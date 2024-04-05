@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-04-05T18:25:01.701Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="uu7iu8mAnEeJ3J2oxgIh" version="24.2.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-04-05T18:26:38.803Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="tAYRuZnc00PAYjK6lamM" version="24.2.2" type="github">
   <diagram name="diagramaClasesSvS" id="uobrlc5QwxZ93EzpMw6y">
-    <mxGraphModel dx="2796" dy="2037" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2796" dy="868" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="AqabxxaaFR3CiJ1AvPnt-0" />
         <mxCell id="AqabxxaaFR3CiJ1AvPnt-1" parent="AqabxxaaFR3CiJ1AvPnt-0" />
@@ -166,9 +166,6 @@
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-25" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
           <mxGeometry x="-30" y="502" width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="Qm0mAu9XDyj_B8wbn4-K-27" value="CA02: Seria un atributo object de lineaCompra?" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
-          <mxGeometry x="-415.5" y="432" width="190" height="100" as="geometry" />
-        </mxCell>
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-28" value="" style="endArrow=none;html=1;rounded=0;" parent="AqabxxaaFR3CiJ1AvPnt-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-30" y="260" as="sourcePoint" />
@@ -286,9 +283,6 @@
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-67" value="CA03" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
           <mxGeometry x="300" y="327" width="50" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="Qm0mAu9XDyj_B8wbn4-K-68" value="CA03: que pasa cuando varias personas publican el mismo articulo con diferente nombre o descripcion oalkgo? para facilitar diria que solo un producto es vendido por un vendedor" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
-          <mxGeometry x="70" y="-110" width="340" height="150" as="geometry" />
-        </mxCell>
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-72" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
           <mxGeometry x="-140" y="327" width="30" height="30" as="geometry" />
         </mxCell>
@@ -330,9 +324,6 @@
         </mxCell>
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-81" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
           <mxGeometry x="50" y="248" width="30" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="Qm0mAu9XDyj_B8wbn4-K-82" value="CA04: En una subasta puede haber varios productos en la misma o solo uno, y si es un producto puede haber varia cantidad del mismo?" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
-          <mxGeometry x="455" y="-70" width="210" height="100" as="geometry" />
         </mxCell>
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-83" value="genera" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
           <mxGeometry x="535" y="327" width="60" height="30" as="geometry" />

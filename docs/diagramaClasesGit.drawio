@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-04-05T16:07:50.790Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="wqD-oRGpvOZPK4xVSzFM" version="24.2.2" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2024-04-05T17:05:17.996Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="dM2ZozDJmkjo52tpUOI-" version="24.2.2" type="github" pages="2">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="2501" dy="738" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -284,7 +284,7 @@
           <mxGeometry x="450" y="502" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-15" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=0;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
-          <mxGeometry x="310" y="498" width="30" height="30" as="geometry" />
+          <mxGeometry x="305" y="502" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-16" value="CA02: Seria un atributo object de usuario?" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
           <mxGeometry x="340" y="601" width="120" height="64" as="geometry" />

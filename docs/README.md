@@ -1,4 +1,4 @@
-# integrantes
+# Integrantes
 51394 - Arach, Mateo Simon
 
 51391 - Borsato, Milton Ruben

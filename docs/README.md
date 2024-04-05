@@ -11,6 +11,10 @@
 
 SvS es un sitio destinado a la subasta y comercio electrónico de productos a través de internet. Es utilizado para comprar y vender artículos. Las subastas utilizan un sistema de subasta. Compradores y vendedores pueden valorarse y evaluarse mutuamente después de cada transacción, lo que da lugar a un sistema de reputación. El servicio SvS es accesible a través de sitios web y aplicaciones móviles.
 
+
+
+
+
 <table>
 <thead>
 <tr>
@@ -39,11 +43,14 @@ SvS es un sitio destinado a la subasta y comercio electrónico de productos a tr
 </tr>
 <tr>
 <td align="left">Listado<br>+<br>detalle</td>
-<td align="left">1. Listado de productos filtrado por marca|modelo|categoria|precio, muestra nombre, descripcion, precio de producto y stock =&gt; detalle CRUD Habitacion<br> 2. Listado de reservas filtrado por rango de fecha, muestra nro de habitación, fecha inicio y fin estadía, estado y nombre del cliente =&gt; detalle muestra datos completos de la reserva y del cliente</td>
+<td align="left">1. Listado de productos filtrado por marca|modelo|categoria|precio, muestra nombre, precio de producto y stock =&gt; detalle muestra modelo, marca y categoria
+      <br> 2. Listado de pedidos filtrado por rango de fecha, muestra fecha, monto, nombre del cliente =&gt; detalle muestra datos completos de los productos con sus cantidades y del cliente</td>
 </tr>
 <tr>
 <td align="left">CUU/Epic</td>
-<td align="left">1. Reservar una habitación para la estadía<br>2. Realizar el check-in de una reserva</td>
+<td align="left">
+      1. Publicar producto
+      <br>2. Generar Subasta</td>
 </tr>
 </tbody>
 </table>

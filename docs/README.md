@@ -21,11 +21,21 @@ SvS es un sitio destinado a la subasta y comercio electrónico de productos a tr
 <tbody>
 <tr>
 <td align="left">CRUD simple</td>
-<td align="left">1. CRUD Tipo Habitacion<br>2. CRUD Servicio<br>3. CRUD Localidad</td>
-</tr>
-<tr>
-<td align="left">CRUD dependiente</td>
-<td align="left">1. CRUD Habitación {depende de} CRUD Tipo Habitacion<br>2. CRUD Cliente {depende de} CRUD Localidad</td>
+<td align="left">
+      1. CRUD Usuario
+  <br>2. CRUD Pedido
+  <br>3. CRUD Subasta
+  <br>4. CRUD Calificacion
+  <br>5. CRUD Tarjeta
+  <br>6. CRUD Categoria
+  <br>7. CRUD Modelo
+  <br>8. CRUD Marca
+  <br>9. CRUD Precio
+  <br>10. CRUD LineaCompra
+  <br>11. CRUD Boleta
+  <br>12. CRUD CategoriaUsuario
+  <br>13. CRUD Politica
+</td>
 </tr>
 <tr>
 <td align="left">Listado<br>+<br>detalle</td>

@@ -39,7 +39,7 @@ SvS es un sitio destinado a la subasta y comercio electrónico de productos a tr
 </tr>
 <tr>
 <td align="left">Listado<br>+<br>detalle</td>
-<td align="left">1. Listado de habitaciones filtrado por tipo de habitación, muestra nro y tipo de habitación =&gt; detalle CRUD Habitacion<br> 2. Listado de reservas filtrado por rango de fecha, muestra nro de habitación, fecha inicio y fin estadía, estado y nombre del cliente =&gt; detalle muestra datos completos de la reserva y del cliente</td>
+<td align="left">1. Listado de productos filtrado por marca|modelo|categoria|precio, muestra nombre, descripcion, precio de producto y stock =&gt; detalle CRUD Habitacion<br> 2. Listado de reservas filtrado por rango de fecha, muestra nro de habitación, fecha inicio y fin estadía, estado y nombre del cliente =&gt; detalle muestra datos completos de la reserva y del cliente</td>
 </tr>
 <tr>
 <td align="left">CUU/Epic</td>

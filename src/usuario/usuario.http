@@ -23,10 +23,10 @@ PUT http://localhost:3000/api/usuarios/0d159c3c-39e7-4980-b85e-634b1dfb44d1
 Content-Type: application/json
 
 {
-  "nombre": "Camion",
-  "apellido": "Vozzi",
-  "correo": "pitutito@gmail.com",
-  "usuario": "vozzi",
+  "nombre": "Pedro",
+  "apellido": "sanchez",
+  "correo": "pedritosanchez@gmail.com",
+  "usuario": "pedrito",
   "contrasena": "12345678",
   "direccion": "calle 54"
 }
@@ -36,8 +36,8 @@ PATCH http://localhost:3000/api/usuarios/0d159c3c-39e7-4980-b85e-634b1dfb44d1
 Content-Type: application/json
 
 {
-  "nombre": "Ogro",
-  "apellido": "Sastre"
+  "nombre": "Juan",
+  "apellido": "Gonzalez"
 }
 
 ### borrar un character

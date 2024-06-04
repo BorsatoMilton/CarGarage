@@ -1,0 +1,44 @@
+### obtener todos los productos
+GET http://localhost:3000/api/productos
+
+
+### obtener un character
+GET http://localhost:3000/api/productos/add641ca-fee4-4244-9157-73522eeb71dd
+
+### crear un nuevo character
+POST http://localhost:3000/api/productos/
+Content-Type: application/json
+
+{
+  "nombre": "collar",
+  "descripcion": "collar de oro",
+  "fechaAlta": "2021-09-01",
+  "stock": 5,
+  "imagen": "imagen",
+  "fechaBaja": null
+}
+
+### modificar un character (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/productos/0d159c3c-39e7-4980-b85e-634b1dfb44d1
+Content-Type: application/json
+
+{
+  "nombre": "pulsera",
+  "descripcion": "pulsera de goma",
+  "fechaAlta": "2023-09-01",
+  "stock": 3,
+  "imagen": "imagen",
+  "fechaBaja": null
+}
+
+### modificar un character (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/productos/0d159c3c-39e7-4980-b85e-634b1dfb44d1
+Content-Type: application/json
+
+{
+  "nombre": "camisa",
+  "descripcion": "camisa de algodon"
+}
+
+### borrar un character
+DELETE http://localhost:3000/api/productos/b66313da-6bf2-45ba-afdb-5cf3a9e06017

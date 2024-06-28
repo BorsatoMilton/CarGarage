@@ -49,8 +49,8 @@ SvS es un sitio destinado a la subasta y comercio electrónico de productos a tr
 <tr>
 <td align="left">CUU/Epic</td>
 <td align="left">
-      1. Publicar producto
-      <br>2. Generar Subasta</td>
+      1. Registrar Pedido
+      <br>2. Gestionar Subasta</td>
 </tr>
 </tbody>
 </table>

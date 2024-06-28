@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-04-05T18:26:38.803Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="tAYRuZnc00PAYjK6lamM" version="24.2.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-06-28T14:20:41.498Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="gyg3k3tOaEaeJzzxrCis" version="24.6.4" type="github">
   <diagram name="diagramaClasesSvS" id="uobrlc5QwxZ93EzpMw6y">
-    <mxGraphModel dx="2796" dy="868" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1941" dy="593" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="AqabxxaaFR3CiJ1AvPnt-0" />
         <mxCell id="AqabxxaaFR3CiJ1AvPnt-1" parent="AqabxxaaFR3CiJ1AvPnt-0" />
@@ -344,9 +344,6 @@
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-86" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
           <mxGeometry x="635" y="438" width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="Qm0mAu9XDyj_B8wbn4-K-87" value="es ganada" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
-          <mxGeometry x="670" y="248" width="80" height="30" as="geometry" />
-        </mxCell>
         <mxCell id="Qm0mAu9XDyj_B8wbn4-K-88" value="" style="endArrow=none;html=1;rounded=0;" parent="AqabxxaaFR3CiJ1AvPnt-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="230" y="750" as="sourcePoint" />
@@ -391,6 +388,23 @@
         </mxCell>
         <mxCell id="uC7N7puvD3lx8-JbYY9u-5" value="1..*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
           <mxGeometry x="555" y="684" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6FhlLgoNNcCuuzwu92jF-2" value="Puja" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="AqabxxaaFR3CiJ1AvPnt-1" vertex="1">
+          <mxGeometry x="710" y="232" width="200" height="76" as="geometry">
+            <mxRectangle x="550" y="140" width="160" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6FhlLgoNNcCuuzwu92jF-3" value="fechaPuja&lt;div&gt;monto&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" parent="6FhlLgoNNcCuuzwu92jF-2" vertex="1">
+          <mxGeometry y="26" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="6FhlLgoNNcCuuzwu92jF-4" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="AqabxxaaFR3CiJ1AvPnt-1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="680" y="280" as="sourcePoint" />
+            <mxPoint x="710" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eEaZEcjXKDsbV3xqlWUg-0" value="??? no se si puede&lt;div&gt;&amp;nbsp;llegar a dificultar&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="AqabxxaaFR3CiJ1AvPnt-1">
+          <mxGeometry x="653.5" y="740" width="120" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/db/orm.js";
-import { Modelo } from "./modelo.entity.js";
+import { Categoria } from "./categoria.entity.js";
 
 
 
@@ -12,9 +12,8 @@ function sanitizeModeloInput(
     next: NextFunction
   ) {
     req.body.sanitizedInput = {
-      nombreModelo: req.body.nombreModelo,
-      descripcionModelo: req.body.descripcionModelo,
-      marca: req.body.marca,
+      nombreCategoria: req.body.nombreCategoria,
+      descripcionCategoria: req.body.descripcionCategoria,
     }
   
     Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -27,7 +26,7 @@ function sanitizeModeloInput(
   
     async function findAll(req: Request, res: Response) {
         try {
-        const modelos = await em.find(Modelo,{})
+        const modelos = await em.find(Categoria,{})
         res.status(200).json({ message: 'Modelos', data: modelos })
         } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -37,8 +36,8 @@ function sanitizeModeloInput(
     async function findOne(req: Request, res: Response) {
         try {
             const id = req.params.id;
-            const modelo = await em.findOneOrFail(Modelo, { id })
-            res.status(200).json({ message: 'Modelo Encontrado', data: modelo })
+            const categoria = await em.findOneOrFail(Categoria, { id })
+            res.status(200).json({ message: 'Categoria Encontrada', data: categoria })
         } catch (error: any) {
             res.status(500).json({ message: error.message })
         }
@@ -46,9 +45,9 @@ function sanitizeModeloInput(
 
     async function add(req: Request, res: Response) {
         try {
-        const modelo = em.create(Modelo, req.body.sanitizedInput)
+        const categoria = em.create(Categoria, req.body.sanitizedInput)
         await em.flush()
-        res.status(201).json({ message: 'Modelo creado', data: modelo })
+        res.status(201).json({ message: 'Categoria creada', data: categoria })
         } catch (error: any) {
         res.status(500).json({ message: error.message })
         }
@@ -57,10 +56,10 @@ function sanitizeModeloInput(
     async function update(req: Request, res: Response) {
         try {
         const id = req.params.id
-        const modelo = await em.findOneOrFail(Modelo, { id })
-        em.assign(modelo, req.body.sanitizedInput)
+        const categoria = await em.findOneOrFail(Categoria, { id })
+        em.assign(categoria, req.body.sanitizedInput)
         await em.flush()
-        res.status(200).json({ message: 'Modelo actualizado', data: modelo })
+        res.status(200).json({ message: 'Categoria actualizada', data: categoria })
         } catch (error: any) {
         res.status(500).json({ message: error.message })
         }
@@ -69,9 +68,9 @@ function sanitizeModeloInput(
     async function remove(req: Request, res: Response) {
         try {
         const id = req.params.id
-        const modelo = em.getReference(Modelo, id)
-        await em.removeAndFlush(modelo)
-        res.status(200).json({ message: 'Modelo eliminado' })
+        const categoria = em.getReference(Categoria, id)
+        await em.removeAndFlush(categoria)
+        res.status(200).json({ message: 'Categoria Eliminada' })
         } catch (error: any) {
         res.status(500).json({ message: error.message })
         }

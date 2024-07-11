@@ -6,6 +6,7 @@ import {
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Modelo } from '../producto/modelo.entity.js'
+import { Categoria } from '../producto/categoria.entity.js'
 
 @Entity()
 export class Producto extends BaseEntity {
@@ -29,5 +30,8 @@ export class Producto extends BaseEntity {
 
     @ManyToOne(() => Modelo, { nullable: false })
     modelo!: Rel<Modelo>
+
+    @ManyToOne(() => Categoria , { nullable: true })
+    categoria!: Rel<Categoria>
 
 }

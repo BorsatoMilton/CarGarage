@@ -17,6 +17,7 @@ function sanitizeProductoInput(
     stock: req.body.stock,
     precioVenta: req.body.precioVenta,
     modelo: req.body.modelo,
+    categoria: req.body.categoria,
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {

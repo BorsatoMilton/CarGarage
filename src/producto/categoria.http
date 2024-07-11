@@ -1,0 +1,28 @@
+### get all clients
+GET http://localhost:3000/api/categorias
+
+### get one client
+GET http://localhost:3000/api/categorias/66904310a5879a5c633b28bc
+
+### create client
+POST http://localhost:3000/api/categorias/
+Content-Type: application/json
+
+{
+    "nombreCategoria": "Automoviles",
+    "descripcionCategoria" : "Rodado mediano"
+}
+
+
+### put client
+PUT http://localhost:3000/api/categorias/66904310a5879a5c633b28bc
+Content-Type: application/json
+
+{
+    "nombreCategoria": "Automovil"
+
+}
+
+
+### delete client
+DELETE http://localhost:3000/api/categorias/66900479772a039a334a94a1

@@ -10,12 +10,13 @@ POST http://localhost:3000/api/productos/
 Content-Type: application/json
 
 {
-    "nombre": "producto 10",
-    "descripcion": "descripcion 10",
+    "nombre": "producto 25",
+    "descripcion": "descripcion 25",
     "fechaAlta": "2023-09-01",
     "stock": 10,
     "precioVenta": 100,
-    "modelo": "66903783b38f02b95917f0da"
+    "modelo": "66903783b38f02b95917f0da",
+    "categoria": "66904310a5879a5c633b28bc"
 }
 
 

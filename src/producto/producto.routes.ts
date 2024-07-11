@@ -1,11 +1,11 @@
 import {Router} from 'express';
-import {sanitizeUserInput, findAll, findOne, add, update, remove} from './producto.controler.js';
+import {sanitizeProductoInput, findAll, findOne, add, update, remove} from './producto.controler.js';
 
 export const productoRouter = Router();
 
-productoRouter.get('/', findAll);//chequear si iria id producto
+productoRouter.get('/', findAll);
 productoRouter.get('/:id', findOne);
-productoRouter.post('/', sanitizeUserInput, add);
-productoRouter.put('/:id', sanitizeUserInput, update);
-productoRouter.patch('/:id', sanitizeUserInput, update);
+productoRouter.post('/', sanitizeProductoInput, add);
+productoRouter.put('/:id', sanitizeProductoInput, update);
+productoRouter.patch('/:id', sanitizeProductoInput, update);
 productoRouter.delete('/:id', remove);

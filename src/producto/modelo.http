@@ -1,0 +1,44 @@
+### get all clients
+GET http://localhost:3000/api/modelos
+
+### get one client
+GET http://localhost:3000/api/modelos/66900479772a039a334a94a1
+
+
+### create client
+POST http://localhost:3000/api/modelos/
+Content-Type: application/json
+
+{
+    "nombreModelo": "modelo 1",
+    "descripcionModelo": "descripcion 1",
+    "marca": "669036a635d36ae88fc3dbf4",
+    "productos": []
+}
+
+
+### put client
+PUT http://localhost:3000/api/modelos/66900479772a039a334a94a1
+Content-Type: application/json
+
+{
+    "nombreModelo": "modelo 1 cambio",
+    "descripcionModelo": "descripcion 1 cambio",
+    "marca": "",
+    "productos": []
+   
+
+}
+
+
+### patch client
+PATCH http://localhost:3000/api/modelos/66900479772a039a334a94a1
+Content-Type: application/json
+
+{
+    "productos": []
+}
+
+
+### delete client
+DELETE http://localhost:3000/api/modelos/66900479772a039a334a94a1

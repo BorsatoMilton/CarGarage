@@ -1,72 +1,83 @@
-import { Request, Response, NextFunction } from "express";
-import { ProductoRepository } from "./producto.repository.js";
-import { Producto } from "./producto.entity.js";
-const repository = new ProductoRepository(); 
+import { Request, Response, NextFunction } from 'express'
+import { Producto } from './producto.entity.js'
+import { orm } from '../shared/db/orm.js'
 
-function sanitizeUserInput(req: Request, res: Response, next: NextFunction){
-    req.body.sanitizedInput = {
-        nombre: req.body.nombre,
-        descripcion: req.body.descripcion,
-        fechaAlta: req.body.fechaAlta,
-        stock: req.body.stock,
-        imagen: req.body.imagen,
-        fechaBaja: req.body.fechaBaja
+const em = orm.em
+
+function sanitizeProductoInput(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  req.body.sanitizedInput = {
+    nombre: req.body.nombre,
+    descripcion: req.body.descripcion,
+    fechaAlta: req.body.fechaAlta,
+    fechaBaja: req.body.fechaBaja,
+    stock: req.body.stock,
+    precioVenta: req.body.precioVenta,
+    modelo: req.body.modelo,
+  }
+
+  Object.keys(req.body.sanitizedInput).forEach((key) => {
+    if (req.body.sanitizedInput[key] === undefined) {
+      delete req.body.sanitizedInput[key]
     }
-    Object.keys(req.body.sanitizedInput).forEach(key => {
-        if(req.body.sanitizedInput[key] === undefined){
-            delete req.body.sanitizedInput[key]
-        }
-    });
-    next();
+  })
+  next()
 }
 
-function findAll(req: Request, res:Response){
-    res.json({data: repository.findAll()})
+async function findAll(req: Request, res: Response) {
+  try {
+    const productos = await em.find(Producto,{},{populate: ['modelo']})
+    res.status(200).json({ message: 'Productos', data: productos })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
-function findOne(req: Request, res: Response){
-    const id = req.params.id;
-    const producto = repository.findOne({id});
-
-    if (!producto){
-        return res.status(404).json({message: 'Producto no encontrado'})
-
-    }
-    res.json({data: producto})}
-
-function add(req: Request, res: Response){
-    const input = req.body.sanitizedInput;
-
-    const nuevoProducto = new Producto(
-        input.nombre,
-        input.descripcion,
-        input.fechaAlta,
-        input.stock,
-        input.imagen,
-        input.fechaBaja
-    );
-    const producto = repository.add(nuevoProducto);
-    return res.status(201).json({message: 'Producto Creado con exito!', data: producto})
+async function findOne(req: Request, res: Response) {
+  try {
+    const id = req.params.id
+    const producto = await em.findOneOrFail(Producto, { id }, { populate: ['modelo'] })
+    res.status(200).json({ message: 'Producto Encontrado', data: producto })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
-function update(req: Request, res: Response){
-    req.body.sanitizedInput.idProducto = req.params.id;
-    const producto = repository.update(req.body.sanitizedInput);
-    if(!producto){
-        return res.status(404).json({message: 'Producto no encontrado'})
-    }
-    return res.status(200).json({message: 'Producto actualizado con exito!', data: producto})
+async function add(req: Request, res: Response) {
+  try {
+    const producto = em.create(Producto, req.body.sanitizedInput)
+    await em.flush()
+    res.status(201).json({ message: 'Producto creado', data: producto })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
-function remove(req: Request, res: Response){
-    const id = req.params.id;
-    const producto = repository.delete({id});
-    if(!producto){
-        return res.status(404).json({message: 'Producto no encontrado'})
-    }else {
-        return res.status(200).json({message: 'Producto eliminado con exito!', data: producto})
-
-    }
-
+async function update(req: Request, res: Response) {
+  try {
+    const id = req.params.id
+    const productoAactualizar = await em.findOneOrFail(Producto, { id })
+    em.assign(productoAactualizar, req.body.sanitizedInput)
+    await em.flush()
+    res
+      .status(200)
+      .json({ message: 'Producto Actualizado', data: productoAactualizar })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
-export {sanitizeUserInput, findAll, findOne, add, update, remove}
+
+async function remove(req: Request, res: Response) {
+  try {
+    const id = req.params.id
+    const producto = em.getReference(Producto, id)
+    await em.removeAndFlush(producto)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export { sanitizeProductoInput, findAll, findOne, add, update, remove }

@@ -34,11 +34,10 @@ SvS es un sitio destinado a la subasta y comercio electrónico de productos a tr
   <br>6. CRUD Categoria
   <br>7. CRUD Modelo
   <br>8. CRUD Marca
-  <br>9. CRUD Precio
-  <br>10. CRUD LineaCompra
-  <br>11. CRUD Boleta
-  <br>12. CRUD CategoriaUsuario
-  <br>13. CRUD Politica
+  <br>9. CRUD LineaCompra
+  <br>10. CRUD Boleta
+  <br>11. CRUD CategoriaUsuario
+  <br>12. CRUD Politica
 </td>
 </tr>
 <tr>

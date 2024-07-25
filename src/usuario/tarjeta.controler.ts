@@ -1,24 +1,18 @@
 import { Request, Response, NextFunction } from 'express'
-import { Producto } from './producto.entity.js'
+import { Tarjeta } from './tarjeta.entity.js'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
 
-function sanitizeProductoInput(
+function sanitizeTarjetaInput(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    nombre: req.body.nombre,
-    descripcion: req.body.descripcion,
-    fechaAlta: req.body.fechaAlta,
-    fechaBaja: req.body.fechaBaja,
-    stock: req.body.stock,
-    precioVenta: req.body.precioVenta,
-    modelo: req.body.modelo,
-    categoria: req.body.categoria,
-    calificacion: req.body.calificacion,
+    codSeguridad: req.body.codSeguridad,
+    fechaVencimiento: req.body.fechaVencimiento,
+    usuario: req.body.usuario,
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -31,8 +25,8 @@ function sanitizeProductoInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const productos = await em.find(Producto,{},{populate: ['modelo']})
-    res.status(200).json({ message: 'Productos', data: productos })
+    const tarjetas = await em.find(Tarjeta,{})
+    res.status(200).json({ message: 'Tarjetas', data: tarjetas })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -41,8 +35,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const producto = await em.findOneOrFail(Producto, { id }, { populate: ['modelo'] })
-    res.status(200).json({ message: 'Producto Encontrado', data: producto })
+    const tarjeta = await em.findOneOrFail(Tarjeta, { id })
+    res.status(200).json({ message: 'Tarjeta Encontrada', data: tarjeta })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -50,9 +44,9 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const producto = em.create(Producto, req.body.sanitizedInput)
+    const tarjeta = em.create(Tarjeta, req.body.sanitizedInput)
     await em.flush()
-    res.status(201).json({ message: 'Producto creado', data: producto })
+    res.status(201).json({ message: 'Tarjeta creada', data: tarjeta })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -61,12 +55,12 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const productoAactualizar = await em.findOneOrFail(Producto, { id })
-    em.assign(productoAactualizar, req.body.sanitizedInput)
+    const tarjetaAactualizar = await em.findOneOrFail(Tarjeta, { id })
+    em.assign(tarjetaAactualizar, req.body.sanitizedInput)
     await em.flush()
     res
       .status(200)
-      .json({ message: 'Producto Actualizado', data: productoAactualizar })
+      .json({ message: 'Tarjeta Actualizada', data: tarjetaAactualizar })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -75,11 +69,11 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const producto = em.getReference(Producto, id)
-    await em.removeAndFlush(producto)
+    const tarjeta = em.getReference(Tarjeta, id)
+    await em.removeAndFlush(tarjeta)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizeProductoInput, findAll, findOne, add, update, remove }
+export { sanitizeTarjetaInput, findAll, findOne, add, update, remove }

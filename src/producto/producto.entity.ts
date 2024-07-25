@@ -2,11 +2,13 @@ import {
     Entity,
     Property,
     ManyToOne,
-    Rel
+    Rel,
+    OneToMany
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Modelo } from '../producto/modelo.entity.js'
 import { Categoria } from '../producto/categoria.entity.js'
+import { Calificacion } from '../usuario/calificacion.entity.js'
 
 @Entity()
 export class Producto extends BaseEntity {
@@ -33,5 +35,8 @@ export class Producto extends BaseEntity {
 
     @ManyToOne(() => Categoria , { nullable: true })
     categoria!: Rel<Categoria>
+
+    @OneToMany(() => Calificacion, calificacion => calificacion.producto, { nullable: false })
+    calificacion?: Rel<Calificacion>;
 
 }

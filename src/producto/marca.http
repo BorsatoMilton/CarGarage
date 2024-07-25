@@ -24,4 +24,4 @@ Content-Type: application/json
 
 
 ### delete client
-DELETE http://localhost:3000/api/marcas/66900479772a039a334a94a1
+DELETE http://localhost:3000/api/marcas/66a25e0726cc7f88926de44c

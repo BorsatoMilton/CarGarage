@@ -1,0 +1,34 @@
+### get all usuario
+GET http://localhost:3000/api/usuarios 
+
+### get one usuario
+GET http://localhost:3000/api/usuarios/66a26a56c2d60a2b531e553b
+
+### create usuario
+POST http://localhost:3000/api/usuarios/
+Content-Type: application/json
+
+{
+    "usuario": "JuanP",
+    "clave": "123456",
+    "nombre": "Juan",
+    "apellido": "Perez",
+    "mail": "JuanPerez@gmail.com",
+    "direccion": "Calle falsa 123",
+    "tarjeta": ["66a28b7d10af30a819063177"],
+    "calificacion" : ["66a28ee01dbd5c9e5aece75b" ]
+}
+
+
+### put usuario
+PUT http://localhost:3000/api/usuarios/66a26a56c2d60a2b531e553b
+Content-Type: application/json
+
+{
+    "nombre": "Juan",
+    "apellido": "Perez",
+    "mail": "JuanPerez@gmail.com"
+}
+
+### delete client
+DELETE http://localhost:3000/api/usuarios/66a291df5296f54a27620919

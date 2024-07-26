@@ -1,11 +1,11 @@
 import {Router} from 'express'; 
-import {findAll, findOne, add, update, remove, sanitizelineacompraInput} from '../pedido/lineacompra.controler.js';
+import {findAll, findOne, add, update, remove, sanitizeLineaCompraInput} from '../pedido/lineacompra.controler.js';
 
 export const lineacompraRouter = Router();
 
 lineacompraRouter.get('/', findAll);
 lineacompraRouter.get('/:id', findOne);
-lineacompraRouter.post('/', sanitizelineacompraInput, add);
-lineacompraRouter.put('/:id', sanitizelineacompraInput, update);
-lineacompraRouter.patch('/:id', sanitizelineacompraInput, update);
+lineacompraRouter.post('/', sanitizeLineaCompraInput, add);
+lineacompraRouter.put('/:id', sanitizeLineaCompraInput, update);
+lineacompraRouter.patch('/:id', sanitizeLineaCompraInput, update);
 lineacompraRouter.delete('/:id', remove);

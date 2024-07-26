@@ -16,7 +16,8 @@ Content-Type: application/json
     "mail": "JuanPerez@gmail.com",
     "direccion": "Calle falsa 123",
     "tarjeta": ["66a28b7d10af30a819063177"],
-    "calificacion" : ["66a28ee01dbd5c9e5aece75b" ]
+    "calificacion" : ["66a28ee01dbd5c9e5aece75b" ],
+    "pedidos": ["66a291df5296f54a27620919"]
 }
 
 
@@ -31,4 +32,4 @@ Content-Type: application/json
 }
 
 ### delete client
-DELETE http://localhost:3000/api/usuarios/66a291df5296f54a27620919
+DELETE http://localhost:3000/api/usuarios/66a292b9167e1190e60640d1

@@ -15,11 +15,13 @@ import { Producto } from '../producto/producto.entity.js'
 
 @Entity()
 
-export class lineacompra extends BaseEntity{
+export class LineaCompra extends BaseEntity{
     @Property ({nullable: false})
     cantidad!: number
+    
     @ManyToOne(() => Pedido, { nullable: false })
-    Pedido!: Rel<Pedido>
-    @OneToOne(() => Producto, { nullable: true })
+    pedido!: Rel<Pedido>
+
+    @ManyToOne(() => Producto, { nullable: true })
     producto!: Rel<Producto>
 }

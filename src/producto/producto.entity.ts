@@ -10,9 +10,11 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Modelo } from '../producto/modelo.entity.js'
 import { Categoria } from '../producto/categoria.entity.js'
 import { Calificacion } from '../usuario/calificacion.entity.js'
+import { LineaCompra } from '../pedido/lineacompra.entity.js'
 
 @Entity()
 export class Producto extends BaseEntity {
+    
     @Property({ nullable: false })
     nombre!: string
 
@@ -39,5 +41,8 @@ export class Producto extends BaseEntity {
 
     @OneToMany(() => Calificacion, calificacion => calificacion.producto, { nullable: false })
     calificacion?: Rel<Calificacion>;
+
+    @OneToMany (() => LineaCompra, linea => linea.producto, { nullable: false })
+    linea!: Rel<LineaCompra>
 
 }

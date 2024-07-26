@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/db/orm.js";
-import {lineacompra} from "./lineacompra.entity.js";
+import {LineaCompra} from "./lineacompra.entity.js"
 
 const em = orm.em
 
-function sanitizelineacompraInput(
+function sanitizeLineaCompraInput(
     req: Request,
     res: Response,
     next: NextFunction
@@ -27,7 +27,7 @@ function sanitizelineacompraInput(
 
 async function findAll(req: Request, res: Response) {
     try {
-    const lineas = await em.find(lineacompra,{})
+    const lineas = await em.find(LineaCompra,{})
     res.status(200).json({ message: 'Lineas', data: lineas })
     } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -37,7 +37,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
     try {
         const id = req.params.id;
-        const linea = await em.findOneOrFail(lineacompra, { id })
+        const linea = await em.findOneOrFail(LineaCompra, { id })
         res.status(200).json({ message: 'Linea Encontrada', data: linea })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -46,7 +46,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
     try {
-    const linea = em.create(lineacompra, req.body)
+    const linea = em.create(LineaCompra, req.body)
     await em.flush()
     res.status(201).json({ message: 'Linea creada', data: linea })
     } catch (error: any) {
@@ -57,7 +57,7 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
     try {
     const id = req.params.id
-    const linea = await em.findOneOrFail(lineacompra, { id })
+    const linea = await em.findOneOrFail(LineaCompra, { id })
     em.assign(linea, req.body)
     await em.flush()
     res.status(200).json({ message: 'Linea actualizada', data: linea })
@@ -69,7 +69,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
     try {
     const id = req.params.id
-    const linea = em.getReference(lineacompra, id)
+    const linea = em.getReference(LineaCompra, id)
    await em.removeAndFlush(linea)
     res.status(200).json({ message: 'Linea eliminada', data: linea })
     } catch (error: any) {
@@ -77,4 +77,4 @@ async function remove(req: Request, res: Response) {
     }
 }
     
-export { findAll, findOne, add, update, remove, sanitizelineacompraInput }
+export { findAll, findOne, add, update, remove, sanitizeLineaCompraInput }

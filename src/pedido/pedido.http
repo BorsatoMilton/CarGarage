@@ -10,14 +10,9 @@ POST http://localhost:3000/api/pedidos/
 Content-Type: application/json
 
 {
-    "fecha": "2023-09-01",
-    "cliente": "66903783b38f02b95917f0da",
-    "productos": [
-        {
-            "producto": "66904310a5879a5c633b28bc",
-            "cantidad": 2
-        }
-    ]
+    "fecha": "2023-11-01",
+    "usuario": "66a41688d30644a3d53a88b4",
+    "lineacompra" : ["66a41b00476e69053223a5f6"]
 }
 
 ### put pedido

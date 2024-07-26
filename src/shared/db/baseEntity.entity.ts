@@ -5,7 +5,7 @@ export abstract class BaseEntity {
   @PrimaryKey()
   _id!: ObjectId 
 
-  @SerializedPrimaryKey()
+  @SerializedPrimaryKey() 
   id!: string
 
 }

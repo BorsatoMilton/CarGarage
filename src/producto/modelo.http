@@ -12,8 +12,9 @@ Content-Type: application/json
 {
     "nombreModelo": "modelo 1",
     "descripcionModelo": "descripcion 1",
-    "marca": "669036a635d36ae88fc3dbf4",
+    "marca": "66a25df026cc7f88926de44b",
     "productos": []
+    
 }
 
 
@@ -41,4 +42,4 @@ Content-Type: application/json
 
 
 ### delete client
-DELETE http://localhost:3000/api/modelos/66900479772a039a334a94a1
+DELETE http://localhost:3000/api/modelos/66a25e1426cc7f88926de44d

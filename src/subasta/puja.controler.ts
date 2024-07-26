@@ -26,7 +26,7 @@ function sanitizeProductoInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const pujas = await em.find(Pujas,{},{populate: ['usuario']})
+    const pujas = await em.find(Puja,{},{populate: ['usuario']})
     res.status(200).json({ message: 'Pujas', data: pujas })
   } catch (error: any) {
     res.status(500).json({ message: error.message })

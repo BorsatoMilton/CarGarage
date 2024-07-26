@@ -10,15 +10,15 @@ POST http://localhost:3000/api/subastas/
 Content-Type: application/json
 
 {
-    "idsubasta": 01,
     "fechaAlta": "2023-09-01",
     "fechahora": "descripcion 25",
     "precio_base_entrada": 10,
     "precio_cierre": 100,
-    "producto": "xxxxx",
-    "usuario": "xxxxx",
-    "usuarios": "xxxxxxx",
+    "producto": "66a25e9b26cc7f88926de44e",
+    "usuarioCreador": "66a25ede26cc7f88926de44f",
+    "usuarioGanador": "66a28ee01dbd5c9e5aece75b" 
 }
+
 
 
 ### put client

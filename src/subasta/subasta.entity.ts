@@ -8,14 +8,11 @@ import {
     DateTimeType
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import { Usuario } from '../subasta/usuario.entity.js'
-import { Producto } from '../subasta/producto.entity.js'
+import { Usuario } from '../usuario/usuario.entity.js'
+import { Producto } from '../producto/producto.entity.js'
 
 @Entity()
 export class Subasta extends BaseEntity {
-    @Property({ nullable: false })
-    idsubasta!: number
-
     @Property({ nullable: false})
     fechaAlta!: Date //= new Date()
 
@@ -30,12 +27,12 @@ export class Subasta extends BaseEntity {
 
     @OneToOne(() => Producto, { nullable: false })
     producto!: Rel<Producto>
-/*
-    @ManyToOne(() => Usuario , { nullable: false })
-    usuario!: Rel<Usuario>
 
-    @ManyToMany(() => Usuario , { nullable: true })
-    usuario?: Rel<Usuario>
-    */
+    @ManyToOne(() => Usuario , { nullable: false })
+    usuarioCreador!: Rel<Usuario>
+
+    @ManyToOne(() => Usuario , { nullable: true })
+    usuarioGanador?: Rel<Usuario>
+    
 
 }

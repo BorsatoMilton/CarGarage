@@ -25,7 +25,7 @@ function sanitizeTarjetaInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const tarjetas = await em.find(Tarjeta,{})
+    const tarjetas = await em.find(Tarjeta,{}, {populate: ['usuario']})
     res.status(200).json({ message: 'Tarjetas', data: tarjetas })
   } catch (error: any) {
     res.status(500).json({ message: error.message })

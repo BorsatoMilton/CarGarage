@@ -6,7 +6,6 @@ GET http://localhost:3000/api/pedidos/66902e647185119674495890
 
 ### create pedido
 POST http://localhost:3000/api/pedidos/
-
 Content-Type: application/json
 
 {
@@ -15,34 +14,5 @@ Content-Type: application/json
     "lineacompra" : ["66a41b00476e69053223a5f6"]
 }
 
-### put pedido
-PUT http://localhost:3000/api/pedidos/66900479772a039a334a94a1
-Content-Type: application/json
-
-{
-    "fecha": "2023-11-01",
-    "cliente": "66903783b38f02b95917f0da",
-    "productos": [
-        {
-            "producto": "66904310a5879a5c633b28bc",
-            "cantidad": 4
-        }
-    ]
-}
-
-### patch pedido
-PATCH http://localhost:3000/api/pedidos/66900479772a039a334a94a1
-
-Content-Type: application/json
-
-{
-    "productos": [
-        {
-            "producto": "66904310a5879a5c633b28bc",
-            "cantidad": 4
-        }
-    ]
-}
-
 ### delete pedido
-DELETE http://localhost:3000/api/pedidos/66900479772a039a334a94a1
+DELETE http://localhost:3000/api/pedidos/66a41f22a5539ba11d0d8452

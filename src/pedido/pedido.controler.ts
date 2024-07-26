@@ -10,10 +10,11 @@ function sanitizePedidoInput (
   res: Response,
   next: NextFunction
 ) {
-  req.body.sanitizedInput = {
-    fecha: req.body.fecha,
-    usuario: req.body.usuario,
-    lineacompra: req.body.lineacompra
+  req.body.sanitizedInput = 
+    {
+        fecha: req.body.fecha,
+        usuario: req.body.usuario,
+        lineacompra: req.body.lineacompra
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -27,7 +28,7 @@ function sanitizePedidoInput (
 
 async function findAll(req: Request, res: Response) {
     try {
-        const pedidos = await em.find(Pedido,{},{populate: ['usuario','lineacompra']})
+        const pedidos = await em.find(Pedido,{})
         res.status(200).json({ message: 'Pedidos', data: pedidos })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -37,7 +38,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
     try {
         const id = req.params.id
-        const pedido = await em.findOneOrFail(Pedido, { id }, { populate: ['usuario','lineacompra'] })
+        const pedido = await em.findOneOrFail(Pedido, { id })
         res.status(200).json({ message: 'Pedido Encontrado', data: pedido })
     } catch (error: any) {
         res.status(500).json({ message: error.message })

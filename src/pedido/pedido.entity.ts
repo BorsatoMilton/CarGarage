@@ -13,14 +13,14 @@ import { LineaCompra } from './lineacompra.entity.js'
 
 @Entity()
 export class Pedido extends BaseEntity{
-    
+
     @OneToMany (() => LineaCompra, lineacompra => lineacompra.pedido, { nullable: false })
-    lineacompra!: Collection<LineaCompra>
+    lineacompra!: Rel<LineaCompra>
 
     @ManyToOne(() => Usuario, { nullable: false })
     usuario!: Rel<Usuario>
 
-    @Property({type: 'date'})
+    @Property({ nullable: false })
     fecha!:Date
     
 }

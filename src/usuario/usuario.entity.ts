@@ -36,7 +36,7 @@ export class Usuario extends BaseEntity {
     @OneToMany(() => Calificacion, calificacion => calificacion.usuario, { nullable: false })
     calificacion?: Rel<Calificacion>;
 
-    @OneToMany(() => Pedido, pedido => pedido.usuario , { nullable: true })
+    @OneToMany(() => Pedido, pedido => pedido.usuario , { nullable: false })
     pedido?: Rel<Pedido>;
 
   }

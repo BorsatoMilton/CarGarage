@@ -1,5 +1,4 @@
 import {
-    OneToOne,
     Entity,
     Property,
     ManyToOne,

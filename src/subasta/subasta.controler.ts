@@ -15,8 +15,9 @@ function sanitizeProductoInput(
     fechaHora: req.body.fechaHora,
     precio_base_entrada: req.body.precio_base_entrada,
     precio_cierre: req.body.precio_cierre,
-    usuario: req.body.usuario,
     producto: req.body.producto,
+    usuarioCreador: req.body.usuarioCreador,
+    usuarioGanador: req.body.usuarioGanador,
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -29,7 +30,7 @@ function sanitizeProductoInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const subastas = await em.find(Subasta,{},{populate: ['usuario']})
+    const subastas = await em.find(Subasta,{},{populate: ['usuarioGanador','usuarioCreador','producto']})
     res.status(200).json({ message: 'Subastas', data: subastas })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -39,7 +40,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const subasta = await em.findOneOrFail(Subasta, { id }, { populate: ['usuario'] })
+    const subasta = await em.findOneOrFail(Subasta, { id }, { populate: ['usuarioGanador','usuarioCreador','producto'] })
     res.status(200).json({ message: 'Subasta Encontrada', data: subasta })
   } catch (error: any) {
     res.status(500).json({ message: error.message })

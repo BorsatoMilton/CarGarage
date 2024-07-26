@@ -1,0 +1,32 @@
+### get all clients
+GET http://localhost:3000/api/lineacompras
+
+### get one client
+GET http://localhost:3000/api/lineacompras/66904310a5879a5c633b28bc
+
+### create client
+POST http://localhost:3000/api/lineacompras/
+Content-Type: application/json
+
+{
+    "cantidad": 5,
+    "producto": "66902e647185119674495890",
+    "pedido": "66902e647185119674495890"
+}
+
+### put client
+PUT http://localhost:3000/api/lineacompras/66904310a5879a5c633b28bc
+Content-Type: application/json
+    
+    {
+        "cantidad": 7,
+        "producto": "66902e647185119674495890",
+        "pedido": "66902e647185119674495890"
+    }
+
+
+
+
+### delete client
+DELETE http://localhost:3000/api/lineacompras/66904310a5879a5c633b28bc
+    

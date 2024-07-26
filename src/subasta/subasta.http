@@ -1,0 +1,48 @@
+### get all clients
+GET http://localhost:3000/api/subastas
+
+### get one client
+GET http://localhost:3000/api/subastas/xxxxxxxxxxxxxxxxxxx
+
+
+### create client
+POST http://localhost:3000/api/subastas/
+Content-Type: application/json
+
+{
+    "idsubasta": 01,
+    "fechaAlta": "2023-09-01",
+    "fechahora": "descripcion 25",
+    "precio_base_entrada": 10,
+    "precio_cierre": 100,
+    "producto": "xxxxx",
+    "usuario": "xxxxx",
+    "usuarios": "xxxxxxx",
+}
+
+
+### put client
+PUT http://localhost:3000/api/subastas/xxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+    "nombreUsuario": "usuario 1 cambio",
+    "descripcion": "descripcion 1 cambio",
+    "usuarios": []
+    "productos": []
+   
+
+}
+
+
+### patch client
+PATCH http://localhost:3000/api/subastas/xxxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+    "usuarios": []
+}
+
+
+### delete client
+DELETE http://localhost:3000/api/subastas/xxxxxxxxxxxxxxxxxxxx

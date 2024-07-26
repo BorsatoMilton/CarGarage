@@ -1,0 +1,44 @@
+### get all clients
+GET http://localhost:3000/api/pujas
+
+### get one client
+GET http://localhost:3000/api/pujas/xxxxxxxxxxxxxxxxxxx
+
+
+### create client
+POST http://localhost:3000/api/pujas/
+Content-Type: application/json
+
+{
+    "fecha_puja": "2023-09-01",
+    "monto": 10,
+    "subasta": "xxxxx",
+    "usuario": "xxxxx",
+}
+
+
+### put client
+PUT http://localhost:3000/api/pujas/xxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+    "nombreUsuario": "usuario 1 cambio",
+    "descripcion": "descripcion 1 cambio",
+    "usuario": ""
+    "producto": ""
+   
+
+}
+
+
+### patch client
+PATCH http://localhost:3000/api/pujas/xxxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+    "usuarios": ""
+}
+
+
+### delete client
+DELETE http://localhost:3000/api/pujas/xxxxxxxxxxxxxxxxxxxx

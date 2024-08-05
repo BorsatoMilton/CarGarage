@@ -10,7 +10,6 @@ import { usuarioRouter } from './usuario/usuario.routes.js';
 import { tarjetaRouter } from './usuario/tarjeta.routes.js';
 import { calificacionRouter } from './usuario/calificacion.routes.js';
 import { subastaRouter } from './subasta/subasta.routes.js';
-import { pujaRouter } from './subasta/puja.routes.js';
 import { pedidoRouter } from './pedido/pedido.routes.js';
 import { lineacompraRouter } from './pedido/lineacompra.routes.js';
 
@@ -29,7 +28,6 @@ app.use('/api/usuarios', usuarioRouter )
 app.use('/api/tarjetas', tarjetaRouter)
 app.use ('/api/calificaciones', calificacionRouter)
 app.use('/api/subastas', subastaRouter)
-app.use('/api/pujas', pujaRouter)
 app.use('/api/pedidos', pedidoRouter)
 app.use('/api/lineacompras', lineacompraRouter)
 

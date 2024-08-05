@@ -15,6 +15,6 @@ export class Marca extends BaseEntity{
     @Property({ nullable: false })
     nombreMarca!: string
 
-    @OneToMany(() => Modelo, modelo => modelo.marca, {cascade : [Cascade.ALL]})    
+    @OneToMany(() => Modelo, modelo => modelo.marca, {cascade : [Cascade.ALL], nullable: true})    
     modelos = new Collection<Modelo>(this)
 }

@@ -14,18 +14,18 @@ import { Producto } from '../producto/producto.entity.js'
 @Entity()
 export class Subasta extends BaseEntity {
     @Property({ nullable: false})
-    fechaAlta!: Date //= new Date()
+    fechaPublicacion!: Date //= new Date()
 
     @Property({ nullable: true })
-    fechahora!: DateTimeType
+    fechaHoraRealizacion!: DateTimeType
 
     @Property({ nullable: false })
-    precio_base_entrada!: number
+    precioBaseEntrada!: number
 
     @Property({ nullable: false })
-    precio_cierre!: number
+    precioCierre?: number
 
-    @OneToOne(() => Producto, { nullable: false })
+    @ManyToOne(() => Producto, { nullable: false })
     producto!: Rel<Producto>
 
     @ManyToOne(() => Usuario , { nullable: false })

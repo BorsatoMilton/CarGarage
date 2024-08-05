@@ -4,7 +4,7 @@ import {
     Collection,
     OneToMany,
     ManyToOne,
-    Rel,
+    Rel
 
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
@@ -15,13 +15,13 @@ import { LineaCompra } from './lineacompra.entity.js'
 export class Pedido extends BaseEntity{
 
     @OneToMany (() => LineaCompra, lineacompra => lineacompra.pedido, { nullable: false })
-    lineacompra!: Rel<LineaCompra>
+    lineasCompra = new Collection<LineaCompra>(this)
 
     @ManyToOne(() => Usuario, { nullable: false })
     usuario!: Rel<Usuario>
 
     @Property({ nullable: false })
-    fecha!:Date
+    fechaPedido!:Date
     
 }
 

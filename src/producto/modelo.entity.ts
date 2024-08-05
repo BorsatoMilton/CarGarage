@@ -20,7 +20,7 @@ import {
     @Property({ nullable: false })
     descripcionModelo!: string
 
-    @OneToMany(() => Producto, (producto)=> producto.modelo, {cascade: [Cascade.ALL]})
+    @OneToMany(() => Producto, (producto)=> producto.modelo, {cascade: [Cascade.ALL], nullable: false})
     productos = new Collection<Producto>(this)
 
     @ManyToOne(() => Marca, { nullable: false })

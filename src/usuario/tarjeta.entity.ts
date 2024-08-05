@@ -10,6 +10,10 @@ import { Usuario } from './usuario.entity.js'
 
 @Entity()
 export class Tarjeta extends BaseEntity {
+
+    @Property({ nullable: false })
+    numeroTarjeta!: number
+
     @Property({ nullable: false })
     codSeguridad!: number
 

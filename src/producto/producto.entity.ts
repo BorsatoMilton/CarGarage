@@ -1,16 +1,19 @@
 import {
-    OneToOne,
+    
     Entity,
     Property,
     ManyToOne,
     Rel,
-    OneToMany
+    OneToMany,
+    Collection
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Modelo } from '../producto/modelo.entity.js'
 import { Categoria } from '../producto/categoria.entity.js'
 import { Calificacion } from '../usuario/calificacion.entity.js'
 import { LineaCompra } from '../pedido/lineacompra.entity.js'
+import { Usuario } from '../usuario/usuario.entity.js'
+import { Subasta } from '../subasta/subasta.entity.js'
 
 @Entity()
 export class Producto extends BaseEntity {
@@ -22,7 +25,7 @@ export class Producto extends BaseEntity {
     descripcion!: string
 
     @Property({ nullable: false})
-    fechaAlta!: Date //= new Date()
+    fechaAlta!: Date //new Date()??
 
     @Property({ nullable: true })
     fechaBaja?: Date 
@@ -36,13 +39,19 @@ export class Producto extends BaseEntity {
     @ManyToOne(() => Modelo, { nullable: false })
     modelo!: Rel<Modelo>
 
-    @ManyToOne(() => Categoria , { nullable: true })
+    @ManyToOne(() => Categoria , { nullable: false })
     categoria!: Rel<Categoria>
 
+    @ManyToOne(() => Usuario , { nullable: false })
+    vendedor!: Rel<Usuario>
+
+    @OneToMany(()=> Subasta , subasta => subasta.producto, { nullable: true })
+    subastas = new Collection<Subasta>(this)
+
     @OneToMany(() => Calificacion, calificacion => calificacion.producto, { nullable: false })
-    calificacion?: Rel<Calificacion>;
+    calificaciones = new Collection<Calificacion>(this)
 
     @OneToMany (() => LineaCompra, linea => linea.producto, { nullable: false })
-    linea!: Rel<LineaCompra>
+    lineasCompra = new Collection<LineaCompra>(this)
 
 }

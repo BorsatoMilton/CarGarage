@@ -3,12 +3,15 @@ import {
     Property,
     ManyToOne,
     Rel,
-    OneToMany
+    OneToMany, 
+    Collection
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Tarjeta } from './tarjeta.entity.js'
 import { Calificacion } from './calificacion.entity.js'
 import { Pedido } from '../pedido/pedido.entity.js'
+import {Producto } from '../producto/producto.entity.js'
+import {Subasta } from '../subasta/subasta.entity.js'
 
 @Entity()
 export class Usuario extends BaseEntity {
@@ -31,12 +34,21 @@ export class Usuario extends BaseEntity {
     direccion!: string
 
     @OneToMany(() => Tarjeta, tarjeta => tarjeta.usuario, { nullable: false })
-    tarjeta?: Rel<Tarjeta>;
+    tarjetas = new Collection<Tarjeta>(this)
 
     @OneToMany(() => Calificacion, calificacion => calificacion.usuario, { nullable: false })
-    calificacion?: Rel<Calificacion>;
+    calificacionesUsuario = new Collection<Calificacion>(this)
 
     @OneToMany(() => Pedido, pedido => pedido.usuario , { nullable: false })
-    pedido?: Rel<Pedido>;
+    pedidos = new Collection<Pedido>(this)
+
+    @OneToMany(() => Producto, producto => producto.vendedor, { nullable: false })
+    productos = new Collection<Producto>(this)
+
+    @OneToMany(() => Subasta, subasta => subasta.usuarioCreador, { nullable: false })
+    subastasCreadas = new Collection<Subasta>(this)
+
+    @OneToMany(() => Subasta, subasta => subasta.usuarioGanador, { nullable: true })
+    subastasGanadas = new Collection<Subasta>(this)
 
   }

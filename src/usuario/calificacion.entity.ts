@@ -26,4 +26,4 @@ export class Calificacion extends BaseEntity {
     @ManyToOne(() => Producto, { nullable: true })
     producto!: Rel<Producto>
 
-  }
+}

@@ -11,8 +11,8 @@ Content-Type: application/json
 {
     "usuario": "JuanP",
     "clave": "123456",
-    "nombre": "Juan",
-    "apellido": "Perez",
+    "nombre": "Milton",
+    "apellido": "Borsato",
     "mail": "JuanPerez@gmail.com",
     "direccion": "Calle falsa 123",
     "tarjeta": ["66a28b7d10af30a819063177"],

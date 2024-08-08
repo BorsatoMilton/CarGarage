@@ -10,6 +10,7 @@ function sanitizeTarjetaInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
+    numeroTarjeta: req.body.numeroTarjeta,
     codSeguridad: req.body.codSeguridad,
     fechaVencimiento: req.body.fechaVencimiento,
     usuario: req.body.usuario,

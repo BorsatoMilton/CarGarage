@@ -12,8 +12,13 @@ import { calificacionRouter } from './usuario/calificacion.routes.js';
 import { subastaRouter } from './subasta/subasta.routes.js';
 import { pedidoRouter } from './pedido/pedido.routes.js';
 import { lineacompraRouter } from './pedido/lineacompra.routes.js';
+import cors from 'cors';
+
 
 const app = express();
+app.use(cors(
+  {origin: 'http://localhost:4200'}
+));
 app.use(express.json());
   
 app.use((req, res, next) => {

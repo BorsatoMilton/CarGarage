@@ -1,0 +1,18 @@
+<div>
+    <button (click)="getAllUsuarios()">Mostrar Usuarios</button>
+</div>
+
+<!-- Mostrar lista de usuarios -->
+<ul *ngIf="usuarios.length > 0">
+    <li *ngFor="let usuario of usuarios">
+      <strong>{{ usuario.nombre }} {{ usuario.apellido }}</strong><br>
+      Email: {{ usuario.mail }}<br>
+      Dirección: {{ usuario.direccion || 'N/A' }}<br>
+      Tarjeta: {{ usuario.tarjeta || 'N/A' }}<br>
+      Calificación: {{ usuario.calificacion || 'N/A' }}<br>
+      Pedido: {{ usuario.pedido || 'N/A' }}<br>
+    </li>
+  </ul>
+  
+  <!-- Mensaje si no hay usuarios -->
+  <p *ngIf="usuarios.length === 0">No hay usuarios disponibles.</p>

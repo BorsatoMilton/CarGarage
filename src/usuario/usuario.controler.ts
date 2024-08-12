@@ -38,11 +38,22 @@ async function findAll(req: Request, res: Response) {
   }
 }
 
-async function findOne(req: Request, res: Response) {
+async function findOneById(req: Request, res: Response) {
   try {
     const id = req.params.id
     const usuario = await em.findOneOrFail(Usuario, { id })
     res.status(200).json({ message: 'Usuario Encontrado', data: usuario })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+
+async function findOneByEmail(req: Request, res: Response) {
+  try {
+    const email = req.params.email
+    const usuario = await em.findOne(Usuario, { mail : email})
+    res.status(200).json(usuario)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -82,4 +93,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeUsuarioInput, findAll, findOne, add, update, remove }
+export { sanitizeUsuarioInput, findAll, findOneById, findOneByEmail, add, update, remove}

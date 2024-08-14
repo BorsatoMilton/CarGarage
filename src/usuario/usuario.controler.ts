@@ -49,10 +49,10 @@ async function findOneById(req: Request, res: Response) {
 }
 
 
-async function findOneByEmail(req: Request, res: Response) {
+async function findOneByUser(req: Request, res: Response) {
   try {
-    const email = req.params.email
-    const usuario = await em.findOne(Usuario, { mail : email})
+    const user = req.params.user
+    const usuario = await em.findOne(Usuario, { usuario : user})
     res.status(200).json(usuario)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -93,4 +93,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeUsuarioInput, findAll, findOneById, findOneByEmail, add, update, remove}
+export { sanitizeUsuarioInput, findAll, findOneById, findOneByUser, add, update, remove}

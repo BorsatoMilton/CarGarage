@@ -12,8 +12,12 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) { }
 
-      getUsuarioByEmail(email: string):Observable<Usuario>{
-        return this.http.get<Usuario>(`${this.apiUrl}/login/${email}`);
+      getUsuarioByUser(user: string):Observable<Usuario>{
+        return this.http.get<Usuario>(`${this.apiUrl}/login/${user}`);
+      }
+
+      addUsuario(usuario: Usuario): Observable<Usuario> {
+        return this.http.post<Usuario>(this.apiUrl, usuario);
       }
   }
 

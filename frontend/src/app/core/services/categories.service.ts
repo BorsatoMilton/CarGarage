@@ -14,3 +14,4 @@ export class CategoriesService {
     return this.http.post<Category>(this.apiUrl, category);
   }
 }
+

@@ -35,3 +35,12 @@ button.btn-primary:hover {
     background-color: #007bff; /* Azul más brillante al pasar el cursor */
     border-color: #007bff;
 }
+
+form {
+    margin-top: 20px;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+

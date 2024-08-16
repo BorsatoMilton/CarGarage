@@ -1,0 +1,7 @@
+<form [formGroup]="brandForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="name">Nombre Marca</label>
+    <input type="text" formControlName="nombreMarca" id="name" name="name" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+</form>

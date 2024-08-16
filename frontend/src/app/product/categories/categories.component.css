@@ -1,0 +1,37 @@
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    color: #004080; /* Azul oscuro */
+    font-weight: bold;
+}
+
+input {
+    border: 1px solid #004080; /* Azul oscuro */
+    border-radius: 4px;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus {
+    border-color: #007bff; /* Azul más brillante para el foco */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+button.btn-primary {
+    background-color: #004080; /* Azul oscuro */
+    border-color: #004080;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn-primary:hover {
+    background-color: #007bff; /* Azul más brillante al pasar el cursor */
+    border-color: #007bff;
+}

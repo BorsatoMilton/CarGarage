@@ -11,8 +11,8 @@
             <td>{{ category.nombreCategoria }}</td>
             <td>{{ category.descripcionCategoria }}</td>
             <td>
-                <button (click)="editCategory(category)" class="btn btn-primary">Editar</button>
-                <button (click)="deleteCategory(category)" class="btn btn-danger">Eliminar</button>
+                <button  class="btn btn-primary">Editar</button>
+                <button (click)="loadCategoryData(category)" class="btn btn-danger">Eliminar</button>
             </td>
         </tr>
     </tbody>
@@ -31,7 +31,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
                 <div class="form-group">
                 <label for="name">Nombre Categoría</label>
                 <input type="text" formControlName="nombreCategoria" id="name" name="name" class="form-control" required>

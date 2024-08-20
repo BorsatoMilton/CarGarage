@@ -33,21 +33,25 @@ descripcionCategoria: ['', Validators.required]
 this.loadCategories();
 }
 
-
-
-onSubmit() {
-  if (this.categoryForm.valid) {
-    const categoryData = this.categoryForm.value;
-  
-    this.categoriesService.addCategory(categoryData).subscribe(() => {
-      alert('Categoria agregada' );
-      this.categoryForm.reset();
-      this.ngOnInit();
-      
- 
-    });
+openModal(){
+  const modalDiv = document.getElementById('editCategoria');
+  if(modalDiv != null){
+    modalDiv.style.display='block';
+    
   }
 }
+
+closeModal(modalId: string){
+  const modalDiv = document.getElementById(modalId);
+  if(modalDiv != null){
+    modalDiv.style.display='none';
+  }
+  const backdrop = document.querySelector('.modal-backdrop');
+  if (backdrop != null) {
+    backdrop.parentNode?.removeChild(backdrop);
+  }
+}
+
 
 
 loadCategories(): void {
@@ -59,6 +63,17 @@ loadCategories(): void {
 
 
 addCategory() {
+  if (this.categoryForm.valid) {
+    const categoryData = this.categoryForm.value;
+  
+    this.categoriesService.addCategory(categoryData).subscribe(() => {
+      alert('Categoria agregada' );
+      this.categoryForm.reset();
+      this.closeModal('addCategoria');
+      this.ngOnInit();
+      
+    });
+  }
 
 }
 
@@ -66,6 +81,11 @@ addCategory() {
 editCategory(category: Category) {
 }
 
-deleteCategory(category: Category) {}
+deleteCategory(category: Category) {
+  this.categoriesService.deleteCategory(category).subscribe(() => {
+    alert('Categoria eliminada');
+    this.ngOnInit();
+  });
+}
 
 }

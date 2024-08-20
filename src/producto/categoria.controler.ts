@@ -59,7 +59,7 @@ function sanitizeModeloInput(
         const categoria = await em.findOneOrFail(Categoria, { id })
         em.assign(categoria, req.body.sanitizedInput)
         await em.flush()
-        res.status(200).json({ message: 'Categoria actualizada', data: categoria })
+        res.status(200).json(categoria )
         } catch (error: any) {
         res.status(500).json({ message: error.message })
         }

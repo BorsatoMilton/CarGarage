@@ -44,3 +44,34 @@ form {
     align-items: center;
 }
 
+
+
+.modalChanged {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Para que el modal se mantenga fijo en la pantalla */
+    z-index: 1050; /* Asegúrate de que se muestre por encima de otros elementos */
+    left: 50%; /* Centrando horizontalmente */
+    top: 50%; /* Centrando verticalmente */
+    transform: translate(-50%, -50%); /* Asegura que el modal esté centrado */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+    width: 100%; /* Ancho del modal */
+    height: 100%; /* Alto del modal */
+    overflow: auto; /* En caso de contenido grande */
+}
+  
+.modal-contentChanged {
+    background-color: white; /* Fondo del contenido */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    width: 600px; /* Ajustar el ancho del popup */
+    max-width: 90%;
+    position: relative;
+}
+  
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 25px;
+    cursor: pointer;
+}

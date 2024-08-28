@@ -1,4 +1,4 @@
-<table *ngIf="categories.length > 0">
+<table >
     <thead>
         <tr>
             <th>Nombre</th>
@@ -6,13 +6,13 @@
             <th>Acciones</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody *ngIf="categories.length > 0">
         <tr *ngFor="let category of categories">
             <td>{{ category.nombreCategoria }}</td>
             <td>{{ category.descripcionCategoria }}</td>
             <td>
-                <button  class="btn btn-primary">Editar</button>
-                <button (click)="loadCategoryData(category)" class="btn btn-danger">Eliminar</button>
+                <button  (click)="openModal('editCategoria', category)"class="btn btn-primary">Editar</button>
+                <button  (click)="openModal('removeCategoria', category)"class="btn btn-danger">Eliminar</button>
             </td>
         </tr>
     </tbody>
@@ -53,8 +53,42 @@
 
 
 
+<!-- Eliminar Modal -->
+<div id="removeCategoria" class="modalChanged">
+    <div class="modal-contentChanged">
+      <span class="close" (click)="closeModal('removeCategoria')">&times;</span>
+      <h2>Eliminar Categoría</h2>
+      <p>¿Estás seguro de que deseas eliminar la siguiente categoría?</p>
+      <p><strong>Nombre:</strong> {{ selectedCategory?.nombreCategoria }}</p>
+      <p><strong>Descripción:</strong> {{ selectedCategory?.descripcionCategoria }}</p>
+      <button class="btn btn-secondary" (click)="closeModal('removeCategoria')">Cancelar</button>
+      <button class="btn btn-danger" (click)="deleteCategory(selectedCategory, 'removeCategoria')">Eliminar</button>
+    </div>
+</div>
 
+  
 
+<!--Editar Modal-->
+<div id="editCategoria" class="modalChanged">
+    <div class="modal-contentChanged">
+      <span class="close" (click)="closeModal('editCategoria')">&times;</span>
+      <h2>Editar Categoría</h2>
+      <form [formGroup]="categoryForm" (ngSubmit)="editCategory()">
+        <div class="form-group">
+          <label for="nombreCategoria">Nombre Categoría</label>
+          <input type="text" id="nombreCategoria" formControlName="nombreCategoria" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcionCategoria">Descripción</label>
+          <input type="text" id="descripcionCategoria" formControlName="descripcionCategoria" class="form-control" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal('editCategoria')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+</div>
 
 
 

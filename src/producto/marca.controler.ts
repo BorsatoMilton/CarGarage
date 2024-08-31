@@ -24,8 +24,8 @@ function sanitizeModeloInput(
   
     async function findAll(req: Request, res: Response) {
         try {
-        const Marcas = await em.find(Marca,{})
-        res.status(200).json({ message: 'Marcas', data: Marcas })
+        const marcas = await em.find(Marca,{})
+        res.status(200).json(marcas)
         } catch (error: any) {
         res.status(500).json({ message: error.message })
         }

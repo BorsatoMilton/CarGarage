@@ -11,10 +11,13 @@ import { Brand } from '../../core/models/brands.interfaces.js';
   templateUrl: './brand.component.html',
   styleUrl: './brand.component.css'
 })
+
 export class BrandComponent implements OnInit {
 brandForm: FormGroup=new FormGroup({}); 
 brands: Brand[] = [];
 selectedBrand: Brand | null = null;
+
+
 constructor(
 private fb: FormBuilder, 
 private brandService: BrandsService
@@ -24,9 +27,8 @@ private brandService: BrandsService
   });}
 
 ngOnInit(): void {
-this.loadBrand()
+    this.loadBrand()
 }
-
 
 openModal(modalId: string, brand: Brand): void{
   this.selectedBrand = brand;
@@ -61,9 +63,7 @@ addBrand() {
       alert('Marca agregada' );
       this.brandForm.reset();
       this.closeModal('addBrand');
-      this.ngOnInit();   
-    
-
+      this.loadBrand() 
     });
   }
 
@@ -94,7 +94,7 @@ deleteBrand(brand: Brand | null, modalId: string) {
   if(brand){
       this.brandService.deleteBrand(brand).subscribe(() => {
         alert('Marca eliminada');
-        this.ngOnInit();
+        this.loadBrand();
         this.closeModal(modalId);
         this.brandForm.reset();
       });

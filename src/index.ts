@@ -12,6 +12,7 @@ import { calificacionRouter } from './usuario/calificacion.routes.js';
 import { subastaRouter } from './subasta/subasta.routes.js';
 import { pedidoRouter } from './pedido/pedido.routes.js';
 import { lineacompraRouter } from './pedido/lineacompra.routes.js';
+import { correoRouter } from './correo/correo.routes.js';
 import cors from 'cors';
 
 
@@ -35,6 +36,8 @@ app.use ('/api/calificaciones', calificacionRouter)
 app.use('/api/subastas', subastaRouter)
 app.use('/api/pedidos', pedidoRouter)
 app.use('/api/lineacompras', lineacompraRouter)
+app.use('/api/recuperacion', correoRouter);
+
 
 
 app.use((_, res) => {

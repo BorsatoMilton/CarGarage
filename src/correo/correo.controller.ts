@@ -12,8 +12,8 @@ async function envioCorreo (req: Request, res: Response)  {
         port: 587,
         secure: false,
         auth: {
-            user: 'cargarage153@gmail.com', 
-            pass: 'DSW2024utn'
+            user: '', 
+            pass: ''
         }
     });
 

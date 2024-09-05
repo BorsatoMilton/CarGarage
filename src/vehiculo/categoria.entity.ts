@@ -6,7 +6,7 @@ import {
     Cascade
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import { Producto } from './producto.entity.js'
+import { Producto } from './vehiculo.entity.js'
 
 
 @Entity()

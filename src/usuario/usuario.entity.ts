@@ -9,8 +9,8 @@ import {
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Tarjeta } from './tarjeta.entity.js'
 import { Calificacion } from './calificacion.entity.js'
-import { Pedido } from '../pedido/pedido.entity.js'
-import {Producto } from '../producto/producto.entity.js'
+import { Pedido } from '../pedido/compra.entity.js'
+import {Producto } from '../vehiculo/vehiculo.entity.js'
 import {Subasta } from '../subasta/subasta.entity.js'
 
 @Entity()

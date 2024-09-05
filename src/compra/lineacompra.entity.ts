@@ -5,8 +5,8 @@ import {
     Rel
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import { Pedido } from './pedido.entity.js'
-import { Producto } from '../producto/producto.entity.js'
+import { Pedido } from './compra.entity.js'
+import { Producto } from '../vehiculo/vehiculo.entity.js'
 
 
 @Entity()

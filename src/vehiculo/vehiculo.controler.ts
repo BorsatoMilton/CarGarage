@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { Producto } from './producto.entity.js'
+import { Vehiculo } from './vehiculo.entity.js'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
 
-function sanitizeProductoInput(
+function sanitizeVehiculoInput(
   req: Request,
   res: Response,
   next: NextFunction
@@ -31,8 +31,8 @@ function sanitizeProductoInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const productos = await em.find(Producto,{},{populate: ['modelo']})
-    res.status(200).json({ message: 'Productos', data: productos })
+    const vehiculos = await em.find(Vehiculo,{},{populate: ['modelo']})
+    res.status(200).json({ message: 'Vehiculos', data: vehiculos })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -41,8 +41,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const producto = await em.findOneOrFail(Producto, { id }, { populate: ['modelo'] })
-    res.status(200).json({ message: 'Producto Encontrado', data: producto })
+    const vehiculo = await em.findOneOrFail(Vehiculo, { id }, { populate: ['modelo'] })
+    res.status(200).json({ message: 'Vehiculo Encontrado', data: vehiculo })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -50,9 +50,9 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const producto = em.create(Producto, req.body.sanitizedInput)
+    const vehiculo = em.create(Vehiculo, req.body.sanitizedInput)
     await em.flush()
-    res.status(201).json({ message: 'Producto creado', data: producto })
+    res.status(201).json({ message: 'Vehiculo creado', data: vehiculo })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -61,12 +61,12 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const productoAactualizar = await em.findOneOrFail(Producto, { id })
-    em.assign(productoAactualizar, req.body.sanitizedInput)
+    const vehiculoAactualizar = await em.findOneOrFail(Vehiculo, { id })
+    em.assign(vehiculoAactualizar, req.body.sanitizedInput)
     await em.flush()
     res
       .status(200)
-      .json({ message: 'Producto Actualizado', data: productoAactualizar })
+      .json({ message: 'Vehiculo Actualizado', data: vehiculoAactualizar })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -75,11 +75,11 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const producto = em.getReference(Producto, id)
-    await em.removeAndFlush(producto)
+    const vehiculo = em.getReference(Vehiculo, id)
+    await em.removeAndFlush(vehiculo)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizeProductoInput, findAll, findOne, add, update, remove }
+export { sanitizeVehiculoInput, findAll, findOne, add, update, remove }

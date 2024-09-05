@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { Pedido } from "./pedido.entity.js";    
+import { Compra } from "./compra.entity.js";
 import { orm } from "../shared/db/orm.js";
 
 
 const em = orm.em
 
-function sanitizePedidoInput (
+function sanitizeCompraInput (
   req: Request,
   res: Response,
   next: NextFunction
@@ -13,9 +13,8 @@ function sanitizePedidoInput (
   req.body.sanitizedInput = 
     {
         fecha: req.body.fecha,
-        usuario: req.body.usuario,
-        lineacompra: req.body.lineacompra
-  }
+        usuario: req.body.usuario
+      }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {
@@ -28,8 +27,8 @@ function sanitizePedidoInput (
 
 async function findAll(req: Request, res: Response) {
     try {
-        const pedidos = await em.find(Pedido,{})
-        res.status(200).json({ message: 'Pedidos', data: pedidos })
+        const compras = await em.find(Compra,{})
+        res.status(200).json({ message: 'Compra', data: compras })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -38,8 +37,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
     try {
         const id = req.params.id
-        const pedido = await em.findOneOrFail(Pedido, { id })
-        res.status(200).json({ message: 'Pedido Encontrado', data: pedido })
+        const compra = await em.findOneOrFail(Compra, { id })
+        res.status(200).json({ message: 'Compra Encontrado', data: compra })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -47,9 +46,9 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
     try {
-        const pedido = em.create(Pedido, req.body.sanitizedInput)
+        const compra = em.create(Compra, req.body.sanitizedInput)
         await em.flush()
-        res.status(201).json({ message: 'Pedido creado', data: pedido })
+        res.status(201).json({ message: 'Compra creado', data: compra })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -58,10 +57,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
     try {
         const id = req.params.id
-        const pedidoActualizar = await em.findOneOrFail(Pedido, { id })
-        em.assign(pedidoActualizar, req.body.sanitizedInput)
+        const compraActualizar = await em.findOneOrFail(Compra, { id })
+        em.assign(compraActualizar, req.body.sanitizedInput)
         await em.flush()
-        res.status(200).json({ message: 'Pedido actualizado', data: pedidoActualizar })
+        res.status(200).json({ message: 'Compra actualizado', data: compraActualizar })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -70,12 +69,12 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
     try {
         const id = req.params.id
-        const pedido = em.getReference(Pedido, id)
-        await em.removeAndFlush(pedido)
-        res.status(200).json({ message: 'Pedido eliminado' })
+        const compra = em.getReference(Compra, id)
+        await em.removeAndFlush(compra)
+        res.status(200).json({ message: 'Compra eliminado' })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
 }
 
-export { sanitizePedidoInput, findAll, findOne, add, update, remove }
+export { sanitizeCompraInput, findAll, findOne, add, update, remove }

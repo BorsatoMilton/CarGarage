@@ -9,7 +9,7 @@ import {
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
-import { Producto } from '../producto/producto.entity.js'
+import { Producto } from '../vehiculo/vehiculo.entity.js'
 
 @Entity()
 export class Subasta extends BaseEntity {

@@ -2,16 +2,15 @@ import 'reflect-metadata';
 import express from 'express';
 import { orm } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
-import { modeloRouter } from './producto/modelo.routes.js';
-import { productoRouter } from './producto/producto.routes.js';
-import { marcaRouter } from './producto/marca.routes.js';
-import { categoriaRouter } from './producto/categoria.routes.js';
+import { vehiculoRouter } from './vehiculo/vehiculo.routes.js';
+import { marcaRouter } from './vehiculo/marca.routes.js';
+import { categoriaRouter } from './vehiculo/categoria.routes.js';
 import { usuarioRouter } from './usuario/usuario.routes.js';
 import { tarjetaRouter } from './usuario/tarjeta.routes.js';
 import { calificacionRouter } from './usuario/calificacion.routes.js';
 import { subastaRouter } from './subasta/subasta.routes.js';
-import { pedidoRouter } from './pedido/pedido.routes.js';
-import { lineacompraRouter } from './pedido/lineacompra.routes.js';
+import { compraRouter } from './compra/compra.routes.js';
+import { lineacompraRouter } from './compra/lineacompra.routes.js';
 import { correoRouter } from './correo/correo.routes.js';
 import cors from 'cors';
 
@@ -28,13 +27,12 @@ app.use((req, res, next) => {
 
 app.use('/api/categorias', categoriaRouter)
 app.use('/api/marcas', marcaRouter)
-app.use('/api/modelos', modeloRouter )
-app.use('/api/productos', productoRouter )
+app.use('/api/productos', vehiculoRouter )
 app.use('/api/usuarios', usuarioRouter )
 app.use('/api/tarjetas', tarjetaRouter)
 app.use ('/api/calificaciones', calificacionRouter)
 app.use('/api/subastas', subastaRouter)
-app.use('/api/pedidos', pedidoRouter)
+app.use('/api/pedidos', compraRouter)
 app.use('/api/lineacompras', lineacompraRouter)
 app.use('/api/recuperacion', correoRouter);
 

@@ -9,19 +9,24 @@ import {
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
-import { LineaCompra } from './lineacompra.entity.js'
+import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
 
 @Entity()
-export class Pedido extends BaseEntity{
+export class Compra extends BaseEntity{
 
-    @OneToMany (() => LineaCompra, lineacompra => lineacompra.pedido, { nullable: false })
-    lineasCompra = new Collection<LineaCompra>(this)
+    @Property({ nullable: false })
+    fechaCompra!:Date
+    
+    @Property({ nullable: false })
+    precioTotal!:Number
 
     @ManyToOne(() => Usuario, { nullable: false })
     usuario!: Rel<Usuario>
 
-    @Property({ nullable: false })
-    fechaPedido!:Date
+    @ManyToOne(() => Vehiculo, { nullable: false })
+    vehiculo!: Rel<Vehiculo>
+
+    
     
 }
 

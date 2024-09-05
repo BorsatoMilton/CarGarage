@@ -7,7 +7,7 @@ import {
     ManyToOne,
     Rel
   } from '@mikro-orm/core'
-  import { Producto } from './producto.entity.js'
+  import { Producto } from './vehiculo.entity.js'
   import { BaseEntity } from '../shared/db/baseEntity.entity.js'
   import { Marca } from './marca.entity.js'
 

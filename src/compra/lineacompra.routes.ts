@@ -1,5 +1,5 @@
 import {Router} from 'express'; 
-import {findAll, findOne, add, update, remove, sanitizeLineaCompraInput} from '../pedido/lineacompra.controler.js';
+import {findAll, findOne, add, update, remove, sanitizeLineaCompraInput} from '../compra/lineacompra.controler.js';
 
 export const lineacompraRouter = Router();
 

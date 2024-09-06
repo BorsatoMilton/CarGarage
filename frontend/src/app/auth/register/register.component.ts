@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuariosService } from '../../core/services/usuarios.service.js';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -16,7 +17,9 @@ import { UsuariosService } from '../../core/services/usuarios.service.js';
 export class RegisterComponent implements OnInit{
   registerForm: FormGroup = new FormGroup({});
 
-  constructor(private fb: FormBuilder, private usuariosService: UsuariosService) {}
+  constructor(private fb: FormBuilder, private usuariosService: UsuariosService,
+    private router: Router
+  ) {}
 
   
   ngOnInit(): void {
@@ -45,6 +48,8 @@ export class RegisterComponent implements OnInit{
           this.usuariosService.addUsuario(this.registerForm.value).subscribe(() => {
             alert('Usuario registrado correctamente');
             this.registerForm.reset();
+            this.router.navigate(['/login']);
+            
           });
       }else{
         alert('Por favor complete todos los campos correctamente.');

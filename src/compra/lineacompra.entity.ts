@@ -5,8 +5,8 @@ import {
     Rel
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import { Pedido } from './compra.entity.js'
-import { Producto } from '../vehiculo/vehiculo.entity.js'
+import { Compra } from './compra.entity.js'
+import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
 
 
 @Entity()
@@ -15,9 +15,9 @@ export class LineaCompra extends BaseEntity{
     @Property ({nullable: false})
     cantidad!: number
     
-    @ManyToOne(() => Pedido, { nullable: false })
-    pedido!: Rel<Pedido>
+    @ManyToOne(() => Compra, { nullable: false })
+    compra!: Rel<Compra>
 
-    @ManyToOne(() => Producto, { nullable: false })
-    producto!: Rel<Producto>
+    @ManyToOne(() => Vehiculo, { nullable: false })
+    vehiculo!: Rel<Vehiculo>
 }

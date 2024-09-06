@@ -20,7 +20,7 @@ export class ForgotPasswordComponent {
     
   ) { }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.recoverForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -28,11 +28,16 @@ export class ForgotPasswordComponent {
 
   recoverPassword(): void {
     if (this.recoverForm.valid) {
-      const email = this.recoverForm.value;
-      this.passwordRecoveryService.sendRecoveryEmail(email).subscribe(() => {
-        alert('Se ha enviado un correo a tu dirección de email');
-      }
-      );
+      const email = this.recoverForm.get('email')?.value;
+      this.passwordRecoveryService.sendRecoveryEmail(email).subscribe({
+        next: () => {
+          alert('Se ha enviado un correo a tu dirección de email');
+        },
+        error: (error) => {
+          console.error('Error al enviar el correo:', error);
+          alert('Hubo un error al enviar el correo. Por favor, inténtalo nuevamente.');
+        }
+      });
     }
   }
 

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Usuario } from './usuario.entity.js'
 import { orm } from '../shared/db/orm.js'
+import { PasswordResetToken } from './passwordResetToken.entity.js'
 
 const em = orm.em
 
@@ -48,6 +49,12 @@ async function findOneById(req: Request, res: Response) {
   }
 }
 
+async function findOneByEmail(email:string){
+  const usuario = await em.findOne(Usuario, { mail: email })
+  return usuario
+}
+
+
 
 async function findOneByUser(req: Request, res: Response) {
   try {
@@ -83,6 +90,27 @@ async function update(req: Request, res: Response) {
   }
 }
 
+async function resetPassword(req: Request, res: Response) {
+  const { token, newPassword } = req.body;
+
+  const tokenEntity = await orm.em.findOne(PasswordResetToken, { token });
+  if (!tokenEntity || tokenEntity.expiryDate < new Date()) {
+      return res.status(400).json({ ok: false, message: 'Token inválido o expirado' });
+  }
+
+  const user = await orm.em.findOne(Usuario, tokenEntity.user.id);
+  if (!user) {
+      return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
+  }
+
+  user.clave = newPassword;
+  await orm.em.persistAndFlush(user); //faltaria encriptar la clave, pero bue, pincho
+  await orm.em.removeAndFlush(tokenEntity);
+  return res.status(200).json({ ok: true, message: 'Contraseña actualizada exitosamente' });
+
+}
+
+
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id
@@ -93,4 +121,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeUsuarioInput, findAll, findOneById, findOneByUser, add, update, remove}
+export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove}

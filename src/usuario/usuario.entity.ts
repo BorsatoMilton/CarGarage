@@ -9,9 +9,9 @@ import {
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Tarjeta } from './tarjeta.entity.js'
 import { Calificacion } from './calificacion.entity.js'
-import { Pedido } from '../pedido/compra.entity.js'
-import {Producto } from '../vehiculo/vehiculo.entity.js'
-import {Subasta } from '../subasta/subasta.entity.js'
+import { Compra } from '../compra/compra.entity.js'
+import {Vehiculo} from '../vehiculo/vehiculo.entity.js'
+
 
 @Entity()
 export class Usuario extends BaseEntity {
@@ -39,16 +39,12 @@ export class Usuario extends BaseEntity {
     @OneToMany(() => Calificacion, calificacion => calificacion.usuario, { nullable: false })
     calificacionesUsuario = new Collection<Calificacion>(this)
 
-    @OneToMany(() => Pedido, pedido => pedido.usuario , { nullable: false })
-    pedidos = new Collection<Pedido>(this)
+    @OneToMany(() => Compra, compra => compra.usuario , { nullable: false })
+    compras = new Collection<Compra>(this)
 
-    @OneToMany(() => Producto, producto => producto.vendedor, { nullable: false })
-    productos = new Collection<Producto>(this)
+    @OneToMany(() => Vehiculo, vehiculo => vehiculo.vendedor, { nullable: false })
+    vehiculos = new Collection<Vehiculo>(this)
 
-    @OneToMany(() => Subasta, subasta => subasta.usuarioCreador, { nullable: false })
-    subastasCreadas = new Collection<Subasta>(this)
-
-    @OneToMany(() => Subasta, subasta => subasta.usuarioGanador, { nullable: true })
-    subastasGanadas = new Collection<Subasta>(this)
+    //FALTA LO DE ALQUILER
 
   }

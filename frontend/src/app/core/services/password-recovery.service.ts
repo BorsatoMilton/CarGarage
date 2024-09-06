@@ -9,14 +9,16 @@ import {RecoveryPassword} from '../models/recovery-password';
 export class PasswordRecoveryService {
 
   private apiUrl = 'http://localhost:3000/api/recuperacion'; 
+  private apiUrlToReset = 'http://localhost:3000/api/usuarios'
 
   constructor(private http: HttpClient) { }
 
   sendRecoveryEmail(email: string): Observable<any> {
-    const correo: RecoveryPassword = {
-      asunto: 'Recuperación de contraseña',
-      destinatario: email,
-      mensaje: 'Para recuperar tu contraseña, haz clic en el siguiente enlace: '}
-    return this.http.post<any>(this.apiUrl, correo);
+
+    return this.http.post<any>(this.apiUrl, {destinatario: email});
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrlToReset}/reset`, { token, newPassword });
   }
 }

@@ -13,7 +13,7 @@ Content-Type: application/json
     "clave": "123",
     "nombre": "Milton",
     "apellido": "Borsato",
-    "mail": "borsatomilton@gmail.com",
+    "mail": "nachodayer@gmail.com",
     "direccion": "Calle falsa 123",
     "tarjeta": ["66a28b7d10af30a819063177"],
     "calificacion" : ["66a28ee01dbd5c9e5aece75b" ],

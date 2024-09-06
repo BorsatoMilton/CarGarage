@@ -1,27 +1,43 @@
 import { Request, Response } from 'express';
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import { findOneByEmail } from '../usuario/usuario.controler.js';
+import { generateToken } from '../shared/db/tokenGenerator.js';
+import { PasswordResetToken } from '../usuario/passwordResetToken.entity.js';
+import { orm } from '../shared/db/orm.js';
+
+dotenv.config();
 
 async function envioCorreo (req: Request, res: Response)  {
     
-    const asunto = req.body.asunto;
     const destinatario = req.body.destinatario;
-    const mensaje = req.body.mensaje;
+    
+
+    const user = await findOneByEmail(destinatario);
+    if (!user) {
+        return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
+    }
+
+    const token = generateToken();
+    const resetLink = `http://localhost:4200/auth/reset-password?token=${token}`
+    const tokenEntity = new PasswordResetToken(token, user);
+    await orm.em.persistAndFlush(tokenEntity);
 
     const config = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
         secure: false,
         auth: {
-            user: '', 
-            pass: ''
+            user: process.env.EMAIL_USER, 
+            pass: process.env.EMAIL_PASS
         }
     });
 
     const opciones = {
-        from: 'cargarage153@gmail.com',
-        subject: asunto,
+        from: process.env.EMAIL_USER,
+        subject: 'Recuperación de contraseña',
         to: destinatario,
-        text: mensaje
+        text: `Para recuperar tu contraseña, haz clic en el siguiente enlace: ${resetLink}`
     };
 
     config.sendMail(opciones, (error: Error | null, info: any) => {

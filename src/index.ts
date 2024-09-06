@@ -8,7 +8,6 @@ import { categoriaRouter } from './vehiculo/categoria.routes.js';
 import { usuarioRouter } from './usuario/usuario.routes.js';
 import { tarjetaRouter } from './usuario/tarjeta.routes.js';
 import { calificacionRouter } from './usuario/calificacion.routes.js';
-import { subastaRouter } from './subasta/subasta.routes.js';
 import { compraRouter } from './compra/compra.routes.js';
 import { lineacompraRouter } from './compra/lineacompra.routes.js';
 import { correoRouter } from './correo/correo.routes.js';
@@ -31,7 +30,6 @@ app.use('/api/productos', vehiculoRouter )
 app.use('/api/usuarios', usuarioRouter )
 app.use('/api/tarjetas', tarjetaRouter)
 app.use ('/api/calificaciones', calificacionRouter)
-app.use('/api/subastas', subastaRouter)
 app.use('/api/pedidos', compraRouter)
 app.use('/api/lineacompras', lineacompraRouter)
 app.use('/api/recuperacion', correoRouter);

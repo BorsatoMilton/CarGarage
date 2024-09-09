@@ -12,6 +12,7 @@ import { compraRouter } from './compra/compra.routes.js';
 import { lineacompraRouter } from './compra/lineacompra.routes.js';
 import { correoRouter } from './correo/correo.routes.js';
 import cors from 'cors';
+import { alquilerRouter } from './alquiler/alquiler.routes.js';
 
 
 const app = express();
@@ -33,6 +34,7 @@ app.use ('/api/calificaciones', calificacionRouter)
 app.use('/api/pedidos', compraRouter)
 app.use('/api/lineacompras', lineacompraRouter)
 app.use('/api/recuperacion', correoRouter);
+app.use('/api/alquiler', alquilerRouter);
 
 
 

@@ -1,0 +1,71 @@
+<table >
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="vehicles.length > 0">
+        <tr *ngFor="let vehicle of vehicles">
+            <td>{{ vehicle.nombreVehiculo }}</td>
+            <td>
+                <button  (click)="openModal('editVehicle', vehicle)"class="btn btn-primary">Editar</button>
+                <button  (click)="openModal('removeVehicle', vehicle)"class="btn btn-danger">Eliminar</button>
+            </td>
+        </tr>
+    </tbody>
+    <p *ngIf="vehicles.length === 0">No hay vehiculos</p>
+  </table>
+  
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVehicle">Añadir Vehiculo</button>
+  
+  <div class="modal fade" id="addVehicle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Vehiculo</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()">
+                <div class="form-group">
+                <label for="name">Nombre Vehiculo</label>
+                <input type="text" formControlName="nombreVehiculo" id="name" name="name" class="form-control" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>        
+    </div>
+    </div>
+  </div>
+  
+  <div id="removeVehicle" class="modalChanged">
+    <div class="modal-contentChanged">
+      <span class="close" (click)="closeModal('removeVehicle')">&times;</span>
+      <h2>Eliminar Vehiculo</h2>
+      <p>¿Estás seguro de que deseas eliminar el siguiente vehiculo?</p>
+      <p><strong>Nombre:</strong> {{ selectedVehicle?.nombreVehiculo }}</p>
+      <button class="btn btn-secondary" (click)="closeModal('removeVehicle')">Cancelar</button>
+      <button class="btn btn-danger" (click)="deleteVehicle(selectedVehicle, 'removeVehicle')">Eliminar</button>
+    </div>
+  </div>
+  
+  <div id="editVehicle" class="modalChanged">
+      <div class="modal-contentChanged">
+        <span class="close" (click)="closeModal('editVehicle')">&times;</span>
+        <h2>Editar Vehiculo</h2>
+        <form [formGroup]="vehicleForm" (ngSubmit)="editVehicle()">
+          <div class="form-group">
+            <label for="nombreVehiculo">Nombre Vehiculo</label>
+            <input type="text" id="nombreVehiculo" formControlName="nombreVehiculo" class="form-control" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal('editVehicle')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+      </div>
+  </div>

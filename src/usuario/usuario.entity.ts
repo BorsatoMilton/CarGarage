@@ -11,6 +11,7 @@ import { Tarjeta } from './tarjeta.entity.js'
 import { Calificacion } from './calificacion.entity.js'
 import { Compra } from '../compra/compra.entity.js'
 import {Vehiculo} from '../vehiculo/vehiculo.entity.js'
+import { Alquiler } from '../alquiler/alquiler.entity.js'
 
 
 @Entity()
@@ -45,6 +46,12 @@ export class Usuario extends BaseEntity {
     @OneToMany(() => Vehiculo, vehiculo => vehiculo.vendedor, { nullable: false })
     vehiculos = new Collection<Vehiculo>(this)
 
-    //FALTA LO DE ALQUILER
+    @OneToMany(() => Alquiler, alquiler => alquiler.locador, { nullable: false })
+    alquilerLocador= new Collection<Alquiler>(this)
+    
+    @OneToMany(() => Alquiler, alquiler => alquiler.locatario, { nullable: false })
+    alquilerLocatorio= new Collection<Alquiler>(this)
+
+    
 
   }

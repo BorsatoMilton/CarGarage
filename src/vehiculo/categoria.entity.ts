@@ -3,7 +3,8 @@ import {
     Property,
     ManyToMany,
     Collection,
-    Cascade
+    Cascade,
+    OneToMany
 } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Marca } from './marca.entity.js'
@@ -18,7 +19,7 @@ export class Categoria extends BaseEntity{
     @Property({ nullable: false })
     descripcionCategoria!: string
 
-    @ManyToMany(() => Marca, marca => marca.categorias, { nullable: true, cascade: [Cascade.ALL] , owner:true})
+    @OneToMany (() => Marca, marca => marca.categoria, { nullable: true })
     marcas = new Collection<Marca>(this)
 
 }

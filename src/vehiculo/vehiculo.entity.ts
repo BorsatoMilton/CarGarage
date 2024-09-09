@@ -10,7 +10,7 @@ import {
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Calificacion } from '../usuario/calificacion.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
-// import { Alquiler } from '../alquiler/alquiler.entity.js'
+import { Alquiler } from '../alquiler/alquiler.entity.js'
 import { Marca } from './marca.entity.js'
 import { Compra } from '../compra/compra.entity.js'
 
@@ -47,8 +47,8 @@ export class Vehiculo extends BaseEntity {
     @ManyToOne(() => Usuario , { nullable: false })
     vendedor!: Rel<Usuario>
 
-    //@OneToMany(()=> Alquiler , alquiler => alquiler.vehiculo, { nullable: true })
-    //alquiler = new Collection<Subasta>(this)
+    @OneToMany(()=> Alquiler , alquiler => alquiler.vehiculo, { nullable: true })
+    alquileres = new Collection<Alquiler>(this)
 
     @OneToMany(() => Calificacion, calificacion => calificacion.vehiculo, { nullable: false })
     calificaciones = new Collection<Calificacion>(this)

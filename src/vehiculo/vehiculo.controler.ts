@@ -17,8 +17,8 @@ function sanitizeVehiculoInput(
     stock: req.body.stock,
     precioVenta: req.body.precioVenta,
     modelo: req.body.modelo,
-    categoria: req.body.categoria,
     calificacion: req.body.calificacion,
+    alquiler: req.body.alquiler,
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {

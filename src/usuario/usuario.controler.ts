@@ -19,7 +19,7 @@ function sanitizeUsuarioInput(
     direccion: req.body.direccion,
     tarjeta: req.body.tarjeta,
     calificacion: req.body.calificacion,
-    pedido: req.body.pedido,
+    alquiler: req.body.alquiler,
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {

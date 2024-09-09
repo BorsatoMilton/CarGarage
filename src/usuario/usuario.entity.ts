@@ -12,7 +12,7 @@ import { Calificacion } from './calificacion.entity.js'
 import { Compra } from '../compra/compra.entity.js'
 import {Vehiculo} from '../vehiculo/vehiculo.entity.js'
 import { Alquiler } from '../alquiler/alquiler.entity.js'
-
+import { Rol } from './rol.entity.js'
 
 @Entity()
 export class Usuario extends BaseEntity {
@@ -52,6 +52,7 @@ export class Usuario extends BaseEntity {
     @OneToMany(() => Alquiler, alquiler => alquiler.locatario, { nullable: false })
     alquilerLocatorio= new Collection<Alquiler>(this)
 
-    
+    @ManyToOne(() => Rol, { nullable: false })
+    rol!: Rel<Rol> 
 
   }

@@ -1,3 +1,4 @@
+
 .register-container {
     margin: 0;
     padding: 0;
@@ -6,7 +7,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Ajuste para centrar verticalmente en la pantalla */
+    height: 90vh; /* Ajuste para centrar verticalmente en la pantalla */
   }
   
   /* Caja del formulario de registro */

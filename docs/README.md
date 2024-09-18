@@ -9,7 +9,7 @@
 
 # Enunciado
 
-SvS es un sitio destinado a la venta y compra de vehículos a través de internet. Es utilizado para comprar y vender artículos. Las subastas utilizan un sistema de subasta. Compradores y vendedores pueden valorarse y evaluarse mutuamente después de cada transacción, lo que da lugar a un sistema de reputación. El servicio SvS es accesible a través de sitios web y aplicaciones móviles.
+SvS es un sitio destinado a la compra, venta y alquiler vehículos a través de internet. Compradores y vendedores pueden valorarse y evaluarse mutuamente después de cada transacción, lo que da lugar a un sistema de reputación. El servicio SvS es accesible a través de sitios web y aplicaciones móviles.
 
 
 
@@ -27,29 +27,26 @@ SvS es un sitio destinado a la venta y compra de vehículos a través de inter
 <td align="left">CRUD simple</td>
 <td align="left">
       1. CRUD Usuario
-  <br>2. CRUD Pedido
-  <br>3. CRUD Subasta
+  <br>2. CRUD Compra
+  <br>3. CRUD Alquiler
   <br>4. CRUD Calificacion
   <br>5. CRUD Tarjeta
   <br>6. CRUD Categoria
-  <br>7. CRUD Modelo
-  <br>8. CRUD Marca
-  <br>9. CRUD LineaCompra
-  <br>10. CRUD Boleta
-  <br>11. CRUD CategoriaUsuario
-  <br>12. CRUD Politica
+  <br>7. CRUD Marca
+  <br>8. CRUD Rol
+  <br>9. CRUD Politica
 </td>
 </tr>
 <tr>
 <td align="left">Listado<br>+<br>detalle</td>
-<td align="left">1. Listado de productos filtrado por marca|modelo|categoria|precio, muestra nombre, precio de producto y stock =&gt; detalle muestra modelo, marca y categoria
-      <br> 2. Listado de pedidos filtrado por rango de fecha, muestra fecha, monto, nombre del cliente =&gt; detalle muestra datos completos de los productos con sus cantidades y del cliente</td>
+<td align="left">1. Listado de vehículos filtrado por marca|categoria|precio, muestra nombre, precio venta del vehiculo y descripcion =&gt; detalle muestra marca y categoria
+      <br> 2. Listado de Alquileres filtrado por rango de fecha, muestra fecha, monto, nombre del locatario =&gt; detalle muestra datos completos del vehiculo y del locatario</td>
 </tr>
 <tr>
 <td align="left">CUU/Epic</td>
 <td align="left">
-      1. Registrar Pedido
-      <br>2. Gestionar Subasta</td>
+      1. Registrar Compra
+      <br>2. Gestionar Alquiler</td>
 </tr>
 </tbody>
 </table>

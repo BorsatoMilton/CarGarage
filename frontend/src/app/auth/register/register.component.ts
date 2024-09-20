@@ -48,8 +48,7 @@ export class RegisterComponent implements OnInit{
           this.usuariosService.addUsuario(this.registerForm.value).subscribe(() => {
             alert('Usuario registrado correctamente');
             this.registerForm.reset();
-            this.router.navigate(['/login']);
-            
+            this.router.navigate(['/auth/login']);
           });
       }else{
         alert('Por favor complete todos los campos correctamente.');

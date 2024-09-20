@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { Usuario } from './usuario.entity.js'
 import { orm } from '../shared/db/orm.js'
 import { PasswordResetToken } from './passwordResetToken.entity.js'
+import bcrypt from 'bcrypt';
 
 const em = orm.em
 
@@ -66,12 +67,42 @@ async function findOneByUser(req: Request, res: Response) {
   }
 }
 
+
+async function login(req: Request, res: Response) {
+  try {
+    const usuario = req.body.user;
+    const clave = req.body.password;
+    const usuarioEncontrado = await em.findOne(Usuario, { usuario: usuario });
+
+    if (!usuarioEncontrado) {
+      return res.status(401).json({ message: 'Usuario no encontrado' });
+    }
+
+    const isMatch = await bcrypt.compare(clave, usuarioEncontrado.clave);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Contraseña incorrecta' });
+    }
+
+    // Aquí puedes generar un token o realizar otra acción
+    res.status(200).json({ message: 'Inicio de sesión exitoso' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
 async function add(req: Request, res: Response) {
   try {
-    const usuario = em.create(Usuario, req.body.sanitizedInput)
+    const vecesHash = 10;
+    const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
+    const usuario = em.create(Usuario, {
+      ...req.body.sanitizedInput,
+      clave: hashClave
+    })
     await em.flush()
     res.status(201).json({ message: 'Usuario creado', data: usuario })
   } catch (error: any) {
+    console.error(error); 
     res.status(500).json({ message: error.message })
   }
 }
@@ -121,4 +152,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove}
+export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove, login}

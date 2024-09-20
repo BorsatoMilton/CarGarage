@@ -33,20 +33,27 @@ export class LoginComponent implements OnInit {
       alert('Por favor complete todos los campos correctamente.');
       return;
     }
-
+  
     this.user = this.loginForm.get('user')?.value;
     this.password = this.loginForm.get('password')?.value;
-
-    this.usuariosService.getUsuarioByUser(this.user).subscribe((usuario) => {
-      if (!usuario) {
-        alert('Usuario Inexistente!');
-        this.loginForm.reset();
-      } else if (this.password === usuario.clave) {
+    
+  
+    this.usuariosService.login(this.user, this.password).subscribe({
+      next: () => {
         alert('Bienvenido');
-      } else {
-        alert('Contraseña Incorrecta!');
-        this.loginForm.get('password')?.reset();
+        
+      },
+      error: (error) => {
+        if (error.status === 404) {
+          alert('Usuario no encontrado');
+        } else if (error.status === 401) {
+          alert('Contraseña incorrecta');
+        } else {
+          alert('Error al comunicarse con el servidor');
+        }
+        this.loginForm.reset();
       }
     });
   }
+  
 }

@@ -12,8 +12,8 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) { }
 
-      getUsuarioByUser(user: string):Observable<User>{
-        return this.http.get<User>(`${this.apiUrl}/login/${user}`);
+      login(user: string, password: string):Observable<User>{
+        return this.http.post<User>(`${this.apiUrl}/login`, {user, password});
       }
 
       addUsuario(usuario: User): Observable<User> {

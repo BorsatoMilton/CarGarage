@@ -46,28 +46,24 @@ private categoriesService: CategoriesService
   });}
 
 ngOnInit(): void {
-    this.loadVehicle()
+  
     this.vehicleService.getBrands().subscribe(data => {
       this.brands = data;
     });
     this.vehicleService.getCategories().subscribe(data => {
       this.categories = data;
     });
-    console.log(this.vehicles)
+
+    this.loadVehicle();
+    
     
 }
 
-
-
 openModal(modalId: string, vehicle: Vehicle): void{
   this.selectedVehicle = vehicle;
-  const marcaid = vehicle.marca
-  const categoriaid = vehicle.categoria
+
   if (vehicle) {
-    const marcaobjeto = this.brandService.getOneBrand(marcaid).subscribe((marca) => {
-    const nombremarca = marca.nombreMarca;
-    const categoriaobjeto = this.categoriesService.getOneCategory(categoriaid).subscribe((categoria) => {
-      const nombrecategoria = categoria.nombreCategoria;
+
     this.vehicleForm.patchValue({
       nombre: vehicle.nombre,
       descripcion: vehicle.descripcion,
@@ -77,13 +73,9 @@ openModal(modalId: string, vehicle: Vehicle): void{
       precioAlquilerDiario: vehicle.precioAlquilerDiario,
       stock: vehicle.stock,
       modelo: vehicle.modelo,
-      marca: nombremarca,
-      categoria: nombrecategoria,
-      vendedor: vehicle.vendedor,
-    });})})
-    
-  }
-
+      marca: vehicle.marca,
+      categoria: vehicle.categoria,
+    });}
   const modalDiv = document.getElementById(modalId);
   if(modalDiv != null){
     modalDiv.style.display='block';
@@ -137,15 +129,17 @@ editVehicle(): void {
     });
   }
 }
+
 removeVehicle(vehicle: Vehicle | null, modalId: string) {
   if(vehicle){
       this.vehicleService.deleteVehicle(vehicle).subscribe(() => {
         alert('Vehiculo eliminado');
-        this.loadVehicle();
+        this.ngOnInit();
         this.closeModal(modalId);
         this.vehicleForm.reset();
       });
   }
 }
+
 }
 

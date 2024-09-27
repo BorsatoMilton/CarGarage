@@ -79,6 +79,7 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id
     const vehiculo = em.getReference(Vehiculo, id)
     await em.removeAndFlush(vehiculo)
+    res.status(200).json({ message: 'Vehiculo Eliminado' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

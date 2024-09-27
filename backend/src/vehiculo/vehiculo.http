@@ -6,7 +6,7 @@ GET http://localhost:3000/api/productos/66902e647185119674495890
 
 
 ### create client
-POST http://localhost:3000/api/productos/
+POST http://localhost:3000/api/vehiculos/
 Content-Type: application/json
 
 {

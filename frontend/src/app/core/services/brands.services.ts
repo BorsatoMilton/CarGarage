@@ -22,4 +22,7 @@ export class BrandsService {
   getAllBrand(): Observable<Brand[]> {
     return this.http.get<Brand[]>(this.apiUrl);
   }
+  getOneBrand(id:string): Observable<Brand> {
+    return this.http.get<Brand>(`${this.apiUrl}/${id}`)
+  }
 }

@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 
 app.use('/api/categorias', categoriaRouter)
 app.use('/api/marcas', marcaRouter)
-app.use('/api/productos', vehiculoRouter )
+app.use('/api/vehiculos', vehiculoRouter )
 app.use('/api/usuarios', usuarioRouter )
 app.use('/api/tarjetas', tarjetaRouter)
 app.use ('/api/calificaciones', calificacionRouter)

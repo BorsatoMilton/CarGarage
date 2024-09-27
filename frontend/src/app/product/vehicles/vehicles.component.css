@@ -1,11 +1,16 @@
 .form-group {
+    display: flex; /* Usa flexbox para alinear los elementos */
+    align-items: center; /* Alinea verticalmente en el centro */
     margin-bottom: 15px;
   }
   
   label {
-    color: #004080;
+    color: #f81206;
     /* Azul oscuro */
     font-weight: bold;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    display: block
   }
   
   input {

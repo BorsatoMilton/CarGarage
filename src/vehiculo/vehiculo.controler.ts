@@ -16,9 +16,11 @@ function sanitizeVehiculoInput(
     fechaBaja: req.body.fechaBaja,
     stock: req.body.stock,
     precioVenta: req.body.precioVenta,
+    precioAlquilerDiario: req.body.precioAlquilerDiario,
     modelo: req.body.modelo,
-    calificacion: req.body.calificacion,
-    alquiler: req.body.alquiler,
+    marca: req.body.marca,
+    categoria: req.body.categoria
+    
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -32,7 +34,7 @@ function sanitizeVehiculoInput(
 async function findAll(req: Request, res: Response) {
   try {
     const vehiculos = await em.find(Vehiculo,{},{populate: ['modelo']})
-    res.status(200).json({ message: 'Vehiculos', data: vehiculos })
+    res.status(200).json(vehiculos)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

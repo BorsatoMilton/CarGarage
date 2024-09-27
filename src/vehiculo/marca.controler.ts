@@ -35,7 +35,7 @@ function sanitizeModeloInput(
         try {
             const id = req.params.id;
             const marca = await em.findOneOrFail(Marca, { id })
-            res.status(200).json({ message: 'Marca Encontrada', data: marca })
+            res.status(200).json(marca)
         } catch (error: any) {
             res.status(500).json({ message: error.message })
         }

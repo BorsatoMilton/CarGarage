@@ -13,6 +13,7 @@ import { Usuario } from '../usuario/usuario.entity.js'
 import { Alquiler } from '../alquiler/alquiler.entity.js'
 import { Marca } from './marca.entity.js'
 import { Compra } from '../compra/compra.entity.js'
+import { Categoria } from './categoria.entity.js'
 
 @Entity()
 export class Vehiculo extends BaseEntity {
@@ -23,11 +24,11 @@ export class Vehiculo extends BaseEntity {
     @Property({ nullable: false })
     descripcion!: string
 
-    @Property({ nullable: false})
-    fechaAlta!: Date //new Date()??
+    @Property({ type: 'date' })
+    fechaAlta: Date = new Date();
 
-    @Property({ nullable: true })
-    fechaBaja?: Date 
+    @Property({ type: 'date', nullable: true })
+    fechaBaja?: Date
 
     @Property({ nullable: false })
     precioVenta!: number
@@ -36,24 +37,27 @@ export class Vehiculo extends BaseEntity {
     precioAlquilerDiario!: number
 
     @Property({ nullable: false })
-    stock!: number
+    stock?: number
 
     @Property({ nullable: true })
-    modelo?: string
+    modelo!: string
+
+    @ManyToOne(() => Categoria , { nullable: false })
+    categoria!: Rel<Categoria>
 
     @ManyToOne(() => Marca , { nullable: false })
     marca!: Rel<Marca>
 
-    @ManyToOne(() => Usuario , { nullable: false })
-    vendedor!: Rel<Usuario>
+    @ManyToOne(() => Usuario , { nullable: true })
+    vendedor?: Rel<Usuario>
 
     @OneToMany(()=> Alquiler , alquiler => alquiler.vehiculo, { nullable: true })
     alquileres = new Collection<Alquiler>(this)
 
-    @OneToMany(() => Calificacion, calificacion => calificacion.vehiculo, { nullable: false })
+    @OneToMany(() => Calificacion, calificacion => calificacion.vehiculo, { nullable: true })
     calificaciones = new Collection<Calificacion>(this)
 
-    @OneToMany(() => Compra, compra => compra.vehiculo, { nullable: false })
+    @OneToMany(() => Compra, compra => compra.vehiculo, { nullable: true })
     compras = new Collection<Compra>(this)
 
 

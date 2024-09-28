@@ -61,6 +61,11 @@
                     <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.nombreCategoria }}</option>
                   </select>
                 </div>
+                <div class="form-group">
+                  <label for="file">Imágenes del Vehículo</label>
+                  <input type="file" id="file" (change)="onFilesSelected($event)" class="form-control" accept="image/*" multiple>
+                </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary" [disabled]="vehicleForm.invalid">Guardar</button>

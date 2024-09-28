@@ -14,7 +14,7 @@ import { correoRouter } from './correo/correo.routes.js';
 import cors from 'cors';
 import { alquilerRouter } from './alquiler/alquiler.routes.js';
 import { rolRouter } from './usuario/rol.routes.js';
-
+import path from 'path';
 
 const app = express();
 app.use(cors(
@@ -37,8 +37,7 @@ app.use('/api/lineacompras', lineacompraRouter)
 app.use('/api/recuperacion', correoRouter);
 app.use('/api/alquiler', alquilerRouter);
 app.use('/api/rol', rolRouter);
-
-
+app.use('/uploads', express.static(path.resolve('src/uploads')));
 
 
 app.use((_, res) => {

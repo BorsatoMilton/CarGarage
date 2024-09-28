@@ -15,8 +15,8 @@ export class VehiclesService {
   
 
   constructor(private http:HttpClient) { }
-  addVehicle(vehicle: Vehicle): Observable<Vehicle> {
-    return this.http.post<Vehicle>(this.apiUrl, vehicle);
+  addVehicle(formData: FormData): Observable<Vehicle> {
+    return this.http.post<Vehicle>(this.apiUrl, formData);
   }
   deleteVehicle(vehicle: Vehicle): Observable<Vehicle> {
     return this.http.delete<Vehicle>(`${this.apiUrl}/${vehicle.id}`);

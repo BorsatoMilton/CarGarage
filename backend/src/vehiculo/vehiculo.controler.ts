@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import { Vehiculo } from './vehiculo.entity.js'
 import { orm } from '../shared/db/orm.js'
+import fs from 'fs';
+import path from 'path';
 
 const em = orm.em
 
@@ -52,11 +54,18 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const vehiculo = em.create(Vehiculo, req.body.sanitizedInput)
-    await em.flush()
-    res.status(201).json({ message: 'Vehiculo creado', data: vehiculo })
+    const imagePaths = Array.isArray(req.files) ? req.files.map((file: any) => file.filename) : [];
+
+    const vehiculoData = {
+      ...req.body.sanitizedInput,
+      imagenes: imagePaths 
+    };
+    const vehiculo = em.create(Vehiculo, vehiculoData);
+  
+    await em.flush();
+    res.status(201).json({ message: 'Vehiculo creado', data: vehiculo });
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
 
@@ -79,6 +88,19 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id
     const vehiculo = em.getReference(Vehiculo, id)
     await em.removeAndFlush(vehiculo)
+    //CHEQUEAR ACA PORQUE NO BORRA LAS IMAGENES (MILTON)
+    vehiculo.imagenes.forEach((imageName: string) => {
+      const imagePath = path.resolve('src/uploads', imageName); 
+
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error('Error al eliminar la imagen:', err);
+        } else {
+          console.log('Imagen eliminada correctamente:', imagePath);
+        }
+      });
+    });
+
     res.status(200).json({ message: 'Vehiculo Eliminado' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })

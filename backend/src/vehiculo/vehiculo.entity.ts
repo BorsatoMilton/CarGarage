@@ -42,6 +42,9 @@ export class Vehiculo extends BaseEntity {
     @Property({ nullable: true })
     modelo!: string
 
+    @Property({ nullable: true, type: 'text' }) 
+    imagenes!: string[];
+
     @ManyToOne(() => Categoria , { nullable: false })
     categoria!: Rel<Categoria>
 

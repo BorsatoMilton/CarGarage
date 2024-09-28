@@ -13,5 +13,6 @@ export interface Vehicle {
     modelo: string;
     marca: string;
     categoria: string;
+    imagenes: string[];
     vendedor?: string;
 }

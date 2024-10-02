@@ -1,10 +1,11 @@
 import {Router} from 'express';
-import {sanitizeRolInput, findAll, findOne, add, update, remove} from './rol.controler.js';
+import {sanitizeRolInput, findAll, findOneByName,findOneById, add, update, remove} from './rol.controler.js';
 
 export const rolRouter = Router();
 
 rolRouter.get('/', findAll);
-rolRouter.get('/:id', findOne);
+rolRouter.get('/byname/:name', findOneByName);
+rolRouter.get('/:id', findOneById);
 rolRouter.post('/', sanitizeRolInput, add);
 rolRouter.put('/:id', sanitizeRolInput, update);
 rolRouter.patch('/:id', sanitizeRolInput, update);

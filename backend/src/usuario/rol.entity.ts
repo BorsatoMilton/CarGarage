@@ -17,7 +17,7 @@ export class Rol extends BaseEntity {
     @Property({ nullable: false })
     nombreRol!: string
 
-    @OneToMany(()=> Usuario , usuario =>usuario.rol, { nullable: true })
+    @OneToMany(()=> Usuario , usuario =>usuario.rol, { nullable: false })
     usuarios = new Collection<Usuario>(this)
 
 }

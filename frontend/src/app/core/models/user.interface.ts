@@ -1,3 +1,4 @@
+
 export interface User {
     id: string;
     usuario: string;
@@ -9,4 +10,5 @@ export interface User {
     tarjeta?: string;
     calificacion?: string;
     pedido?: string;
+    rol: string; 
 }

@@ -4,6 +4,7 @@ import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuariosService } from '../../core/services/usuarios.service.js';
 import { Router } from '@angular/router';
+import { RolService } from '../../core/services/rol.service.js';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -18,7 +19,7 @@ export class RegisterComponent implements OnInit{
   registerForm: FormGroup = new FormGroup({});
 
   constructor(private fb: FormBuilder, private usuariosService: UsuariosService,
-    private router: Router
+    private router: Router, private rolService: RolService
   ) {}
 
   
@@ -30,7 +31,8 @@ export class RegisterComponent implements OnInit{
       nombre: ['', [Validators.required]],
       apellido: ['', [Validators.required]],
       mail: ['', [Validators.required, Validators.email]],
-      direccion: ['', [Validators.required]] 
+      direccion: ['', [Validators.required]],
+      rol: null
     }, )
     if( this.passwordMatchValidator(this.registerForm) !== null){
       console.log('Las contraseñas no coinciden');
@@ -43,20 +45,39 @@ export class RegisterComponent implements OnInit{
   }
 
   onSubmit() {
-    if(this.passwordMatchValidator(this.registerForm)){
-      if (this.registerForm.valid) { // Falta validar si el mail y/o usuario ya existe
-          this.usuariosService.addUsuario(this.registerForm.value).subscribe(() => {
-            alert('Usuario registrado correctamente');
-            this.registerForm.reset();
-            this.router.navigate(['/auth/login']);
-          });
-      }else{
+    if (this.passwordMatchValidator(this.registerForm)) {
+      if (this.registerForm.valid) { 
+        // Falta validar si el mail y/o usuario ya existe
+        this.rolService.getOneRolByName('usuario').subscribe({
+          next: (rolEncontrado) => {
+            if (rolEncontrado) {
+              const usuarioFinal = {
+                ...this.registerForm.value,
+                rol: rolEncontrado.id
+              };
+              this.usuariosService.addUsuario(usuarioFinal).subscribe(() => {
+                alert('Usuario registrado correctamente');
+                this.registerForm.reset();
+                this.router.navigate(['/auth/login']);
+              });
+            } else {
+              alert('No se pudo obtener el rol');
+            }
+          },
+          error: (error) => {
+            console.error('Error al obtener el rol:', error);
+            alert('Hubo un problema al obtener el rol');
+          }
+        });
+      } else {
         alert('Por favor complete todos los campos correctamente.');
       }
-    }else{
+    } else {
       alert('Las contraseñas no coinciden');
       this.registerForm.get('clave')?.reset();
       this.registerForm.get('repetirClave')?.reset();
     }
   }
+  
+
 }

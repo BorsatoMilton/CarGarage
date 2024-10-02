@@ -9,26 +9,22 @@ POST http://localhost:3000/api/usuarios/
 Content-Type: application/json
 
 {
-    "usuario": "JuanP",
-    "clave": "123",
+    "usuario": "admin",
+    "clave": "admin123",
     "nombre": "Milton",
     "apellido": "Borsato",
     "mail": "nachodayer@gmail.com",
     "direccion": "Calle falsa 123",
-    "tarjeta": ["66a28b7d10af30a819063177"],
-    "calificacion" : ["66a28ee01dbd5c9e5aece75b" ],
-    "pedidos": ["66a291df5296f54a27620919"]
+    "rol": "66fc66d4b0dc577d38498f01"
 }
 
 
 ### put usuario
-PUT http://localhost:3000/api/usuarios/66a26a56c2d60a2b531e553b
+PUT http://localhost:3000/api/usuarios/66fd592821f0f4df023497b5
 Content-Type: application/json
 
 {
-    "nombre": "Juan",
-    "apellido": "Perez",
-    "mail": "JuanPerez@gmail.com"
+    "nombre": "admin"
 }
 
 ### delete client

@@ -52,7 +52,7 @@ export class Usuario extends BaseEntity {
     @OneToMany(() => Alquiler, alquiler => alquiler.locatario, { nullable: false })
     alquilerLocatorio= new Collection<Alquiler>(this)
 
-    @ManyToOne(() => Rol, { nullable: true})
-    rol?: Rel<Rol> 
+    @ManyToOne(() => Rol, { nullable: false})
+    rol!: Rel<Rol> 
 
   }

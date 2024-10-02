@@ -4,7 +4,7 @@ import { orm } from '../shared/db/orm.js'
 import fs from 'fs';
 import path from 'path';
 
-const em = orm.em
+const em = orm.em.fork()
 
 function sanitizeVehiculoInput(
   req: Request,
@@ -85,23 +85,37 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
   try {
-    const id = req.params.id
-    const vehiculo = em.getReference(Vehiculo, id)
-    await em.removeAndFlush(vehiculo)
-    //CHEQUEAR ACA PORQUE NO BORRA LAS IMAGENES (MILTON)
-    vehiculo.imagenes.forEach((imageName: string) => {
-      const imagePath = path.resolve('src/uploads', imageName); 
+  const id = req.params.id;
 
+  const vehiculo = await em.findOne(Vehiculo, { id });
+  if (!vehiculo) {
+    return res.status(404).json({ message: 'Vehículo no encontrado' });
+  }
+
+  const imagePaths = vehiculo.imagenes.map((imageName: string) => 
+    path.resolve('src/uploads', imageName)
+  );
+
+ 
+  const unlinkPromises = imagePaths.map((imagePath) => {
+    return new Promise((resolve, reject) => {
       fs.unlink(imagePath, (err) => {
         if (err) {
           console.error('Error al eliminar la imagen:', err);
-        } else {
-          console.log('Imagen eliminada correctamente:', imagePath);
+          return reject(err);
         }
+        console.log('Imagen eliminada correctamente:', imagePath);
+        resolve(true);
       });
     });
+  });
+  
+  await Promise.all(unlinkPromises);
 
-    res.status(200).json({ message: 'Vehiculo Eliminado' })
+  
+  await em.removeAndFlush(vehiculo);
+  res.status(200).json({ message: 'Vehículo y sus imágenes eliminados correctamente' });
+
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

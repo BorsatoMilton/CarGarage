@@ -4,6 +4,7 @@ import { orm } from '../shared/db/orm.js'
 import { PasswordResetToken } from './passwordResetToken.entity.js'
 import bcrypt from 'bcrypt';
 
+
 const em = orm.em
 
 function sanitizeUsuarioInput(
@@ -21,6 +22,7 @@ function sanitizeUsuarioInput(
     tarjeta: req.body.tarjeta,
     calificacion: req.body.calificacion,
     alquiler: req.body.alquiler,
+    rol: req.body.rol
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -76,15 +78,14 @@ async function login(req: Request, res: Response) {
 
     if (!usuarioEncontrado) {
       return res.status(401).json({ message: 'Usuario no encontrado' });
+    }else{
+      const isMatch = await bcrypt.compare(clave, usuarioEncontrado.clave);
+      if (!isMatch) {
+        return res.status(401).json({ message: 'Contraseña incorrecta' });
+      }
+      
+      res.status(200).json(usuarioEncontrado);
     }
-
-    const isMatch = await bcrypt.compare(clave, usuarioEncontrado.clave);
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Contraseña incorrecta' });
-    }
-
-    // Aquí puedes generar un token o realizar otra acción
-    res.status(200).json({ message: 'Inicio de sesión exitoso' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -92,6 +93,7 @@ async function login(req: Request, res: Response) {
 
 
 async function add(req: Request, res: Response) {
+  
   try {
     const vecesHash = 10;
     const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);

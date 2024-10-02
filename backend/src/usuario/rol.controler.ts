@@ -12,7 +12,6 @@ function sanitizeRolInput(
 ) {
   req.body.sanitizedInput = {
     nombreRol: req.body.nombreRol,
-    rol: req.body.rol,
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -32,11 +31,22 @@ async function findAll(req: Request, res: Response) {
   }
 }
 
-async function findOne(req: Request, res: Response) {
+async function findOneByName(req: Request, res: Response) {
+  try {
+    const name = req.params.name
+    const rol = await em.findOneOrFail(Rol, { nombreRol: name })
+    res.status(200).json(rol)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+
+async function findOneById(req: Request, res: Response) {
   try {
     const id = req.params.id
     const rol = await em.findOneOrFail(Rol, { id })
-    res.status(200).json({ message: 'Rol Encontrado', data: rol })
+    res.status(200).json(rol)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -76,4 +86,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeRolInput, findAll, findOne, add, update, remove}
+export { sanitizeRolInput, findAll, findOneByName, findOneById, add, update, remove}

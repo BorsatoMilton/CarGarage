@@ -16,12 +16,14 @@ function sanitizeVehiculoInput(
     descripcion: req.body.descripcion,
     fechaAlta: req.body.fechaAlta,
     fechaBaja: req.body.fechaBaja,
-    stock: req.body.stock,
+    kilometros: req.body.kilometros,
     precioVenta: req.body.precioVenta,
     precioAlquilerDiario: req.body.precioAlquilerDiario,
     modelo: req.body.modelo,
     marca: req.body.marca,
-    categoria: req.body.categoria
+    categoria: req.body.categoria,
+    propietario: req.body.propietario,
+    transmision: req.body.transmision
     
   }
 
@@ -35,7 +37,7 @@ function sanitizeVehiculoInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const vehiculos = await em.find(Vehiculo,{},{populate: ['modelo']})
+    const vehiculos = await em.find(Vehiculo,{ fechaBaja: null},{populate: ['modelo']})
     res.status(200).json(vehiculos)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -83,6 +85,20 @@ async function update(req: Request, res: Response) {
   }
 }
 
+async function logicRemove(req: Request, res:Response) {
+  try {
+    const id = req.params.id
+    const vehiculo = await em.findOneOrFail(Vehiculo, { id })
+    vehiculo.fechaBaja = new Date()
+    await em.flush()
+    res.status(200).json({ message: 'Vehiculo dado de baja', data: vehiculo })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+  
+}
+
+
 async function remove(req: Request, res: Response) {
   try {
   const id = req.params.id;
@@ -121,4 +137,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeVehiculoInput, findAll, findOne, add, update, remove }
+export { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove }

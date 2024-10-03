@@ -43,7 +43,7 @@ export class Usuario extends BaseEntity {
     @OneToMany(() => Compra, compra => compra.usuario , { nullable: false })
     compras = new Collection<Compra>(this)
 
-    @OneToMany(() => Vehiculo, vehiculo => vehiculo.propietario)
+    @OneToMany(() => Vehiculo, vehiculo => vehiculo.vendedor, { nullable: false })
     vehiculos = new Collection<Vehiculo>(this)
 
     @OneToMany(() => Alquiler, alquiler => alquiler.locador, { nullable: false })

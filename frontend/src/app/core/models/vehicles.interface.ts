@@ -7,13 +7,12 @@ export interface Vehicle {
     descripcion: string;
     fechaAlta?: Date;
     fechaBaja?: Date;
-    precioVenta?: number;
-    precioAlquilerDiario?: number;
-    kilometros:number;
+    precioVenta: number;
+    precioAlquilerDiario: number;
+    stock?: number;
     modelo: string;
     marca: string;
     categoria: string;
     imagenes: string[];
-    propietario?: string;
-    transmision?: string;
+    vendedor?: string;
 }

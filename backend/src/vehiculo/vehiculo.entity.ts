@@ -30,14 +30,17 @@ export class Vehiculo extends BaseEntity {
     @Property({ type: 'date', nullable: true })
     fechaBaja?: Date
 
-    @Property({ nullable: false })
-    precioVenta!: number
+    @Property({ nullable: true })
+    precioVenta?: number
+
+    @Property({ nullable: false})
+    transmision!: string
+
+    @Property({ nullable: true })
+    precioAlquilerDiario?: number
 
     @Property({ nullable: false })
-    precioAlquilerDiario!: number
-
-    @Property({ nullable: false })
-    stock?: number
+    kilometros!: number
 
     @Property({ nullable: true })
     modelo!: string
@@ -51,8 +54,8 @@ export class Vehiculo extends BaseEntity {
     @ManyToOne(() => Marca , { nullable: false })
     marca!: Rel<Marca>
 
-    @ManyToOne(() => Usuario , { nullable: true })
-    vendedor?: Rel<Usuario>
+    @ManyToOne(() => Usuario , { nullable: false })
+    propietario!: Rel<Usuario>
 
     @OneToMany(()=> Alquiler , alquiler => alquiler.vehiculo, { nullable: true })
     alquileres = new Collection<Alquiler>(this)

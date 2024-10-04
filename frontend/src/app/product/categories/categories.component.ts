@@ -3,20 +3,20 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoriesService } from '../../core/services/categories.service';
 import { Category } from '../../core/models/categories.interface';
-
-
+import { SearcherComponent } from '../../shared/components/searcher/searcher.component.js';
 
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SearcherComponent],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.css'
 })
 export class CategoriesComponent implements OnInit {
 categoryForm: FormGroup=new FormGroup({});
 categories: Category[] = [];
+filteredCategories: Category[] = [];
 selectedCategory: Category | null = null;
 
 
@@ -66,7 +66,12 @@ closeModal(modalId: string){
 loadCategories(): void {
   this.categoriesService.getAllCategories().subscribe((categories : Category[]) => {
     this.categories = categories;
+    this.filteredCategories = categories;
   });
+}
+
+onSearch(filteredCategories: Category[]): void {
+  this.filteredCategories = filteredCategories.length > 0 ? filteredCategories: [];
 }
 
 addCategory() {

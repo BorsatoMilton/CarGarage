@@ -1,3 +1,4 @@
+<app-searcher [data]="categories" [filterAttributes]="['nombreCategoria', 'descripcionCategoria']" (filteredData)="onSearch($event)"></app-searcher>
 <table >
     <thead>
         <tr>
@@ -6,8 +7,8 @@
             <th>Acciones</th>
         </tr>
     </thead>
-    <tbody *ngIf="categories.length > 0">
-        <tr *ngFor="let category of categories">
+    <tbody *ngIf="filteredCategories.length > 0">
+        <tr *ngFor="let category of filteredCategories">
             <td>{{ category.nombreCategoria }}</td>
             <td>{{ category.descripcionCategoria }}</td>
             <td>
@@ -16,7 +17,7 @@
             </td>
         </tr>
     </tbody>
-    <p *ngIf="categories.length === 0">No hay categorías</p>
+    <p *ngIf="filteredCategories.length === 0">No hay categorías</p>
 </table>
 
 

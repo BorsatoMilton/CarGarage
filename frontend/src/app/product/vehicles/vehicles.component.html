@@ -27,23 +27,30 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()">
-                <div class="form-group">
+            <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()" class = "formulario">
+                <div class="form-group" >
                   <label for="name">Nombre Vehiculo</label>
                   <input type="text" formControlName="nombre" id="name" name="name" class="form-control" required>
-
-                  <label for="name">Descripcion Vehiculo</label>
-                  <input type="text" formControlName="descripcion" id="description" name="description" class="form-control" required>
                 </div>
                 <div class="form-group">
+                  <label for="name">Descripción Vehiculo</label>
+                  <input type="text" formControlName="descripcion" id="description" name="description" class="form-control" required>
+                </div>
+                  
+                
+                <div class="form-group" >
                   <label for="venta">Precio Venta</label>
                   <input type="number" formControlName="precioVenta" id="venta" name="venta" class="form-control" required>
+                </div>
+                <div class="form-group" >
                   <label for="preciodiario">Precio Alquiler Diario</label>
                   <input type="number" formControlName="precioAlquilerDiario" id="preciodiario" name="preciodiario" class="form-control" required>
                 </div>
                 <div class="form-group">
                   <label for="stock">Stock</label>
                   <input type="number" formControlName="stock" id="stock" name="stock" class="form-control">
+                </div>
+                <div class="form-group">
                   <label for="modelo">Modelo</label>
                   <input type="text" formControlName="modelo" id="modelo" name="modelo" class="form-control" required>
                 </div>
@@ -61,7 +68,7 @@
                     <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.nombreCategoria }}</option>
                   </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group" >
                   <label for="file">Imágenes del Vehículo</label>
                   <input type="file" id="file" (change)="onFilesSelected($event)" class="form-control" accept="image/*" multiple>
                 </div>
@@ -95,18 +102,24 @@
           <div class="form-group">
             <label for="name">Nombre Vehiculo</label>
             <input type="text" formControlName="nombre" id="name" name="name" class="form-control" required>
+          </div>  
+          <div class="form-group">
             <label for="name">Descripcion Vehiculo</label>
             <input type="text" formControlName="descripcion" id="description" name="description" class="form-control" value = "Lindo" required>
           </div>
           <div class="form-group">
             <label for="venta">Precio Venta</label>
             <input type="number" formControlName="precioVenta" id="venta" name="venta" class="form-control" required>
+          </div>
+          <div class="form-group">
             <label for="preciodiario">Precio Alquiler Diario</label>
             <input type="number" formControlName="precioAlquilerDiario" id="preciodiario" name="preciodiario" class="form-control" required>
           </div>
           <div class="form-group">
             <label for="stock">Stock</label>
             <input type="number" formControlName="stock" id="stock" name="stock" class="form-control">
+          </div>
+          <div class="form-group">
             <label for="modelo">Modelo</label>
             <input type="text" formControlName="modelo" id="modelo" name="modelo" class="form-control" required>
           </div>

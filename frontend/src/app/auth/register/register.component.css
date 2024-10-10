@@ -7,8 +7,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90vh; /* Ajuste para centrar verticalmente en la pantalla */
+    height: 100%; /* Ajuste para centrar verticalmente en la pantalla */
+    margin-top: 40px;
+    margin-bottom: 40px;	
+    margin-left: 10px;
+    margin-right: 10px
   }
+  
   
   /* Caja del formulario de registro */
   .register-box {

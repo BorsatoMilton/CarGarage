@@ -30,6 +30,7 @@
     <p *ngIf="vehicles.length === 0" class="text-center text-muted">No hay vehiculos</p>
   </table>
   
+<<<<<<< HEAD
   <div>
     <div class="modal fade" id="addVehicle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -101,6 +102,72 @@
                   
   
   
+=======
+  
+  <div class="modal fade" id="addVehicle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Vehiculo</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()" class = "formulario">
+                <div class="form-group" >
+                  <label for="name">Nombre Vehiculo</label>
+                  <input type="text" formControlName="nombre" id="name" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="name">Descripción Vehiculo</label>
+                  <input type="text" formControlName="descripcion" id="description" name="description" class="form-control" required>
+                </div>
+                  
+                
+                <div class="form-group" >
+                  <label for="venta">Precio Venta</label>
+                  <input type="number" formControlName="precioVenta" id="venta" name="venta" class="form-control" required>
+                </div>
+                <div class="form-group" >
+                  <label for="preciodiario">Precio Alquiler Diario</label>
+                  <input type="number" formControlName="precioAlquilerDiario" id="preciodiario" name="preciodiario" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="stock">Stock</label>
+                  <input type="number" formControlName="stock" id="stock" name="stock" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="modelo">Modelo</label>
+                  <input type="text" formControlName="modelo" id="modelo" name="modelo" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="marca">Marca del Vehículo</label>
+                  <select id="marca" formControlName="marca" class="form-control">
+                    <option value="" disabled selected>Seleccione una marca</option>
+                    <option *ngFor="let brand of brands" [ngValue]="brand.id">{{ brand.nombreMarca}}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="categoria">Categoria del Vehículo</label>
+                  <select id="categoria" formControlName="categoria" class="form-control">
+                    <option value="" selected>Seleccione una categoria</option>
+                    <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.nombreCategoria }}</option>
+                  </select>
+                </div>
+                <div class="form-group" >
+                  <label for="file">Imágenes del Vehículo</label>
+                  <input type="file" id="file" (change)="onFilesSelected($event)" class="form-control" accept="image/*" multiple>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="vehicleForm.invalid">Guardar</button>
+                </div>
+            </form>
+        </div>        
+    </div>
+    </div>
+  </div>
+>>>>>>> origin/main
   
   <div id="removeVehicle" class="modalChanged">
     <div class="modal-contentChanged">
@@ -121,18 +188,24 @@
           <div class="form-group">
             <label for="name">Nombre Vehiculo</label>
             <input type="text" formControlName="nombre" id="name" name="name" class="form-control" required>
+          </div>  
+          <div class="form-group">
             <label for="name">Descripcion Vehiculo</label>
             <input type="text" formControlName="descripcion" id="description" name="description" class="form-control" value = "Lindo" required>
           </div>
           <div class="form-group">
             <label for="venta">Precio Venta</label>
             <input type="number" formControlName="precioVenta" id="venta" name="venta" class="form-control" required>
+          </div>
+          <div class="form-group">
             <label for="preciodiario">Precio Alquiler Diario</label>
             <input type="number" formControlName="precioAlquilerDiario" id="preciodiario" name="preciodiario" class="form-control" required>
           </div>
           <div class="form-group">
             <label for="stock">Stock</label>
             <input type="number" formControlName="stock" id="stock" name="stock" class="form-control">
+          </div>
+          <div class="form-group">
             <label for="modelo">Modelo</label>
             <input type="text" formControlName="modelo" id="modelo" name="modelo" class="form-control" required>
           </div>

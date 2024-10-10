@@ -10,9 +10,6 @@ import { Category } from '../models/categories.interface.js';
 })
 export class VehiclesService {
   private apiUrl = 'http://localhost:3000/api/vehiculos';
-  private apiUrlMarca = 'http://localhost:3000/api/marcas';
-  private apiUrlCategoria = 'http://localhost:3000/api/categorias';
-  
 
   constructor(private http:HttpClient) { }
   addVehicle(formData: FormData): Observable<Vehicle> {
@@ -27,10 +24,5 @@ export class VehiclesService {
   getAllVehicle(): Observable<Vehicle[]> {
     return this.http.get<Vehicle[]>(this.apiUrl);
   }
-  getBrands(): Observable<Brand[]> {
-    return this.http.get<Brand[]>(this.apiUrlMarca);
-  }
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.apiUrlCategoria);
-  }
+
 }

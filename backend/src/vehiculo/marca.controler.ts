@@ -40,6 +40,16 @@ function sanitizeModeloInput(
             res.status(500).json({ message: error.message })
         }
     }
+    async function findOneByName(req: Request, res: Response) {
+      try {
+          const nombre = req.params.name;
+          const marca = await em.findOneOrFail(Marca, { nombreMarca: nombre })
+          res.status(200).json(marca)
+      } catch (error: any) {
+          res.status(500).json({ message: error.message })
+      }
+  }
+
 
     async function add(req: Request, res: Response) {
         try {
@@ -47,7 +57,7 @@ function sanitizeModeloInput(
         await em.flush()
         res.status(201).json({ message: 'Marca creada', data: marca })
         } catch (error: any) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: 'Ocurrio un error al crear la marca' })
         }
     }
 
@@ -74,4 +84,4 @@ function sanitizeModeloInput(
         }
     }
 
-    export {findAll, findOne, add, update, remove, sanitizeModeloInput}
+    export {findAll, findOne, add, update, remove, sanitizeModeloInput, findOneByName}

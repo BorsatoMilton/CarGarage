@@ -3,6 +3,7 @@ import { Vehiculo } from './vehiculo.entity.js'
 import { orm } from '../shared/db/orm.js'
 import fs from 'fs';
 import path from 'path';
+import { ObjectId } from 'mongodb';
 
 const em = orm.em.fork()
 
@@ -57,9 +58,17 @@ async function findOne(req: Request, res: Response) {
 async function add(req: Request, res: Response) {
   try {
     const imagePaths = Array.isArray(req.files) ? req.files.map((file: any) => file.filename) : [];
+    if (!ObjectId.isValid(req.body.sanitizedInput.marca) || 
+      !ObjectId.isValid(req.body.sanitizedInput.categoria) || 
+      !ObjectId.isValid(req.body.sanitizedInput.propietario)) {
+        return res.status(400).json({ message: 'IDs inválidos' });
+      }
 
     const vehiculoData = {
       ...req.body.sanitizedInput,
+      marca: ObjectId.createFromHexString(req.body.sanitizedInput.marca),
+      categoria: ObjectId.createFromHexString(req.body.sanitizedInput.categoria), 
+      propietario: ObjectId.createFromHexString(req.body.sanitizedInput.propietario),
       imagenes: imagePaths 
     };
     const vehiculo = em.create(Vehiculo, vehiculoData);

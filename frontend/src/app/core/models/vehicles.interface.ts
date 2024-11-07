@@ -1,6 +1,3 @@
-import { Brand } from "./brands.interfaces";
-import { Category } from "./categories.interface";
-
 export interface Vehicle {
     id: string;
     nombre: string;
@@ -14,6 +11,6 @@ export interface Vehicle {
     marca: string;
     categoria: string;
     imagenes: string[];
-    propietario?: string;
-    transmision?: string;
+    propietario: string;
+    transmision: string;
 }

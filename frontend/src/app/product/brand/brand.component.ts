@@ -1,13 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BrandsService } from '../../core/services/brands.services.js';
+import { BrandsService } from '../../core/services/brands.service.js';
 import { Brand } from '../../core/models/brands.interfaces.js';
-
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { SearcherComponent } from '../../shared/components/searcher/searcher.component.js';
 @Component({
   selector: 'app-brand',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SearcherComponent],
   templateUrl: './brand.component.html',
   styleUrl: './brand.component.css'
 })
@@ -16,7 +19,7 @@ export class BrandComponent implements OnInit {
 brandForm: FormGroup=new FormGroup({}); 
 brands: Brand[] = [];
 selectedBrand: Brand | null = null;
-
+filteredBrands: Brand[] = [];
 
 constructor(
 private fb: FormBuilder, 
@@ -55,24 +58,42 @@ closeModal(modalId: string){
   this.selectedBrand= null;
 }
 
+checkBrandExists(): Observable<boolean> {
+  return this.brandService.getOneBrandByName(this.brandForm.get('nombreMarca')?.value).pipe(
+    map((marca: Brand) => !!marca),
+    catchError(() => of(false))
+  );
+}
+
 addBrand() {
   if (this.brandForm.valid) {
     const brandData = this.brandForm.value;
-  
-    this.brandService.addBrand(brandData).subscribe(() => {
-      alert('Marca agregada' );
-      this.brandForm.reset();
-      this.closeModal('addBrand');
-      this.loadBrand() 
-    });
+    
+    this.checkBrandExists().subscribe((existe: boolean) => {
+      if (!existe) {
+          this.brandService.addBrand(brandData).subscribe(() => {
+            alert('Marca agregada' );
+            this.brandForm.reset();
+            this.closeModal('addBrand');
+            this.loadBrand();   
+         });
+      } else {
+            alert('La marca ya existe');
+            this.brandForm.reset();
+      }
+  });
   }
-
 }
 
 loadBrand(): void {
   this.brandService.getAllBrand().subscribe((brands : Brand[]) => {
     this.brands = brands;
+    this.filteredBrands = brands;
   });
+}
+
+onSearch(filteredBrands: Brand[]): void {
+  this.filteredBrands = filteredBrands.length > 0 ? filteredBrands : [];
 }
 
 editBrand(): void {

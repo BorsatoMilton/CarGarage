@@ -43,6 +43,16 @@ function sanitizeModeloInput(
         }
     }
 
+    async function findOneByName(req: Request, res: Response) {
+      try {
+          const name = req.params.name;
+          const categoria = await em.findOneOrFail(Categoria, { nombreCategoria: name })
+          res.status(200).json(categoria)
+      } catch (error: any) {
+          res.status(500).json({ message: error.message })
+      }
+  }
+
     async function add(req: Request, res: Response) {
         try {
         const categoria = em.create(Categoria, req.body.sanitizedInput)
@@ -76,4 +86,4 @@ function sanitizeModeloInput(
         }
     }
 
-    export {findAll, findOne, add, update, remove, sanitizeModeloInput}
+    export {findAll, findOne, add, update, remove, sanitizeModeloInput, findOneByName}

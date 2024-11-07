@@ -28,5 +28,9 @@ export class CategoriesService {
   getOneCategory(id:string): Observable<Category> {
     return this.http.get<Category>(`${this.apiUrl}/${id}`)
   }
+
+  getOneCategoryByName(name:string): Observable<Category> {
+    return this.http.get<Category>(`${this.apiUrl}/byname/${name}`)
+  }
 }
 

@@ -7,10 +7,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { VehiclesService } from '../../core/services/vehicles.services.js';
+import { VehiclesService } from '../../core/services/vehicles.service.js';
 import { Vehicle } from '../../core/models/vehicles.interface.js';
 import { BrandComponent } from '../brand/brand.component.js';
-import { BrandsService } from '../../core/services/brands.services.js';
+import { BrandsService } from '../../core/services/brands.service.js';
 import { Brand } from '../../core/models/brands.interfaces.js';
 import { CategoriesService } from '../../core/services/categories.service.js';
 import { Category } from '../../core/models/categories.interface.js';
@@ -64,7 +64,7 @@ export class VehicleComponent implements OnInit {
     });
     this.usuario = this.authService.getCurrentUser();
 
-    if (this.usuario) {
+    if (this.usuario !== null) {
       this.vehicleForm.patchValue({ propietario: this.usuario.id });
     }
 
@@ -172,6 +172,7 @@ export class VehicleComponent implements OnInit {
 
   editVehicle(): void {
     if (this.selectedVehicle) {
+      this.ngOnInit();
       const updatedVehicle: Vehicle = {
         ...this.selectedVehicle,
         ...this.vehicleForm.value,
@@ -180,7 +181,7 @@ export class VehicleComponent implements OnInit {
       this.vehicleService.editVehicle(updatedVehicle).subscribe(() => {
         alert('Vehiculo actualizado');
         this.closeModal('editVehicle');
-        this.loadVehicle();
+        this.ngOnInit();
         this.vehicleForm.reset();
         this.selectedFiles = [];
       });

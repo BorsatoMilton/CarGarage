@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component,  OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoriesService } from '../../core/services/categories.service';
 import { Category } from '../../core/models/categories.interface';
 import { SearcherComponent } from '../../shared/components/searcher/searcher.component.js';
-
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-categories',
@@ -74,21 +75,33 @@ onSearch(filteredCategories: Category[]): void {
   this.filteredCategories = filteredCategories.length > 0 ? filteredCategories: [];
 }
 
+checkCategoryExists(): Observable<boolean> {
+  return this.categoriesService.getOneCategoryByName(this.categoryForm.get('nombreCategoria')?.value).pipe(
+    map((categoria: Category) => !!categoria),
+    catchError(() => of(false))
+  );
+}
+
 addCategory() {
   if (this.categoryForm.valid) {
     const categoryData = this.categoryForm.value;
-  
-    this.categoriesService.addCategory(categoryData).subscribe(() => {
-      alert('Categoria agregada' );
-      this.categoryForm.reset();
-      this.closeModal('addCategoria');
-      this.ngOnInit();
-      
+    
+
+    this.checkCategoryExists().subscribe((existe: boolean) => {
+      if (!existe) {
+          this.categoriesService.addCategory(categoryData).subscribe(() => {
+            alert('Categoria agregada' );
+            this.categoryForm.reset();
+            this.closeModal('addCategoria');
+            this.ngOnInit();
+          });
+      }else {
+        alert('La categoria ya existe')
+        this.categoryForm.reset();
+      }
     });
-  }
-
+  }  
 }
-
 
 editCategory(): void {
   if (this.selectedCategory) {

@@ -1,7 +1,8 @@
 <div class="container my-4">
 <div class="d-flex justify-content-between align-items-center mb-3">
-<h2>LISTA DE MARCAS</h2>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrand">Añadir Marca</button>
+  <h2>LISTADO DE MARCAS</h2>
+  <app-searcher [data]="brands" [filterAttributes]="['nombreMarca']" (filteredData)="onSearch($event)"  style="display: block; width: 70%;"></app-searcher>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrand">Añadir Marca</button>
 </div>
 <table class="table table-hover">
   <thead class="table-dark">
@@ -11,7 +12,7 @@
         </tr>
      </thead>
      <tbody *ngIf="brands.length > 0">
-       <tr *ngFor="let brand of brands">
+       <tr *ngFor="let brand of filteredBrands">
           <td>{{ brand.nombreMarca }}</td>
           <td>
               <button  (click)="openModal('editBrand', brand)"class="btn btn-primary">Editar</button>
@@ -19,7 +20,7 @@
           </td>
       </tr>
   </tbody>
-  <p *ngIf="brands.length === 0">No hay marcas</p>
+  <p *ngIf="filteredBrands.length === 0">No hay marcas que coincidan con ese nombre</p>
 </table>
 
 

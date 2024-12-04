@@ -24,5 +24,6 @@ export class VehiclesService {
   getAllVehicle(): Observable<Vehicle[]> {
     return this.http.get<Vehicle[]>(this.apiUrl);
   }
+  
 
 }

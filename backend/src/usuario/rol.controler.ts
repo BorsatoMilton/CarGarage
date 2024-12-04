@@ -25,7 +25,7 @@ function sanitizeRolInput(
 async function findAll(req: Request, res: Response) {
   try {
     const roles = await em.find(Rol,{})
-    res.status(200).json({ message: 'Roles', data: roles })
+    res.status(200).json(roles)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -56,7 +56,7 @@ async function add(req: Request, res: Response) {
   try {
     const rol = em.create(Rol, req.body.sanitizedInput)
     await em.flush()
-    res.status(201).json({ message: 'Rol creado', data: rol })
+    res.status(201).json()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -70,7 +70,7 @@ async function update(req: Request, res: Response) {
     await em.flush()
     res
       .status(200)
-      .json({ message: 'Rol Actualizado', data: rolAactualizar })
+      .json(rolAactualizar)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -81,6 +81,7 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id
     const rol = em.getReference(Rol, id)
     await em.removeAndFlush(rol)
+    res.status(200).json({ message: 'Rol eliminado correctamente' });
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

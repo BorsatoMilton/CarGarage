@@ -36,7 +36,7 @@ function sanitizeUsuarioInput(
 async function findAll(req: Request, res: Response) {
   try {
     const usuarios = await em.find(Usuario,{})
-    res.status(200).json({ message: 'Usuarios', data: usuarios })
+    res.status(200).json(usuarios)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -149,6 +149,7 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id
     const usuario = em.getReference(Usuario, id)
     await em.removeAndFlush(usuario)
+    res.status(200).json("Usuario eliminado con exito")
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

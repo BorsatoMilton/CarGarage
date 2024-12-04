@@ -1,0 +1,93 @@
+.form-group {
+    display: flex; /* Usa flexbox para alinear los elementos */
+    align-items: center; /* Alinea verticalmente en el centro */
+    margin-bottom: 15px;
+  }
+  
+  label {
+    color: #f81206;
+    /* Azul oscuro */
+    font-weight: bold;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    display: block
+  }
+  
+  input {
+    border: 1px solid #004080;
+    /* Azul oscuro */
+    border-radius: 4px;
+    padding: 8px;
+    width: 250px;
+    box-sizing: border-box;
+    justify-items: end;
+  }
+
+  input:focus {
+    border-color: #007bff;
+    /* Azul más brillante para el foco */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+  }
+  
+  button.btn-primary {
+    background-color: #004080;
+    /* Azul oscuro */
+    border-color: #004080;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.btn-primary:hover {
+    background-color: #007bff;
+    /* Azul más brillante al pasar el cursor */
+    border-color: #007bff;
+  }
+  
+  form {
+    margin-top: 20px;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+  }
+  
+  .modalChanged {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Para que el modal se mantenga fijo en la pantalla */
+    z-index: 1050; /* Asegúrate de que se muestre por encima de otros elementos */
+    left: 50%; /* Centrando horizontalmente */
+    top: 50%; /* Centrando verticalmente */
+    transform: translate(-50%, -50%); /* Asegura que el modal esté centrado */
+    background-color: rgba(24, 9, 240, 0.5); /* Fondo oscuro semitransparente */
+    width: 100%; /* Ancho del modal */
+    height: 100%; /* Alto del modal */
+    overflow: auto; /* En caso de contenido grande */
+  }
+  
+  .modal-contentChanged {
+    background-color: white; /* Fondo del contenido */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    width: 600px; /* Ajustar el ancho del popup */
+    max-width: 90%;
+    position: relative;
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .form-group {
+    display: flex;
+    justify-content: space-between;
+    
+  }
+  

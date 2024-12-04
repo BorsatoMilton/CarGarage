@@ -37,6 +37,7 @@ app.use('/api/lineacompras', lineacompraRouter)
 app.use('/api/recuperacion', correoRouter);
 app.use('/api/alquiler', alquilerRouter);
 app.use('/api/rol', rolRouter);
+app.use('/api/usuarios', usuarioRouter)
 app.use('/uploads', express.static(path.resolve('src/uploads')));
 
 

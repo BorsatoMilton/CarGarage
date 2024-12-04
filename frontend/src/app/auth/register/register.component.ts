@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UsuariosService } from '../../core/services/usuarios.service.js';
+import { UsuariosService } from '../../core/services/users.service.js';
 import { Router } from '@angular/router';
 import { RolService } from '../../core/services/rol.service.js';
 @Component({
@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit{
                 ...this.registerForm.value,
                 rol: rolEncontrado.id
               };
-              this.usuariosService.addUsuario(usuarioFinal).subscribe(() => {
+              this.usuariosService.addUser(usuarioFinal).subscribe(() => {
                 alert('Usuario registrado correctamente');
                 this.registerForm.reset();
                 this.router.navigate(['/auth/login']);

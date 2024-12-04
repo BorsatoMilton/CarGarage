@@ -7,15 +7,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { VehiclesService } from '../../core/services/vehicles.service.js';
-import { Vehicle } from '../../core/models/vehicles.interface.js';
-import { AuthService } from '../../core/services/auth.service.js';
-import { transition } from '@angular/animations';
 import { User } from '../../core/models/user.interface.js';
 import { UsuariosService } from '../../core/services/users.service.js';
 import { Rol } from '../../core/models/rol.interface.js';
 import { RolService } from '../../core/services/rol.service.js';
-import { RolComponent } from '../rol/rol.component.js';
 
 @Component({
   selector: 'app-vehicle',
@@ -33,10 +28,8 @@ export class UserComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private vehicleService: VehiclesService,
     private userService: UsuariosService,
     private rolService: RolService,
-    private authService: AuthService
   ) {
     this.userForm = this.fb.group({
       usuario: ['', Validators.required],
@@ -54,7 +47,6 @@ export class UserComponent implements OnInit {
       this.roles = data;
     });
     this.loadUser();
-    console.log(this.users)
   }
 
   openModal(modalId: string, user: User): void {
@@ -119,8 +111,12 @@ export class UserComponent implements OnInit {
 
   loadUser(): void {
     this.userService.getAllUser().subscribe((users: User[]) => {
-      this.users = users;
+      this.users = users.map((user) => {
+        const roleName = this.roles.find((role) => role.id === user.rol)?.nombreRol.toUpperCase() || 'DESCONOCIDO';
+        return { ...user, roleName };
+      });
     });
+    
   }
 
   editUser(): void {
@@ -152,10 +148,4 @@ export class UserComponent implements OnInit {
     }
   }
 
-  onFilesSelected(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files) {
-      this.selectedFiles = Array.from(fileInput.files);
-    }
-  }
 }

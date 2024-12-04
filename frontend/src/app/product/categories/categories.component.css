@@ -47,26 +47,29 @@ form {
 
 
 .modalChanged {
-    display: none; /* Oculto por defecto */
-    position: fixed; /* Para que el modal se mantenga fijo en la pantalla */
-    z-index: 1050; /* Asegúrate de que se muestre por encima de otros elementos */
-    left: 50%; /* Centrando horizontalmente */
-    top: 50%; /* Centrando verticalmente */
-    transform: translate(-50%, -50%); /* Asegura que el modal esté centrado */
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
-    width: 100%; /* Ancho del modal */
-    height: 100%; /* Alto del modal */
-    overflow: auto; /* En caso de contenido grande */
-}
+    display: none; 
+    position: fixed; 
+    z-index: 1050; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh; 
+    background-color: rgba(0, 0, 0, 0.5); 
+  }
   
-.modal-contentChanged {
-    background-color: white; /* Fondo del contenido */
-    padding: 20px; /* Espaciado interno */
-    border-radius: 8px; /* Bordes redondeados */
-    width: 600px; /* Ajustar el ancho del popup */
-    max-width: 90%;
-    position: relative;
-}
+  .modal-contentChanged {
+    position: absolute;
+    z-index: 1050;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff; 
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    max-width: 1000px; 
+    width: 90%; 
+  }
   
 .close {
     position: absolute;

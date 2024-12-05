@@ -8,23 +8,22 @@
       <thead class="table-dark">
         <tr>
           <th>USUARIO</th>
-          <th>CLAVE</th>
           <th>NOMBRE</th>
           <th>APELLIDO</th>
           <th>MAIL</th>
           <th>DIRECCION</th>
           <th>ROL</th>
+          <th>ACCIONES</th>
         </tr>
       </thead>
       <tbody *ngIf="users.length > 0">
         <tr *ngFor="let User of users">
           <td>{{ User.usuario }}</td>
-          <td>{{ User.clave }}</td>
           <td>{{ User.nombre }}</td>
           <td>{{ User.apellido }}</td>
           <td>{{ User.mail }}</td>
           <td>{{ User.direccion }}</td>
-          <td>{{ User.rol }}</td>
+          <td>{{ User.roleName }}</td>
           <td>
             <button (click)="openModal('editUser', User)" class="btn btn-primary" data-bs-toggle="modal"
               data-bs-target="#editUserModal">Editar</button>

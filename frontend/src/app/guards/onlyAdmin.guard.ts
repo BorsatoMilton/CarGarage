@@ -17,7 +17,7 @@ export const onlyAdmin: CanActivateFn = (route, state) => {
 
   return authService.getRole().pipe(
     map(rolNombre => {
-      if (rolNombre === 'admin') {
+      if (rolNombre === 'ADMIN') {
         return true; 
       } else {
         console.log(rolNombre)

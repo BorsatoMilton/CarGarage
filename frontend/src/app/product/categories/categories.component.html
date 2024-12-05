@@ -1,18 +1,14 @@
-<<<<<<< Updated upstream
-<app-searcher [data]="categories" [filterAttributes]="['nombreCategoria', 'descripcionCategoria']" (filteredData)="onSearch($event)"></app-searcher>
-<table >
-    <thead>
-=======
+
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>LISTA DE CATEGORIAS</h2>
+    <app-searcher [data]="categories" [filterAttributes]="['nombreCategoria', 'descripcionCategoria']" (filteredData)="onSearch($event)"></app-searcher>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoria">Añadir Categoría</button>
     </div>
 </div>
 
 <table class="table table-hover">
     <thead class="table-dark">
->>>>>>> Stashed changes
         <tr>
             <th>NOMBRE</th>
             <th>DESCRIPCION</th>

@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit{
     if (this.passwordMatchValidator(this.registerForm)) {
       if (this.registerForm.valid) { 
         // Falta validar si el mail y/o usuario ya existe
-        this.rolService.getOneRolByName('usuario').subscribe({
+        this.rolService.getOneRolByName('USUARIO').subscribe({
           next: (rolEncontrado) => {
             if (rolEncontrado) {
               const usuarioFinal = {

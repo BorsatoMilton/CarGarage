@@ -12,6 +12,8 @@ import { Rol } from '../../core/models/rol.interface.js';
 import { AuthService } from '../../core/services/auth.service.js';
 import { User } from '../../core/models/user.interface.js';
 import { transition } from '@angular/animations';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-rol',
@@ -68,31 +70,31 @@ export class RolComponent implements OnInit {
     this.selectedRol = null;
     this.rolForm.reset();
   }
+checkRolExists():Observable<boolean>{
+  return this.rolService.getOneRolByName(this.rolForm.get('nombreRol')?.value).pipe(
+    map((rol:Rol)=>!!rol),
+    catchError(()=>of(false))
+  );
+}
 
-  addRol() {
+addRol() {
     if (this.rolForm.invalid) {
       alert('Por favor, complete todos los campos requeridos.');
       return;
     }
     const rolData = this.rolForm.value
-
-
-    this.rolService.addRol(rolData).subscribe({
-      next: () => {
-        alert('Rol agregado con éxito');
-        this.rolForm.reset();
-        this.closeModal('addRol');
-        this.ngOnInit();
-        this.rolForm.enable();
-      },
-      error: (e:Error) => {
-        console.error(e);
-        alert('Error al agregar el rol.');
-        this.rolForm.enable();
-      },
+    this.checkRolExists().subscribe((exists:boolean)=>{
+      if(!exists){
+        this.rolService.addRol(rolData).subscribe(()=>{
+          alert('Rol creado');
+          this.closeModal('addRol');
+          this.rolForm.reset();
+          this.ngOnInit();
+        });
+      }else {
+        alert('El rol ya existe');
+      }
     });
-    this.rolForm.reset();
-    this.selectedFiles = [];
   }
 
   loadRol(): void {

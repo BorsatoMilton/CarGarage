@@ -1,10 +1,22 @@
+<<<<<<< Updated upstream
 <app-searcher [data]="categories" [filterAttributes]="['nombreCategoria', 'descripcionCategoria']" (filteredData)="onSearch($event)"></app-searcher>
 <table >
     <thead>
+=======
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>LISTA DE CATEGORIAS</h2>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoria">Añadir Categoría</button>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead class="table-dark">
+>>>>>>> Stashed changes
         <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
+            <th>NOMBRE</th>
+            <th>DESCRIPCION</th>
+            <th>ACCIONES</th>
         </tr>
     </thead>
     <tbody *ngIf="filteredCategories.length > 0">
@@ -20,8 +32,6 @@
     <p *ngIf="filteredCategories.length === 0">No hay categorías</p>
 </table>
 
-
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoria">Añadir Categoría</button>
 
   
 <div class="modal fade" id="addCategoria" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

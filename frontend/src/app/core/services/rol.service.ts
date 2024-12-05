@@ -30,6 +30,5 @@ export class RolService {
   getAllRol(): Observable<Rol[]> {
     return this.http.get<Rol[]>(this.apiUrl);
   }
-  
-
 }
+

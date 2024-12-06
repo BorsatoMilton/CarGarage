@@ -76,7 +76,8 @@ onSearch(filteredCategories: Category[]): void {
 }
 
 checkCategoryExists(): Observable<boolean> {
-  return this.categoriesService.getOneCategoryByName(this.categoryForm.get('nombreCategoria')?.value).pipe(
+  const nombreCategoria = this.categoryForm.get('nombreCategoria')?.value.toUpperCase();
+  return this.categoriesService.getOneCategoryByName(nombreCategoria).pipe(
     map((categoria: Category) => !!categoria),
     catchError(() => of(false))
   );
@@ -85,7 +86,7 @@ checkCategoryExists(): Observable<boolean> {
 addCategory() {
   if (this.categoryForm.valid) {
     const categoryData = this.categoryForm.value;
-    
+    categoryData.nombreCategoria = categoryData.nombreCategoria.toUpperCase();
 
     this.checkCategoryExists().subscribe((existe: boolean) => {
       if (!existe) {

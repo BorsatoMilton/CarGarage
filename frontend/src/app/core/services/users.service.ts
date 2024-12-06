@@ -25,5 +25,11 @@ export class UsuariosService {
       getAllUser(): Observable<User[]> {
         return this.http.get<User[]>(this.apiUrl);
       }
+      getOneUserByEmailOrUsername(usuario: String , mail: String): Observable<User | null> {
+        return this.http.get<User>(`${this.apiUrl}/${usuario}/${mail}`);
+      }
+      getOneUserById(id: number): Observable<User> {
+        return this.http.get<User>(`${this.apiUrl}/${id}`);
+      }
   }
 

@@ -59,7 +59,8 @@ closeModal(modalId: string){
 }
 
 checkBrandExists(): Observable<boolean> {
-  return this.brandService.getOneBrandByName(this.brandForm.get('nombreMarca')?.value).pipe(
+  const nombreMarca = this.brandForm.get('nombreMarca')?.value.toUpperCase();
+  return this.brandService.getOneBrandByName(nombreMarca).pipe(
     map((marca: Brand) => !!marca),
     catchError(() => of(false))
   );
@@ -68,6 +69,7 @@ checkBrandExists(): Observable<boolean> {
 addBrand() {
   if (this.brandForm.valid) {
     const brandData = this.brandForm.value;
+    brandData.nombreMarca = brandData.nombreMarca.toUpperCase();
     
     this.checkBrandExists().subscribe((existe: boolean) => {
       if (!existe) {

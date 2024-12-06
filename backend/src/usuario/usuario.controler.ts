@@ -42,6 +42,21 @@ async function findAll(req: Request, res: Response) {
   }
 }
 
+async function findOneByEmailOrUsername(req: Request, res: Response) {
+  try {
+    const usuario = req.params.user
+    const mail = req.params.mail
+    const usuarioEncontrado = await em.findOne(Usuario, {
+      $or: [
+      { usuario: usuario},
+      { mail: mail }]
+      });
+    res.status(200).json(usuarioEncontrado)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 async function findOneById(req: Request, res: Response) {
   try {
     const id = req.params.id
@@ -128,19 +143,25 @@ async function resetPassword(req: Request, res: Response) {
 
   const tokenEntity = await orm.em.findOne(PasswordResetToken, { token });
   if (!tokenEntity || tokenEntity.expiryDate < new Date()) {
-      return res.status(400).json({ ok: false, message: 'Token inválido o expirado' });
+    return res
+      .status(400)
+      .json({ ok: false, message: "Token inválido o expirado" });
   }
 
   const user = await orm.em.findOne(Usuario, tokenEntity.user.id);
   if (!user) {
-      return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
+    return res
+      .status(404)
+      .json({ ok: false, message: "Usuario no encontrado" });
   }
-
-  user.clave = newPassword;
-  await orm.em.persistAndFlush(user); //faltaria encriptar la clave, pero bue, pincho
+  const vecesHash = 10;
+  const hashClave = await bcrypt.hash(newPassword, vecesHash);
+  user.clave = hashClave;
+  await orm.em.persistAndFlush(user);
   await orm.em.removeAndFlush(tokenEntity);
-  return res.status(200).json({ ok: true, message: 'Contraseña actualizada exitosamente' });
-
+  return res
+    .status(200)
+    .json({ ok: true, message: "Contraseña actualizada exitosamente" });
 }
 
 
@@ -155,4 +176,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove, login}
+export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove, login, findOneByEmailOrUsername}

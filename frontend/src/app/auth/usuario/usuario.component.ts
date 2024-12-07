@@ -13,7 +13,7 @@ import { Rol } from '../../core/models/rol.interface.js';
 import { RolService } from '../../core/services/rol.service.js';
 
 @Component({
-  selector: 'app-vehicle',
+  selector: 'app-usuario',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: 'usuario.component.html',
@@ -23,7 +23,6 @@ export class UserComponent implements OnInit {
   userForm: FormGroup = new FormGroup({});
   users: User[] = [];
   selectedUser: User | null = null;
-  selectedFiles: File[] = [];
   roles: Rol[] = [];
 
   constructor(
@@ -54,7 +53,6 @@ export class UserComponent implements OnInit {
     if (user) {
       this.userForm.patchValue({
         usuario: user.usuario,
-        clave: user.clave,
         nombre: user.nombre,
         apellido: user.apellido,
         mail: user.mail,
@@ -89,24 +87,36 @@ export class UserComponent implements OnInit {
     }
     this.userForm.disable();
     const userData = this.userForm.value
-    
-    this.userService.addUser(userData).subscribe({
-      next: () => {
-        alert('Usuario agregado con éxito');
-        this.userForm.reset();
-        this.selectedFiles = [];
-        this.closeModal('addUser');
-        this.ngOnInit();
-        this.userForm.enable();
+    this.userService.getOneUserByEmailOrUsername(userData.usuario, userData.mail).subscribe({
+      next: (user: User | null) => {
+        if (user) {
+          alert('El usuario ya existe o el mail ya está en uso!');
+          this.userForm.enable();
+          return;
+        }else {
+          this.userService.addUser(userData).subscribe({
+            next: () => {
+              alert('Usuario agregado con éxito');
+              this.userForm.reset();
+              this.closeModal('addUser');
+              this.ngOnInit();
+              this.userForm.enable();
+              this.userForm.reset();
+            },
+            error: (error) => {
+              console.error(error);
+              alert('Error al agregar el usuario.');
+              this.userForm.enable();
+            },
+          });
+        }
       },
       error: (error) => {
         console.error(error);
-        alert('Error al agregar el usuario.');
+        alert('Se ha producido un error.');
         this.userForm.enable();
-      },
+      }
     });
-    this.userForm.reset();
-    this.selectedFiles = [];
   }
 
   loadUser(): void {
@@ -132,7 +142,25 @@ export class UserComponent implements OnInit {
         this.closeModal('editUser');
         this.ngOnInit();
         this.userForm.reset();
-        this.selectedFiles = [];
+
+      });
+    }
+  }
+
+  updatePassword(): void {
+
+    if (this.selectedUser) {
+      const updatedUser: User = {
+        ...this.selectedUser,
+        ...this.userForm.value,
+      };
+
+      this.userService.editUser(updatedUser).subscribe(() => {
+        alert('Contraseña actualizada');
+        this.closeModal('updatePassword');
+        this.ngOnInit();
+        this.userForm.reset();
+   
       });
     }
   }

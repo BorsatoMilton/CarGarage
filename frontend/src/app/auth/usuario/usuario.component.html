@@ -27,6 +27,8 @@
           <td>
             <button (click)="openModal('editUser', User)" class="btn btn-primary" data-bs-toggle="modal"
               data-bs-target="#editUserModal">Editar</button>
+              <button (click)="openModal('updatePassword', User)" class="btn btn-warning" data-bs-toggle="modal"
+              data-bs-target="#changePaswwordUserModal">Actualizar Clave</button>
             <button (click)="openModal('removeUser', User)" class="btn btn-danger" data-bs-toggle="modal"
               data-bs-target="#removeUserModal">Eliminar</button>
           </td>
@@ -49,7 +51,7 @@
                   <label for="usuario">Usuario</label>
                   <input type="text" formControlName="usuario" id="usuario" class="form-control" required>
                   <label for="clave">Clave</label>
-                  <input type="text" formControlName="clave" id="clave" class="form-control" required>
+                  <input type="password" formControlName="clave" id="clave" class="form-control" required>
                 </div>
                 <div class="col-md-6">
                   <label for="nombre">Nombre</label>
@@ -60,7 +62,7 @@
               </div>
               <div class="row mt-3">
                   <label for="mail">Mail</label>
-                  <input type="text" formControlName="mail" id="mail" class="form-control" required>
+                  <input type="email" formControlName="mail" id="mail" class="form-control" required>
                   <label for="direccion">Direccion</label>
                   <input type="text" formControlName="direccion" id="direccion"class="form-control">
               </div>
@@ -102,11 +104,6 @@
             <input type="text" formControlName="usuario" id="usuario" name="usuario" class="form-control" required>
           </div>
           <div class="form-group">
-            <label for="clave">Clave</label>
-            <input type="text" formControlName="clave" id="clave" name="clave" class="form-control"
-              required>
-          </div>
-          <div class="form-group">
             <label for="nombre">Nombre</label>
             <input type="text" formControlName="nombre" id="nombre" name="nombre" class="form-control">
             <label for="apellido">Apellido</label>
@@ -115,9 +112,9 @@
           </div>
           <div class="form-group">
             <label for="mail">Mail</label>
-            <input type="text" formControlName="mail" id="mail" name="mail" class="form-control" required>
-            <label for="apellido">Apellido</label>
-            <input type="text" formControlName="apellido" id="apellido" name="apellido"
+            <input type="email" formControlName="mail" id="mail" name="mail" class="form-control" required>
+            <label for="direccion">Direccion</label>
+            <input type="text" formControlName="direccion" id="direccion" name="direccion"
               class="form-control">
           </div>
           <div class="form-group">
@@ -131,6 +128,25 @@
             <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Guardar cambios</button>
           </div>
   
+        </form>
+      </div>
+    </div>
+
+
+
+    <div id="updatePassword" class="modalChanged">
+      <div class="modal-contentChanged">
+        <span class="close" (click)="closeModal('updatePassword')">&times;</span>
+        <h2>Cambiar Contraseña Usuario</h2>
+        <form [formGroup]="userForm" (ngSubmit)="updatePassword()">
+          <div class="form-group">
+            <label for="clave">Nueva Clave</label>
+            <input type="password" formControlName="clave" id="clave" name="clave" class="form-control" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal('updatePassword')">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Guardar cambios</button>
+          </div>
         </form>
       </div>
     </div>

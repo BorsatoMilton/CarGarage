@@ -128,7 +128,13 @@ async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
     const usuarioAactualizar = await em.findOneOrFail(Usuario, { id })
-    em.assign(usuarioAactualizar, req.body.sanitizedInput)
+    const vecesHash = 10;
+    const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
+    const usuario = {
+      ...req.body.sanitizedInput,
+      clave: hashClave
+    }
+    em.assign(usuarioAactualizar, usuario)
     await em.flush()
     res
       .status(200)

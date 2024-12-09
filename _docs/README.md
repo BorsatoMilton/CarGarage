@@ -30,10 +30,10 @@ SvS es un sitio destinado a la compra, venta y alquiler vehículos a través de
   <br>2. CRUD Compra
   <br>3. CRUD Alquiler
   <br>4. CRUD Calificacion
-  <br>5. CRUD Tarjeta
-  <br>6. CRUD Categoria
-  <br>7. CRUD Marca
-  <br>8. CRUD Rol
+  <br>5. CRUD Categoria
+  <br>6. CRUD Marca
+  <br>7. CRUD Rol
+  <br>8. CRUD Vehiculo
 
 </td>
 </tr>

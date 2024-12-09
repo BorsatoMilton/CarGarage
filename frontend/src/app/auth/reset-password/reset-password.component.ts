@@ -34,28 +34,33 @@ export class ResetPasswordComponent implements OnInit {
     });
     if (!this.token) { //FALTARIA TOKEN EXPIRADO, DEBO BUSCARLO EN LA DB Y VERIFICAR SI NO EXPIRO
       alert('Token inválido o expirado.');
-      this.router.navigate(['/login']);
+      this.router.navigate(['auth/login']);
     }
   }
 
   passwordMatchValidator(form: FormGroup) {
     return form.get('password')?.value === form.get('confirmPassword')?.value
-      ? null : { mismatch: true };
+      ? true : false;
   }
 
   resetPassword(): void {
     if (this.resetForm.valid && this.token) {
-      const password = this.resetForm.get('password')?.value;
-      this.passwordRecoveryService.resetPassword(this.token, password).subscribe({
-        next: () => {
-          alert('Contraseña actualizada correctamente');
-          this.router.navigate(['/login']);
-        },
-        error: (error) => {
-          console.error('Error al actualizar la contraseña:', error);
-          alert('Hubo un error al actualizar la contraseña. Por favor, inténtalo nuevamente.');
-        }
-      });
-    }
+      if(this.passwordMatchValidator(this.resetForm)){
+        const password = this.resetForm.get('password')?.value;
+        this.passwordRecoveryService.resetPassword(this.token, password).subscribe({
+          next: () => {
+            alert('Contraseña actualizada correctamente');
+            this.router.navigate(['auth/login']);
+          },
+          error: (error) => {
+            console.error('Error al actualizar la contraseña:', error);
+            alert('Hubo un error al actualizar la contraseña. Por favor, inténtalo nuevamente.');
+          }
+        });
+      } else {
+        alert('Las contraseñas no coinciden');
+        this.resetForm.reset();
+      }
+   }
   }
 }

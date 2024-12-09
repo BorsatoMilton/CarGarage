@@ -21,7 +21,7 @@ import { transition } from '@angular/animations';
 @Component({
   selector: 'app-vehicle',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, BrandComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: 'vehicles.component.html',
   styleUrl: './vehicles.component.css',
 })
@@ -63,7 +63,7 @@ export class VehicleComponent implements OnInit {
       this.categories = data;
     });
     this.usuario = this.authService.getCurrentUser();
-
+  
     if (this.usuario !== null) {
       this.vehicleForm.patchValue({ propietario: this.usuario.id });
     }

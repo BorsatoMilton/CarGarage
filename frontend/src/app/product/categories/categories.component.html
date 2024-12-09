@@ -1,104 +1,104 @@
 
 <div class="container my-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>LISTA DE CATEGORIAS</h2>
-    <app-searcher [data]="categories" [filterAttributes]="['nombreCategoria', 'descripcionCategoria']" (filteredData)="onSearch($event)"></app-searcher>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoria">Añadir Categoría</button>
-    </div>
-</div>
-
-<table class="table table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>NOMBRE</th>
-            <th>DESCRIPCION</th>
-            <th>ACCIONES</th>
-        </tr>
-    </thead>
-    <tbody *ngIf="filteredCategories.length > 0">
-        <tr *ngFor="let category of filteredCategories">
-            <td>{{ category.nombreCategoria }}</td>
-            <td>{{ category.descripcionCategoria }}</td>
-            <td>
-                <button  (click)="openModal('editCategoria', category)"class="btn btn-primary">Editar</button>
-                <button  (click)="openModal('removeCategoria', category)"class="btn btn-danger">Eliminar</button>
-            </td>
-        </tr>
-    </tbody>
-    <p *ngIf="filteredCategories.length === 0">No hay categorías</p>
-</table>
-
-
-  
-<div class="modal fade" id="addCategoria" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Categoria</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>LISTA DE CATEGORIAS</h2>
+        <app-searcher [data]="categories" [filterAttributes]="['nombreCategoria', 'descripcionCategoria']" (filteredData)="onSearch($event)"></app-searcher>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoria">Añadir Categoría</button>
         </div>
-        <div class="modal-body">
-            <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
-                <div class="form-group">
-                <label for="name">Nombre Categoría</label>
-                <input type="text" formControlName="nombreCategoria" id="name" name="name" class="form-control" required>
-                </div>
-                <div class="form-group">
-                <label for="description">Descripción</label>
-                <input type="text" formControlName="descripcionCategoria" id="description" name="description" class="form-control" required>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>        
-    </div>
-    </div>
-</div>
 
 
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>NOMBRE</th>
+                <th>DESCRIPCION</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="filteredCategories.length > 0">
+            <tr *ngFor="let category of filteredCategories">
+                <td>{{ category.nombreCategoria }}</td>
+                <td>{{ category.descripcionCategoria }}</td>
+                <td>
+                    <button  (click)="openModal('editCategoria', category)"class="btn btn-primary">Editar</button>
+                    <button  (click)="openModal('removeCategoria', category)"class="btn btn-danger">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+        <p *ngIf="filteredCategories.length === 0">No hay categorías</p>
+    </table>
 
 
-<!-- Eliminar Modal -->
-<div id="removeCategoria" class="modalChanged">
-    <div class="modal-contentChanged">
-      <span class="close" (click)="closeModal('removeCategoria')">&times;</span>
-      <h2>Eliminar Categoría</h2>
-      <p>¿Estás seguro de que deseas eliminar la siguiente categoría?</p>
-      <p><strong>Nombre:</strong> {{ selectedCategory?.nombreCategoria }}</p>
-      <p><strong>Descripción:</strong> {{ selectedCategory?.descripcionCategoria }}</p>
-      <button class="btn btn-secondary" (click)="closeModal('removeCategoria')">Cancelar</button>
-      <button class="btn btn-danger" (click)="deleteCategory(selectedCategory, 'removeCategoria')">Eliminar</button>
-    </div>
-</div>
-
-  
-
-<!--Editar Modal-->
-<div id="editCategoria" class="modalChanged">
-    <div class="modal-contentChanged">
-      <span class="close" (click)="closeModal('editCategoria')">&times;</span>
-      <h2>Editar Categoría</h2>
-      <form [formGroup]="categoryForm" (ngSubmit)="editCategory()">
-        <div class="form-group">
-          <label for="nombreCategoria">Nombre Categoría</label>
-          <input type="text" id="nombreCategoria" formControlName="nombreCategoria" class="form-control" required>
+    
+    <div class="modal fade" id="addCategoria" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Categoria</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+                    <div class="form-group">
+                    <label for="name">Nombre Categoría</label>
+                    <input type="text" formControlName="nombreCategoria" id="name" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <input type="text" formControlName="descripcionCategoria" id="description" name="description" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>        
         </div>
-        <div class="form-group">
-          <label for="descripcionCategoria">Descripción</label>
-          <input type="text" id="descripcionCategoria" formControlName="descripcionCategoria" class="form-control" required>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal('editCategoria')">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        </div>
-      </form>
     </div>
+
+
+
+
+    <!-- Eliminar Modal -->
+    <div id="removeCategoria" class="modalChanged">
+        <div class="modal-contentChanged">
+        <span class="close" (click)="closeModal('removeCategoria')">&times;</span>
+        <h2>Eliminar Categoría</h2>
+        <p>¿Estás seguro de que deseas eliminar la siguiente categoría?</p>
+        <p><strong>Nombre:</strong> {{ selectedCategory?.nombreCategoria }}</p>
+        <p><strong>Descripción:</strong> {{ selectedCategory?.descripcionCategoria }}</p>
+        <button class="btn btn-secondary" (click)="closeModal('removeCategoria')">Cancelar</button>
+        <button class="btn btn-danger" (click)="deleteCategory(selectedCategory, 'removeCategoria')">Eliminar</button>
+        </div>
+    </div>
+
+    
+
+    <!--Editar Modal-->
+    <div id="editCategoria" class="modalChanged">
+        <div class="modal-contentChanged">
+        <span class="close" (click)="closeModal('editCategoria')">&times;</span>
+        <h2>Editar Categoría</h2>
+        <form [formGroup]="categoryForm" (ngSubmit)="editCategory()">
+            <div class="form-group">
+            <label for="nombreCategoria">Nombre Categoría</label>
+            <input type="text" id="nombreCategoria" formControlName="nombreCategoria" class="form-control" required>
+            </div>
+            <div class="form-group">
+            <label for="descripcionCategoria">Descripción</label>
+            <input type="text" id="descripcionCategoria" formControlName="descripcionCategoria" class="form-control" required>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal('editCategoria')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+
 </div>
-
-
-
 
 
 

@@ -17,9 +17,6 @@ export class AuthService {
 
 
   constructor(private http: HttpClient, private router: Router, private rolService: RolService) {
-
-    
-
    }
 
   login(user: string, password: string):Observable<User>{
@@ -41,7 +38,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.isLoggedIn || sessionStorage.getItem('user') !== null;  // Tiene sentido esto?
+    return this.isLoggedIn || sessionStorage.getItem('user') !== null;  
   }
 
 

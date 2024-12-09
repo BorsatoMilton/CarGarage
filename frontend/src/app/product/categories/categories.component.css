@@ -1,52 +1,60 @@
 .form-group {
+    display: flex; /* Usa flexbox para alinear los elementos */
+    align-items: center; /* Alinea verticalmente en el centro */
     margin-bottom: 15px;
-}
-
-label {
-    color: #004080; /* Azul oscuro */
+  }
+  
+  label {
+    color: #f81206;
+    /* Azul oscuro */
     font-weight: bold;
-}
-
-input {
-    border: 1px solid #004080; /* Azul oscuro */
+    margin-right: 10px;
+    margin-bottom: 5px;
+    display: block
+  }
+  
+  input {
+    border: 1px solid #004080;
+    /* Azul oscuro */
     border-radius: 4px;
     padding: 8px;
     width: 100%;
     box-sizing: border-box;
-}
-
-input:focus {
-    border-color: #007bff; /* Azul más brillante para el foco */
+  }
+  
+  input:focus {
+    border-color: #007bff;
+    /* Azul más brillante para el foco */
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     outline: none;
-}
-
-button.btn-primary {
-    background-color: #004080; /* Azul oscuro */
+  }
+  
+  button.btn-primary {
+    background-color: #004080;
+    /* Azul oscuro */
     border-color: #004080;
     color: white;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-button.btn-primary:hover {
-    background-color: #007bff; /* Azul más brillante al pasar el cursor */
+  }
+  
+  button.btn-primary:hover {
+    background-color: #007bff;
+    /* Azul más brillante al pasar el cursor */
     border-color: #007bff;
-}
-
-form {
+  }
+  
+  form {
     margin-top: 20px;
     width: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-
-
-.modalChanged {
+  }
+  
+  .modalChanged {
     display: none; 
     position: fixed; 
     z-index: 1050; 
@@ -70,11 +78,10 @@ form {
     max-width: 1000px; 
     width: 90%; 
   }
-  
-.close {
+  .close {
     position: absolute;
     top: 10px;
     right: 15px;
     font-size: 25px;
     cursor: pointer;
-}
+  }

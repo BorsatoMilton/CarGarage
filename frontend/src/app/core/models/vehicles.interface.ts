@@ -9,6 +9,8 @@ export interface Vehicle {
     kilometros:number;
     modelo: string;
     marca: string;
+    nombreMarca: string;
+    nombreCategoria: string;
     categoria: string;
     imagenes: string[];
     propietario: string;

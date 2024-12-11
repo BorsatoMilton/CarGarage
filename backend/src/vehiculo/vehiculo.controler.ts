@@ -4,6 +4,8 @@ import { orm } from '../shared/db/orm.js'
 import fs from 'fs';
 import path from 'path';
 import { ObjectId } from 'mongodb';
+import { Marca } from './marca.entity.js';
+import { Categoria } from './categoria.entity.js';
 
 const em = orm.em.fork()
 
@@ -48,10 +50,38 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const vehiculo = await em.findOneOrFail(Vehiculo, { id }, { populate: ['modelo'] })
-    res.status(200).json({ message: 'Vehiculo Encontrado', data: vehiculo })
+    const vehiculo = await em.findOneOrFail(Vehiculo, { id }, { populate: ['categoria', 'marca'] })
+    res.status(200).json(vehiculo)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
+  }
+}
+
+ async function findNameBrand(req: Request, res: Response) {
+  try {
+    const brandId = req.params.id;
+    const marca = await em.findOneOrFail(Marca, { id: brandId });
+    if (!marca) {
+      return res.status(404).json({ message: 'Marca no encontrada' });
+    }
+
+    res.status(200).json({ nombre: marca.nombreMarca });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+ async function findNameCategory(req: Request, res: Response) {
+  try {
+    const categoryId = req.params.id;
+    const categoria = await em.findOneOrFail(Categoria, { id: categoryId });
+    if (!categoria) {
+      return res.status(404).json({ message: 'Categoria no encontrada' });
+    }
+
+    res.status(200).json({ nombre: categoria.nombreCategoria });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 }
 
@@ -146,4 +176,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove }
+export { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findNameCategory, findNameBrand }

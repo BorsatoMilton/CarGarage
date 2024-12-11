@@ -17,11 +17,12 @@ import { Category } from '../../core/models/categories.interface.js';
 import { AuthService } from '../../core/services/auth.service.js';
 import { User } from '../../core/models/user.interface.js';
 import { transition } from '@angular/animations';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-vehicle',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
   templateUrl: 'vehicles.component.html',
   styleUrl: './vehicles.component.css',
 })
@@ -39,7 +40,9 @@ export class VehicleComponent implements OnInit {
     private vehicleService: VehiclesService,
     private brandService: BrandsService,
     private categoriesService: CategoriesService,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.vehicleForm = this.fb.group({
       nombre: ['', Validators.required],
@@ -63,13 +66,19 @@ export class VehicleComponent implements OnInit {
       this.categories = data;
     });
     this.usuario = this.authService.getCurrentUser();
-  
+    const vehicleId = this.route.snapshot.paramMap.get('id');
+    if (vehicleId !== null) {
+      this.loadVehicle(vehicleId);
+    }
+    
+    
     if (this.usuario !== null) {
       this.vehicleForm.patchValue({ propietario: this.usuario.id });
     }
 
-    this.loadVehicle();
+    
   }
+
 
   openModal(modalId: string, vehicle: Vehicle): void {
     this.selectedVehicle = vehicle;
@@ -85,6 +94,8 @@ export class VehicleComponent implements OnInit {
         kilometros: vehicle.kilometros,
         modelo: vehicle.modelo,
         marca: vehicle.marca,
+        nombreCategoria: vehicle.nombreCategoria,
+        nombreMarca: vehicle.nombreMarca,
         categoria: vehicle.categoria,
         transmision: vehicle.transmision,
       });
@@ -108,6 +119,18 @@ export class VehicleComponent implements OnInit {
     this.selectedVehicle = null;
     this.vehicleForm.reset();
   }
+
+  loadVehicle(vehicleId: string): void {
+  this.vehicleService.getOneVehicle(vehicleId).subscribe((vehicle) => {
+    this.categoriesService.getOneCategory(vehicle.categoria).subscribe((category) => {
+      vehicle.nombreCategoria = category.nombreCategoria;
+    });
+
+    this.brandService.getOneBrand(vehicle.marca).subscribe((brand) => {
+      vehicle.nombreMarca = brand.nombreMarca;
+    });
+  });
+}
 
   addVehicle() {
     if (this.vehicleForm.invalid) {
@@ -164,12 +187,6 @@ export class VehicleComponent implements OnInit {
     this.selectedFiles = [];
   }
 
-  loadVehicle(): void {
-    this.vehicleService.getAllVehicle().subscribe((vehicles: Vehicle[]) => {
-      this.vehicles = vehicles;
-    });
-  }
-
   editVehicle(): void {
     if (this.selectedVehicle) {
       this.ngOnInit();
@@ -199,10 +216,15 @@ export class VehicleComponent implements OnInit {
     }
   }
 
+  
+
   onFilesSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files) {
       this.selectedFiles = Array.from(fileInput.files);
     }
   }
+
+  
+
 }

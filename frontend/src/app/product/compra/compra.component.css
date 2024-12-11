@@ -1,0 +1,79 @@
+/* Contenedor principal para centrar todo en la página */
+.page-container {
+  display: flex;
+  /* Activa Flexbox */
+  justify-content: center;
+  /* Centra horizontalmente */
+  align-items: center;
+  /* Centra verticalmente */
+  height: 60vh;
+  /* Ocupa el 100% de la altura de la ventana */
+  background-color: #f4f4f4;
+  /* Fondo opcional */
+}
+
+/* Contenedor de la imagen y los detalles */
+.vehicle-container {
+  display: flex;
+  /* Activa Flexbox para organizar imagen y detalles */
+  align-items: center;
+  /* Centra verticalmente la imagen y los detalles */
+  gap: 20px;
+  /* Espacio entre la imagen y las descripciones */
+  padding: 20px;
+  background: white;
+  /* Fondo blanco */
+  border-radius: 10px;
+  /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Sombra opcional */
+}
+
+/* Estilo para la imagen */
+.imagen-vehiculo {
+  width: 500px;
+  height: 500px;
+  
+  object-fit: cover;
+  /* Asegura proporción en la imagen */
+  border-radius: 10px;
+  /* Bordes redondeados */
+}
+#imagen-vehiculo {
+  width: 500px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+  /* Imágenes responsivas */
+  align-items: center;
+}
+/* Estilo para los detalles del vehículo */
+.vehicle-details {
+  display: flex;
+  flex-direction: column;
+  /* Organiza los detalles en una columna */
+  font-family: Arial, sans-serif;
+  /* Estilo de texto */
+  font-size: 16px;
+  color: #333;
+}
+
+.vehicle-details p {
+  margin: 5px 0;
+  /* Espaciado entre descripciones */
+}
+
+.img {
+  max-width: 100%;
+  /* Imágenes responsivas */
+  align-items: center;
+}
+
+.whatsapp-container{
+  display: flex;
+  justify-content: right;
+  align-items: right;
+  gap: 20px;
+  padding: 20px;
+  
+}

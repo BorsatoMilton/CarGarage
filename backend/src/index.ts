@@ -32,7 +32,7 @@ app.use('/api/vehiculos', vehiculoRouter )
 app.use('/api/usuarios', usuarioRouter )
 app.use('/api/tarjetas', tarjetaRouter)
 app.use ('/api/calificaciones', calificacionRouter)
-app.use('/api/pedidos', compraRouter)
+app.use('/api/compras', compraRouter)
 app.use('/api/lineacompras', lineacompraRouter)
 app.use('/api/recuperacion', correoRouter);
 app.use('/api/alquiler', alquilerRouter);

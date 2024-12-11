@@ -10,12 +10,12 @@ Content-Type: application/json
 
 {
     "usuario": "marchecrack",
-    "clave": "admin123",
+    "clave": "123456",
     "nombre": "valentin",
     "apellido": "marchese",
     "mail": "nachodayer@gmail.com",
     "direccion": "Calle falsa 123",
-    "rol": "674fb75214b16c10267f0a48"
+    "rol": "6754a6cb6f22e57ec62162aa"
 }
 
 

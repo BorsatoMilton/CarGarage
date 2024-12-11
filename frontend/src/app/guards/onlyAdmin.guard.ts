@@ -14,6 +14,7 @@ export const onlyAdmin: CanActivateFn = (route, state) => {
     router.navigate(['/auth/login']);
     return of(false); 
   }
+  
 
   return authService.getRole().pipe(
     map(rolNombre => {

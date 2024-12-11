@@ -14,11 +14,13 @@ import { User } from '../../core/models/user.interface.js';
 import { transition } from '@angular/animations';
 import { Compra } from '../../core/models/compra.interfaces.js';
 import { CompraService } from '../../core/services/compra.service.js';
+import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-compra',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
   templateUrl: 'compra.component.html',
   styleUrl: './compra.component.css',
 })
@@ -26,15 +28,18 @@ export class CompraComponent implements OnInit {
   compraForm: FormGroup = new FormGroup({});
   compras: Compra[] = [];
   selectedCompra: Compra | null = null;
-  vehiculos: Vehicle[] = [];
+  vehiculo: Vehicle | null = null;
   selectedFiles: File[] = [];
   usuario: User | null = null;
-
+  idVehiculo: string | null = null;
+  
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehiclesService,
     private authService: AuthService,
-    private compraservice: CompraService
+    private compraservice: CompraService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.compraForm = this.fb.group({ //crea un formulario reactivo con FormBuilder
       fecha_compra: ['', Validators.required],
@@ -42,10 +47,25 @@ export class CompraComponent implements OnInit {
     });
   }
 
+  
   ngOnInit(): void {
-    this.vehicleService.getAllVehicle().subscribe((data) => {
-      this.vehiculos = data;
+
+    this.route.paramMap.subscribe(params => {
+      this.idVehiculo = params.get('id');
+      if(this.idVehiculo === null){
+      alert('Vehiculo no encontrado');
+      this.router.navigate(['/']);
+    }else{
+      this.vehicleService.getOneVehicle(this.idVehiculo).subscribe((data) => {
+      if(data === null){
+        alert('Vehiculo no encontrado');
+        this.router.navigate(['/']);
+      }else{
+        this.vehiculo = data;
+      }
+    })};
     });
+    
     this.usuario = this.authService.getCurrentUser();
 
     if (this.usuario !== null) {
@@ -54,6 +74,7 @@ export class CompraComponent implements OnInit {
 
     this.loadCompra();
   }
+
 
   openModal(modalId: string, compra: Compra): void {
     this.selectedCompra = compra;
@@ -112,9 +133,19 @@ export class CompraComponent implements OnInit {
     this.compraForm.reset();
   }
 
+
   loadCompra(): void {
     this.compraservice.getAllCompra().subscribe((compras: Compra[]) => {
       this.compras = compras;
     });
+  }
+
+  comprar(): void {
+    if (this.authService.isAuthenticated()) {
+      console.log('Usuario autenticado. Procesando compra...');
+    } else {
+      console.log('Usuario no autenticado. Redirigiendo a login...');
+      this.router.navigate(['/login']);
+    }
   }
 }

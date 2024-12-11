@@ -57,7 +57,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const imagePaths = Array.isArray(req.files) ? req.files.map((file: any) => file.filename) : [];
+    const imagePaths = Array.isArray(req.files) ? req.files.map((file: any) => file.filename) : []; // a cada archivo que se envia se le va a poner el nombre, se trata de mapear, si no lo deja vacio. el imagepaths muestra los nombres del archivo si lo q se envia es un array
     if (!ObjectId.isValid(req.body.sanitizedInput.marca) || 
       !ObjectId.isValid(req.body.sanitizedInput.categoria) || 
       !ObjectId.isValid(req.body.sanitizedInput.propietario)) {
@@ -65,7 +65,7 @@ async function add(req: Request, res: Response) {
       }
 
     const vehiculoData = {
-      ...req.body.sanitizedInput,
+      ...req.body.sanitizedInput, //spread operator para copiar todas las propiedades de
       marca: ObjectId.createFromHexString(req.body.sanitizedInput.marca),
       categoria: ObjectId.createFromHexString(req.body.sanitizedInput.categoria), 
       propietario: ObjectId.createFromHexString(req.body.sanitizedInput.propietario),
@@ -94,7 +94,7 @@ async function update(req: Request, res: Response) {
   }
 }
 
-async function logicRemove(req: Request, res:Response) {
+async function logicRemove(req: Request, res:Response) { // se utiliza a la hora de establecer una fecha de baja, es una baja logica, no fisica
   try {
     const id = req.params.id
     const vehiculo = await em.findOneOrFail(Vehiculo, { id })

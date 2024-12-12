@@ -11,12 +11,18 @@ export class CompraService {
   private apiUrl = 'http://localhost:3000/api/compras';
   
   
+  
   constructor(private http:HttpClient) { }
   addCompra(formData: FormData): Observable<Compra> {
     return this.http.post<Compra>(this.apiUrl, formData);
   }
+  
   getAllCompra(): Observable<Compra[]> {
     return this.http.get<Compra[]>(this.apiUrl);
+  }
+
+  confirmarCompra(mail:string, id: string): Observable<Compra> {
+    return this.http.post<Compra>(`${this.apiUrl}/confirmarCompra`, {id: id, destinatario: mail});
   }
   
   

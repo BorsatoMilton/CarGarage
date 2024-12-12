@@ -1,79 +1,129 @@
 /* Contenedor principal para centrar todo en la página */
 .page-container {
   display: flex;
-  /* Activa Flexbox */
   justify-content: center;
-  /* Centra horizontalmente */
   align-items: center;
-  /* Centra verticalmente */
-  height: 60vh;
-  /* Ocupa el 100% de la altura de la ventana */
+  height: 80vh;
   background-color: #f4f4f4;
-  /* Fondo opcional */
+  
 }
 
-/* Contenedor de la imagen y los detalles */
 .vehicle-container {
   display: flex;
-  /* Activa Flexbox para organizar imagen y detalles */
   align-items: center;
-  /* Centra verticalmente la imagen y los detalles */
   gap: 20px;
-  /* Espacio entre la imagen y las descripciones */
   padding: 20px;
   background: white;
-  /* Fondo blanco */
   border-radius: 10px;
-  /* Bordes redondeados */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  /* Sombra opcional */
-}
 
-/* Estilo para la imagen */
+}
 .imagen-vehiculo {
   width: 500px;
   height: 500px;
   
   object-fit: cover;
-  /* Asegura proporción en la imagen */
   border-radius: 10px;
-  /* Bordes redondeados */
 }
 #imagen-vehiculo {
   width: 500px;
   height: 500px;
   object-fit: cover;
   border-radius: 10px;
-  /* Imágenes responsivas */
   align-items: center;
 }
-/* Estilo para los detalles del vehículo */
+
+#imagen-propietario {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  }
+
 .vehicle-details {
   display: flex;
   flex-direction: column;
-  /* Organiza los detalles en una columna */
+
   font-family: Arial, sans-serif;
-  /* Estilo de texto */
   font-size: 16px;
   color: #333;
 }
 
 .vehicle-details p {
   margin: 5px 0;
-  /* Espaciado entre descripciones */
 }
 
 .img {
   max-width: 100%;
-  /* Imágenes responsivas */
   align-items: center;
 }
 
-.whatsapp-container{
-  display: flex;
-  justify-content: right;
-  align-items: right;
-  gap: 20px;
+.propietario-container{
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    gap: 20px;
+    height: 40%;
+}
+
+.anuncio {
+  font-family: Arial, sans-serif;
+  color: #a52a2a;
   padding: 20px;
+  max-width: 300px;
+}
+
+.modalChanged {
+  display: none;
+  position: fixed;
+  z-index: 1050;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-contentChanged {
+  position: absolute;
+  z-index: 1050;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 1000px;
+  width: 90%;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.btn-success {
+  background-color: #004080;
+  border-color: #004080;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
   
+}
+
+.btn-secondary {
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
 }

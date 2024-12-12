@@ -69,7 +69,12 @@ async function findOneById(req: Request, res: Response) {
 
 async function findOneByEmail(email:string){
   const usuario = await em.findOne(Usuario, { mail: email })
-  return usuario
+  try {
+    return usuario
+  }
+  catch (error: any) {
+    return error.message
+  }
 }
 
 

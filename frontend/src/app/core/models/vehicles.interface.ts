@@ -1,3 +1,7 @@
+import { Brand } from "./brands.interfaces.js";
+import { Category } from "./categories.interface.js";
+import { User } from "./user.interface.js";
+
 export interface Vehicle {
     id: string;
     nombre: string;
@@ -8,11 +12,9 @@ export interface Vehicle {
     precioAlquilerDiario?: number;
     kilometros:number;
     modelo: string;
-    marca: string;
-    nombreMarca: string;
-    nombreCategoria: string;
-    categoria: string;
+    marca: Brand;
+    categoria: Category;
     imagenes: string[];
-    propietario: string;
+    propietario: User;
     transmision: string;
 }

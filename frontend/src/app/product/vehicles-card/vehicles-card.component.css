@@ -22,6 +22,15 @@
     
 }
 
+.whatsapp-container {
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    gap: 20px;
+    padding: 20px;
+
+}
+
 .btn-secondary{
     color: white;
     padding: 10px 20px;

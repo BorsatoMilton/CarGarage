@@ -16,6 +16,8 @@ import { Compra } from '../../core/models/compra.interfaces.js';
 import { CompraService } from '../../core/services/compra.service.js';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Brand } from '../../core/models/brands.interfaces.js';
+import { Category } from '../../core/models/categories.interface.js';
 
 @Component({
   selector: 'app-compra',
@@ -32,6 +34,7 @@ export class CompraComponent implements OnInit {
   selectedFiles: File[] = [];
   usuario: User | null = null;
   idVehiculo: string | null = null;
+  categoria:Category | null = null;
   
   constructor(
     private fb: FormBuilder,
@@ -40,10 +43,10 @@ export class CompraComponent implements OnInit {
     private compraservice: CompraService,
     private route: ActivatedRoute,
     private router: Router
+
   ) {
     this.compraForm = this.fb.group({ //crea un formulario reactivo con FormBuilder
       fecha_compra: ['', Validators.required],
-      precio_total: ['', Validators.required],
     });
   }
 
@@ -62,29 +65,20 @@ export class CompraComponent implements OnInit {
         this.router.navigate(['/']);
       }else{
         this.vehiculo = data;
+      
+
+  ;
       }
     })};
     });
     
     this.usuario = this.authService.getCurrentUser();
 
-    if (this.usuario !== null) {
-      this.compraForm.patchValue({ propietario: this.usuario.id });
-    }
-
-    this.loadCompra();
+    
   }
 
 
-  openModal(modalId: string, compra: Compra): void {
-    this.selectedCompra = compra;
-
-    if (compra) {
-      this.compraForm.patchValue({
-        fechacompra: compra.fecha_compra,
-        preciototal: compra.precio_total,
-      });
-    }
+  openModal(modalId: string): void {
     console.log(this.compraForm.value);
     const modalDiv = document.getElementById(modalId);
     if (modalDiv != null) {
@@ -103,6 +97,25 @@ export class CompraComponent implements OnInit {
     }
     this.selectedCompra = null;
     this.compraForm.reset();
+  }
+
+  comprar(){
+    if (this.authService.isAuthenticated()) {
+      console.log('Usuario autenticado. Procesando compra...');
+      this.compraservice.confirmarCompra(this.usuario!.mail, this.vehiculo!.id).subscribe({
+        next: () => {
+          alert('Se le envio un mail con la confirmación de la compra');
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          console.error(error);
+          alert('Error al realizar la compra.');
+        },
+      });
+    } else {
+      console.log('Usuario no autenticado. Redirigiendo a login...');
+      this.router.navigate(['/login']);
+    }
   }
 
   addCompra() {
@@ -133,19 +146,25 @@ export class CompraComponent implements OnInit {
     this.compraForm.reset();
   }
 
+  
 
-  loadCompra(): void {
-    this.compraservice.getAllCompra().subscribe((compras: Compra[]) => {
-      this.compras = compras;
+  /*
+  loadDataVehicle(vehiculo: Vehicle): void {
+  
+    // Cargar el nombre de la categoría
+    this.categoryService.getOneCategory(vehiculo.categoria).subscribe((category) => {
+      this.vehiculo!.nombreCategoria = category.nombreCategoria;
+      console.log('Nombre de la categoría:', category.nombreCategoria);
     });
-  }
 
-  comprar(): void {
-    if (this.authService.isAuthenticated()) {
-      console.log('Usuario autenticado. Procesando compra...');
-    } else {
-      console.log('Usuario no autenticado. Redirigiendo a login...');
-      this.router.navigate(['/login']);
-    }
-  }
+    // Cargar el nombre de la marca
+    this.brandService.getOneBrand(vehiculo.marca).subscribe((brand) => {
+      this.vehiculo!.nombreMarca = brand.nombreMarca;
+      console.log('Nombre de la marca:', brand.nombreMarca);
+    });
+
+    ;
+    } */
+
+  
 }

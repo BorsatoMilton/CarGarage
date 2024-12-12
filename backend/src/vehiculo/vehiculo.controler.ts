@@ -50,10 +50,20 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const vehiculo = await em.findOneOrFail(Vehiculo, { id }, { populate: ['categoria', 'marca'] })
+    const vehiculo = await em.findOneOrFail(Vehiculo, { id }, { populate: ['categoria', 'marca', 'propietario'] })
     res.status(200).json(vehiculo)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
+  }
+}
+
+async function findOneById(id:string){
+  const vehiculo = await em.findOne(Vehiculo, { id:id }, { populate: ['categoria', 'marca', 'propietario'] })
+  try {
+    return vehiculo
+  }
+  catch (error: any) {
+    return error.message
   }
 }
 
@@ -176,4 +186,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findNameCategory, findNameBrand }
+export { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findNameCategory, findNameBrand, findOneById }

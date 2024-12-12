@@ -1,1 +1,54 @@
 <p>La compra ha sido realizada con exito</p>
+
+
+<div class="page-container">
+  <div class="vehicle-container">
+    <div *ngIf="vehiculo">
+      <img id="imagen-vehiculo" *ngIf="vehiculo.imagenes && vehiculo.imagenes.length > 0"
+        [src]="'http://localhost:3000/uploads/' + vehiculo.imagenes[0]" alt="Imagen del vehículo" />
+      <p *ngIf="!vehiculo.imagenes?.length">No hay imágenes disponibles para este vehículo.</p>
+    </div>
+
+    <div class="vehicle-details">
+      <div class="anuncio">
+        <strong>Descripción del vehiculo</strong>
+      </div>
+      <hr>
+      <p><strong>Modelo:</strong> {{vehiculo?.modelo}}</p>
+      <p><strong>Color:</strong> Blanco</p>
+      <p><strong>Categoria:</strong> {{vehiculo?.categoria?.nombreCategoria}} </p>
+      <p><strong>Marca:</strong> {{vehiculo?.marca?.nombreMarca}}</p>
+      <p><strong>Descripción:</strong> {{vehiculo?.descripcion}}</p>
+      <p><strong>Transmisión:</strong> {{vehiculo?.transmision}}</p>
+      <p><strong>Precio Venta:</strong> {{ vehiculo?.precioVenta | currency:'ARS' }}</p>
+      <p><strong>Precio Alquiler:</strong> {{ vehiculo?.precioAlquilerDiario| currency:'ARS' }}</p>
+      <div class="anuncio">
+        <strong>Descripción del propietario</strong>
+      </div>
+      <hr>
+      <p><strong>Nombre:</strong>{{vehiculo?.propietario?.nombre}} </p>
+      <p><strong>Apellido:</strong> {{vehiculo?.propietario?.apellido}} </p>
+      <p><strong>Mail:</strong> {{vehiculo?.propietario?.mail}} </p>
+      <p><strong>Direccion:</strong> {{vehiculo?.propietario?.direccion}} </p>
+
+      <button type="button" class="btn btn-primary" (click)="openModal('confirmarCompra')">Confirmar Compra</button>
+    </div>
+  </div>
+</div>
+<div class="propietario-container">
+  <a href="https://wa.me/5493413264072" target="_blank" id="imagen-propietario"> <img
+      src="http://localhost:3000/uploads/propietario2.png"> </a>
+</div>
+
+
+
+<div id="confirmarCompra" class="modalChanged">
+  <div class="modal-contentChanged">
+    <span class="close" (click)="closeModal('confirmarCompra')">&times;</span>
+    <h2>Confirmar Compra</h2>
+    <p style="margin: 10px;">¿Estás seguro de que deseas <strong>confirmar</strong> la compra?</p>
+    <p style="margin: 10px;"><strong>Nombre:</strong> {{ vehiculo?.nombre }}</p>
+    <button class="btn btn-secondary" (click)="closeModal('confirmarCompra')">Cancelar</button>
+    <button class="btn btn-success" (click)="confirmarCompra()">Confirmar Compra</button>
+  </div>
+</div>

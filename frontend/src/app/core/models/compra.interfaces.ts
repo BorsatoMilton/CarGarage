@@ -1,5 +1,11 @@
+import { User } from "./user.interface.js";
+import { Vehicle } from "./vehicles.interface.js";
+
 export interface Compra {
     idCompra : string;
-    fecha_compra : Date;
-    
+    vehiculo: Vehicle;
+    comprador: User;
+    fechaCompra: Date;
+    fechaCancelacion: Date;
+ 
 }

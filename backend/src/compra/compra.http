@@ -9,8 +9,9 @@ POST http://localhost:3000/api/compras/
 Content-Type: application/json
 
 {
-    "fechaCompra": "2023-11-01",
-    "usuario": "66a41688d30644a3d53a88b4"
+    "usuario": "6758e84958d35a0003e0f1d1",
+    "vehiculo": "675ae3329d939f9932eec290"
+    
 }
 
 ### delete pedido

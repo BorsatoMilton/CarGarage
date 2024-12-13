@@ -16,6 +16,12 @@ export class Compra extends BaseEntity{
 
     @Property({ nullable: false })
     fechaCompra!:Date
+    
+    @Property({ nullable: false })
+    fechaLimitePago!:Date
+    
+    @Property({ nullable: true })
+    fechaCancelacion!:Date
 
     @ManyToOne(() => Usuario, { nullable: false })
     usuario!: Rel<Usuario>

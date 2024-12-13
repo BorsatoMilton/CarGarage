@@ -12,8 +12,15 @@ function sanitizeCompraInput (
 ) {
   req.body.sanitizedInput = 
     {
-        fecha: req.body.fecha,
-        usuario: req.body.usuario
+        fechaCompra: new Date(),
+        fechaLimitePago: (() => {
+            const fecha = new Date(); 
+            fecha.setDate(fecha.getDate() + 7); 
+            return fecha; 
+        })(),
+        fechaCancelacion:req.body.fechaCancelacion,
+        usuario: req.body.comprador,
+        vehiculo: req.body.vehiculo
       }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -27,8 +34,18 @@ function sanitizeCompraInput (
 
 async function findAll(req: Request, res: Response) {
     try {
-        const compras = await em.find(Compra,{})
-        res.status(200).json({ message: 'Compra', data: compras })
+        const compras = await em.find(Compra,{}, { populate: ['usuario', 'vehiculo'] })
+        res.status(200).json(compras)
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+async function findAllByUser(req: Request, res: Response) {
+    try {
+        const idComprador = req.params.id
+        const compras = await em.find(Compra, { usuario: idComprador }, { populate: ['usuario', 'vehiculo'] })
+        res.status(200).json(compras)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -37,8 +54,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
     try {
         const id = req.params.id
-        const compra = await em.findOneOrFail(Compra, { id })
-        res.status(200).json({ message: 'Compra Encontrado', data: compra })
+        const compra = await em.findOneOrFail(Compra, { id }, { populate: ['usuario', 'vehiculo'] })
+        res.status(200).json(compra)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -48,17 +65,17 @@ async function add(req: Request, res: Response) {
     try {
         const compra = em.create(Compra, req.body.sanitizedInput)
         await em.flush()
-        res.status(201).json({ message: 'Compra creado', data: compra })
+        res.status(201).json(compra)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
 }
 
-async function update(req: Request, res: Response) {
+async function cancelarCompra(req: Request, res: Response) {
     try {
-        const id = req.params.id
+        const id = req.body.id
         const compraActualizar = await em.findOneOrFail(Compra, { id })
-        em.assign(compraActualizar, req.body.sanitizedInput)
+        em.assign(compraActualizar, { fechaCancelacion: new Date() })
         await em.flush()
         res.status(200).json({ message: 'Compra actualizado', data: compraActualizar })
     } catch (error: any) {
@@ -77,4 +94,4 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-export { sanitizeCompraInput, findAll, findOne, add, update, remove }
+export { sanitizeCompraInput, findAll, findAllByUser, findOne, add, cancelarCompra, remove }

@@ -57,6 +57,17 @@ async function findOneByEmailOrUsername(req: Request, res: Response) {
   }
 }
 
+async function findOneByEmailDestinatario(req: Request, res: Response) {
+  try {
+    const mail = req.params.mail
+    const usuarioEncontrado = await em.findOneOrFail(Usuario, { mail });
+    res.status(200).json(usuarioEncontrado)
+  }
+  catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 async function findOneById(req: Request, res: Response) {
   try {
     const id = req.params.id
@@ -187,4 +198,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove, login, findOneByEmailOrUsername}
+export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove, login, findOneByEmailOrUsername, findOneByEmailDestinatario}

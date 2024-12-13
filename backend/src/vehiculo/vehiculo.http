@@ -1,8 +1,8 @@
-### get all clients
-GET http://localhost:3000/api/productos
+### get all vehiculos
+GET http://localhost:3000/api/vehiculos
 
-### get one client
-GET http://localhost:3000/api/productos/6705bb6a70edd32a102eb5f8
+### get one vehiculo
+GET http://localhost:3000/api/vehiculos/6705bb6a70edd32a102eb5f8
 
 
 ### create client

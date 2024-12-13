@@ -117,54 +117,5 @@ export class CompraComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
-
-  addCompra() {
-    if (this.compraForm.invalid) {
-      alert('Por favor, complete todos los campos correctamente.');
-      return;
-    }
-
-    this.compraForm.disable();
-    const formData = new FormData();
-    formData.append('fechacompra', this.compraForm.get('fechacompra')?.value);
-    formData.append('preciototal', this.compraForm.get('preciototal')?.value);
-    
-    this.compraservice.addCompra(formData).subscribe({
-      next: () => {
-        alert('Compra agregada con éxito');
-        this.compraForm.reset();
-        this.closeModal('addCompra');
-        this.ngOnInit();
-        this.compraForm.enable();
-      },
-      error: (error) => {
-        console.error(error);
-        alert('Error al agregar la compra.');
-        this.compraForm.enable();
-      },
-    });
-    this.compraForm.reset();
-  }
-
-  
-
-  /*
-  loadDataVehicle(vehiculo: Vehicle): void {
-  
-    // Cargar el nombre de la categoría
-    this.categoryService.getOneCategory(vehiculo.categoria).subscribe((category) => {
-      this.vehiculo!.nombreCategoria = category.nombreCategoria;
-      console.log('Nombre de la categoría:', category.nombreCategoria);
-    });
-
-    // Cargar el nombre de la marca
-    this.brandService.getOneBrand(vehiculo.marca).subscribe((brand) => {
-      this.vehiculo!.nombreMarca = brand.nombreMarca;
-      console.log('Nombre de la marca:', brand.nombreMarca);
-    });
-
-    ;
-    } */
-
   
 }

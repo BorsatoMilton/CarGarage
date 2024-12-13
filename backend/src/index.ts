@@ -9,7 +9,6 @@ import { usuarioRouter } from './usuario/usuario.routes.js';
 import { tarjetaRouter } from './usuario/tarjeta.routes.js';
 import { calificacionRouter } from './usuario/calificacion.routes.js';
 import { compraRouter } from './compra/compra.routes.js';
-import { lineacompraRouter } from './compra/lineacompra.routes.js';
 import { correoRouter } from './correo/correo.routes.js';
 import cors from 'cors';
 import { alquilerRouter } from './alquiler/alquiler.routes.js';
@@ -33,7 +32,6 @@ app.use('/api/usuarios', usuarioRouter )
 app.use('/api/tarjetas', tarjetaRouter)
 app.use ('/api/calificaciones', calificacionRouter)
 app.use('/api/compras', compraRouter)
-app.use('/api/lineacompras', lineacompraRouter)
 app.use('/api/recuperacion', correoRouter);
 app.use('/api/alquiler', alquilerRouter);
 app.use('/api/rol', rolRouter);

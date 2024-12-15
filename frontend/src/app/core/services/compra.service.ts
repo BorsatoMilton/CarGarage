@@ -35,7 +35,8 @@ export class CompraService {
   }
 
   cancelarCompra(compra: Compra): Observable<Compra> {
-    return this.http.put<Compra>(`${this.apiUrl}/cancelarCompra`, { body: compra });
+    console.log('Compra a cancelar:', compra);
+    return this.http.delete<Compra>(`${this.apiUrl}/cancelarCompra`, { body: compra });
   }
 
 }

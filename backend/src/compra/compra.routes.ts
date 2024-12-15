@@ -10,7 +10,7 @@ compraRouter.get('/:id', findOne);
 compraRouter.post('/', sanitizeCompraInput, add);
 compraRouter.post('/confirmarCompra',confirmarCompra);
 compraRouter.post('/avisoCompraExitosa',avisoCompraExitosa);
-compraRouter.put('/cancelarCompra', cancelarCompra)
+compraRouter.delete('/cancelarCompra', cancelarCompra)
 compraRouter.delete('/:id', remove);
 
 

@@ -27,6 +27,7 @@
       <p><strong>Nombre:</strong>{{vehiculo?.propietario?.nombre}} </p>
       <p><strong>Apellido:</strong> {{vehiculo?.propietario?.apellido}} </p>
       <p><strong>Mail:</strong> {{vehiculo?.propietario?.mail}} </p>
+      <p><strong>Telefono:</strong> {{vehiculo?.propietario?.telefono}} </p>
       <p><strong>Direccion:</strong> {{vehiculo?.propietario?.direccion}} </p>
       
       <button type="button" class="btn btn-primary" (click)="openModal('confirmarCompra')">Comprar</button>
@@ -34,7 +35,7 @@
   </div>
 </div>
 <div class="propietario-container">
-  <a href="https://wa.me/5493413264072" target="_blank" id="imagen-propietario"> <img
+  <a [href]="'https://wa.me/' + vehiculo?.propietario?.telefono" target="_blank" id="imagen-propietario"> <img
       src="http://localhost:3000/uploads/propietario2.png"> </a>
 </div>
 

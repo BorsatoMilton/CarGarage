@@ -33,6 +33,9 @@ export class Usuario extends BaseEntity {
     
     @Property({ nullable: false})
     direccion!: string
+    
+    @Property({ nullable: false})
+    telefono!: string
 
     @OneToMany(() => Tarjeta, tarjeta => tarjeta.usuario, { nullable: false })
     tarjetas = new Collection<Tarjeta>(this)

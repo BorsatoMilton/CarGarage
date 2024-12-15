@@ -67,6 +67,11 @@ form {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+#span-cancelada{
+  color: rgb(0, 0, 0);
+
+}
+
 .modal-contentChanged {
   position: absolute;
   z-index: 1050;

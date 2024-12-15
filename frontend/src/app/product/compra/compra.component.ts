@@ -99,6 +99,7 @@ export class CompraComponent implements OnInit {
     this.compraForm.reset();
   }
 
+
   comprar(){
     if (this.authService.isAuthenticated()) {
       console.log('Usuario autenticado. Procesando compra...');

@@ -1,4 +1,4 @@
-### get all usuario
+### get all roles
 GET http://localhost:3000/api/rol
 
 ### get one usuario

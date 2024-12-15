@@ -31,6 +31,7 @@ export class RegisterComponent implements OnInit {
       repetirClave: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
       apellido: ['', [Validators.required]],
+      telefono: ['', [Validators.required]],
       mail: ['', [Validators.required, Validators.email]],
       direccion: ['', [Validators.required]],
       rol: null,

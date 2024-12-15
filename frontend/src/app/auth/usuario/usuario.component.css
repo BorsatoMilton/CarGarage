@@ -2,11 +2,11 @@
     display: flex; /* Usa flexbox para alinear los elementos */
     align-items: center; /* Alinea verticalmente en el centro */
     margin-bottom: 15px;
+    margin-top: 15px;
   }
   
   label {
-    color: #f81206;
-    /* Azul oscuro */
+    color: #000000;
     font-weight: bold;
     margin-right: 10px;
     margin-bottom: 5px;
@@ -40,10 +40,9 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  
+
   button.btn-primary:hover {
     background-color: #007bff;
-    /* Azul más brillante al pasar el cursor */
     border-color: #007bff;
   }
   
@@ -88,8 +87,17 @@
     cursor: pointer;
   }
 
+  #boton-editar{
+    margin-right: 15px;
+  }
+  #boton-eliminar{
+    margin-left: 15px;
+  }
+
   .form-group {
     display: flex;
     justify-content: space-between;
     
   }
+
+  

@@ -74,6 +74,9 @@ async function add(req: Request, res: Response) {
 async function cancelarCompra(req: Request, res: Response) {
     try {
         const id = req.body.id
+        if (!id) {
+      return res.status(400).json({ message: "El id de la compra es requerido" });
+        }
         const compraActualizar = await em.findOneOrFail(Compra, { id })
         em.assign(compraActualizar, { fechaCancelacion: new Date() })
         await em.flush()

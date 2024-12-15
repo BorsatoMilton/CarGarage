@@ -14,16 +14,18 @@
       <td>{{ compra.fechaCompra }}</td>
       <td>{{ compra.vehiculo.precioVenta }}</td>
       <td>
-        {{ compra.vehiculo.propietario }} 
+        {{ compra.vehiculo.propietario}}
       </td>
 
       <td>
-        <button
-          (click)="openModal('cancelarCompra', compra)"
-          class="btn btn-danger"
-        >
-          Cancelar
-        </button>
+        <ng-container *ngIf="compra.fechaCancelacion !== null, else cancelButton;">
+          <span class="badge" id="span-cancelada">Cancelada</span>
+        </ng-container>
+        <ng-template #cancelButton>
+          <button (click)="openModal('cancelarCompra', compra)" class="btn btn-danger">
+            Cancelar
+          </button>
+        </ng-template>
       </td>
     </tr>
   </tbody>

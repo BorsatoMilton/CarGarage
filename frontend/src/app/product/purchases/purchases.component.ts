@@ -52,10 +52,11 @@ export class PurchasesComponent {
   
 
   cancelarCompra(compra: Compra, modalId: string): void {
-    this.compraService.cancelarCompra(compra).subscribe((data) => {
+    this.compraService.cancelarCompra(compra).subscribe(() => {
       alert('Compra cancelada con exito!');
-      this.closeModal(modalId);
       this.ngOnInit();
+      this.closeModal(modalId);
+      
     });
   }
 

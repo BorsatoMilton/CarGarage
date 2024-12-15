@@ -35,6 +35,7 @@ export class UserComponent implements OnInit {
       clave: ['', Validators.required],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
+      telefono: ['', Validators.required],
       mail: ['', Validators.required],
       direccion: ['', Validators.required],
       rol: ['', Validators.required],
@@ -56,6 +57,7 @@ export class UserComponent implements OnInit {
         nombre: user.nombre,
         apellido: user.apellido,
         mail: user.mail,
+        telefono: user.telefono,
         direccion: user.direccion,
         rol: user.rol,
       });

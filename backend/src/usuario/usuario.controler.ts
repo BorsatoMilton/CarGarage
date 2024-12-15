@@ -19,6 +19,7 @@ function sanitizeUsuarioInput(
     apellido: req.body.apellido,
     mail: req.body.mail,
     direccion: req.body.direccion,
+    telefono: req.body.telefono,
     tarjeta: req.body.tarjeta,
     calificacion: req.body.calificacion,
     alquiler: req.body.alquiler,
@@ -142,23 +143,27 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
-    const id = req.params.id
-    const usuarioAactualizar = await em.findOneOrFail(Usuario, { id })
-    const vecesHash = 10;
-    const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
-    const usuario = {
-      ...req.body.sanitizedInput,
-      clave: hashClave
+    const id = req.params.id;
+    const usuarioAactualizar = await em.findOneOrFail(Usuario, { id });
+    const usuario = { ...req.body.sanitizedInput };
+
+    if (req.body.sanitizedInput.clave) {
+      const vecesHash = 10;
+      const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
+      usuario.clave = hashClave;
+    } else {
+      delete usuario.clave;
     }
-    em.assign(usuarioAactualizar, usuario)
-    await em.flush()
-    res
-      .status(200)
-      .json({ message: 'Usuario Actualizado', data: usuarioAactualizar })
+
+    em.assign(usuarioAactualizar, usuario);
+    await em.flush();
+
+    res.status(200).json({ message: 'Usuario Actualizado', data: usuarioAactualizar });
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
+
 
 async function resetPassword(req: Request, res: Response) {
   const { token, newPassword } = req.body;

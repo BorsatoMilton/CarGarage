@@ -12,6 +12,7 @@
           <th>APELLIDO</th>
           <th>MAIL</th>
           <th>DIRECCION</th>
+          <th>TELEFONO</th>
           <th>ROL</th>
           <th>ACCIONES</th>
         </tr>
@@ -23,14 +24,15 @@
           <td>{{ User.apellido }}</td>
           <td>{{ User.mail }}</td>
           <td>{{ User.direccion }}</td>
+          <td>{{ User.telefono }}</td>
           <td>{{ User.roleName }}</td>
           <td>
             <button (click)="openModal('editUser', User)" class="btn btn-primary" data-bs-toggle="modal"
-              data-bs-target="#editUserModal">Editar</button>
+              data-bs-target="#editUserModal" id="boton-editar">Editar</button>
               <button (click)="openModal('updatePassword', User)" class="btn btn-warning" data-bs-toggle="modal"
               data-bs-target="#changePaswwordUserModal">Actualizar Clave</button>
             <button (click)="openModal('removeUser', User)" class="btn btn-danger" data-bs-toggle="modal"
-              data-bs-target="#removeUserModal">Eliminar</button>
+              data-bs-target="#removeUserModal" id="boton-eliminar">Eliminar</button>
           </td>
         </tr>
       </tbody>
@@ -60,11 +62,17 @@
                   <input type="text" formControlName="apellido" id="apellido"class="form-control">
                 </div>
               </div>
-              <div class="row mt-3">
+              <div class="row">
+              <div class="col-md-6">
                   <label for="mail">Mail</label>
                   <input type="email" formControlName="mail" id="mail" class="form-control" required>
                   <label for="direccion">Direccion</label>
                   <input type="text" formControlName="direccion" id="direccion"class="form-control">
+              </div>
+              <div class="col-md-6">
+                  <label for="telefono">Telefono</label>
+                  <input type="text" formControlName="telefono" id="telefono" class="form-control" required>
+              </div>
               </div>
               <div class="form-group">
                 <label for="rol">Rol</label>
@@ -99,23 +107,31 @@
         <span class="close" (click)="closeModal('editUser')">&times;</span>
         <h2>Editar Usuario</h2>
         <form [formGroup]="userForm" (ngSubmit)="editUser()">
-          <div class="form-group">
+          <div class="row">
+          <div class="col-md-6">
             <label for="usuario">Usuario</label>
             <input type="text" formControlName="usuario" id="usuario" name="usuario" class="form-control" required>
-          </div>
-          <div class="form-group">
             <label for="nombre">Nombre</label>
             <input type="text" formControlName="nombre" id="nombre" name="nombre" class="form-control">
+          </div>
+          <div class="col-md-6">
             <label for="apellido">Apellido</label>
             <input type="text" formControlName="apellido" id="apellido" name="apellido"
               class="form-control">
-          </div>
-          <div class="form-group">
             <label for="mail">Mail</label>
             <input type="email" formControlName="mail" id="mail" name="mail" class="form-control" required>
+          </div>
+          </div>
+          <div class="row">
+          <div class="col-md-6">
             <label for="direccion">Direccion</label>
             <input type="text" formControlName="direccion" id="direccion" name="direccion"
               class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label for="telefono">Telefono</label>
+            <input type="text" formControlName="telefono" id="telefono" name="telefono" class="form-control" required>
+          </div>
           </div>
           <div class="form-group">
             <label for="rol">Rol</label>
@@ -125,14 +141,12 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="closeModal('editUser')">Cancelar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Guardar cambios</button>
+            <button type="submit" class="btn btn-primary" (click)="editUser()">Guardar cambios</button>
           </div>
   
         </form>
       </div>
     </div>
-
-
 
     <div id="updatePassword" class="modalChanged">
       <div class="modal-contentChanged">

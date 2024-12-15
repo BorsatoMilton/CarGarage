@@ -7,6 +7,7 @@ export interface User {
     apellido: string;
     mail: string;
     direccion: string;
+    telefono: string;
     tarjeta?: string;
     calificacion?: string;
     pedido?: string;

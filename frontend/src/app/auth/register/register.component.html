@@ -40,6 +40,13 @@
             </div>
         </div>
         <div class="input">
+            <label for="telefono">telefono</label>
+            <input type="text" id="telefono" formControlName="telefono" placeholder="Ingrese su telefono">
+            <div *ngIf="registerForm.get('telefono')?.invalid && (registerForm.get('telefono')?.touched || registerForm.get('telefono')?.dirty)">
+              <small *ngIf="registerForm.get('telefono')?.errors?.['required']">El telefono es requerido.</small>
+            </div>
+        </div>
+        <div class="input">
             <label for="clave">Clave</label>
             <input type="password" id="clave" formControlName="clave" placeholder="Ingrese su clave">
             <div *ngIf="registerForm.get('clave')?.invalid && (registerForm.get('clave')?.touched || registerForm.get('clave')?.dirty)">

@@ -20,13 +20,18 @@ export class NavBarComponent {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.isLoggedIn = this.authService.isAuthenticated();
-    this.currentUser = this.authService.getCurrentUser();
+    this.authService.isAuthenticated$.subscribe((authStatus) => {
+      this.isLoggedIn = authStatus;
+    });
+
+    this.authService.currentUser$.subscribe((user) => {
+      this.currentUser = user;
+    });
   }
 
   logout(): void {
     this.authService.logout();
-    this.isLoggedIn = false;
+    this.isDropdownOpen = false;
   }
 
   toggleDropdown(): void {

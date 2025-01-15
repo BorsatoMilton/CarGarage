@@ -52,20 +52,4 @@ export class AuthService {
     return userString ? JSON.parse(userString) : null;
   }
   
-  getRole(): Observable<string | null> {
-    const user = this.getCurrentUser();
-    if (!user) {
-      return of(null); 
-    }
-  
-    const rolId = user.rol;
-    return this.rolService.getOneRol(rolId).pipe(
-      map((rolEntity: any) => rolEntity?.nombreRol || null),
-      catchError((error: any) => {
-        console.error('Error al obtener el rol:', error);
-        return of(null);
-      })
-    );
-  }
-
 }

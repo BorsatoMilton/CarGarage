@@ -15,6 +15,7 @@ import { User } from '../../../core/models/user.interface.js';
 export class NavBarComponent {
   isLoggedIn: boolean = false;
   currentUser: User|null = null;
+  userRole: string|null = null;
   isDropdownOpen= false;
 
   constructor(private authService: AuthService) { }
@@ -26,12 +27,14 @@ export class NavBarComponent {
 
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
+      this.userRole = user?.rol.nombreRol || null;
     });
-  }
+}
 
   logout(): void {
     this.authService.logout();
     this.isDropdownOpen = false;
+    this.userRole = null;
   }
 
   toggleDropdown(): void {

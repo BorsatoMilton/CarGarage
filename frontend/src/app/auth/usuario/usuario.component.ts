@@ -124,7 +124,7 @@ export class UserComponent implements OnInit {
   loadUser(): void {
     this.userService.getAllUser().subscribe((users: User[]) => {
       this.users = users.map((user) => {
-        const roleName = this.roles.find((role) => role.id === user.rol)?.nombreRol.toUpperCase() || 'DESCONOCIDO';
+        const roleName = user.rol.nombreRol.toUpperCase() || 'DESCONOCIDO';
         return { ...user, roleName };
       });
     });

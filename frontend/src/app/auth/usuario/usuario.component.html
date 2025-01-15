@@ -25,7 +25,7 @@
           <td>{{ User.mail }}</td>
           <td>{{ User.direccion }}</td>
           <td>{{ User.telefono }}</td>
-          <td>{{ User.roleName }}</td>
+          <td>{{ User.rol.nombreRol }}</td>
           <td>
             <button (click)="openModal('editUser', User)" class="btn btn-primary" data-bs-toggle="modal"
               data-bs-target="#editUserModal" id="boton-editar">Editar</button>

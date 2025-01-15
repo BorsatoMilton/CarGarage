@@ -167,6 +167,7 @@ export class VehicleComponent implements OnInit {
   loadVehicle(): void {
     this.vehicleService.getAllVehicle().subscribe((vehicles: Vehicle[]) => {
       this.vehicles = vehicles;
+      console.log('Los vehiculos: ', this.vehicles)
     });
   }
 

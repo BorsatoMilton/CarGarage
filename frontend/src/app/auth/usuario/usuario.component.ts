@@ -46,7 +46,9 @@ export class UserComponent implements OnInit {
     this.rolService.getAllRol().subscribe((data) => {
       this.roles = data;
     });
-    this.loadUser();
+    this.userService.getAllUser().subscribe((data) => {
+      this.users = data;
+    });
   }
 
   openModal(modalId: string, user: User): void {
@@ -119,16 +121,6 @@ export class UserComponent implements OnInit {
         this.userForm.enable();
       }
     });
-  }
-
-  loadUser(): void {
-    this.userService.getAllUser().subscribe((users: User[]) => {
-      this.users = users.map((user) => {
-        const roleName = user.rol.nombreRol.toUpperCase() || 'DESCONOCIDO';
-        return { ...user, roleName };
-      });
-    });
-    
   }
 
   editUser(): void {

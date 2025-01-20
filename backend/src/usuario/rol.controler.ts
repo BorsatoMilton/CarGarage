@@ -33,7 +33,7 @@ async function findAll(req: Request, res: Response) {
 
 async function findOneByName(req: Request, res: Response) {
   try {
-    const name = req.params.name
+    const name = req.params.name.toUpperCase();
     const rol = await em.findOneOrFail(Rol, { nombreRol: name })
     res.status(200).json(rol)
   } catch (error: any) {
@@ -54,9 +54,17 @@ async function findOneById(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const rol = em.create(Rol, req.body.sanitizedInput)
-    await em.flush()
-    res.status(201).json()
+    req.body.sanitizedInput.nombreRol = req.body.sanitizedInput.nombreRol.toUpperCase()
+    const rolExistente = await em.findOne(Rol, {
+      nombreRol: req.body.sanitizedInput.nombreRol,
+    })
+    if (rolExistente) {
+      return res.status(400).json({ message: 'El rol ya existe' })
+    }else{
+      const rol = em.create(Rol, req.body.sanitizedInput)
+      await em.flush()
+      res.status(201).json({ message: 'Rol creado', data: rol })
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -66,11 +74,15 @@ async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
     const rolAactualizar = await em.findOneOrFail(Rol, { id })
-    em.assign(rolAactualizar, req.body.sanitizedInput)
-    await em.flush()
-    res
-      .status(200)
-      .json(rolAactualizar)
+    if (!rolAactualizar) {
+      return res.status(400).json({ message: 'El rol no existe' })
+    }else{
+      em.assign(rolAactualizar, req.body.sanitizedInput)
+      await em.flush()
+      res
+        .status(200)
+        .json(rolAactualizar)
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -80,8 +92,12 @@ async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id
     const rol = em.getReference(Rol, id)
-    await em.removeAndFlush(rol)
-    res.status(200).json({ message: 'Rol eliminado correctamente' });
+    if(!rol){
+      return res.status(404).json({ message: 'Rol no encontrado' })
+    }else{
+      await em.removeAndFlush(rol)
+      res.status(200).json({ message: 'Rol eliminado correctamente' });
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

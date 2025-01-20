@@ -18,7 +18,7 @@ import { Rol } from './rol.entity.js'
 export class Usuario extends BaseEntity {
     @Property({ nullable: false })
     usuario!: string
-
+    //DNI?
     @Property({ nullable: false })
     clave!: string
 

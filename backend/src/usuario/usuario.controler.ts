@@ -52,7 +52,11 @@ async function findOneByEmailOrUsername(req: Request, res: Response) {
       { usuario: usuario},
       { mail: mail }]
       }, { populate: ['rol'] });
-    res.status(200).json(usuarioEncontrado)
+    if (!usuarioEncontrado) {
+      return res.status(404).json({ message: 'Usuario no encontrado' })
+    }else{
+      res.status(200).json(usuarioEncontrado)
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -95,7 +99,11 @@ async function findOneByUser(req: Request, res: Response) {
   try {
     const user = req.params.user
     const usuario = await em.findOne(Usuario, { usuario : user},  { populate: ['rol'] })
-    res.status(200).json(usuario)
+    if(!usuario){
+      return res.status(404).json({ message: 'Usuario no encontrado' })
+    }else{
+      res.status(200).json(usuario)
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -127,14 +135,22 @@ async function login(req: Request, res: Response) {
 async function add(req: Request, res: Response) {
   
   try {
-    const vecesHash = 10;
-    const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
-    const usuario = em.create(Usuario, {
-      ...req.body.sanitizedInput,
-      clave: hashClave
-    })
-    await em.flush()
-    res.status(201).json({ message: 'Usuario creado', data: usuario })
+    const usuarioExistente = await em.findOne(Usuario, {$or: [
+      { usuario: req.body.sanitizedInput.usuario },
+      { mail: req.body.sanitizedInput.mail },
+    ]});
+    if (usuarioExistente) {
+      return res.status(400).json({ message: 'Usuario ya existe' })
+    }else{
+      const vecesHash = 10;
+      const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
+      const usuario = em.create(Usuario, {
+        ...req.body.sanitizedInput,
+        clave: hashClave
+      })
+      await em.flush()
+      res.status(201).json({ message: 'Usuario creado', data: usuario })
+    }
   } catch (error: any) {
     console.error(error); 
     res.status(500).json({ message: error.message })
@@ -145,20 +161,21 @@ async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const usuarioAactualizar = await em.findOneOrFail(Usuario, { id });
-    const usuario = { ...req.body.sanitizedInput };
-
-    if (req.body.sanitizedInput.clave) {
-      const vecesHash = 10;
-      const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
-      usuario.clave = hashClave;
-    } else {
-      delete usuario.clave;
+    if (!usuarioAactualizar) {
+      return res.status(400).json({ message: 'Usuario no encontrado' });
+    }else{
+      const usuario = { ...req.body.sanitizedInput };
+      if (req.body.sanitizedInput.clave) {
+        const vecesHash = 10;
+        const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
+        usuario.clave = hashClave;
+      } else {
+        delete usuario.clave;
+      }
+      em.assign(usuarioAactualizar, usuario);
+      await em.flush();
+      res.status(200).json({ message: 'Usuario Actualizado', data: usuarioAactualizar });
     }
-
-    em.assign(usuarioAactualizar, usuario);
-    await em.flush();
-
-    res.status(200).json({ message: 'Usuario Actualizado', data: usuarioAactualizar });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -196,8 +213,12 @@ async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id
     const usuario = em.getReference(Usuario, id)
-    await em.removeAndFlush(usuario)
-    res.status(200).json("Usuario eliminado con exito")
+    if (!usuario) {
+      return res.status(400).json({ message: 'Usuario no encontrado' })
+    }else{
+      await em.removeAndFlush(usuario)
+      res.status(200).json("Usuario eliminado con exito")
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

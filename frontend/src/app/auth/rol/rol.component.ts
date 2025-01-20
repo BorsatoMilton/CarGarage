@@ -71,7 +71,7 @@ export class RolComponent implements OnInit {
     this.rolForm.reset();
   }
 checkRolExists(): Observable<boolean> {
-  const nombreRol = this.rolForm.get('nombreRol')?.value.toUpperCase();
+  const nombreRol = this.rolForm.get('nombreRol')?.value;
   return this.rolService.getOneRolByName(nombreRol).pipe(
     map((rol: Rol) => !!rol),
     catchError(() => of(false))
@@ -84,7 +84,6 @@ addRol() {
       return;
     }
     const rolData = this.rolForm.value
-    rolData.nombreRol = rolData.nombreRol.toUpperCase();
     this.checkRolExists().subscribe((exists:boolean)=>{
       if(!exists){
         this.rolService.addRol(rolData).subscribe(()=>{

@@ -6,7 +6,7 @@ import {
     Cascade,
     OneToMany
 } from '@mikro-orm/core'
-import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Marca } from './marca.entity.js'
 
 

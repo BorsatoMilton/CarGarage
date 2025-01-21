@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Compra } from "./compra.entity.js";
-import { orm } from "../shared/db/orm.js";
+import { orm } from "../../shared/db/orm.js";
 
 
 const em = orm.em
@@ -44,7 +44,7 @@ async function findAll(req: Request, res: Response) {
 async function findAllByUser(req: Request, res: Response) {
     try {
         const idComprador = req.params.id
-        const compras = await em.find(Compra, { usuario: idComprador }, { populate: ['usuario', 'vehiculo'] })
+        const compras = await em.find(Compra, { usuario: { id: idComprador } }, { populate: ['usuario', 'vehiculo'] })
         res.status(200).json(compras)
     } catch (error: any) {
         res.status(500).json({ message: error.message })

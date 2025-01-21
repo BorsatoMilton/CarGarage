@@ -6,7 +6,7 @@ import {
     ManyToOne,
     Rel
 } from '@mikro-orm/core'
-import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Categoria } from './categoria.entity.js'
 import { Vehiculo } from './vehiculo.entity.js'
 

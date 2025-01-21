@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import { findOneByEmail } from '../usuario/usuario.controler.js';
-import { generateToken } from '../shared/db/tokenGenerator.js';
+import { generateToken } from '../../shared/db/tokenGenerator.js';
 import { PasswordResetToken } from '../usuario/passwordResetToken.entity.js';
-import { orm } from '../shared/db/orm.js';
+import { orm } from '../../shared/db/orm.js';
 import { findOneById } from '../vehiculo/vehiculo.controler.js';
 
 

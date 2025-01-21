@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Rol } from './rol.entity.js'
-import { orm } from '../shared/db/orm.js'
+import { orm } from '../../shared/db/orm.js'
 import { PasswordResetToken } from './passwordResetToken.entity.js'
 
 const em = orm.em

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Vehiculo } from './vehiculo.entity.js'
-import { orm } from '../shared/db/orm.js'
+import { orm } from '../../shared/db/orm.js'
 import fs from 'fs';
 import path from 'path';
 import { ObjectId } from 'mongodb';

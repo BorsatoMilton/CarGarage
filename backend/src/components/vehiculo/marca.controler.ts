@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { orm } from "../shared/db/orm.js";
+import { orm } from "../../shared/db/orm.js";
 import { Marca } from "./marca.entity.js";
 
 const em = orm.em;

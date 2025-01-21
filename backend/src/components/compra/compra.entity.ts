@@ -7,7 +7,7 @@ import {
     Rel
 
 } from '@mikro-orm/core'
-import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
 import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
 

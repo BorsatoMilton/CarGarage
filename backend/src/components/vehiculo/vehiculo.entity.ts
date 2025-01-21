@@ -7,7 +7,7 @@ import {
     OneToMany,
     Collection
 } from '@mikro-orm/core'
-import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Calificacion } from '../usuario/calificacion.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
 import { Alquiler } from '../alquiler/alquiler.entity.js'

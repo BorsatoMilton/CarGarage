@@ -1,23 +1,20 @@
 import { Request, Response, NextFunction } from 'express'
-import { Alquiler } from './alquiler.entity.js'
-import { orm } from '../shared/db/orm.js'
+import { Calificacion } from './calificacion.entity.js'
+import { orm } from '../../shared/db/orm.js'
 
 const em = orm.em
 
-function sanitizeAlquilerInput(
+function sanitizeCalificacionInput(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    fechaAlquiler: req.body.fechaAlquiler,
-    fechaHoraInicioAlquiler: req.body.fechaHoraInicioAlquiler,
-    fechaHoraDevolucion: req.body.fechaHoraDevolucion,
-    estadoAlquiler: req.body.estadoAlquiler,
-    precioTotal: req.body.precioTotal,
-    locador: req.body.locador,
-    locatario: req.body.locatario,
-    vehiculo: req.body.vehiculo,
+    fechaCalificacion: req.body.fechaCalificacion,
+    valoracion: req.body.valoracion,
+    observacion: req.body.observacion,
+    usuario: req.body.usuario,
+    producto: req.body.producto,
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -30,8 +27,8 @@ function sanitizeAlquilerInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const alquileres = await em.find(Alquiler,{})
-    res.status(200).json({ message: 'Alquilers', data: alquileres })
+    const calificaciones = await em.find(Calificacion,{})
+    res.status(200).json({ message: 'Calificaciones', data: calificaciones })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -40,8 +37,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const alquiler = await em.findOneOrFail(Alquiler, { id })
-    res.status(200).json({ message: 'Alquiler Encontrado', data: alquiler })
+    const calificacion = await em.findOneOrFail(Calificacion, { id })
+    res.status(200).json({ message: 'Calificacion Encontrada', data: calificacion })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -49,9 +46,9 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const alquiler = em.create(Alquiler, req.body.sanitizedInput)
+    const calificacion = em.create(Calificacion, req.body.sanitizedInput)
     await em.flush()
-    res.status(201).json({ message: 'Alquiler creado', data: alquiler })
+    res.status(201).json({ message: 'Calificacion creada', data: calificacion })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -60,12 +57,12 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const alquilerAactualizar = await em.findOneOrFail(Alquiler, { id })
-    em.assign(alquilerAactualizar, req.body.sanitizedInput)
+    const calificacionAactualizar = await em.findOneOrFail(Calificacion, { id })
+    em.assign(calificacionAactualizar, req.body.sanitizedInput)
     await em.flush()
     res
       .status(200)
-      .json({ message: 'Alquiler Actualizado', data: alquilerAactualizar })
+      .json({ message: 'Calificacion Actualizada', data: calificacionAactualizar })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -74,11 +71,11 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const alquiler = em.getReference(Alquiler, id)
-    await em.removeAndFlush(alquiler)
+    const calificacion = em.getReference(Calificacion, id)
+    await em.removeAndFlush(calificacion)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizeAlquilerInput, findAll, findOne, add, update, remove }
+export { sanitizeCalificacionInput, findAll, findOne, add, update, remove }

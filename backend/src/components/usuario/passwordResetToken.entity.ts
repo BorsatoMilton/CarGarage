@@ -1,6 +1,6 @@
 import { Entity, Property, ManyToOne } from '@mikro-orm/core';
 import { Usuario } from './usuario.entity.js'; // Asegúrate de ajustar la ruta según tu estructura de proyecto
-import { BaseEntity } from '../shared/db/baseEntity.entity.js';
+import { BaseEntity } from '../../shared/db/baseEntity.entity.js';
 
 @Entity()
 export class PasswordResetToken extends BaseEntity {

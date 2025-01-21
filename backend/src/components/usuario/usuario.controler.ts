@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Usuario } from './usuario.entity.js'
-import { orm } from '../shared/db/orm.js'
+import { orm } from '../../shared/db/orm.js'
 import { PasswordResetToken } from './passwordResetToken.entity.js'
 import bcrypt from 'bcrypt';
 

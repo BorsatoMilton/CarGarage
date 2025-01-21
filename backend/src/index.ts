@@ -2,23 +2,32 @@ import 'reflect-metadata';
 import express from 'express';
 import { orm } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
-import { vehiculoRouter } from './vehiculo/vehiculo.routes.js';
-import { marcaRouter } from './vehiculo/marca.routes.js';
-import { categoriaRouter } from './vehiculo/categoria.routes.js';
-import { usuarioRouter } from './usuario/usuario.routes.js';
-import { tarjetaRouter } from './usuario/tarjeta.routes.js';
-import { calificacionRouter } from './usuario/calificacion.routes.js';
-import { compraRouter } from './compra/compra.routes.js';
-import { correoRouter } from './correo/correo.routes.js';
+import { vehiculoRouter } from './components/vehiculo/vehiculo.routes.js';
+import { marcaRouter } from './components/vehiculo/marca.routes.js';
+import { categoriaRouter } from './components/vehiculo/categoria.routes.js';
+import { usuarioRouter } from './components/usuario/usuario.routes.js';
+import { tarjetaRouter } from './components/usuario/tarjeta.routes.js';
+import { calificacionRouter } from './components/usuario/calificacion.routes.js';
+import { compraRouter } from './components/compra/compra.routes.js';
+import { correoRouter } from './components/correo/correo.routes.js';
 import cors from 'cors';
-import { alquilerRouter } from './alquiler/alquiler.routes.js';
-import { rolRouter } from './usuario/rol.routes.js';
+import { alquilerRouter } from './components/alquiler/alquiler.routes.js';
+import { rolRouter } from './components/usuario/rol.routes.js';
 import path from 'path';
 
 const app = express();
-app.use(cors(
-  {origin: 'http://localhost:4200'}
-));
+
+const allowedOrigins = ['http://localhost:4200' ]; //despues faltaria colocar el dominio de nuestra pagina
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed')); 
+    }
+  },
+}));
+
 app.use(express.json());
   
 app.use((req, res, next) => {
@@ -35,7 +44,6 @@ app.use('/api/compras', compraRouter)
 app.use('/api/recuperacion', correoRouter);
 app.use('/api/alquiler', alquilerRouter);
 app.use('/api/rol', rolRouter);
-app.use('/api/usuarios', usuarioRouter)
 app.use('/uploads', express.static(path.resolve('src/uploads')));
 
 

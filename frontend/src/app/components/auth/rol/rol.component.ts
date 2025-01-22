@@ -7,10 +7,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RolService } from '../../core/services/rol.service.js';
-import { Rol } from '../../core/models/rol.interface.js';
-import { AuthService } from '../../core/services/auth.service.js';
-import { User } from '../../core/models/user.interface.js';
+import { RolService } from '../../../core/services/rol.service.js';
+import { Rol } from '../../../core/models/rol.interface.js';
+import { AuthService } from '../../../core/services/auth.service.js';
+import { User } from '../../../core/models/user.interface.js';
 import { transition } from '@angular/animations';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';

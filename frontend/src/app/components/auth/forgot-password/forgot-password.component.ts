@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; 
-import { PasswordRecoveryService } from '../../core/services/password-recovery.service';
+import { PasswordRecoveryService } from '../../../core/services/password-recovery.service';
 import { RouterModule} from '@angular/router';
 import { CommonModule } from '@angular/common';
 

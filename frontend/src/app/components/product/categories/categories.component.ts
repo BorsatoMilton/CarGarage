@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component,  OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CategoriesService } from '../../core/services/categories.service';
-import { Category } from '../../core/models/categories.interface';
-import { SearcherComponent } from '../../shared/components/searcher/searcher.component.js';
+import { CategoriesService } from '../../../core/services/categories.service';
+import { Category } from '../../../core/models/categories.interface';
+import { SearcherComponent } from '../../../shared/components/searcher/searcher.component.js';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 

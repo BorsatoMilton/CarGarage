@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Vehicle } from '../../core/models/vehicles.interface.js';
-import { VehiclesService } from '../../core/services/vehicles.service.js';
+import { Vehicle } from '../../../core/models/vehicles.interface.js';
+import { VehiclesService } from '../../../core/services/vehicles.service.js';
 import { RouterLink } from '@angular/router';
 
 @Component({

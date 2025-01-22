@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Compra } from '../../core/models/compra.interfaces.js';
-import { CompraService } from '../../core/services/compra.service.js';
+import { Compra } from '../../../core/models/compra.interfaces.js';
+import { CompraService } from '../../../core/services/compra.service.js';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../core/services/auth.service.js';
+import { AuthService } from '../../../core/services/auth.service.js';
 
 @Component({
   selector: 'app-purchases',

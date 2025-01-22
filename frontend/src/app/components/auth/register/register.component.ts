@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UsuariosService } from '../../core/services/users.service.js';
+import { UsuariosService } from '../../../core/services/users.service.js';
 import { Router } from '@angular/router';
-import { RolService } from '../../core/services/rol.service.js';
-import { User } from '../../core/models/user.interface.js';
-import { Rol } from '../../core/models/rol.interface.js';
+import { RolService } from '../../../core/services/rol.service.js';
+import { User } from '../../../core/models/user.interface.js';
+import { Rol } from '../../../core/models/rol.interface.js';
 @Component({
   selector: 'app-register',
   standalone: true,

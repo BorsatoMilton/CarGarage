@@ -7,17 +7,17 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { VehiclesService } from '../../core/services/vehicles.service.js';
-import { Vehicle } from '../../core/models/vehicles.interface.js';
-import { AuthService } from '../../core/services/auth.service.js';
-import { User } from '../../core/models/user.interface.js';
+import { VehiclesService } from '../../../core/services/vehicles.service.js';
+import { Vehicle } from '../../../core/models/vehicles.interface.js';
+import { AuthService } from '../../../core/services/auth.service.js';
+import { User } from '../../../core/models/user.interface.js';
 import { transition } from '@angular/animations';
-import { Compra } from '../../core/models/compra.interfaces.js';
-import { CompraService } from '../../core/services/compra.service.js';
+import { Compra } from '../../../core/models/compra.interfaces.js';
+import { CompraService } from '../../../core/services/compra.service.js';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Brand } from '../../core/models/brands.interfaces.js';
-import { Category } from '../../core/models/categories.interface.js';
+import { Brand } from '../../../core/models/brands.interfaces.js';
+import { Category } from '../../../core/models/categories.interface.js';
 
 @Component({
   selector: 'app-compra',

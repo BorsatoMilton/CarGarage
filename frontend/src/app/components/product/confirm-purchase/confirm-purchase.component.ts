@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { VehiclesService } from '../../core/services/vehicles.service.js';
-import { UsuariosService } from '../../core/services/users.service.js';
-import { Compra } from '../../core/models/compra.interfaces.js';
+import { VehiclesService } from '../../../core/services/vehicles.service.js';
+import { UsuariosService } from '../../../core/services/users.service.js';
+import { Compra } from '../../../core/models/compra.interfaces.js';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Vehicle } from '../../core/models/vehicles.interface.js';
-import { User } from '../../core/models/user.interface.js';
-import { Category } from '../../core/models/categories.interface.js';
-import { CompraService } from '../../core/services/compra.service.js';
+import { Vehicle } from '../../../core/models/vehicles.interface.js';
+import { User } from '../../../core/models/user.interface.js';
+import { Category } from '../../../core/models/categories.interface.js';
+import { CompraService } from '../../../core/services/compra.service.js';
 
 @Component({
   selector: 'app-confirm-purchase',

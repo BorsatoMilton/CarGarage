@@ -5,7 +5,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { RolComponent } from './rol/rol.component';
 import { UserComponent } from './usuario/usuario.component';
-import { onlyAdmin } from '../guards/onlyAdmin.guard';
+import { onlyAdmin } from '../../guards/onlyAdmin.guard';
 
 export const authRoutes: Routes = [
     { path: 'login', component: LoginComponent },

@@ -7,15 +7,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { VehiclesService } from '../../core/services/vehicles.service.js';
-import { Vehicle } from '../../core/models/vehicles.interface.js';
+import { VehiclesService } from '../../../core/services/vehicles.service.js';
+import { Vehicle } from '../../../core/models/vehicles.interface.js';
 import { BrandComponent } from '../brand/brand.component.js';
-import { BrandsService } from '../../core/services/brands.service.js';
-import { Brand } from '../../core/models/brands.interfaces.js';
-import { CategoriesService } from '../../core/services/categories.service.js';
-import { Category } from '../../core/models/categories.interface.js';
-import { AuthService } from '../../core/services/auth.service.js';
-import { User } from '../../core/models/user.interface.js';
+import { BrandsService } from '../../../core/services/brands.service.js';
+import { Brand } from '../../../core/models/brands.interfaces.js';
+import { CategoriesService } from '../../../core/services/categories.service.js';
+import { Category } from '../../../core/models/categories.interface.js';
+import { AuthService } from '../../../core/services/auth.service.js';
+import { User } from '../../../core/models/user.interface.js';
 import { transition } from '@angular/animations';
 
 @Component({

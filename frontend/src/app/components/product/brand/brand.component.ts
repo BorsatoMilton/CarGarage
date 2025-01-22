@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BrandsService } from '../../core/services/brands.service.js';
-import { Brand } from '../../core/models/brands.interfaces.js';
+import { BrandsService } from '../../../core/services/brands.service.js';
+import { Brand } from '../../../core/models/brands.interfaces.js';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { SearcherComponent } from '../../shared/components/searcher/searcher.component.js';
+import { SearcherComponent } from '../../../shared/components/searcher/searcher.component.js';
 @Component({
   selector: 'app-brand',
   standalone: true,

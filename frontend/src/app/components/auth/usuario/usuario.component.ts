@@ -7,10 +7,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { User } from '../../core/models/user.interface.js';
-import { UsuariosService } from '../../core/services/users.service.js';
-import { Rol } from '../../core/models/rol.interface.js';
-import { RolService } from '../../core/services/rol.service.js';
+import { User } from '../../../core/models/user.interface.js';
+import { UsuariosService } from '../../../core/services/users.service.js';
+import { Rol } from '../../../core/models/rol.interface.js';
+import { RolService } from '../../../core/services/rol.service.js';
 
 @Component({
   selector: 'app-usuario',

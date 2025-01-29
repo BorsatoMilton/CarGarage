@@ -47,6 +47,16 @@ async function findOne(req: Request, res: Response) {
   }
 }
 
+async function findAllByVehicle(req: Request, res: Response) {
+  try {
+    const idVehiculo = req.params.id
+    const alquileres = await em.find(Alquiler, { vehiculo: idVehiculo })
+    res.status(200).json(alquileres)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 async function add(req: Request, res: Response) {
   try {
     const alquiler = em.create(Alquiler, req.body.sanitizedInput)
@@ -81,4 +91,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeAlquilerInput, findAll, findOne, add, update, remove }
+export { sanitizeAlquilerInput, findAll, findAllByVehicle, findOne, add, update, remove }

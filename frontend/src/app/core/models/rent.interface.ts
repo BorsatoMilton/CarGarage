@@ -7,7 +7,6 @@ export interface Rent{
     fechaHoraInicioAlquiler: Date;
     fechaHoraDevolucion: Date;
     estadoAlquiler: String;
-    precioTotal: number;
     locador: User;
     locatario: User;
     vehiculo: Vehicle;

@@ -24,9 +24,6 @@ export class Alquiler extends BaseEntity {
     @Property({ nullable: false })
     estadoAlquiler!: String
 
-    @Property({ nullable: false })
-    precioTotal!: number
-
     @ManyToOne(() => Usuario , { nullable: false })
     locador!: Rel<Usuario>
     

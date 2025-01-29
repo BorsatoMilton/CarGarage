@@ -1,80 +1,104 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RentsService } from '../../../core/services/rents.service.js';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Vehicle } from '../../../core/models/vehicles.interface.js';
 import { VehiclesService } from '../../../core/services/vehicles.service.js';
 import { User } from '../../../core/models/user.interface.js';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { FormGroup } from '@angular/forms';
 import { Rent } from '../../../core/models/rent.interface.js';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-rent',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './rent.component.html',
   styleUrl: './rent.component.css',
 })
-export class RentComponent {
+export class RentComponent implements OnInit{
+  rentForm: FormGroup;
+  vehiculo: Vehicle | undefined;
+  fechasReservadas: { fechaInicio: string; fechaFin: string }[] = [];
   idVehiculo: string | null = null;
-  vehiculo: Vehicle | null = null;
-  usuario: User | null = null;
-  rentForm: FormGroup = new FormGroup({});
-  selectedRent: Rent | null = null;
+  usuario: any;
 
   constructor(
     private fb: FormBuilder,
-    private rentService: RentsService,
     private route: ActivatedRoute,
-    private router: Router,
-    private vehicleService: VehiclesService,
-    private authService: AuthService
+    private vehiculoService: VehiclesService,
+    private rentService: RentsService,
+    private authService: AuthService,
+    private router: Router
   ) {
-      this.rentForm = this.fb.group({ //crea un formulario reactivo con FormBuilder
-        fecha_alquiler: ['', Validators.required],
-      });
+    this.rentForm = this.fb.group({
+      fechaHoraInicioAlquiler: ['', Validators.required],
+      fechaHoraFinAlquiler: ['', Validators.required]
+    }, { validators: this.dateRangeValidator });
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.idVehiculo = params.get('id');
-      if (this.idVehiculo === null) {
-        alert('Vehiculo no encontrado');
-        this.router.navigate(['/']);
-      } else {
-        this.vehicleService.getOneVehicle(this.idVehiculo).subscribe((data) => {
-          if (data === null) {
-            alert('Vehiculo no encontrado');
-            this.router.navigate(['/']);
-          } else {
-            this.vehiculo = data;
-          }
-        });
-      }
+    this.idVehiculo = this.route.snapshot.paramMap.get('id');
+    if (this.idVehiculo) {
+      this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe(
+        (data: Vehicle) => {
+          this.vehiculo = data;
+        },
+        (error) => {
+          console.error('Error para obtener el vehiculo:', error);
+        }
+      );
+
+      this.rentService.getRentsByVehicle(this.idVehiculo).subscribe((reservas) => {
+        this.fechasReservadas = reservas.map((reserva: any) => ({
+          fechaInicio: reserva.fechaInicio,
+          fechaFin: reserva.fechaFin,
+        }));
+      });
+    }
+  }
+
+  dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const start = group.get('fechaHoraInicioAlquiler')?.value;
+    const end = group.get('fechaHoraFinAlquiler')?.value;
+
+    if (!start || !end) {
+      return null;
+    }
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    if (startDate > endDate) {
+      return { dateRangeInvalid: true };
+    }
+
+    const isOverlapping = this.fechasReservadas.some((reserva) => {
+      const reservaInicio = new Date(reserva.fechaInicio);
+      const reservaFin = new Date(reserva.fechaFin);
+      return (startDate >= reservaInicio && startDate <= reservaFin) ||
+             (endDate >= reservaInicio && endDate <= reservaFin) ||
+             (startDate <= reservaInicio && endDate >= reservaFin);
     });
-    this.usuario = this.authService.getCurrentUser();
+
+    return isOverlapping ? { dateRangeOverlapping: true } : null;
   }
 
-  openModal(modalId: string): void {
-    console.log(this.rentForm.value);
-    const modalDiv = document.getElementById(modalId);
-    if (modalDiv != null) {
-      modalDiv.style.display = 'block';
-    }
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
-  closeModal(modalId: string) {
-    const modalDiv = document.getElementById(modalId);
-    if (modalDiv != null) {
-      modalDiv.style.display = 'none';
-    }
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop != null) {
-      backdrop.parentNode?.removeChild(backdrop);
-    }
-    this.selectedRent = null;
-    this.rentForm.reset();
+  isDateDisabled(date: string): boolean {
+    const checkDate = new Date(date);
+    return this.fechasReservadas.some((reserva) => {
+      const inicio = new Date(reserva.fechaInicio);
+      const fin = new Date(reserva.fechaFin);
+      return checkDate >= inicio && checkDate <= fin;
+    });
   }
 
   pre_rent(): void {
@@ -95,5 +119,4 @@ export class RentComponent {
       this.router.navigate(['/login']);
     }
   }
-  
 }

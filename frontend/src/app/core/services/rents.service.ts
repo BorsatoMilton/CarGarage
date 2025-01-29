@@ -14,6 +14,10 @@ export class RentsService {
     return this.http.get<Rent[]>(this.url);
   }
 
+  getRentsByVehicle(id: string): Observable<Rent[]> {
+    return this.http.get<Rent[]>(`${this.url}/vehiculo/${id}`);
+  }
+
   getOneRent(id: string): Observable<Rent> {
     return this.http.get<Rent>(`${this.url}/${id}`);
   }

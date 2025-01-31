@@ -81,20 +81,5 @@ export class ConfirmRentComponent {
     this.selectedRent = null;
   }
 
-  confirmarCompra(): void {
-    this.closeModal('confirmarAlquiler');
-    if (this.vehiculo !== null && this.usuario !== null) {
-      this.rentService
-        .addRent(this.usuario.id, this.vehiculo.id)
-        .subscribe((data) => {
-          if (data === null) {
-            alert('Error al comprar el vehiculo');
-          } else {
-            alert('Vehiculo alquilado correctamente');
-            // this.rentService.avisoCompraExitosa(this.usuario!.mail);
-            this.router.navigate(['/']);
-          }
-        });
-    }
-  }
+
 }

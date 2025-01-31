@@ -16,16 +16,16 @@ export class Alquiler extends BaseEntity {
     fechaAlquiler!: Date
 
     @Property({ nullable: false })
-    fechaHoraInicioAlquiler!: DateTimeType
+    fechaHoraInicioAlquiler!: Date
 
     @Property({ nullable: false})
-    fechaHoraDevolucion!: DateTimeType
+    fechaHoraDevolucion!: Date
 
     @Property({ nullable: false })
     estadoAlquiler!: String
 
-    @ManyToOne(() => Usuario , { nullable: false })
-    locador!: Rel<Usuario>
+    @Property({ nullable: false })
+    tiempoConfirmacion!: Date
     
     @ManyToOne(() => Usuario , { nullable: false })
     locatario!: Rel<Usuario>

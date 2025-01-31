@@ -17,12 +17,12 @@ import { CommonModule } from '@angular/common';
   templateUrl: './rent.component.html',
   styleUrl: './rent.component.css',
 })
-export class RentComponent implements OnInit{
+export class RentComponent implements OnInit {
   rentForm: FormGroup;
   vehiculo: Vehicle | undefined;
   fechasReservadas: { fechaInicio: string; fechaFin: string }[] = [];
   idVehiculo: string | null = null;
-  usuario: any;
+  usuario: User | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -32,10 +32,13 @@ export class RentComponent implements OnInit{
     private authService: AuthService,
     private router: Router
   ) {
-    this.rentForm = this.fb.group({
-      fechaHoraInicioAlquiler: ['', Validators.required],
-      fechaHoraFinAlquiler: ['', Validators.required]
-    }, { validators: this.dateRangeValidator });
+    this.rentForm = this.fb.group(
+      {
+        fechaHoraInicioAlquiler: ['', Validators.required],
+        fechaHoraDevolucion: ['', Validators.required],
+      },
+      { validators: this.dateRangeValidatorFactory() }
+    );
   }
 
   ngOnInit(): void {
@@ -50,39 +53,50 @@ export class RentComponent implements OnInit{
         }
       );
 
-      this.rentService.getRentsByVehicle(this.idVehiculo).subscribe((reservas) => {
-        this.fechasReservadas = reservas.map((reserva: any) => ({
-          fechaInicio: reserva.fechaInicio,
-          fechaFin: reserva.fechaFin,
-        }));
-      });
+      this.rentService
+        .getRentsByVehicle(this.idVehiculo)
+        .subscribe((reservas) => {
+          if (!reservas) {
+            return;
+          } else {
+            this.fechasReservadas = reservas.map((reserva: any) => ({
+              fechaInicio: reserva.fechaInicio,
+              fechaFin: reserva.fechaFin,
+            }));
+          }
+        });
     }
+    this.usuario = this.authService.getCurrentUser();
   }
 
-  dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const start = group.get('fechaHoraInicioAlquiler')?.value;
-    const end = group.get('fechaHoraFinAlquiler')?.value;
+  dateRangeValidatorFactory() {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const start = group.get('fechaHoraInicioAlquiler')?.value;
+      const end = group.get('fechaHoraFinAlquiler')?.value;
 
-    if (!start || !end) {
-      return null;
-    }
+      if (!start || !end) {
+        return null;
+      }
 
-    const startDate = new Date(start);
-    const endDate = new Date(end);
+      const startDate = new Date(start);
+      const endDate = new Date(end);
 
-    if (startDate > endDate) {
-      return { dateRangeInvalid: true };
-    }
+      if (startDate > endDate) {
+        return { dateRangeInvalid: true };
+      }
 
-    const isOverlapping = this.fechasReservadas.some((reserva) => {
-      const reservaInicio = new Date(reserva.fechaInicio);
-      const reservaFin = new Date(reserva.fechaFin);
-      return (startDate >= reservaInicio && startDate <= reservaFin) ||
-             (endDate >= reservaInicio && endDate <= reservaFin) ||
-             (startDate <= reservaInicio && endDate >= reservaFin);
-    });
+      const isOverlapping = this.fechasReservadas.some((reserva) => {
+        const reservaInicio = new Date(reserva.fechaInicio);
+        const reservaFin = new Date(reserva.fechaFin);
+        return (
+          (startDate >= reservaInicio && startDate <= reservaFin) ||
+          (endDate >= reservaInicio && endDate <= reservaFin) ||
+          (startDate <= reservaInicio && endDate >= reservaFin)
+        );
+      });
 
-    return isOverlapping ? { dateRangeOverlapping: true } : null;
+      return isOverlapping ? { dateRangeOverlapping: true } : null;
+    };
   }
 
   formatDate(date: Date): string {
@@ -101,22 +115,39 @@ export class RentComponent implements OnInit{
     });
   }
 
-  pre_rent(): void {
+  rent(): void {
     if (this.authService.isAuthenticated()) {
-      console.log('Usuario autenticado. Procesando alquiler...');
-      this.rentService.confirmRent(this.usuario!.mail, this.vehiculo!.id).subscribe({
-        next: () => {
-          alert('Se le envio un mail con la confirmación del alquiler');
-          this.router.navigate(['/']);
+      const rentData: Rent = {
+        ...this.rentForm.value,
+        estadoAlquiler: 'PENDIENTE',
+        locatario: this.usuario?.id,
+        vehiculo: this.idVehiculo,
+        locador: this.vehiculo?.propietario,
+      };
+      this.rentService.addRent(rentData).subscribe({
+        next: (response) => {
+          console.log('Respuesta del servidor:', response);
+          if (this.usuario?.mail && this.idVehiculo) {
+            const idAlquiler = response.id;
+            this.rentService
+              .confirmRent(this.usuario.mail, idAlquiler)
+              .subscribe({
+                next: () => {
+                  alert('Se le envió un mail con la confirmación del alquiler');
+                  this.router.navigate(['/']);
+                },
+                error: (error) => {
+                  console.error(error);
+                  alert('Error al confirmar el alquiler.');
+                },
+              });
+          }
         },
         error: (error) => {
           console.error(error);
-          alert('Error al realizar la compra.');
+          alert('Error al realizar el alquiler.');
         },
       });
-    } else {
-      console.log('Usuario no autenticado. Redirigiendo a login...');
-      this.router.navigate(['/login']);
     }
   }
 }

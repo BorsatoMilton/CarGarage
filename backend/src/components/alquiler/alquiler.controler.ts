@@ -10,14 +10,16 @@ function sanitizeAlquilerInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    fechaAlquiler: req.body.fechaAlquiler,
+    fechaAlquiler: new Date(),
     fechaHoraInicioAlquiler: req.body.fechaHoraInicioAlquiler,
     fechaHoraDevolucion: req.body.fechaHoraDevolucion,
     estadoAlquiler: req.body.estadoAlquiler,
-    precioTotal: req.body.precioTotal,
-    locador: req.body.locador,
     locatario: req.body.locatario,
     vehiculo: req.body.vehiculo,
+    tiempoConfirmacion: (() => {
+      const fecha = new Date()
+      fecha.setDate(fecha.getDate() + 3)
+      return fecha})(),
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -47,6 +49,15 @@ async function findOne(req: Request, res: Response) {
   }
 }
 
+async function getOneById(idAlquiler: string) {
+  try {
+    const alquiler = await em.findOneOrFail(Alquiler, { id: idAlquiler })
+    return alquiler
+  } catch (error: any) {
+    return null
+  }
+}
+
 async function findAllByVehicle(req: Request, res: Response) {
   try {
     const idVehiculo = req.params.id
@@ -61,7 +72,7 @@ async function add(req: Request, res: Response) {
   try {
     const alquiler = em.create(Alquiler, req.body.sanitizedInput)
     await em.flush()
-    res.status(201).json({ message: 'Alquiler creado', data: alquiler })
+    res.status(201).json(alquiler)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -91,4 +102,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeAlquilerInput, findAll, findAllByVehicle, findOne, add, update, remove }
+export { sanitizeAlquilerInput, findAll, findAllByVehicle, findOne, getOneById, add, update, remove }

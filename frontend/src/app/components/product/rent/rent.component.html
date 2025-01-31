@@ -16,7 +16,7 @@
       >
     </div>
 
-    <form [formGroup]="rentForm" (ngSubmit)="pre_rent()">
+    <form [formGroup]="rentForm" (ngSubmit)="rent()">
       <div class="mb-4">
         <label for="fechaInicio" class="form-label text-gray-700">Fecha Inicio:</label>
         <input 
@@ -34,7 +34,7 @@
           type="date" 
           id="fechaFin" 
           class="form-control" 
-          formControlName="fechaHoraFinAlquiler"
+          formControlName="fechaHoraDevolucion"
           name="fechaFin" 
           required
         />

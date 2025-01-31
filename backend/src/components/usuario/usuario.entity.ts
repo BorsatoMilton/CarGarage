@@ -48,9 +48,6 @@ export class Usuario extends BaseEntity {
 
     @OneToMany(() => Vehiculo, vehiculo => vehiculo.propietario)
     vehiculos = new Collection<Vehiculo>(this)
-
-    @OneToMany(() => Alquiler, alquiler => alquiler.locador, { nullable: false })
-    alquilerLocador= new Collection<Alquiler>(this)
     
     @OneToMany(() => Alquiler, alquiler => alquiler.locatario, { nullable: false })
     alquilerLocatorio= new Collection<Alquiler>(this)

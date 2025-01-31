@@ -22,8 +22,8 @@ export class RentsService {
     return this.http.get<Rent>(`${this.url}/${id}`);
   }
 
-  addRent(idLocatario: string, idVehiculo: string): Observable<Rent> {
-    return this.http.post<Rent>(this.url, {vehiculo: idVehiculo, comprador: idLocatario, fechaCancelacion: null});
+  addRent(rent:Rent): Observable<Rent> {
+    return this.http.post<Rent>(this.url, rent);
   }
   editRent(rent: Rent): Observable<Rent> {
     return this.http.put<Rent>(`${this.url}/${rent.id}`, rent);
@@ -33,7 +33,7 @@ export class RentsService {
     return this.http.delete<Rent>(`${this.url}/${rent.id}`);
   }
 
-  confirmRent(mail:String, id:String): Observable<Rent> {
-    return this.http.post<Rent>(`${this.url}/confirmarAlquiler`, {id: id, destinatario: mail});
+  confirmRent(mail:String, idAlquiler: number): Observable<Rent> {
+    return this.http.post<Rent>(`${this.url}/confirmarAlquiler`, {id: idAlquiler, destinatario: mail});
   }
 }

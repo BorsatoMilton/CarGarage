@@ -6,6 +6,8 @@ import { generateToken } from '../../shared/db/tokenGenerator.js';
 import { PasswordResetToken } from '../usuario/passwordResetToken.entity.js';
 import { orm } from '../../shared/db/orm.js';
 import { findOneById } from '../vehiculo/vehiculo.controler.js';
+import { getOneById } from '../alquiler/alquiler.controler.js';
+
 
 
 dotenv.config();
@@ -150,17 +152,13 @@ async function confirmarCompra (req: Request, res: Response) {
 
 async function confirmRent (req: Request, res: Response) {
     const destinatario = req.body.destinatario;
-    const id = req.body.id;
-    const confirmLinkRent = `http://localhost:4200/product/confirm-rent?id=${id}&destinatario=${destinatario}`;
-    const user = await findOneByEmail(destinatario);
-    if (!user) {
-        return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
+    const idAlquiler = String(req.body.id);
+    const confirmLinkRent = `http://localhost:4200/product/confirm-rent?id=${idAlquiler}`;
+    const alquiler = await getOneById(idAlquiler);
+    if(!alquiler) {
+        return res.status(404).json({ ok: false, message: 'Alquiler no encontrado' });
     }
-    const vehiculo = await findOneById(id);
-    if (!vehiculo) {
-        return res.status(404).json({ ok: false, message: 'Vehículo no encontrado' });
-    }
-    
+
     const config = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -173,7 +171,7 @@ async function confirmRent (req: Request, res: Response) {
 
     const opciones = {
         from: process.env.EMAIL_USER,
-        subject: 'Confirmación de compra',
+        subject: 'Confirmación de Alquiler',
         to: destinatario,
         text: `Para confirmar el alquiler, haz clic en el siguiente enlace: ${confirmLinkRent}`
     };

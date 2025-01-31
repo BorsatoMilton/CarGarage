@@ -10,6 +10,7 @@ import { ConfirmPurchaseComponent } from './confirm-purchase/confirm-purchase.co
 import { PurchasesComponent } from './purchases/purchases.component.js';
 import { RentListComponent } from './rent-list/rent-list.component.js';
 import { RentComponent } from './rent/rent.component.js';
+import { ConfirmRentComponent } from './confirm-rent/confirm-rent.component.js';
 
 export const productRoutes: Routes = [
     {path: 'categories', component: CategoriesComponent, canActivate: [onlyAdmin]},
@@ -19,7 +20,7 @@ export const productRoutes: Routes = [
     {path: 'confirm-purchase', component: ConfirmPurchaseComponent},
     {path: 'rent-list', component:RentListComponent, canActivate: [isLoggedInGuard]},
     {path: 'rent/:id', component:RentComponent, canActivate: [isLoggedInGuard]},
+    {path: 'confirm-rent', component:ConfirmRentComponent},
     {path: 'purchases', component: PurchasesComponent, canActivate: [isLoggedInGuard]},
     {path: '', component: VehiclesCardComponent},
-
 ];

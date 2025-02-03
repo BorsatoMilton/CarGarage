@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { RentsService } from '../../../core/services/rents.service.js';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Vehicle } from '../../../core/models/vehicles.interface.js';
 import { VehiclesService } from '../../../core/services/vehicles.service.js';
 import { User } from '../../../core/models/user.interface.js';
@@ -13,7 +20,11 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-rent',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './rent.component.html',
   styleUrl: './rent.component.css',
 })
@@ -23,6 +34,7 @@ export class RentComponent implements OnInit {
   fechasReservadas: { fechaInicio: string; fechaFin: string }[] = [];
   idVehiculo: string | null = null;
   usuario: User | null = null;
+  todayString: String = '';
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +53,24 @@ export class RentComponent implements OnInit {
     );
   }
 
+  dateFilter = (d: Date | null): boolean => {
+    if (!d) return false;
+    const date = new Date(d);
+    date.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // Deshabilitamos días anteriores a hoy
+    if (date < today) return false;
+    // Deshabilitamos si la fecha cae en un rango reservado
+    return !this.fechasReservadas.some((reserva) => {
+      const start = new Date(reserva.fechaInicio);
+      const end = new Date(reserva.fechaFin);
+      return date >= start && date <= end;
+    });
+  };
+
   ngOnInit(): void {
+    this.todayString = this.formatDate(new Date());
     this.idVehiculo = this.route.snapshot.paramMap.get('id');
     if (this.idVehiculo) {
       this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe(
@@ -71,20 +100,21 @@ export class RentComponent implements OnInit {
 
   dateRangeValidatorFactory() {
     return (group: AbstractControl): ValidationErrors | null => {
-      const start = group.get('fechaHoraInicioAlquiler')?.value;
-      const end = group.get('fechaHoraFinAlquiler')?.value;
-
-      if (!start || !end) {
+      const startValue = group.get('fechaHoraInicioAlquiler')?.value;
+      const endValue = group.get('fechaHoraDevolucion')?.value;
+      if (!startValue || !endValue) {
         return null;
       }
-
-      const startDate = new Date(start);
-      const endDate = new Date(end);
-
+      const startDate = new Date(startValue);
+      const endDate = new Date(endValue);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (startDate < today) {
+        return { startDateInPast: true };
+      }
       if (startDate > endDate) {
         return { dateRangeInvalid: true };
       }
-
       const isOverlapping = this.fechasReservadas.some((reserva) => {
         const reservaInicio = new Date(reserva.fechaInicio);
         const reservaFin = new Date(reserva.fechaFin);
@@ -94,8 +124,10 @@ export class RentComponent implements OnInit {
           (startDate <= reservaInicio && endDate >= reservaFin)
         );
       });
-
-      return isOverlapping ? { dateRangeOverlapping: true } : null;
+      if (isOverlapping) {
+        return { dateRangeOverlapping: true };
+      }
+      return null;
     };
   }
 

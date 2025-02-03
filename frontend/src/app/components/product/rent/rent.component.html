@@ -1,51 +1,85 @@
-<div class="container mx-auto my-8 px-4">
+<div class="container mx-auto py-8 px-4">
   <div class="bg-white shadow-md rounded-lg p-6">
-    <h1 class="text-2xl font-semibold mb-4">Reservar Vehículo</h1>
+    <h1 class="text-2xl font-semibold mb-6 text-center">Reservar Vehículo</h1>
 
-    <div class="mb-6" *ngIf="vehiculo">
-      <h2 class="text-xl font-bold text-gray-700">{{ vehiculo.nombre }}</h2>
-      <p class="text-gray-600">
-        Precio Venta: ${{ vehiculo.precioVenta }} <br>
-        Precio Alquiler Diario: ${{ vehiculo.precioAlquilerDiario }} <br>
-        Propietario: {{ vehiculo.propietario.nombre }} {{ vehiculo.propietario.apellido }}<br>
-      </p>
-      <img
+    <!-- Información del vehículo -->
+    <div *ngIf="vehiculo" class="flex flex-col md:flex-row gap-6 mb-6">
+      <div class="md:w-1/2">
+        <img
           id="imagen-vehiculo"
           [src]="'http://localhost:3000/uploads/' + vehiculo.imagenes[0]"
           alt="Imagen del vehículo"
-      >
+          class="w-full h-auto rounded-md"
+        />
+      </div>
+      <div class="md:w-1/2">
+        <h2 class="text-xl font-bold text-gray-800 mb-2">{{ vehiculo.nombre }}</h2>
+        <p class="text-gray-600 mb-2">
+          Precio Venta: <strong>${{ vehiculo.precioVenta }}</strong><br>
+          Precio Alquiler Diario: <strong>${{ vehiculo.precioAlquilerDiario }}</strong><br>
+          Propietario: <strong>{{ vehiculo.propietario.nombre }} {{ vehiculo.propietario.apellido }}</strong>
+        </p>
+      </div>
     </div>
 
+    <!-- Formulario de reserva -->
     <form [formGroup]="rentForm" (ngSubmit)="rent()">
-      <div class="mb-4">
-        <label for="fechaInicio" class="form-label text-gray-700">Fecha Inicio:</label>
-        <input 
-          type="date" 
-          id="fechaInicio" 
-          class="form-control" 
-          formControlName="fechaHoraInicioAlquiler" 
-          name="fechaInicio" 
-          required
-        />
-      </div>
-      <div class="mb-4">
-        <label for="fechaFin" class="form-label text-gray-700">Fecha Fin:</label>
-        <input 
-          type="date" 
-          id="fechaFin" 
-          class="form-control" 
-          formControlName="fechaHoraDevolucion"
-          name="fechaFin" 
-          required
-        />
-        <div *ngIf="rentForm.errors?.['dateRangeInvalid']" class="text-red-500">
-          La fecha de fin debe ser posterior a la fecha de inicio.
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label for="fechaInicio" class="block text-gray-700 mb-2">Fecha de Inicio</label>
+          <input
+            type="date"
+            id="fechaInicio"
+            class="w-full border border-gray-300 rounded p-2"
+            formControlName="fechaHoraInicioAlquiler"
+            [min]="todayString"
+            required
+          />
+          <div
+            *ngIf="rentForm.get('fechaHoraInicioAlquiler')?.touched && rentForm.get('fechaHoraInicioAlquiler')?.invalid"
+            class="text-red-500 text-sm mt-1"
+          >
+            Seleccione una fecha válida.
+          </div>
         </div>
-        <div *ngIf="rentForm.errors?.['dateRangeOverlapping']" class="text-red-500">
-          Las fechas seleccionadas se solapan con una reserva existente.
+
+        <div>
+          <label for="fechaFin" class="block text-gray-700 mb-2">Fecha de Fin</label>
+          <input
+            type="date"
+            id="fechaFin"
+            class="w-full border border-gray-300 rounded p-2"
+            formControlName="fechaHoraDevolucion"
+            [min]="rentForm.get('fechaHoraInicioAlquiler')?.value || todayString"
+            required
+          />
+          <div
+            *ngIf="rentForm.get('fechaHoraDevolucion')?.touched && rentForm.get('fechaHoraDevolucion')?.invalid"
+            class="text-red-500 text-sm mt-1"
+          >
+            Seleccione una fecha válida.
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary w-full" [disabled]="rentForm.invalid">Confirmar Reserva</button>
+
+      <!-- Mensajes de error de validación a nivel de formulario -->
+      <div *ngIf="rentForm.errors?.['dateRangeInvalid']" class="text-red-500 text-sm mb-4">
+        La fecha de fin debe ser posterior a la fecha de inicio.
+      </div>
+      <div *ngIf="rentForm.errors?.['dateRangeOverlapping']" class="text-red-500 text-sm mb-4">
+        Las fechas seleccionadas se solapan con una reserva existente.
+      </div>
+      <div *ngIf="rentForm.errors?.['startDateInPast']" class="text-red-500 text-sm mb-4">
+        La fecha de inicio no puede ser anterior a hoy.
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        [disabled]="rentForm.invalid"
+      >
+        Confirmar Reserva
+      </button>
     </form>
   </div>
 </div>

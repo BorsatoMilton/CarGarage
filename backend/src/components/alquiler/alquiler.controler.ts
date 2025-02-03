@@ -32,8 +32,8 @@ function sanitizeAlquilerInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const alquileres = await em.find(Alquiler,{})
-    res.status(200).json({ message: 'Alquilers', data: alquileres })
+    const alquileres = await em.find(Alquiler,{}, { populate: ['locatario', 'vehiculo'] })	
+    res.status(200).json(alquileres)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -42,8 +42,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const alquiler = await em.findOneOrFail(Alquiler, { id })
-    res.status(200).json({ message: 'Alquiler Encontrado', data: alquiler })
+    const alquiler = await em.findOneOrFail(Alquiler, { id }, { populate: ['locatario', 'vehiculo'] })
+    res.status(200).json(alquiler)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -51,7 +51,7 @@ async function findOne(req: Request, res: Response) {
 
 async function getOneById(idAlquiler: string) {
   try {
-    const alquiler = await em.findOneOrFail(Alquiler, { id: idAlquiler })
+    const alquiler = await em.findOneOrFail(Alquiler, { id: idAlquiler }, { populate: ['locatario', 'vehiculo'] })
     return alquiler
   } catch (error: any) {
     return null
@@ -61,7 +61,7 @@ async function getOneById(idAlquiler: string) {
 async function findAllByVehicle(req: Request, res: Response) {
   try {
     const idVehiculo = req.params.id
-    const alquileres = await em.find(Alquiler, { vehiculo: idVehiculo })
+    const alquileres = await em.find(Alquiler, { vehiculo: idVehiculo }, { populate: ['locatario', 'vehiculo'] })
     res.status(200).json(alquileres)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -81,7 +81,7 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const alquilerAactualizar = await em.findOneOrFail(Alquiler, { id })
+    const alquilerAactualizar = await em.findOneOrFail(Alquiler, { id: id }, { populate: ['locatario', 'vehiculo'] })
     em.assign(alquilerAactualizar, req.body.sanitizedInput)
     await em.flush()
     res

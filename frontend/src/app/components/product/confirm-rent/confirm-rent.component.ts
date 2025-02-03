@@ -1,61 +1,64 @@
 import { Component } from '@angular/core';
 import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { User } from '../../../core/models/user.interface.js';
-import { Category } from '../../../core/models/categories.interface.js';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
-import { VehiclesService } from '../../../core/services/vehicles.service.js';
-import { UsuariosService } from '../../../core/services/users.service';
 import { Rent } from '../../../core/models/rent.interface.js';
 import { RentsService } from '../../../core/services/rents.service.js';
+import { CommonModule } from '@angular/common';
+import { VehiclesService } from '../../../core/services/vehicles.service.js';
 
 @Component({
   selector: 'app-confirm-rent',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './confirm-rent.component.html',
   styleUrl: './confirm-rent.component.css',
 })
 export class ConfirmRentComponent {
-  id: string | null = null;
-  destinatario: string | null = null;
-  selectedRent: Rent | null = null;
+  rent: Rent | null = null;
   vehiculo: Vehicle | null = null;
-  usuario: User | null = null;
-  idVehiculo: string | null = null;
-  categoria: Category | null = null;
-  compraForm: FormGroup = new FormGroup({});
+  totalAlquiler: number = 0;
 
   constructor(
     private route: ActivatedRoute,
-    private vehicleService: VehiclesService,
     private rentService: RentsService,
-    private userService: UsuariosService,
+    private vehicleService: VehiclesService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.id = params['id'];
-      this.destinatario = params['destinatario'];
-      if (this.id !== null && this.destinatario !== null) {
-        this.userService
-          .getOneUserByEmail(this.destinatario)
-          .subscribe((data) => {
-            if (data === null) {
-              alert('Usuario no encontrado');
-              this.router.navigate(['/']);
-            } else {
-              this.usuario = data;
-            }
-          });
-
-        this.vehicleService.getOneVehicle(this.id!).subscribe((data) => {
+      const idAlquiler = params['id'];
+      if (idAlquiler !== null) {
+        this.rentService.getOneRent(idAlquiler).subscribe((data) => {
           if (data === null) {
-            alert('Vehiculo no encontrado');
+            alert('Alquiler no encontrado');
             this.router.navigate(['/']);
           } else {
-            this.vehiculo = data;
+            this.rent = data;
+            if (this.rent) {
+              this.vehicleService
+                .getOneVehicle(this.rent.vehiculo.id)
+                .subscribe((data) => {
+                  this.vehiculo = data;
+                  if (this.vehiculo?.precioAlquilerDiario) {
+                    const fechaInicio = this.rent
+                      ? new Date(this.rent.fechaHoraInicioAlquiler)
+                      : null;
+                    const fechaDevolucion = this.rent
+                      ? new Date(this.rent.fechaHoraDevolucion)
+                      : null;
+                    const diferenciaMilisegundos =
+                      fechaDevolucion && fechaInicio
+                        ? fechaDevolucion.getTime() - fechaInicio.getTime()
+                        : 0;
+                    const diferenciaDias = Math.ceil(
+                      diferenciaMilisegundos / (24 * 60 * 60 * 1000)
+                    );
+                    this.totalAlquiler =
+                      diferenciaDias * this.vehiculo.precioAlquilerDiario;
+                  }
+                });
+            }
           }
         });
       }
@@ -78,8 +81,25 @@ export class ConfirmRentComponent {
     if (backdrop != null) {
       backdrop.parentNode?.removeChild(backdrop);
     }
-    this.selectedRent = null;
   }
 
+  confirmRent() {
 
+    if (this.rent !== null) {
+      const updatedRent = {
+        ...this.rent,
+        estadoAlquiler: 'CONFIRMADO',
+      };
+      this.rentService.editRent(updatedRent).subscribe({
+        next: () => {
+          alert('Alquiler confirmado');
+          this.closeModal('confirmarAlquiler');
+        },
+        error: (error) => {
+          console.error('Error al confirmar el alquiler:', error);
+          alert('Error al confirmar el alquiler');
+        },
+      });
+    }
+  }
 }

@@ -6,10 +6,10 @@ export interface Vehicle {
     id: string;
     nombre: string;
     descripcion: string;
-    fechaAlta?: Date;
-    fechaBaja?: Date;
-    precioVenta?: number;
-    precioAlquilerDiario?: number;
+    fechaAlta: Date;
+    fechaBaja: Date;
+    precioVenta: number;
+    precioAlquilerDiario: number;
     kilometros:number;
     modelo: string;
     marca: Brand;

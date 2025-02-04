@@ -1,8 +1,7 @@
 <div class="container mx-auto py-8 px-4">
   <div class="bg-white shadow-md rounded-lg p-6">
-    <h1 class="text-2xl font-semibold mb-6 text-center">Reservar Vehículo</h1>
+    <h1 class="text-2xl font-semibold mb-6 text-center">Alquilar Vehículo</h1>
 
-    <!-- Información del vehículo -->
     <div *ngIf="vehiculo" class="flex flex-col md:flex-row gap-6 mb-6">
       <div class="md:w-1/2">
         <img
@@ -13,19 +12,36 @@
         />
       </div>
       <div class="md:w-1/2">
-        <h2 class="text-xl font-bold text-gray-800 mb-2">{{ vehiculo.nombre }}</h2>
+        <h2 class="text-xl font-bold text-gray-800 mb-2">
+          {{ vehiculo.nombre }}
+        </h2>
         <p class="text-gray-600 mb-2">
-          Precio Venta: <strong>${{ vehiculo.precioVenta }}</strong><br>
-          Precio Alquiler Diario: <strong>${{ vehiculo.precioAlquilerDiario }}</strong><br>
-          Propietario: <strong>{{ vehiculo.propietario.nombre }} {{ vehiculo.propietario.apellido }}</strong>
+          Marca: <strong>{{ vehiculo.marca.nombreMarca }}</strong><br />
+          Modelo: <strong>{{ vehiculo.modelo }}</strong
+          ><br />
+          Transmisión: <strong>{{ vehiculo.transmision }}</strong
+          ><br />
+          Precio Alquiler Diario:
+          <strong>${{ vehiculo.precioAlquilerDiario }}</strong
+          ><br />
+          Propietario:
+          <strong
+            >{{ vehiculo.propietario.nombre }}
+            {{ vehiculo.propietario.apellido }}</strong
+          ><br>
+          Contacto:
+          <strong>{{ vehiculo.propietario.mail }}</strong
+          > ||
+          <strong>{{ vehiculo.propietario.telefono || 'Sin celular' }}</strong
+          ><br>
         </p>
       </div>
     </div>
 
-    <!-- Formulario de reserva -->
+
     <form [formGroup]="rentForm" (ngSubmit)="rent()">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <!-- Fecha de Inicio -->
+
         <div>
           <mat-form-field appearance="fill" class="w-full">
             <mat-label>Fecha de Inicio</mat-label>
@@ -37,10 +53,16 @@
               [matDatepickerFilter]="dateFilter"
               required
             />
-            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerInicio"
+            ></mat-datepicker-toggle>
             <mat-datepicker #pickerInicio></mat-datepicker>
             <mat-error
-              *ngIf="rentForm.get('fechaHoraInicioAlquiler')?.touched && rentForm.get('fechaHoraInicioAlquiler')?.invalid"
+              *ngIf="
+                rentForm.get('fechaHoraInicioAlquiler')?.touched &&
+                rentForm.get('fechaHoraInicioAlquiler')?.invalid
+              "
             >
               Seleccione una fecha válida.
             </mat-error>
@@ -50,7 +72,6 @@
           </p>
         </div>
 
-        <!-- Fecha de Fin -->
         <div>
           <mat-form-field appearance="fill" class="w-full">
             <mat-label>Fecha de Fin</mat-label>
@@ -58,14 +79,22 @@
               matInput
               [matDatepicker]="pickerFin"
               formControlName="fechaHoraDevolucion"
-              [min]="rentForm.get('fechaHoraInicioAlquiler')?.value || todayDate"
+              [min]="
+                rentForm.get('fechaHoraInicioAlquiler')?.value || todayDate
+              "
               [matDatepickerFilter]="dateFilter"
               required
             />
-            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerFin"
+            ></mat-datepicker-toggle>
             <mat-datepicker #pickerFin></mat-datepicker>
             <mat-error
-              *ngIf="rentForm.get('fechaHoraDevolucion')?.touched && rentForm.get('fechaHoraDevolucion')?.invalid"
+              *ngIf="
+                rentForm.get('fechaHoraDevolucion')?.touched &&
+                rentForm.get('fechaHoraDevolucion')?.invalid
+              "
             >
               Seleccione una fecha válida.
             </mat-error>
@@ -73,14 +102,22 @@
         </div>
       </div>
 
-      <!-- Mensajes de error a nivel de formulario -->
-      <div *ngIf="rentForm.errors?.['dateRangeInvalid']" class="text-red-500 text-sm mb-4">
+      <div
+        *ngIf="rentForm.errors?.['dateRangeInvalid']"
+        class="text-red-500 text-sm mb-4"
+      >
         La fecha de fin debe ser posterior a la fecha de inicio.
       </div>
-      <div *ngIf="rentForm.errors?.['dateRangeOverlapping']" class="text-red-500 text-sm mb-4">
+      <div
+        *ngIf="rentForm.errors?.['dateRangeOverlapping']"
+        class="text-red-500 text-sm mb-4"
+      >
         Las fechas seleccionadas se solapan con una reserva existente.
       </div>
-      <div *ngIf="rentForm.errors?.['startDateInPast']" class="text-red-500 text-sm mb-4">
+      <div
+        *ngIf="rentForm.errors?.['startDateInPast']"
+        class="text-red-500 text-sm mb-4"
+      >
         La fecha de inicio no puede ser anterior a hoy.
       </div>
 

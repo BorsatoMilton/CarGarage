@@ -45,7 +45,6 @@ export class RentComponent implements OnInit {
   todayDate: Date = new Date();
   fechaInvalida: boolean = false;
 
-
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -65,21 +64,21 @@ export class RentComponent implements OnInit {
 
   dateFilter = (d: Date | null): boolean => {
     if (!d) return false;
-    
+
     const dayString = this.formatDate(d);
-    
-    // Deshabilitamos días anteriores a hoy
+
     const today = new Date();
     const todayString = this.formatDate(today);
     if (dayString < todayString) return false;
-    
-    // Deshabilitamos si la fecha cae en alguno de los rangos reservados
+
     for (const reserva of this.fechasReservadas) {
-      if (dayString >= reserva.fechaInicio && dayString <= reserva.fechaFin) {
+      const reservaInicio = new Date(reserva.fechaInicio);
+      const reservaFin = new Date(reserva.fechaFin);
+      if (d >= reservaInicio && d <= reservaFin) {
         return false;
       }
     }
-    
+
     return true;
   };
 
@@ -108,7 +107,6 @@ export class RentComponent implements OnInit {
         });
     }
     this.usuario = this.authService.getCurrentUser();
-    
   }
 
   dateRangeValidatorFactory() {
@@ -160,28 +158,32 @@ export class RentComponent implements OnInit {
   }
 
   getDisabledDates(): { year: number; month: number; day: number }[] {
-    return this.fechasReservadas.map((reserva) => {
-      const inicio = new Date(reserva.fechaInicio);
-      const fin = new Date(reserva.fechaFin);
-      const fechasBloqueadas = [];
-  
-      for (let d = inicio; d <= fin; d.setDate(d.getDate() + 1)) {
-        fechasBloqueadas.push({
-          year: d.getFullYear(),
-          month: d.getMonth() + 1,
-          day: d.getDate(),
-        });
-      }
-  
-      return fechasBloqueadas;
-    }).flat();
+    return this.fechasReservadas
+      .map((reserva) => {
+        const inicio = new Date(reserva.fechaInicio);
+        const fin = new Date(reserva.fechaFin);
+        const fechasBloqueadas = [];
+
+        for (let d = inicio; d <= fin; d.setDate(d.getDate() + 1)) {
+          fechasBloqueadas.push({
+            year: d.getFullYear(),
+            month: d.getMonth() + 1,
+            day: d.getDate(),
+          });
+        }
+
+        return fechasBloqueadas;
+      })
+      .flat();
   }
-  
+
   validarFecha(): void {
-    const fechaSeleccionada = this.rentForm.get('fechaHoraInicioAlquiler')?.value;
+    const fechaSeleccionada = this.rentForm.get(
+      'fechaHoraInicioAlquiler'
+    )?.value;
     this.fechaInvalida = this.isDateDisabled(fechaSeleccionada);
   }
-  
+
   rent(): void {
     if (this.authService.isAuthenticated()) {
       const rentData: Rent = {

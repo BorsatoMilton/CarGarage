@@ -1,0 +1,6 @@
+::ng-deep .mat-calendar-body-disabled {
+    background-color: rgba(255, 0, 0, 0.2) !important; /* Rojo claro */
+    color: red !important;
+    border-radius: 50%;
+  }
+  

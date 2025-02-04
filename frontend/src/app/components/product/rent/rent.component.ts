@@ -16,6 +16,10 @@ import { AuthService } from '../../../core/services/auth.service.js';
 import { FormGroup } from '@angular/forms';
 import { Rent } from '../../../core/models/rent.interface.js';
 import { CommonModule } from '@angular/common';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-rent',
@@ -24,9 +28,13 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
   ],
   templateUrl: './rent.component.html',
-  styleUrl: './rent.component.css',
+  styleUrls: ['./rent.component.css'],
 })
 export class RentComponent implements OnInit {
   rentForm: FormGroup;
@@ -34,7 +42,9 @@ export class RentComponent implements OnInit {
   fechasReservadas: { fechaInicio: string; fechaFin: string }[] = [];
   idVehiculo: string | null = null;
   usuario: User | null = null;
-  todayString: String = '';
+  todayDate: Date = new Date();
+  fechaInvalida: boolean = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -55,22 +65,25 @@ export class RentComponent implements OnInit {
 
   dateFilter = (d: Date | null): boolean => {
     if (!d) return false;
-    const date = new Date(d);
-    date.setHours(0, 0, 0, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    
+    const dayString = this.formatDate(d);
+    
     // Deshabilitamos días anteriores a hoy
-    if (date < today) return false;
-    // Deshabilitamos si la fecha cae en un rango reservado
-    return !this.fechasReservadas.some((reserva) => {
-      const start = new Date(reserva.fechaInicio);
-      const end = new Date(reserva.fechaFin);
-      return date >= start && date <= end;
-    });
+    const today = new Date();
+    const todayString = this.formatDate(today);
+    if (dayString < todayString) return false;
+    
+    // Deshabilitamos si la fecha cae en alguno de los rangos reservados
+    for (const reserva of this.fechasReservadas) {
+      if (dayString >= reserva.fechaInicio && dayString <= reserva.fechaFin) {
+        return false;
+      }
+    }
+    
+    return true;
   };
 
   ngOnInit(): void {
-    this.todayString = this.formatDate(new Date());
     this.idVehiculo = this.route.snapshot.paramMap.get('id');
     if (this.idVehiculo) {
       this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe(
@@ -81,7 +94,6 @@ export class RentComponent implements OnInit {
           console.error('Error para obtener el vehiculo:', error);
         }
       );
-
       this.rentService
         .getRentsByVehicle(this.idVehiculo)
         .subscribe((reservas) => {
@@ -89,13 +101,14 @@ export class RentComponent implements OnInit {
             return;
           } else {
             this.fechasReservadas = reservas.map((reserva: any) => ({
-              fechaInicio: reserva.fechaInicio,
-              fechaFin: reserva.fechaFin,
+              fechaInicio: reserva.fechaHoraInicioAlquiler,
+              fechaFin: reserva.fechaHoraDevolucion,
             }));
           }
         });
     }
     this.usuario = this.authService.getCurrentUser();
+    
   }
 
   dateRangeValidatorFactory() {
@@ -139,14 +152,36 @@ export class RentComponent implements OnInit {
   }
 
   isDateDisabled(date: string): boolean {
-    const checkDate = new Date(date);
     return this.fechasReservadas.some((reserva) => {
-      const inicio = new Date(reserva.fechaInicio);
-      const fin = new Date(reserva.fechaFin);
-      return checkDate >= inicio && checkDate <= fin;
+      const inicio = this.formatDate(new Date(reserva.fechaInicio));
+      const fin = this.formatDate(new Date(reserva.fechaFin));
+      return date >= inicio && date <= fin;
     });
   }
 
+  getDisabledDates(): { year: number; month: number; day: number }[] {
+    return this.fechasReservadas.map((reserva) => {
+      const inicio = new Date(reserva.fechaInicio);
+      const fin = new Date(reserva.fechaFin);
+      const fechasBloqueadas = [];
+  
+      for (let d = inicio; d <= fin; d.setDate(d.getDate() + 1)) {
+        fechasBloqueadas.push({
+          year: d.getFullYear(),
+          month: d.getMonth() + 1,
+          day: d.getDate(),
+        });
+      }
+  
+      return fechasBloqueadas;
+    }).flat();
+  }
+  
+  validarFecha(): void {
+    const fechaSeleccionada = this.rentForm.get('fechaHoraInicioAlquiler')?.value;
+    this.fechaInvalida = this.isDateDisabled(fechaSeleccionada);
+  }
+  
   rent(): void {
     if (this.authService.isAuthenticated()) {
       const rentData: Rent = {

@@ -1,1 +1,54 @@
-<p>rent-list works!</p>
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1><strong>LISTADO DE ALQUILERES</strong></h1>
+  </div>
+
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>AUTO</th>
+        <th>FECHA ALQUILER</th>
+        <th>PRECIO DIARIO</th>
+        <th>INICIO ALQUILER</th>
+        <th>FIN ALQUILER</th>
+        <th>PROPIETARIO</th>
+        <th>CONTACTO</th>
+        <th>ESTADO</th>
+        <th>ACCIONES</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="alquileres.length > 0">
+      <tr *ngFor="let alquiler of alquileres">
+        <td>{{ alquiler.vehiculo.nombre }}</td>
+        <td>{{ alquiler.fechaAlquiler | date:'yyyy-MM-dd' }}</td>
+        <td>${{ alquiler.vehiculo.precioAlquilerDiario}}</td>
+        <td>{{ alquiler.fechaHoraInicioAlquiler | date:'yyyy-MM-dd' }}</td>
+        <td>{{ alquiler.fechaHoraDevolucion | date:'yyyy-MM-dd' }}</td>
+        <td>
+          {{ alquiler.vehiculo.propietario.nombre}} {{ alquiler.vehiculo.propietario.apellido}}
+        </td>
+        <td><strong>Email:</strong> {{ alquiler.vehiculo.propietario.mail }} <br>
+          <strong>Tel:</strong> {{ alquiler.vehiculo.propietario.telefono  || 'Sin celular'}}
+        </td>
+        <td>{{ alquiler.estadoAlquiler }}</td>
+        <td>
+          <button (click)="openModal('cancelarAlquiler', alquiler)" class="btn btn-danger" 
+          [disabled]="alquiler.estadoAlquiler === 'CANCELADO'"
+            >Cancelar</button>
+        </td>
+      </tr>
+    </tbody>
+    <p *ngIf="alquileres.length === 0" class="text-center text-muted">No hay alquileres</p>
+  </table>
+
+
+  <div id="cancelarAlquiler" class="modalChanged">
+    <div class="modal-contentChanged">
+      <span class="close" (click)="closeModal('cancelarAlquiler')">&times;</span>
+      <h2><strong>Cancelar Alquiler</strong></h2>
+      <p>¿Estás seguro de que deseas cancelar el siguiente alquiler?</p>
+      <p><strong>Fecha Alquiler:</strong> {{ selectedRent?.fechaAlquiler | date:'yyyy-MM-dd'}}</p>
+      <button class="btn btn-secondary" (click)="closeModal('cancelarAlquiler')">Cancelar</button>
+      <button class="btn btn-danger" (click)="cancelRent(selectedRent, 'cancelarAlquiler')">Cancelar Alquiler</button>
+    </div>
+  </div>

@@ -50,10 +50,13 @@
       <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
         <li *ngIf="userRole === 'USUARIO'">
           <a routerLink="/product/vehicles" class="text-gray-900 dark:text-white hover:underline"
-            aria-current="page">Mis Vehiculos</a>
+            aria-current="page">Mis Publicaciones</a>
         </li>
         <li *ngIf="userRole === 'USUARIO'">
           <a routerLink="/product/purchases" class="text-gray-900 dark:text-white hover:underline">Mis Compras</a>
+        </li>
+        <li *ngIf="userRole === 'USUARIO'">
+          <a routerLink="/product/rent-list" class="text-gray-900 dark:text-white hover:underline">Mis Alquileres</a>
         </li>
         <li *ngIf="userRole === 'ADMIN'">
           <a routerLink="/product/brands" class="text-gray-900 dark:text-white hover:underline">Marcas</a>

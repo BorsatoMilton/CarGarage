@@ -99,10 +99,12 @@ export class RentComponent implements OnInit {
           if (!reservas) {
             return;
           } else {
-            this.fechasReservadas = reservas.map((reserva: any) => ({
-              fechaInicio: reserva.fechaHoraInicioAlquiler,
-              fechaFin: reserva.fechaHoraDevolucion,
-            }));
+            this.fechasReservadas = reservas
+              .filter((reserva: any) => reserva.estadoAlquiler !== 'CANCELADO')
+              .map((reserva: any) => ({
+                fechaInicio: reserva.fechaHoraInicioAlquiler,
+                fechaFin: reserva.fechaHoraDevolucion,
+              }));
           }
         });
     }

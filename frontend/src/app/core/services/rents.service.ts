@@ -18,6 +18,10 @@ export class RentsService {
     return this.http.get<Rent[]>(`${this.url}/vehiculo/${id}`);
   }
 
+  getRentsByUser(id: string): Observable<Rent[]> {
+    return this.http.get<Rent[]>(`${this.url}/usuario/${id}`);
+  }
+
   getOneRent(id: string): Observable<Rent> {
     return this.http.get<Rent>(`${this.url}/${id}`);
   }
@@ -31,6 +35,10 @@ export class RentsService {
 
   deleteRent(rent: Rent): Observable<Rent> {
     return this.http.delete<Rent>(`${this.url}/${rent.id}`);
+  }
+
+  cancelRent(rent: Rent): Observable<Rent> {
+    return this.http.put<Rent>(`${this.url}/cancelar/${rent.id}`, rent);
   }
 
   confirmRent(mail:String, idAlquiler: number): Observable<Rent> {

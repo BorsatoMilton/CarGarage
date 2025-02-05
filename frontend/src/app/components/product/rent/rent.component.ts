@@ -42,7 +42,7 @@ export class RentComponent implements OnInit {
   fechasReservadas: { fechaInicio: string; fechaFin: string }[] = [];
   idVehiculo: string | null = null;
   usuario: User | null = null;
-  todayDate: Date = new Date();
+  todayDate: Date = new Date(new Date().setDate(new Date().getDate() + 1));
   fechaInvalida: boolean = false;
 
   constructor(
@@ -100,7 +100,7 @@ export class RentComponent implements OnInit {
             return;
           } else {
             this.fechasReservadas = reservas
-              .filter((reserva: any) => reserva.estadoAlquiler !== 'CANCELADO')
+              .filter((reserva: any) => reserva.estadoAlquiler !== 'CANCELADO' && reserva.estadoAlquiler !== 'NO CONFIRMADO')
               .map((reserva: any) => ({
                 fechaInicio: reserva.fechaHoraInicioAlquiler,
                 fechaFin: reserva.fechaHoraDevolucion,
@@ -197,7 +197,6 @@ export class RentComponent implements OnInit {
       };
       this.rentService.addRent(rentData).subscribe({
         next: (response) => {
-          console.log('Respuesta del servidor:', response);
           if (this.usuario?.mail && this.idVehiculo) {
             const idAlquiler = response.id;
             this.rentService

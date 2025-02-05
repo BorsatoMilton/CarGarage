@@ -54,8 +54,12 @@ export class ConfirmRentComponent {
                     const diferenciaDias = Math.ceil(
                       diferenciaMilisegundos / (24 * 60 * 60 * 1000)
                     );
+                    if(diferenciaDias > 0){
                     this.totalAlquiler =
                       diferenciaDias * this.vehiculo.precioAlquilerDiario;
+                    }else {
+                      this.totalAlquiler = this.vehiculo.precioAlquilerDiario;
+                    }
                   }
                 });
             }
@@ -88,12 +92,13 @@ export class ConfirmRentComponent {
     if (this.rent !== null) {
       const updatedRent = {
         ...this.rent,
-        estadoAlquiler: 'CONFIRMADO',
+        estadoAlquiler: 'CONFIRMADO'
       };
       this.rentService.editRent(updatedRent).subscribe({
         next: () => {
           alert('Alquiler confirmado');
           this.closeModal('confirmarAlquiler');
+          this.router.navigate(['/']);
         },
         error: (error) => {
           console.error('Error al confirmar el alquiler:', error);

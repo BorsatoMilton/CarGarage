@@ -23,13 +23,20 @@ export class RentListComponent {
     ngOnInit(): void {
       const currentUser = this.authService.getCurrentUser();
       if (currentUser !== null) {
-        this.rentService.getRentsByUser(currentUser.id).subscribe((data) => {
-          this.alquileres = data;
-          console.log(this.alquileres)
-        })   
-      }  
+        this.loadRents(currentUser.id);
+    
+        setInterval(() => {
+          this.loadRents(currentUser.id);
+        }, 120000);
+      }
     }
-  
+    
+    loadRents(userId: string): void {
+      this.rentService.getRentsByUser(userId).subscribe((data) => {
+        this.alquileres = data;
+      });
+    }
+    
     openModal(modalId: string, rent: Rent): void{
       this.selectedRent = rent;
       const modalDiv = document.getElementById(modalId);

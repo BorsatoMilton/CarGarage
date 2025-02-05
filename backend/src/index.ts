@@ -14,6 +14,7 @@ import cors from 'cors';
 import { alquilerRouter } from './components/alquiler/alquiler.routes.js';
 import { rolRouter } from './components/usuario/rol.routes.js';
 import path from 'path';
+import './config/cron.timelapse.js';
 
 const app = express();
 

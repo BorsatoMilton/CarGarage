@@ -17,7 +17,7 @@
         <p><strong>Descripción:</strong> {{rent?.vehiculo?.descripcion}}</p>
         <p><strong>Transmisión:</strong> {{rent?.vehiculo?.transmision}}</p>
         <p><strong>Precio Alquiler Diario:</strong> {{ rent?.vehiculo?.precioAlquilerDiario| currency:'ARS' }}</p>
-        <p><strong>Dias:</strong> Desde: {{rent?.fechaHoraInicioAlquiler}} <br> Hasta: {{rent?.fechaHoraDevolucion}}</p>
+        <p> <strong>Desde: </strong>{{rent?.fechaHoraInicioAlquiler | date:'yyyy-MM-dd'}} <br> <strong>Hasta: </strong>{{rent?.fechaHoraDevolucion | date:'yyyy-MM-dd'}}</p>
         <p>
             <strong>Total: </strong>{{totalAlquiler | currency:'ARS'}}
         </p>
@@ -27,9 +27,9 @@
         <hr>
         <p><strong>Nombre:</strong>{{vehiculo?.propietario?.nombre}} </p>
         <p><strong>Apellido:</strong> {{vehiculo?.propietario?.apellido}} </p>
-        <p><strong>Mail:</strong> {{vehiculo?.propietario?.mail}} </p>
+        <p><strong>Email:</strong> {{vehiculo?.propietario?.mail}} </p>
         <p><strong>Direccion:</strong> {{vehiculo?.propietario?.direccion}} </p>
-        <p><strong>Telefono:</strong> {{vehiculo?.propietario?.telefono}} </p>
+        <p><strong>Telefono:</strong> {{vehiculo?.propietario?.telefono || 'Sin celular'}} </p>
   
         <button type="button" class="btn btn-primary" (click)="openModal('confirmarAlquiler')">Confirmar Alquiler</button>
       </div>

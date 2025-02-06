@@ -42,7 +42,7 @@
 
 #imagen-vehiculo {
     width: 400px;
-    height: 400px;
+    height: 200px;
     object-fit: cover;
     border-radius: 10px;
     align-items: center;

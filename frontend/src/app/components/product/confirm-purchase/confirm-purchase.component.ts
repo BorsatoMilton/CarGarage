@@ -86,8 +86,6 @@ export class ConfirmPurchaseComponent {
 
   confirmarCompra(): void {
     this.closeModal('confirmarCompra');
-    console.log(this.vehiculo);
-    console.log(this.usuario);
     if (this.vehiculo !== null && this.usuario !== null) {
       this.compraService
         .addCompra(this.usuario.id, this.vehiculo.id)

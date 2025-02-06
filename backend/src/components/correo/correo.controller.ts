@@ -6,6 +6,8 @@ import { generateToken } from '../../shared/db/tokenGenerator.js';
 import { PasswordResetToken } from '../usuario/passwordResetToken.entity.js';
 import { orm } from '../../shared/db/orm.js';
 import { findOneById } from '../vehiculo/vehiculo.controler.js';
+import { getOneById } from '../alquiler/alquiler.controler.js';
+
 
 
 dotenv.config();
@@ -148,5 +150,50 @@ async function confirmarCompra (req: Request, res: Response) {
     });
 }
 
-export { envioCorreo, confirmarCompra, avisoCompraExitosa  };
+async function confirmRent (req: Request, res: Response) {
+    const destinatario = req.body.destinatario;
+    const idAlquiler = String(req.body.id);
+    const confirmLinkRent = `http://localhost:4200/product/confirm-rent?id=${idAlquiler}`;
+    const alquiler = await getOneById(idAlquiler);
+    if(!alquiler) {
+        return res.status(404).json({ ok: false, message: 'Alquiler no encontrado' });
+    }
+
+    const config = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_USER, 
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
+    const opciones = {
+        from: process.env.EMAIL_USER,
+        subject: 'Confirmación de Alquiler',
+        to: destinatario,
+        text: `Para confirmar el alquiler, haz clic en el siguiente enlace: ${confirmLinkRent}`
+    };
+
+    config.sendMail(opciones, (error: Error | null, info: any) => {
+        if (error) {
+            return res.status(500).json({
+                ok: false,
+                message: 'Error al enviar el correo',
+                error: error.message
+            });
+        }
+
+        return res.status(200).json({
+            ok: true,
+            message: 'Correo enviado correctamente',
+            info: info.response
+        });
+    });
+}
+
+
+export { envioCorreo, confirmarCompra, avisoCompraExitosa , confirmRent
+};
 

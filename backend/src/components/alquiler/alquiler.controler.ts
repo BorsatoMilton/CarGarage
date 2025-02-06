@@ -10,14 +10,16 @@ function sanitizeAlquilerInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    fechaAlquiler: req.body.fechaAlquiler,
+    fechaAlquiler: new Date(),
     fechaHoraInicioAlquiler: req.body.fechaHoraInicioAlquiler,
     fechaHoraDevolucion: req.body.fechaHoraDevolucion,
     estadoAlquiler: req.body.estadoAlquiler,
-    precioTotal: req.body.precioTotal,
-    locador: req.body.locador,
     locatario: req.body.locatario,
     vehiculo: req.body.vehiculo,
+    tiempoConfirmacion: (() => {
+      const fecha = new Date()
+      fecha.setMinutes(fecha.getDate() + 1)
+      return fecha})(),
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -30,8 +32,8 @@ function sanitizeAlquilerInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const alquileres = await em.find(Alquiler,{})
-    res.status(200).json({ message: 'Alquilers', data: alquileres })
+    const alquileres = await em.find(Alquiler,{}, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })	
+    res.status(200).json(alquileres)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -40,8 +42,37 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const alquiler = await em.findOneOrFail(Alquiler, { id })
-    res.status(200).json({ message: 'Alquiler Encontrado', data: alquiler })
+    const alquiler = await em.findOneOrFail(Alquiler, { id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
+    res.status(200).json(alquiler)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+async function getOneById(idAlquiler: string) {
+  try {
+    const alquiler = await em.findOneOrFail(Alquiler, { id: idAlquiler }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
+    return alquiler
+  } catch (error: any) {
+    return null
+  }
+}
+
+async function findAllByVehicle(req: Request, res: Response) {
+  try {
+    const idVehiculo = req.params.id
+    const alquileres = await em.find(Alquiler, { vehiculo: idVehiculo }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
+    res.status(200).json(alquileres)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+async function findAllByUser(req: Request, res: Response) {
+  try {
+    const idUsuario = req.params.id
+    const alquileres = await em.find(Alquiler, { locatario: idUsuario }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
+    res.status(200).json(alquileres)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -51,7 +82,7 @@ async function add(req: Request, res: Response) {
   try {
     const alquiler = em.create(Alquiler, req.body.sanitizedInput)
     await em.flush()
-    res.status(201).json({ message: 'Alquiler creado', data: alquiler })
+    res.status(201).json(alquiler)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -60,12 +91,24 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const alquilerAactualizar = await em.findOneOrFail(Alquiler, { id })
+    const alquilerAactualizar = await em.findOneOrFail(Alquiler, { id: id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
     em.assign(alquilerAactualizar, req.body.sanitizedInput)
     await em.flush()
     res
       .status(200)
       .json({ message: 'Alquiler Actualizado', data: alquilerAactualizar })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+async function cancelRent(req: Request, res: Response) {
+  try {
+    const id = req.params.id
+    const alquiler = em.getReference(Alquiler, id)
+    alquiler.estadoAlquiler = 'CANCELADO'
+    await em.flush()
+    res.status(200).json({ message: 'Alquiler Cancelado' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -81,4 +124,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeAlquilerInput, findAll, findOne, add, update, remove }
+export { sanitizeAlquilerInput, findAll, findAllByVehicle, findAllByUser, findOne, getOneById, add, update, remove, cancelRent }

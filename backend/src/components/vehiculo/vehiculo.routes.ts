@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findNameCategory, findNameBrand} from './vehiculo.controler.js';
-import upload from './multer.upload.images.js';
+import upload from '../../config/multer.upload.images.js';
 
 
 export const vehiculoRouter = Router();

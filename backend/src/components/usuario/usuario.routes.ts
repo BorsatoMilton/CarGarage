@@ -1,6 +1,6 @@
 
 import {Router} from 'express';
-import {findAll, findOneById, findOneByEmailOrUsername, add, update, remove, sanitizeUsuarioInput, resetPassword, login, findOneByEmailDestinatario} from './usuario.controler.js';
+import {findAll, findOneById, findOneByEmailOrUsername, add, update, resetPasswordWithoutToken, remove, sanitizeUsuarioInput, resetPassword, login, findOneByEmailDestinatario} from './usuario.controler.js';
 
 export const usuarioRouter = Router();
 
@@ -12,7 +12,7 @@ usuarioRouter.post('/login', login);
 usuarioRouter.post('/', sanitizeUsuarioInput, add);
 usuarioRouter.post('/reset', resetPassword);
 usuarioRouter.put('/:id', sanitizeUsuarioInput, update);
-usuarioRouter.patch('/:id', sanitizeUsuarioInput, update);
+usuarioRouter.patch('/:id',sanitizeUsuarioInput, resetPasswordWithoutToken);
 usuarioRouter.delete('/:id', remove);
 
 

@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Vehicle } from '../models/vehicles.interface.js';
-import { Brand } from '../models/brands.interfaces.js';
-import { Category } from '../models/categories.interface.js';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +23,12 @@ export class VehiclesService {
     return this.http.get<Vehicle[]>(this.apiUrl);
   }
 
+  getAllVehicleByUser(id: string): Observable<Vehicle[]> {
+    return this.http.get<Vehicle[]>(`${this.apiUrl}/user/${id}`);
+  }
+
   getOneVehicle(id: string): Observable<Vehicle> {
     return this.http.get<Vehicle>(`${this.apiUrl}/${id}`);
   }
   
-  
-
 }

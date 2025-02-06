@@ -53,7 +53,7 @@ async function findOneByEmailOrUsername(req: Request, res: Response) {
       { mail: mail }]
       }, { populate: ['rol'] });
     if (!usuarioEncontrado) {
-      return res.status(404).json({ message: 'Usuario no encontrado' })
+      return res.status(200).json(null)
     }else{
       res.status(200).json(usuarioEncontrado)
     }
@@ -93,8 +93,6 @@ async function findOneByEmail(email:string){
   }
 }
 
-
-
 async function findOneByUser(req: Request, res: Response) {
   try {
     const user = req.params.user
@@ -108,7 +106,6 @@ async function findOneByUser(req: Request, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
 
 async function login(req: Request, res: Response) {
   try {
@@ -130,7 +127,6 @@ async function login(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-
 
 async function add(req: Request, res: Response) {
   
@@ -181,6 +177,25 @@ async function update(req: Request, res: Response) {
   }
 }
 
+async function resetPasswordWithoutToken(req: Request, res: Response) {
+  const id = req.params.id
+  const newPassword  = req.body.newPassword;
+
+  const usuario = await orm.em.findOne(Usuario, { id });
+  if (!usuario) {
+    return res
+      .status(404)
+      .json({ ok: false, message: "Usuario no encontrado" });
+  }
+  const vecesHash = 10;
+  const hashClave = await bcrypt.hash(newPassword, vecesHash);
+  usuario.clave = hashClave;
+  await orm.em.persistAndFlush(usuario);
+  return res
+    .status(200)
+    .json({ ok: true, message: "Contraseña actualizada exitosamente" });
+}
+
 
 async function resetPassword(req: Request, res: Response) {
   const { token, newPassword } = req.body;
@@ -224,4 +239,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove, login, findOneByEmailOrUsername, findOneByEmailDestinatario}
+export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, resetPasswordWithoutToken, add, update, remove, login, findOneByEmailOrUsername, findOneByEmailDestinatario}

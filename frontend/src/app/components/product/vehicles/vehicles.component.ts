@@ -66,9 +66,10 @@ export class VehicleComponent implements OnInit {
   
     if (this.usuario !== null) {
       this.vehicleForm.patchValue({ propietario: this.usuario.id });
+      this.loadVehicle();
     }
 
-    this.loadVehicle();
+
   }
 
   openModal(modalId: string, vehicle: Vehicle): void {
@@ -165,10 +166,11 @@ export class VehicleComponent implements OnInit {
   }
 
   loadVehicle(): void {
-    this.vehicleService.getAllVehicle().subscribe((vehicles: Vehicle[]) => {
-      this.vehicles = vehicles;
-      console.log('Los vehiculos: ', this.vehicles)
-    });
+    if (this.usuario !== null) {
+      this.vehicleService.getAllVehicleByUser(this.usuario.id).subscribe((vehicles: Vehicle[]) => {
+        this.vehicles = vehicles;
+      });
+    }
   }
 
   editVehicle(): void {

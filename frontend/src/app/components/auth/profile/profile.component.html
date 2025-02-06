@@ -1,0 +1,113 @@
+<div class="max-w-2xl mx-auto my-10 bg-white shadow-md rounded-lg p-6 dark:bg-gray-800">
+    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Editar Perfil</h2>
+  
+    <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Nombre -->
+        <div>
+          <label for="nombre" class="block text-blue-600 dark:text-blue-600 font-medium">Nombre</label>
+          <input type="text" id="nombre" formControlName="nombre" class="form-control" [value]="usuario?.nombre" >
+        </div>
+  
+        <!-- Apellido -->
+        <div>
+          <label for="apellido" class="block text-blue-600 dark:text-blue-600 font-medium">Apellido</label>
+          <input type="text" id="apellido" formControlName="apellido" class="form-control" [value]="usuario?.apellido" >
+        </div>
+  
+        <!-- Correo Electrónico -->
+        <div>
+          <label for="email" class="block text-blue-600 dark:text-blue-600 font-medium">Correo Electrónico</label>
+          <input type="email" id="email" formControlName="mail" class="form-control" [value]="usuario?.mail" >
+        </div>
+  
+        <!-- Teléfono -->
+        <div>
+          <label for="telefono" class="block text-blue-600 dark:text-blue-600 font-medium">Teléfono</label>
+          <input type="text" id="telefono" formControlName="telefono" class="form-control" [value]="usuario?.telefono" >
+        </div>
+  
+        <!-- Dirección -->
+        <div class="md:col-span-2">
+          <label for="direccion" class="block text-blue-600 dark:text-blue-600 font-medium">Dirección</label>
+          <input type="text" id="direccion" formControlName="direccion" class="form-control" [value]="usuario?.direccion" >
+        </div>
+
+      </div>
+  
+      <!-- Botón de Guardar -->
+      <div class="mt-6 flex justify-end">
+        <button (click)="openModal('updatePassword')" class="px-4 py-2 mx-3 bg-orange-400 text-white rounded-lg hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-blue-300">
+            Cambiar Contraseña
+        </button>
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+          Guardar Cambios
+        </button>
+      </div>
+    </form>
+</div>
+
+
+
+<div id="updatePassword" class="modalChanged">
+    <div class="modal-contentChanged">
+      <span class="close text-gray-500 hover:text-red-500 cursor-pointer" (click)="closeModal('updatePassword')">
+        &times;
+      </span>
+      <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Actualizar Contraseña</h2>
+  
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+        <!-- Contraseña Actual -->
+        <div class="mb-4">
+          <label for="currentPassword" class="block text-gray-700 dark:text-blue-600 font-medium">
+            Contraseña Actual
+          </label>
+          <input type="password" id="currentPassword" formControlName="currentPassword"
+            class="form-control border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500"
+            placeholder="Ingresa tu contraseña actual">
+          <small class="text-red-500" *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
+            La contraseña actual es obligatoria.
+          </small>
+        </div>
+  
+        <!-- Nueva Contraseña -->
+        <div class="mb-4">
+          <label for="newPassword" class="block text-gray-700 dark:text-blue-600 font-medium">
+            Nueva Contraseña
+          </label>
+          <input type="password" id="newPassword" formControlName="newPassword"
+            class="form-control border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500"
+            placeholder="Nueva contraseña">
+          <small class="text-red-500" *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+            La nueva contraseña debe tener al menos 6 caracteres.
+          </small>
+        </div>
+  
+        <!-- Confirmar Nueva Contraseña -->
+        <div class="mb-4">
+          <label for="confirmPassword" class="block text-gray-700 dark:text-blue-600 font-medium">
+            Confirmar Nueva Contraseña
+          </label>
+          <input type="password" id="confirmPassword" formControlName="confirmPassword"
+            class="form-control border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500"
+            placeholder="Repite la nueva contraseña">
+          <small class="text-red-500" *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched">
+            Las contraseñas deben coincidir.
+          </small>
+        </div>
+  
+        <!-- Botones -->
+        <div class="flex justify-end space-x-4 mt-4">
+          <button type="button" class="btn btn-secondary px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600"
+            (click)="closeModal('updatePassword')">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+            [disabled]="passwordForm.invalid">
+            Actualizar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

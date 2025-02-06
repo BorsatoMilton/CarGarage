@@ -36,5 +36,9 @@ export class UsuariosService {
       getOneUserById(id: number): Observable<User> {
         return this.http.get<User>(`${this.apiUrl}/${id}`);
       }
+
+      changePassword(id: string, data: any): Observable<User> {
+        return this.http.patch<User>(`${this.apiUrl}/${id}`, data);
+      }
   }
 

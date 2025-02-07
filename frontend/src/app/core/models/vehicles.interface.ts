@@ -17,4 +17,5 @@ export interface Vehicle {
     imagenes: string[];
     propietario: User;
     transmision: string;
+    available: boolean;
 }

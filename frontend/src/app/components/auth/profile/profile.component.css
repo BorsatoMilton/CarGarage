@@ -1,86 +1,27 @@
-.form-group {
-    display: flex; /* Usa flexbox para alinear los elementos */
-    align-items: center; /* Alinea verticalmente en el centro */
-    margin-bottom: 15px;
-  }
-    
-  input {
-    border: 1px solid #004080;
-    /* Azul oscuro */
-    border-radius: 4px;
-    padding: 8px;
-    width: 250px;
-    box-sizing: border-box;
-  }
+.modalChanged {
+  display: none; 
+  position: fixed;
+  z-index: 1050;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
 
-  input:focus {
-    border-color: #007bff;
-    /* Azul más brillante para el foco */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
-  }
-  
-  button.btn-primary {
-    background-color: #004080;
-    /* Azul oscuro */
-    border-color: #004080;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button.btn-primary:hover {
-    background-color: #007bff;
-    /* Azul más brillante al pasar el cursor */
-    border-color: #007bff;
-  }
-  
-  form {
-    margin-top: 20px;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-  }
-  
-  .modalChanged {
-    display: none; 
-    position: fixed; 
-    z-index: 1050; 
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh; 
-    background-color: rgba(0, 0, 0, 0.5); 
-  }
-  
-  .modal-contentChanged {
-    position: absolute;
-    z-index: 1050;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff; 
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-    max-width: 1000px; 
-    width: 90%; 
-  }
-  
-  .close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 25px;
-    cursor: pointer;
-  }
+.modal-contentChanged {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
-  .form-group {
-    display: flex;
-    justify-content: space-between;
-    
-  }
-  
+.close {
+  font-size: 1.5rem;
+}

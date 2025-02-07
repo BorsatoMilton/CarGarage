@@ -1,54 +1,68 @@
-<table class="table table-hover">
-  <thead class="table-dark">
-    <tr >
-      <th>VEHICULO</th>
-      <th>FECHA COMPRA</th>
-      <th>PRECIO</th>
-      <th>VENDEDOR</th>
-      <th>ACCIONES</th>
-    </tr>
-  </thead>
-  <tbody *ngIf="compras.length > 0">
-    <tr *ngFor="let compra of compras">
-      <td>{{ compra.vehiculo.nombre }}</td>
-      <td>{{ compra.fechaCompra }}</td>
-      <td>{{ compra.vehiculo.precioVenta }}</td>
-      <td>
-        {{ compra.vehiculo.propietario}}
-      </td>
-
-      <td>
-        <ng-container *ngIf="compra.fechaCancelacion !== null, else cancelButton;">
-          <span class="badge" id="span-cancelada">Cancelada</span>
-        </ng-container>
-        <ng-template #cancelButton>
-          <button (click)="openModal('cancelarCompra', compra)" class="btn btn-danger">
-            Cancelar
-          </button>
-        </ng-template>
-      </td>
-    </tr>
-  </tbody>
-  <p *ngIf="compras.length === 0">No hay compras</p>
-</table>
-
-<div id="cancelarCompra" class="modalChanged">
-  <div class="modal-contentChanged">
-    <span class="close" (click)="closeModal('cancelarCompra')">&times;</span>
-    <h2>Cancelar Compra</h2>
-    <p>¿Estás seguro de que deseas cancelar la compra?</p>
-    <p>
-      <strong>Nombre Vehiculo:</strong> {{ selectedPurchase?.vehiculo?.nombre }}
-    </p>
-    <p><strong>Fecha de Compra:</strong> {{ selectedPurchase?.fechaCompra }}</p>
-    <button class="btn btn-secondary" (click)="closeModal('cancelarCompra')">
-      Cancelar
-    </button>
-    <button
-      class="btn btn-danger"
-      (click)="cancelarCompra(selectedPurchase!, 'cancelarCompra')"
-    >
-      Cancelar Compra
-    </button>
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1><strong>LISTADO DE COMPRAS</strong></h1>
   </div>
+
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>VEHICULO</th>
+        <th>FECHA COMPRA</th>
+        <th>PRECIO</th>
+        <th>VENDEDOR</th>
+        <th>ACCIONES</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="compras.length > 0">
+      <tr *ngFor="let compra of compras">
+        <td>{{ compra.vehiculo.nombre }}</td>
+        <td>{{ compra.fechaCompra }}</td>
+        <td>{{ compra.vehiculo.precioVenta }}</td>
+        <td>
+          {{ compra.vehiculo.propietario }}
+        </td>
+
+        <td>
+          <ng-container
+            *ngIf="compra.fechaCancelacion !== null; else cancelButton"
+          >
+            <span class="badge" id="span-cancelada">Cancelada</span>
+          </ng-container>
+          <ng-template #cancelButton>
+            <button
+              (click)="openModal('cancelarCompra', compra)"
+              class="btn btn-danger"
+            >
+              Cancelar
+            </button>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+    <p *ngIf="compras.length === 0">No hay compras</p>
+  </table>
 </div>
+
+  <div id="cancelarCompra" class="modalChanged">
+    <div class="modal-contentChanged">
+      <span class="close" (click)="closeModal('cancelarCompra')">&times;</span>
+      <h2>Cancelar Compra</h2>
+      <p>¿Estás seguro de que deseas cancelar la compra?</p>
+      <p>
+        <strong>Nombre Vehiculo:</strong>
+        {{ selectedPurchase?.vehiculo?.nombre }}
+      </p>
+      <p>
+        <strong>Fecha de Compra:</strong> {{ selectedPurchase?.fechaCompra }}
+      </p>
+      <button class="btn btn-secondary" (click)="closeModal('cancelarCompra')">
+        Cancelar
+      </button>
+      <button
+        class="btn btn-danger"
+        (click)="cancelarCompra(selectedPurchase!, 'cancelarCompra')"
+      >
+        Cancelar Compra
+      </button>
+    </div>
+  </div>

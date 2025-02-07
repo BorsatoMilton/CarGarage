@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findNameCategory, findNameBrand} from './vehiculo.controler.js';
+import {sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findAllByUser} from './vehiculo.controler.js';
 import upload from '../../config/multer.upload.images.js';
 
 
@@ -7,6 +7,7 @@ export const vehiculoRouter = Router();
 
 vehiculoRouter.get('/', findAll);
 vehiculoRouter.get('/:id', findOne);
+vehiculoRouter.get('/user/:id', findAllByUser);
 vehiculoRouter.post('/',upload.array('imagenes',10), sanitizeVehiculoInput, add);
 vehiculoRouter.put('/:id', sanitizeVehiculoInput, update);
 vehiculoRouter.patch('/:id', sanitizeVehiculoInput, update);

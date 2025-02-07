@@ -6,6 +6,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { RolComponent } from './rol/rol.component';
 import { UserComponent } from './usuario/usuario.component';
 import { onlyAdmin } from '../../guards/onlyAdmin.guard';
+import { isLoggedInGuard } from '../../guards/is-logged-in.guard.js';
+import { ProfileComponent } from './profile/profile.component';
 
 export const authRoutes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -14,7 +16,6 @@ export const authRoutes: Routes = [
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'rol', component: RolComponent, canActivate: [onlyAdmin] },
     { path: 'users', component: UserComponent, canActivate: [onlyAdmin] },
+    { path: 'profile', component: ProfileComponent, canActivate: [isLoggedInGuard] },
 
-
-   
 ];

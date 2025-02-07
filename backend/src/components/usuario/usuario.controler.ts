@@ -1,17 +1,12 @@
-import { Request, Response, NextFunction } from 'express'
-import { Usuario } from './usuario.entity.js'
-import { orm } from '../../shared/db/orm.js'
-import { PasswordResetToken } from './passwordResetToken.entity.js'
-import bcrypt from 'bcrypt';
+import { Request, Response, NextFunction } from "express";
+import { Usuario } from "./usuario.entity.js";
+import { orm } from "../../shared/db/orm.js";
+import { PasswordResetToken } from "./passwordResetToken.entity.js";
+import bcrypt from "bcrypt";
 
+const em = orm.em;
 
-const em = orm.em
-
-function sanitizeUsuarioInput(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+function sanitizeUsuarioInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     usuario: req.body.usuario,
     clave: req.body.clave,
@@ -23,107 +18,40 @@ function sanitizeUsuarioInput(
     tarjeta: req.body.tarjeta,
     calificacion: req.body.calificacion,
     alquiler: req.body.alquiler,
-    rol: req.body.rol
-  }
+    rol: req.body.rol,
+  };
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key]
+      delete req.body.sanitizedInput[key];
     }
-  })
-  next()
+  });
+  next();
 }
 
 async function findAll(req: Request, res: Response) {
   try {
-    const usuarios = await em.find(Usuario, {}, { populate: ['rol'] })
-    res.status(200).json(usuarios)
+    const usuarios = await em.find(Usuario, {}, { populate: ["rol"] });
+    res.status(200).json(usuarios);
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
 
 async function findOneByEmailOrUsername(req: Request, res: Response) {
   try {
-    const usuario = req.params.user
-    const mail = req.params.mail
-    const usuarioEncontrado = await em.findOne(Usuario, {
-      $or: [
-      { usuario: usuario},
-      { mail: mail }]
-      }, { populate: ['rol'] });
+    const usuario = req.params.user;
+    const mail = req.params.mail;
+    const usuarioEncontrado = await em.findOne(
+      Usuario,
+      {
+        $or: [{ usuario: usuario }, { mail: mail }],
+      },
+      { populate: ["rol"] }
+    );
     if (!usuarioEncontrado) {
-      return res.status(404).json({ message: 'Usuario no encontrado' })
-    }else{
-      res.status(200).json(usuarioEncontrado)
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
-}
-
-async function findOneByEmailDestinatario(req: Request, res: Response) {
-  try {
-    const mail = req.params.mail
-    const usuarioEncontrado = await em.findOneOrFail(Usuario, { mail }, {populate: ['rol']});
-    res.status(200).json(usuarioEncontrado)
-  }
-  catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
-}
-
-async function findOneById(req: Request, res: Response) {
-  try {
-    const id = req.params.id
-    const usuario = await em.findOneOrFail(Usuario, { id }, { populate: ['rol'] })
-    res.status(200).json({ message: 'Usuario Encontrado', data: usuario })
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
-}
-
-async function findOneByEmail(email:string){
-  const usuario = await em.findOne(Usuario, { mail: email },  { populate: ['rol'] })
-  try {
-    return usuario
-  }
-  catch (error: any) {
-    return error.message
-  }
-}
-
-
-
-async function findOneByUser(req: Request, res: Response) {
-  try {
-    const user = req.params.user
-    const usuario = await em.findOne(Usuario, { usuario : user},  { populate: ['rol'] })
-    if(!usuario){
-      return res.status(404).json({ message: 'Usuario no encontrado' })
-    }else{
-      res.status(200).json(usuario)
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
-}
-
-
-async function login(req: Request, res: Response) {
-  try {
-    const usuario = req.body.user;
-    const clave = req.body.password;
-    const usuarioEncontrado = await em.findOne(Usuario, { usuario: usuario } , { populate: ['rol'] });
-
-    if (!usuarioEncontrado) {
-      return res.status(401).json({ message: 'Usuario no encontrado' });
-    }else{
-      const isMatch = await bcrypt.compare(clave, usuarioEncontrado.clave);
-      if (!isMatch) {
-        return res.status(401).json({ message: 'Contraseña incorrecta' });
-      }
-      
+      return res.status(200).json(null);
+    } else {
       res.status(200).json(usuarioEncontrado);
     }
   } catch (error: any) {
@@ -131,29 +59,161 @@ async function login(req: Request, res: Response) {
   }
 }
 
-
-async function add(req: Request, res: Response) {
-  
+async function findOneByEmailDestinatario(req: Request, res: Response) {
   try {
-    const usuarioExistente = await em.findOne(Usuario, {$or: [
-      { usuario: req.body.sanitizedInput.usuario },
-      { mail: req.body.sanitizedInput.mail },
-    ]});
-    if (usuarioExistente) {
-      return res.status(400).json({ message: 'Usuario ya existe' })
-    }else{
-      const vecesHash = 10;
-      const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
-      const usuario = em.create(Usuario, {
-        ...req.body.sanitizedInput,
-        clave: hashClave
-      })
-      await em.flush()
-      res.status(201).json({ message: 'Usuario creado', data: usuario })
+    const mail = req.params.mail;
+    const usuarioEncontrado = await em.findOneOrFail(
+      Usuario,
+      { mail },
+      { populate: ["rol"] }
+    );
+    res.status(200).json(usuarioEncontrado);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function findOneById(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const usuario = await em.findOneOrFail(
+      Usuario,
+      { id },
+      { populate: ["rol"] }
+    );
+    res.status(200).json({ message: "Usuario Encontrado", data: usuario });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function findOneByEmail(email: string) {
+  const usuario = await em.findOne(
+    Usuario,
+    { mail: email },
+    { populate: ["rol"] }
+  );
+  try {
+    return usuario;
+  } catch (error: any) {
+    return error.message;
+  }
+}
+
+async function findOneByUser(req: Request, res: Response) {
+  try {
+    const user = req.params.user;
+    const usuario = await em.findOne(
+      Usuario,
+      { usuario: user },
+      { populate: ["rol"] }
+    );
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    } else {
+      res.status(200).json(usuario);
     }
   } catch (error: any) {
-    console.error(error); 
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function login(req: Request, res: Response) {
+  try {
+    const usuario = req.body.user;
+    const clave = req.body.password;
+    const usuarioEncontrado = await em.findOne(
+      Usuario,
+      { usuario: usuario },
+      { populate: ["rol"] }
+    );
+
+    if (!usuarioEncontrado) {
+      return res.status(401).json({ message: "Usuario no encontrado" });
+    } else {
+      const isMatch = await bcrypt.compare(clave, usuarioEncontrado.clave);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Contraseña incorrecta" });
+      }
+
+      res.status(200).json(usuarioEncontrado);
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function validatePassword(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const password = req.body.password;
+    const usuario = await em.findOne(Usuario, { id });
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    } else {
+      const isMatch = await bcrypt.compare(password, usuario.clave);
+      res.status(200).json(isMatch);
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function checkUsername(req: Request, res: Response) {
+  try {
+    const usuario = req.params.username;
+    console.log("Parametros recibidos:", req.params);
+    const usuarioEncontrado = await em.findOne(Usuario, { usuario: usuario });
+    if (!usuarioEncontrado) {
+      return res.status(200).json(false);
+    } else {
+      return res.status(200).json(true);
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function checkEmail(req: Request, res: Response) {
+  try {
+    const mail = req.params.email;
+    const usuarioEncontrado = await em.findOne(Usuario, { mail });
+    if (!usuarioEncontrado) {
+      return res.status(200).json(false);
+    } else {
+      return res.status(200).json(true);
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function add(req: Request, res: Response) {
+  try {
+    const usuarioExistente = await em.findOne(Usuario, {
+      $or: [
+        { usuario: req.body.sanitizedInput.usuario },
+        { mail: req.body.sanitizedInput.mail },
+      ],
+    });
+    if (usuarioExistente) {
+      return res.status(400).json({ message: "Usuario ya existe" });
+    } else {
+      const vecesHash = 10;
+      const hashClave = await bcrypt.hash(
+        req.body.sanitizedInput.clave,
+        vecesHash
+      );
+      const usuario = em.create(Usuario, {
+        ...req.body.sanitizedInput,
+        clave: hashClave,
+      });
+      await em.flush();
+      res.status(201).json({ message: "Usuario creado", data: usuario });
+    }
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 }
 
@@ -162,25 +222,38 @@ async function update(req: Request, res: Response) {
     const id = req.params.id;
     const usuarioAactualizar = await em.findOneOrFail(Usuario, { id });
     if (!usuarioAactualizar) {
-      return res.status(400).json({ message: 'Usuario no encontrado' });
-    }else{
+      return res.status(400).json({ message: "Usuario no encontrado" });
+    } else {
       const usuario = { ...req.body.sanitizedInput };
-      if (req.body.sanitizedInput.clave) {
-        const vecesHash = 10;
-        const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
-        usuario.clave = hashClave;
-      } else {
-        delete usuario.clave;
-      }
       em.assign(usuarioAactualizar, usuario);
       await em.flush();
-      res.status(200).json({ message: 'Usuario Actualizado', data: usuarioAactualizar });
+      res
+        .status(200)
+        .json({ message: "Usuario Actualizado", data: usuarioAactualizar });
     }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 }
 
+async function resetPasswordWithoutToken(req: Request, res: Response) {
+  const id = req.params.id;
+  const newPassword = req.body.newPassword;
+
+  const usuario = await orm.em.findOne(Usuario, { id });
+  if (!usuario) {
+    return res
+      .status(404)
+      .json({ ok: false, message: "Usuario no encontrado" });
+  }
+  const vecesHash = 10;
+  const hashClave = await bcrypt.hash(newPassword, vecesHash);
+  usuario.clave = hashClave;
+  await orm.em.persistAndFlush(usuario);
+  return res
+    .status(200)
+    .json({ ok: true, message: "Contraseña actualizada exitosamente" });
+}
 
 async function resetPassword(req: Request, res: Response) {
   const { token, newPassword } = req.body;
@@ -208,20 +281,36 @@ async function resetPassword(req: Request, res: Response) {
     .json({ ok: true, message: "Contraseña actualizada exitosamente" });
 }
 
-
 async function remove(req: Request, res: Response) {
   try {
-    const id = req.params.id
-    const usuario = em.getReference(Usuario, id)
+    const id = req.params.id;
+    const usuario = em.getReference(Usuario, id);
     if (!usuario) {
-      return res.status(400).json({ message: 'Usuario no encontrado' })
-    }else{
-      await em.removeAndFlush(usuario)
-      res.status(200).json("Usuario eliminado con exito")
+      return res.status(400).json({ message: "Usuario no encontrado" });
+    } else {
+      await em.removeAndFlush(usuario);
+      res.status(200).json("Usuario eliminado con exito");
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
 
-export { sanitizeUsuarioInput, findAll, findOneById,findOneByEmail, findOneByUser, resetPassword, add, update, remove, login, findOneByEmailOrUsername, findOneByEmailDestinatario}
+export {
+  sanitizeUsuarioInput,
+  findAll,
+  findOneById,
+  findOneByEmail,
+  findOneByUser,
+  validatePassword,
+  checkUsername,
+  checkEmail,
+  resetPassword,
+  resetPasswordWithoutToken,
+  add,
+  update,
+  remove,
+  login,
+  findOneByEmailOrUsername,
+  findOneByEmailDestinatario,
+};

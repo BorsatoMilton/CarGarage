@@ -7,6 +7,7 @@ import { PasswordResetToken } from '../usuario/passwordResetToken.entity.js';
 import { orm } from '../../shared/db/orm.js';
 import { findOneById } from '../vehiculo/vehiculo.controler.js';
 import { getOneById } from '../alquiler/alquiler.controler.js';
+import { Alquiler } from '../alquiler/alquiler.entity.js';
 
 
 
@@ -194,6 +195,87 @@ async function confirmRent (req: Request, res: Response) {
 }
 
 
-export { envioCorreo, confirmarCompra, avisoCompraExitosa , confirmRent
+async function avisoPuntuarAlquiler(locador: string, locatario: string, alquiler: Alquiler) {
+    if (!locador || !locatario || !alquiler) {
+      console.log('Faltan datos para enviar el correo de calificación');
+      return;
+    }
+    console.log(alquiler.locatario.mail)
+    console.log(alquiler.vehiculo.propietario.mail)
+  
+    // Generamos el enlace de calificación (puedes personalizarlo según el rol, si lo necesitas)
+    const locatarioLink = `http://localhost:4200/alquiler/rate?locadorId=${locador}}`;
+    const locadorLink = `http://localhost:4200/alquiler/rate?locatarioId=${locatario}`;
+  
+    // Configuración del transporter de Nodemailer
+    const config = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    const htmlContentLocatario = `
+      <h2>Califica tu experiencia</h2>
+      <p>Hola,</p>
+      <p>Tu alquiler ha finalizado. A continuación, te mostramos algunos detalles:</p>
+      <ul>
+        <li><strong>Locador:</strong> ${alquiler.vehiculo.propietario.nombre} ${alquiler.vehiculo.propietario.apellido}</li>
+        <li><strong>Fecha que se realizo la Reserva:</strong> ${alquiler.fechaAlquiler}</li>
+        <li><strong>Fecha de inicio:</strong> ${alquiler.fechaHoraInicioAlquiler}</li>
+        <li><strong>Fecha de devolución:</strong> ${alquiler.fechaHoraDevolucion}</li>
+        <li><strong>Vehículo:</strong> ${alquiler.vehiculo?.marca.nombreMarca || 'N/A'} ${alquiler.vehiculo?.modelo || ''}</li>
+      </ul>
+      <p>Por favor, <a href="${locatarioLink}">califica tu experiencia</a>.</p>
+      <p>¡Gracias!</p>
+    `;
+  
+    // Contenido HTML para el locador
+    const htmlContentLocador = `
+      <h2>Califica tu experiencia</h2>
+      <p>Hola,</p>
+      <p>El alquiler ha finalizado. A continuación, te mostramos algunos detalles:</p>
+      <ul>
+        <li><strong>Locatario:</strong> ${alquiler.locatario.nombre} ${alquiler.locatario.apellido}</li>
+        <li><strong>Fecha que se realizo la Reserva:</strong> ${alquiler.fechaAlquiler}</li>
+        <li><strong>Fecha de inicio:</strong> ${alquiler.fechaHoraInicioAlquiler}</li>
+        <li><strong>Fecha de devolución:</strong> ${alquiler.fechaHoraDevolucion}</li>
+        <li><strong>Vehículo:</strong> ${alquiler.vehiculo?.marca.nombreMarca || 'N/A'} ${alquiler.vehiculo?.modelo || ''}</li>
+      </ul>
+      <p>Por favor, <a href="${locadorLink}">califica tu experiencia</a>.</p>
+      <p>¡Gracias!</p>
+    `;
+  
+    const opcionesLocatario = {
+      from: process.env.EMAIL_USER,
+      subject: 'Califica tu experiencia de alquiler',
+      to: alquiler.locatario.mail,
+      html: htmlContentLocatario
+    };
+  
+    // Opciones para el correo del locador
+    const opcionesLocador = {
+      from: process.env.EMAIL_USER,
+      subject: 'Califica tu experiencia de alquiler',
+      to: alquiler.vehiculo.propietario.mail,
+      html: htmlContentLocador
+    };
+  
+    try {
+      const infoLocatario = await config.sendMail(opcionesLocatario);
+      const infoLocador = await config.sendMail(opcionesLocador);
+      console.log('Correos de calificación enviados correctamente', {
+        locatario: infoLocatario.response,
+        locador: infoLocador.response
+      });
+    } catch (error: any) {
+      console.error('Error al enviar el correo de calificación', error.message);
+    }
+  }
+
+export { envioCorreo, confirmarCompra, avisoCompraExitosa , confirmRent, avisoPuntuarAlquiler
 };
 

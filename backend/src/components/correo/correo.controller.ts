@@ -195,19 +195,15 @@ async function confirmRent (req: Request, res: Response) {
 }
 
 
-async function avisoPuntuarAlquiler(locador: string, locatario: string, alquiler: Alquiler) {
+async function avisoPuntuarAlquiler(locatario: string, locador: string,alquiler: Alquiler) {
     if (!locador || !locatario || !alquiler) {
       console.log('Faltan datos para enviar el correo de calificación');
       return;
     }
-    console.log(alquiler.locatario.mail)
-    console.log(alquiler.vehiculo.propietario.mail)
   
-    // Generamos el enlace de calificación (puedes personalizarlo según el rol, si lo necesitas)
-    const locatarioLink = `http://localhost:4200/alquiler/rate?locadorId=${locador}}`;
-    const locadorLink = `http://localhost:4200/alquiler/rate?locatarioId=${locatario}`;
+    const locatarioLink = `http://localhost:4200/auth/rate/${locador}/${alquiler.id}`;
+    const locadorLink = `http://localhost:4200/auth/rate/${locatario}/${alquiler.id}`;
   
-    // Configuración del transporter de Nodemailer
     const config = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
@@ -233,7 +229,6 @@ async function avisoPuntuarAlquiler(locador: string, locatario: string, alquiler
       <p>¡Gracias!</p>
     `;
   
-    // Contenido HTML para el locador
     const htmlContentLocador = `
       <h2>Califica tu experiencia</h2>
       <p>Hola,</p>
@@ -256,7 +251,6 @@ async function avisoPuntuarAlquiler(locador: string, locatario: string, alquiler
       html: htmlContentLocatario
     };
   
-    // Opciones para el correo del locador
     const opcionesLocador = {
       from: process.env.EMAIL_USER,
       subject: 'Califica tu experiencia de alquiler',

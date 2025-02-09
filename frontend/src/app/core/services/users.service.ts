@@ -34,7 +34,7 @@ export class UsuariosService {
     return this.http.get<User>(`${this.apiUrl}/bymail/${mail}`);
   }
 
-  getOneUserById(id: number): Observable<User> {
+  getOneUserById(id: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 

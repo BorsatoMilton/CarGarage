@@ -60,9 +60,6 @@ export class Vehiculo extends BaseEntity {
     @OneToMany(()=> Alquiler , alquiler => alquiler.vehiculo, { nullable: true })
     alquileres = new Collection<Alquiler>(this)
 
-    @OneToMany(() => Calificacion, calificacion => calificacion.vehiculo, { nullable: true })
-    calificaciones = new Collection<Calificacion>(this)
-
     @OneToMany(() => Compra, compra => compra.vehiculo, { nullable: true })
     compras = new Collection<Compra>(this)
 

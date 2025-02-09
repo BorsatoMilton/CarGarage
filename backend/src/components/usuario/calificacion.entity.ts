@@ -17,13 +17,10 @@ export class Calificacion extends BaseEntity {
     @Property({ nullable: false })
     valoracion!: number
 
-    @Property({ nullable: false })
-    observacion?: string
+    @Property({ nullable: true })
+    comentario?: string
 
-    @ManyToOne(() => Usuario, { nullable: true })
+    @ManyToOne(() => Usuario, { nullable: false })
     usuario!: Rel<Usuario>
-
-    @ManyToOne(() => Vehiculo, { nullable: true })
-    vehiculo!: Rel<Vehiculo>
 
 }

@@ -81,7 +81,7 @@ async function findOneById(req: Request, res: Response) {
       { id },
       { populate: ["rol"] }
     );
-    res.status(200).json({ message: "Usuario Encontrado", data: usuario });
+    res.status(200).json(usuario);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

@@ -8,8 +8,8 @@ compraRouter.get('/', findAll);
 compraRouter.get('/byuser/:id', findAllByUser);
 compraRouter.get('/:id', findOne);
 compraRouter.post('/', sanitizeCompraInput, add);
-compraRouter.post('/confirmarCompra',confirmarCompra);
 compraRouter.post('/avisoCompraExitosa',avisoCompraExitosa);
+compraRouter.post('/confirmarCompra',confirmarCompra);
 compraRouter.delete('/cancelarCompra', cancelarCompra)
 compraRouter.delete('/:id', remove);
 

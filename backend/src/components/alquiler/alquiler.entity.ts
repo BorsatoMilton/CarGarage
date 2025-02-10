@@ -3,7 +3,8 @@ import {
     Property,
     ManyToOne,
     Rel,
-    DateTimeType
+    DateTimeType,
+    OneToOne
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Vehiculo } from '../vehiculo/vehiculo.entity.js'

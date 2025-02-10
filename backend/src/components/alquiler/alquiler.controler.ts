@@ -51,7 +51,7 @@ async function findOne(req: Request, res: Response) {
 
 async function getOneById(idAlquiler: string) {
   try {
-    const alquiler = await em.findOneOrFail(Alquiler, { id: idAlquiler }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
+    const alquiler = await em.findOneOrFail(Alquiler, { id: idAlquiler }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario', 'vehiculo.marca'] })
     return alquiler
   } catch (error: any) {
     return null

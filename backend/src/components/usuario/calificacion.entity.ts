@@ -7,7 +7,7 @@ import {
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Usuario } from './usuario.entity.js'
 import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
-
+import { Alquiler } from '../alquiler/alquiler.entity.js'
 
 @Entity()
 export class Calificacion extends BaseEntity {
@@ -19,6 +19,9 @@ export class Calificacion extends BaseEntity {
 
     @Property({ nullable: true })
     comentario?: string
+
+    @Property({ nullable: false })
+    alquiler!: Rel<Alquiler>
 
     @ManyToOne(() => Usuario, { nullable: false })
     usuario!: Rel<Usuario>

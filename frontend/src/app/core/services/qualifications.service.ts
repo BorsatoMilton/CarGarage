@@ -18,4 +18,7 @@ export class QualificationsService {
     return this.http.post<any>('http://localhost:3000/api/calificaciones', qualification);
   }
 
+  checkQualificationExists(userId: string, rentId: string) {
+    return this.http.get<any>(`http://localhost:3000/api/calificaciones/${userId}/${rentId}`);
+  }
 }

@@ -40,7 +40,7 @@
     </table>
 </div>
     <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Nuevo Usuario</h5>
@@ -91,21 +91,31 @@
     </div>
   
   
-    <div id="removeUser" class="modalChanged">
-      <div class="modal-contentChanged">
-        <span class="close" (click)="closeModal('removeUser')">&times;</span>
-        <h2>Eliminar Usuario</h2>
-        <p>¿Estás seguro de que deseas eliminar el siguiente usuario?</p>
+    <div class="modal fade" id="removeUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar Usuario</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+        <p><strong>¿Estás seguro de que deseas eliminar el siguiente usuario?</strong></p>
         <p><strong>Usuario:</strong> {{ selectedUser?.usuario }}</p>
-        <button class="btn btn-secondary" (click)="closeModal('removeUser')">Cancelar</button>
-        <button class="btn btn-danger" (click)="removeUser(selectedUser, 'removeUser')">Eliminar</button>
+        <button class="btn btn-secondary" (click)="closeModal('removeUser')" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-danger" (click)="removeUser(selectedUser, 'removeUser')" data-bs-dismiss="modal">Eliminar</button>
       </div>
     </div>
+  </div>
+</div>
   
-    <div id="editUser" class="modalChanged">
-      <div class="modal-contentChanged">
-        <span class="close" (click)="closeModal('editUser')">&times;</span>
-        <h2>Editar Usuario</h2>
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Usuario</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
         <form [formGroup]="userForm" (ngSubmit)="editUser()">
           <div class="row">
           <div class="col-md-6">
@@ -140,13 +150,16 @@
             </select>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="closeModal('editUser')">Cancelar</button>
-            <button type="submit" class="btn btn-primary" (click)="editUser()">Guardar cambios</button>
+            <button type="button" class="btn btn-secondary" (click)="closeModal('editUser')" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" (click)="editUser()" data-bs-dismiss="modal">Guardar cambios</button>
           </div>
   
         </form>
       </div>
     </div>
+  </div>
+</div>
+
 
     <div id="updatePassword" class="modalChanged">
       <div class="modal-contentChanged">

@@ -5,7 +5,7 @@
   }
   
   label {
-    color: #f81206;
+    color: #090909;
     /* Azul oscuro */
     font-weight: bold;
     margin-right: 10px;
@@ -37,6 +37,7 @@
     color: white;
     padding: 10px 20px;
     border-radius: 4px;
+    margin-right: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
@@ -47,6 +48,40 @@
     border-color: #007bff;
   }
   
+  button.btn-secondary {
+    background-color: #6c757d;
+    /* Gris */
+    border-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.btn-secondary:hover {
+    background-color: #5a6268;
+    /* Gris más oscuro al pasar el cursor */
+  }
+
+  button.btn-danger {
+    background-color: #d9534f;
+    /* Rojo */
+    border-color: #d43f3a;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.btn-danger:hover {
+    background-color: #c9302c;
+    /* Rojo más oscuro al pasar el cursor */
+  }
+
   form {
     margin-top: 20px;
     width: auto;

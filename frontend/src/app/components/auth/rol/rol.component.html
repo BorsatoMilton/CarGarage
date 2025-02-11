@@ -28,7 +28,7 @@
     </table>
   
     <div class="modal fade" id="addRol" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Nuevo Rol</h5>
@@ -52,32 +52,43 @@
       </div>
     </div>
 
-    <div id="removeRol" class="modalChanged">
-        <div class="modal-contentChanged">
-          <span class="close" (click)="closeModal('removeRol')">&times;</span>
-          <h2>Eliminar Rol</h2>
-          <p>¿Estás seguro de que deseas eliminar el siguiente rol?</p>
+    <div class="modal fade" id="removeRolModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar Rol</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          <p><strong>¿Estás seguro de que deseas eliminar el siguiente rol?</strong></p>
           <p><strong>Nombre:</strong> {{ selectedRol?.nombreRol }}</p>
-          <button class="btn btn-secondary" (click)="closeModal('removeRol')">Cancelar</button>
-          <button class="btn btn-danger" (click)="removeRol(selectedRol, 'removeRol')">Eliminar</button>
+          <button class="btn btn-secondary" (click)="closeModal('removeRol')" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" (click)="removeRol(selectedRol, 'removeRol')" data-bs-dismiss="modal">Eliminar</button>
         </div>
       </div>
-    
-      <div id="editRol" class="modalChanged">
-        <div class="modal-contentChanged">
-          <span class="close" (click)="closeModal('editRol')">&times;</span>
-          <h2>Editar Rol</h2>
+    </div>
+  </div>
+
+      <div class="modal fade" id="editRolModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Rol</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
           <form [formGroup]="rolForm" (ngSubmit)="editRol()">
             <div class="form-group">
               <label for="name">Nombre Rol</label>
               <input type="text" formControlName="nombreRol" id="nombreRol" name="nombreRol" class="form-control" required>
             </div>
-            
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" (click)="closeModal('editRol')">Cancelar</button>
-              <button type="submit" class="btn btn-primary" [disabled]="rolForm.invalid">Guardar cambios</button>
+              <button type="button" class="btn btn-secondary" (click)="closeModal('editRol')" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary" [disabled]="rolForm.invalid" data-bs-dismiss="modal">Guardar cambios</button>
             </div>
-    
           </form>
         </div>
       </div>
+    </div>
+  </div>
+</div>

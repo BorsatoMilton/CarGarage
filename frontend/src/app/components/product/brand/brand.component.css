@@ -5,12 +5,13 @@
 }
 
 label {
-  color: #f81206;
+  color: #060606;
   /* Azul oscuro */
   font-weight: bold;
   margin-right: 10px;
   margin-bottom: 5px;
-  display: block
+  display: block;
+  white-space: nowrap;
 }
 
 input {
@@ -53,6 +54,7 @@ button.btn-secondary {
   border-color: #6c757d;
   color: white;
   padding: 10px 20px;
+  margin-right: 5px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;

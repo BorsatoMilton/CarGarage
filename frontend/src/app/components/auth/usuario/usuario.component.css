@@ -36,6 +36,7 @@
     border-color: #004080;
     color: white;
     padding: 10px 20px;
+    margin-right: 5px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -44,6 +45,57 @@
   button.btn-primary:hover {
     background-color: #007bff;
     border-color: #007bff;
+  }
+
+  button.btn-secondary {
+    background-color: #6c757d;
+    /* Gris */
+    border-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.btn-secondary:hover {
+    background-color: #5a6268;
+    /* Gris más oscuro al pasar el cursor */
+  }
+
+  button.btn-danger {
+    background-color: #d9534f;
+    /* Rojo */
+    border-color: #d43f3a;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.btn-danger:hover {
+    background-color: #c9302c;
+    /* Rojo más oscuro al pasar el cursor */
+  }
+
+  button.btn-warning {
+    background-color: #f0ad4e;
+    /* Naranja */
+    border-color: #eea236;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button.btn-warning:hover {
+    background-color: #ec971f;
+    /* Naranja más oscuro al pasar el cursor */
   }
   
   form {

@@ -22,7 +22,7 @@ function sanitizeUsuarioInput(req: Request, res: Response, next: NextFunction) {
   };
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
-    if (req.body.sanitizedInput[key] === undefined) {
+    if (req.body.sanitizedInput[key] === undefined || req.body.sanitizedInput[key] === null) {
       delete req.body.sanitizedInput[key];
     }
   });
@@ -224,7 +224,9 @@ async function update(req: Request, res: Response) {
     if (!usuarioAactualizar) {
       return res.status(400).json({ message: "Usuario no encontrado" });
     } else {
-      const usuario = { ...req.body.sanitizedInput };
+      const usuario = { ...req.body.sanitizedInput, 
+        telefono: req.body.sanitizedInput.telefono.toString(),
+      };
       em.assign(usuarioAactualizar, usuario);
       await em.flush();
       res

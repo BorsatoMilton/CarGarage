@@ -32,95 +32,103 @@ function sanitizeAlquilerInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const alquileres = await em.find(Alquiler,{}, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })	
-    res.status(200).json(alquileres)
+    const alquileres = await em.find(Alquiler, {}, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] });
+    res.status(200).json(alquileres);
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: 'Error al obtener los alquileres', error: error.message });
   }
 }
 
 async function findOne(req: Request, res: Response) {
   try {
-    const id = req.params.id
-    const alquiler = await em.findOneOrFail(Alquiler, { id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
-    res.status(200).json(alquiler)
+    const id = req.params.id;
+    const alquiler = await em.findOne(Alquiler, { id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] });
+    if(!alquiler){
+      return res.status(404).json({ message: 'Alquiler no encontrado' });
+    }
+    res.status(200).json(alquiler);
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: 'Error al obtener el Alquiler', error: error.message });
   }
 }
 
 async function getOneById(idAlquiler: string) {
   try {
-    const alquiler = await em.findOneOrFail(Alquiler, { id: idAlquiler }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
-    return alquiler
+    const alquiler = await em.findOneOrFail(Alquiler, { id: idAlquiler }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario', 'vehiculo.marca'] });
+    return alquiler;
   } catch (error: any) {
-    return null
+    return null;
   }
 }
 
 async function findAllByVehicle(req: Request, res: Response) {
   try {
-    const idVehiculo = req.params.id
-    const alquileres = await em.find(Alquiler, { vehiculo: idVehiculo }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
-    res.status(200).json(alquileres)
+    const idVehiculo = req.params.id;
+    const alquileres = await em.find(Alquiler, { vehiculo: idVehiculo }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] });
+    res.status(200).json(alquileres);
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: 'Error al obtener los alquileres por vehículo', error: error.message });
   }
 }
 
 async function findAllByUser(req: Request, res: Response) {
   try {
-    const idUsuario = req.params.id
-    const alquileres = await em.find(Alquiler, { locatario: idUsuario }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
-    res.status(200).json(alquileres)
+    const idUsuario = req.params.id;
+    const alquileres = await em.find(Alquiler, { locatario: idUsuario }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] });
+    res.status(200).json(alquileres);
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: 'Error al obtener los alquileres por usuario', error: error.message });
   }
 }
 
 async function add(req: Request, res: Response) {
   try {
-    const alquiler = em.create(Alquiler, req.body.sanitizedInput)
-    await em.flush()
-    res.status(201).json(alquiler)
+    const alquiler = em.create(Alquiler, req.body.sanitizedInput);
+    await em.flush();
+    res.status(201).json(alquiler);
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: 'Error al crear el alquiler', error: error.message });
   }
 }
 
 async function update(req: Request, res: Response) {
   try {
-    const id = req.params.id
-    const alquilerAactualizar = await em.findOneOrFail(Alquiler, { id: id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] })
-    em.assign(alquilerAactualizar, req.body.sanitizedInput)
-    await em.flush()
-    res
-      .status(200)
-      .json({ message: 'Alquiler Actualizado', data: alquilerAactualizar })
+    const id = req.params.id;
+    const alquilerAactualizar = await em.findOne(Alquiler, { id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] });
+    if (!alquilerAactualizar) {
+      return res.status(404).json({ message: 'Alquiler no encontrado' });
+    }
+    em.assign(alquilerAactualizar, req.body.sanitizedInput);
+    await em.flush();
+    return res.status(200).json({ message: 'Alquiler Actualizado', data: alquilerAactualizar });
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
+    return res.status(500).json({ message: 'Error al actualizar el alquiler', error: error.message });
+  }  
 }
 
 async function cancelRent(req: Request, res: Response) {
   try {
-    const id = req.params.id
-    const alquiler = em.getReference(Alquiler, id)
-    alquiler.estadoAlquiler = 'CANCELADO'
-    await em.flush()
-    res.status(200).json({ message: 'Alquiler Cancelado' })
+    const id = req.params.id;
+    const alquiler = em.getReference(Alquiler, id);
+    alquiler.estadoAlquiler = 'CANCELADO';
+    await em.flush();
+    res.status(200).json({ message: 'Alquiler Cancelado', data: alquiler });
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: 'Error al cancelar el alquiler', error: error.message });
   }
 }
 
 async function remove(req: Request, res: Response) {
   try {
-    const id = req.params.id
-    const alquiler = em.getReference(Alquiler, id)
-    await em.removeAndFlush(alquiler)
+    const id = req.params.id;
+    const alquiler = em.getReference(Alquiler, id);
+    if (!alquiler) {
+      return res.status(404).json({ message: 'Alquiler no encontrado' });
+    }
+    await em.removeAndFlush(alquiler);
+    res.status(200).json({ message: 'Alquiler eliminado', data: alquiler });
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: 'Error al eliminar el alquiler', error: error.message });
   }
 }
 

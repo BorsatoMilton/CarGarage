@@ -156,6 +156,7 @@ export class ProfileComponent implements OnInit {
       this.userService.editUser(updatedUser).subscribe({
         next: () => {
           this.authService.setUserSession(updatedUser);
+          this.profileForm.reset();
           this.ngOnInit();
           alert('Perfil actualizado correctamente');
         },
@@ -173,6 +174,7 @@ export class ProfileComponent implements OnInit {
         .subscribe({
           next: () => {
             this.closeModal('updatePassword');
+            this.passwordForm.reset();
             this.ngOnInit();
             alert('Contraseña actualizada correctamente');
           },

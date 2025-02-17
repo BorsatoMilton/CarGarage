@@ -1,8 +1,9 @@
 import cron from "node-cron";
 import { Alquiler } from "../components/alquiler/alquiler.entity.js";
 import { orm } from "../shared/db/orm.js";
+import { avisoPuntuarAlquiler } from "../components/correo/correo.controller.js";
 
-cron.schedule("*/10 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
   console.log("Revisando estados de alquiler...");
 
   const ahora = new Date();
@@ -22,7 +23,7 @@ cron.schedule("*/10 * * * *", async () => {
     const alquileresFinalizados = await em.find(Alquiler, {
       estadoAlquiler: "EN CURSO",
       fechaHoraDevolucion: { $lt: ahora },
-    });
+    }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario', 'vehiculo.marca'] });
 
     if (alquileresNoConfirmados.length > 0) {
       console.log(
@@ -48,6 +49,7 @@ cron.schedule("*/10 * * * *", async () => {
       );
       for (const alquiler of alquileresFinalizados) {
         alquiler.estadoAlquiler = "FINALIZADO";
+        await avisoPuntuarAlquiler(alquiler.locatario.id, alquiler.vehiculo.propietario.id ,alquiler);
       }
     }
 

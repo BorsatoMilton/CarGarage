@@ -29,41 +29,55 @@ export class ConfirmRentComponent {
     this.route.queryParams.subscribe((params) => {
       const idAlquiler = params['id'];
       if (idAlquiler !== null) {
-        this.rentService.getOneRent(idAlquiler).subscribe((data) => {
-          if (data === null) {
-            alert('Alquiler no encontrado');
-            this.router.navigate(['/']);
-          } else {
-            this.rent = data;
-            if (this.rent) {
-              this.vehicleService
-                .getOneVehicle(this.rent.vehiculo.id)
-                .subscribe((data) => {
-                  this.vehiculo = data;
-                  if (this.vehiculo?.precioAlquilerDiario) {
-                    const fechaInicio = this.rent
-                      ? new Date(this.rent.fechaHoraInicioAlquiler)
-                      : null;
-                    const fechaDevolucion = this.rent
-                      ? new Date(this.rent.fechaHoraDevolucion)
-                      : null;
-                    const diferenciaMilisegundos =
-                      fechaDevolucion && fechaInicio
-                        ? fechaDevolucion.getTime() - fechaInicio.getTime()
-                        : 0;
-                    const diferenciaDias = Math.ceil(
-                      diferenciaMilisegundos / (24 * 60 * 60 * 1000)
-                    );
-                    if(diferenciaDias > 0){
-                    this.totalAlquiler =
-                      diferenciaDias * this.vehiculo.precioAlquilerDiario;
-                    }else {
-                      this.totalAlquiler = this.vehiculo.precioAlquilerDiario;
+        this.rentService.getOneRent(idAlquiler).subscribe({
+          next: (data) => {
+            if (!data) {
+              alert('Alquiler no encontrado');
+              this.router.navigate(['/']);
+            } else {
+              this.rent = data;
+              if (this.rent) {
+                this.vehicleService.getOneVehicle(this.rent.vehiculo.id).subscribe({
+                  next: (data) => {
+                    this.vehiculo = data;
+                    if (this.vehiculo?.precioAlquilerDiario) {
+                      const fechaInicio = this.rent
+                        ? new Date(this.rent.fechaHoraInicioAlquiler)
+                        : null;
+                      const fechaDevolucion = this.rent
+                        ? new Date(this.rent.fechaHoraDevolucion)
+                        : null;
+                      const diferenciaMilisegundos =
+                        fechaDevolucion && fechaInicio
+                          ? fechaDevolucion.getTime() - fechaInicio.getTime()
+                          : 0;
+                      const diferenciaDias = Math.ceil(
+                        diferenciaMilisegundos / (24 * 60 * 60 * 1000)
+                      );
+                      if (diferenciaDias > 0) {
+                        this.totalAlquiler =
+                          diferenciaDias * this.vehiculo.precioAlquilerDiario;
+                      } else {
+                        this.totalAlquiler = this.vehiculo.precioAlquilerDiario;
+                      }
                     }
-                  }
+                  },
+                  error: (err) => {
+                    if (err.status === 404) {
+                      alert('Algo salio mal!');
+                      this.router.navigate(['/']);
+                    }
+                  },
                 });
+              }
             }
-          }
+          },
+          error: (err) => {
+            if (err.status === 404) {
+              alert('Algo salio mal!');
+              this.router.navigate(['/']);
+            }
+          },
         });
       }
     });

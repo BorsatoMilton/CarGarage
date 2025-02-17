@@ -94,8 +94,14 @@ export class ConfirmPurchaseComponent {
             alert('Error al comprar el vehiculo');
           } else {
             alert('Vehiculo comprado correctamente');
-            this.compraService.avisoCompraExitosa(this.usuario!.mail);
-            this.router.navigate(['/']);
+            this.compraService.avisoCompraExitosa(this.usuario!.mail).subscribe((data) => {
+              if (data === null) {
+                alert('Error al enviar el correo');
+                this.router.navigate(['/']);
+              } else {
+                alert('Se ha enviado la confirmación a su correo');
+                this.router.navigate(['/']);
+              }})
           }
         });
     }

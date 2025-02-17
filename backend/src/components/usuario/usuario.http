@@ -9,14 +9,14 @@ POST http://localhost:3000/api/usuarios/
 Content-Type: application/json
 
 {
-    "usuario": "joseDayer",
-    "clave": "123456",
+    "usuario": "marchesecrack",
+    "clave": "12345678",
     "nombre": "Jose",
     "apellido": "Dayer",
     "mail": "lalala@gmail.com",
     "telefono": "3413264072",
     "direccion": "Calle falsa 123",
-    "rol": "6754a6cb6f22e57ec62162aa"
+    "rol": "67a648313b881eb76e6f17a3"
 }
 
 

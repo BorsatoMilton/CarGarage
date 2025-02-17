@@ -1,5 +1,6 @@
 import { Brand } from "./brands.interfaces.js";
 import { Category } from "./categories.interface.js";
+import { Compra } from "./compra.interfaces.js";
 import { User } from "./user.interface.js";
 
 export interface Vehicle {
@@ -17,5 +18,5 @@ export interface Vehicle {
     imagenes: string[];
     propietario: User;
     transmision: string;
-    available: boolean;
+    compra: Compra;
 }

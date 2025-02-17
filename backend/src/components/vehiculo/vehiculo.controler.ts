@@ -15,14 +15,14 @@ function sanitizeVehiculoInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    nombre: req.body.nombre,
+    modelo: req.body.nombre,
     descripcion: req.body.descripcion,
     fechaAlta: req.body.fechaAlta,
     fechaBaja: req.body.fechaBaja,
     kilometros: req.body.kilometros,
     precioVenta: req.body.precioVenta,
     precioAlquilerDiario: req.body.precioAlquilerDiario,
-    modelo: req.body.modelo,
+    anio: req.body.modelo,
     marca: req.body.marca,
     categoria: req.body.categoria,
     propietario: req.body.propietario,

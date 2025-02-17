@@ -9,7 +9,7 @@
   <table class="table table-hover">
     <thead class="table-dark">
       <tr>
-        <th>NOMBRE</th>
+        <th>MODELO</th>
         <th>DESCRIPCION</th>
         <th>PRECIO ALQUILER DIARIO</th>
         <th>PRECIO VENTA</th>
@@ -19,7 +19,7 @@
     </thead>
     <tbody *ngIf="vehicles.length > 0">
       <tr *ngFor="let Vehicle of vehicles">
-        <td>{{ Vehicle.nombre }}</td>
+        <td>{{ Vehicle.modelo }}</td>
         <td>{{ Vehicle.descripcion }}</td>
         <td>{{ Vehicle.precioAlquilerDiario || 'NO SE ALQUILA' }}</td>
         <td>{{ Vehicle.precioVenta }}</td>
@@ -44,8 +44,8 @@
           <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()">
             <div class="row">
               <div class="col-md-6">
-                <label for="nombre">Nombre del Vehiculo</label>
-                <input type="text" formControlName="nombre" id="nombre" class="form-control" required>
+                <label for="modelo">Modelo del Vehiculo</label>
+                <input type="text" formControlName="modelo" id="modelo" class="form-control" required>
                 <label for="descripcion">Descripcion del Vehiculo</label>
                 <input type="text" formControlName="descripcion" id="descripcion" class="form-control" required>
               </div>
@@ -60,8 +60,8 @@
             </div>
             <div class="row mt-3">
               <div class="col-md-6">
-                <label for="modelo">Modelo</label>
-                <input type="text" formControlName="modelo" id="modelo" class="form-control" required>
+                <label for="ano">Ano no tengo enie</label>
+                <input type="text" formControlName="ano" id="ano" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="transmision">Transmision</label>

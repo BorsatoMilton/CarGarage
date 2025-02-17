@@ -22,11 +22,13 @@
           <a
             [routerLink]="['/product/compra', vehiculo.id]"
             class="btn btn-primary"
+            [class.disabled]="!vehiculo.precioVenta || vehiculo.propietario.id === usuarioActual?.id"
             >Comprar</a
           >
           <a
             [routerLink]="['/product/rent', vehiculo.id]"
             class="btn btn-secondary"
+            [class.disabled]="!vehiculo.precioAlquilerDiario || vehiculo.propietario.id === usuarioActual?.id"
             >Alquilar</a
           >
         </div>

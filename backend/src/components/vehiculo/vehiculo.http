@@ -10,12 +10,12 @@ POST http://localhost:3000/api/vehiculos/
 Content-Type: application/json
 
 {
-    "nombre": "producto 25",
+    "modelo": "producto 25",
     "descripcion": "descripcion 25",
     "fechaAlta": "2023-09-01",
     "stock": 10,
     "precioVenta": 100,
-    "modelo": "66a25e9b26cc7f88926de44e",
+    "anio": "66a25e9b26cc7f88926de44e",
     "categoria": "66a25ede26cc7f88926de44f",
     "calificacion": ["66a28ee01dbd5c9e5aece75b"]
 }

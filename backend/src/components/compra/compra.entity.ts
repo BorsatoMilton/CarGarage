@@ -3,6 +3,7 @@ import {
     Property,
     Collection,
     OneToMany,
+    OneToOne,
     ManyToOne,
     Rel
 
@@ -26,7 +27,7 @@ export class Compra extends BaseEntity{
     @ManyToOne(() => Usuario, { nullable: false })
     usuario!: Rel<Usuario>
 
-    @ManyToOne(() => Vehiculo, { nullable: false })
+    @Property({ nullable: false })
     vehiculo!: Rel<Vehiculo>
 
     

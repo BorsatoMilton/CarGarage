@@ -5,7 +5,7 @@ import {
     ManyToOne,
     Rel,
     OneToMany,
-    Collection
+    Collection,
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Calificacion } from '../usuario/calificacion.entity.js'
@@ -19,7 +19,7 @@ import { Categoria } from './categoria.entity.js'
 export class Vehiculo extends BaseEntity {
     
     @Property({ nullable: false })
-    nombre!: string
+    modelo!: string
 
     @Property({ nullable: false })
     descripcion!: string
@@ -43,10 +43,13 @@ export class Vehiculo extends BaseEntity {
     kilometros!: number
 
     @Property({ nullable: true })
-    modelo!: string
+    anio!: string
 
     @Property({ nullable: true, type: 'text' }) 
     imagenes!: string[];
+
+    @Property({ nullable: true })
+    Compra?: Rel<Compra>
 
     @ManyToOne(() => Categoria , { nullable: false })
     categoria!: Rel<Categoria>
@@ -59,9 +62,4 @@ export class Vehiculo extends BaseEntity {
 
     @OneToMany(()=> Alquiler , alquiler => alquiler.vehiculo, { nullable: true })
     alquileres = new Collection<Alquiler>(this)
-
-    @OneToMany(() => Compra, compra => compra.vehiculo, { nullable: true })
-    compras = new Collection<Compra>(this)
-
-
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Vehicle } from '../models/vehicles.interface.js';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

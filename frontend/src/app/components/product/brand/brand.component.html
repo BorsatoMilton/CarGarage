@@ -1,79 +1,79 @@
 <div class="container my-4">
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h2>LISTADO DE MARCAS</h2>
-  <app-searcher [data]="brands" [filterAttributes]="['nombreMarca']" (filteredData)="onSearch($event)"  style="display: block; width: 70%;"></app-searcher>
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrand">Añadir Marca</button>
-</div>
-<table class="table table-hover">
-  <thead class="table-dark">
-      <tr>
-          <th>NOMBRE</th>
-          <th>ACCIONES</th>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>LISTADO DE MARCAS</h2>
+    <app-searcher [data]="brands" [filterAttributes]="['nombreMarca']" (filteredData)="onSearch($event)"  style="display: block; width: 70%;"></app-searcher>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrand">Añadir Marca</button>
+  </div>
+  <table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>NOMBRE</th>
+            <th>ACCIONES</th>
+          </tr>
+       </thead>
+       <tbody *ngIf="brands.length > 0">
+         <tr *ngFor="let brand of filteredBrands">
+            <td>{{ brand.nombreMarca }}</td>
+            <td>
+                <button  (click)="openModal('editBrand', brand)"class="btn btn-primary">Editar</button>
+                <button  (click)="openModal('removeBrand', brand)"class="btn btn-danger">Eliminar</button>
+            </td>
         </tr>
-     </thead>
-     <tbody *ngIf="brands.length > 0">
-       <tr *ngFor="let brand of filteredBrands">
-          <td>{{ brand.nombreMarca }}</td>
-          <td>
-              <button  (click)="openModal('editBrand', brand)"class="btn btn-primary">Editar</button>
-              <button  (click)="openModal('removeBrand', brand)"class="btn btn-danger">Eliminar</button>
-          </td>
-      </tr>
-  </tbody>
-  <p *ngIf="filteredBrands.length === 0">No hay marcas que coincidan con ese nombre</p>
-</table>
-
-
-  <div class="modal fade" id="addBrand" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Marca</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </tbody>
+    <p *ngIf="filteredBrands.length === 0">No hay marcas que coincidan con ese nombre</p>
+  </table>
+  
+  
+    <div class="modal fade" id="addBrand" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Marca</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="brandForm" (ngSubmit)="addBrand()">
+                <div class="form-group">
+                <label for="name">Nombre Marca</label>
+                <input type="text" formControlName="nombreMarca" id="name" name="name" class="form-control" required>
+                </div>
+  
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>        
+       </div>
       </div>
-      <div class="modal-body">
-          <form [formGroup]="brandForm" (ngSubmit)="addBrand()">
-              <div class="form-group">
-              <label for="name">Nombre Marca</label>
-              <input type="text" formControlName="nombreMarca" id="name" name="name" class="form-control" required>
-              </div>
-
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-primary">Guardar</button>
-              </div>
-          </form>
-      </div>        
-     </div>
     </div>
-  </div>
-
-<div id="removeBrand" class="modalChanged">
-  <div class="modal-contentChanged">
-    <span class="close" (click)="closeModal('removeBrand')">&times;</span>
-    <h2>Eliminar Marca</h2>
-    <p>¿Estás seguro de que deseas eliminar la siguiente marca?</p>
-    <p><strong>Nombre:</strong> {{ selectedBrand?.nombreMarca }}</p>
-    <div class="modal-footer">
-    <button class="btn btn-secondary" (click)="closeModal('removeBrand')">Cancelar</button>
-    <button class="btn btn-danger" (click)="deleteBrand(selectedBrand, 'removeBrand')">Eliminar</button>
-  </div>
-</div>
-</div>
-
-<div id="editBrand" class="modalChanged">
+  
+  <div id="removeBrand" class="modalChanged">
     <div class="modal-contentChanged">
-      <span class="close" (click)="closeModal('editBrand')">&times;</span>
-      <h2>Editar Marca</h2>
-      <form [formGroup]="brandForm" (ngSubmit)="editBrand()">
-        <div class="form-group">
-          <label for="nombreMarca">Nombre Marca</label>
-          <input type="text" id="nombreMarca" formControlName="nombreMarca" class="form-control" required>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal('editBrand')">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        </div>
-      </form>
+      <span class="close" (click)="closeModal('removeBrand')">&times;</span>
+      <h2>Eliminar Marca</h2>
+      <p><strong>¿Estás seguro de que deseas eliminar la siguiente marca?</strong></p>
+      <p><strong>Nombre:</strong> {{ selectedBrand?.nombreMarca }}</p>
+      <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeModal('removeBrand')">Cancelar</button>
+      <button class="btn btn-danger" (click)="deleteBrand(selectedBrand, 'removeBrand')">Eliminar</button>
     </div>
-</div>
+  </div>
+  </div>
+  
+  <div id="editBrand" class="modalChanged">
+      <div class="modal-contentChanged">
+        <span class="close" (click)="closeModal('editBrand')">&times;</span>
+        <h2>Editar Marca</h2>
+        <form [formGroup]="brandForm" (ngSubmit)="editBrand()">
+          <div class="form-group">
+            <label for="nombreMarca">Nombre Marca</label>
+            <input type="text" id="nombreMarca" formControlName="nombreMarca" class="form-control" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal('editBrand')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+      </div>
+  </div>

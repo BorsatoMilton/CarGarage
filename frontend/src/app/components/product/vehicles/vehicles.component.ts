@@ -114,55 +114,51 @@ export class VehicleComponent implements OnInit {
       alert('Por favor, complete todos los campos requeridos.');
       return;
     }
-
-    if(this.vehicleForm.get('precioVenta')?.value === null && this.vehicleForm.get('precioAlquilerDiario')?.value === null) {
-      alert('Por favor coloque un precio de venta o un precio de alquiler diario.');
+    if (
+      this.vehicleForm.get('precioVenta')?.value === null &&
+      this.vehicleForm.get('precioAlquilerDiario')?.value === null
+    ) {
+      alert('Por favor, coloque un precio de venta o un precio de alquiler diario.');
       return;
     }
     this.vehicleForm.disable();
     const formData = new FormData();
-
     formData.append('modelo', this.vehicleForm.get('modelo')?.value);
     formData.append('descripcion', this.vehicleForm.get('descripcion')?.value);
     formData.append('precioVenta', this.vehicleForm.get('precioVenta')?.value);
-    formData.append(
-      'precioAlquilerDiario',
-      this.vehicleForm.get('precioAlquilerDiario')?.value
-    );
+    formData.append('precioAlquilerDiario', this.vehicleForm.get('precioAlquilerDiario')?.value);
     formData.append('transmision', this.vehicleForm.get('transmision')?.value);
     formData.append('kilometros', this.vehicleForm.get('kilometros')?.value);
     formData.append('propietario', this.vehicleForm.get('propietario')?.value);
     formData.append('anio', this.vehicleForm.get('anio')?.value);
     formData.append('marca', this.vehicleForm.get('marca')?.value);
     formData.append('categoria', this.vehicleForm.get('categoria')?.value);
-
     if (this.selectedFiles.length === 0) {
       alert('Por favor, selecciona al menos una imagen para el vehículo.');
+      this.vehicleForm.enable();
       return;
     }
-
-    this.selectedFiles.forEach((file, index) => {
+    this.selectedFiles.forEach((file) => {
       formData.append('imagenes', file, file.name);
-    });
-    
+    });  
     this.vehicleService.addVehicle(formData).subscribe({
       next: () => {
         alert('Vehículo agregado con éxito');
-        this.vehicleForm.reset();
-        this.selectedFiles = [];
         this.closeModal('addVehicle');
         this.loadVehicle();
         this.vehicleForm.enable();
+        this.vehicleForm.reset();
+        if (this.usuario) {
+          this.vehicleForm.patchValue({ propietario: this.usuario.id });
+        }
+        this.selectedFiles = [];
       },
       error: (error) => {
         console.error(error);
         alert('Error al agregar el vehículo.');
-        this.ngOnInit();
         this.vehicleForm.enable();
       },
     });
-    this.vehicleForm.reset();
-    this.selectedFiles = [];
   }
 
   loadVehicle(): void {
@@ -170,7 +166,6 @@ export class VehicleComponent implements OnInit {
       this.vehicleService.getAllVehicleByUser(this.usuario.id).subscribe((vehicles: Vehicle[]) => {
         this.vehicles = vehicles;
       });
-      console.log(this.usuario);
     }
   }
 

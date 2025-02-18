@@ -1,7 +1,7 @@
-<div class="container">
+<div class="container my-4">
   <div class="row">
-    <div *ngFor="let vehiculo of vehicles" class="col-md-3 mb-4">
-      <div class="card">
+    <div *ngFor="let vehiculo of vehicles" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+      <div class="card h-100">
         <img
           id="imagen-vehiculo"
           [src]="'http://localhost:3000/uploads/' + vehiculo.imagenes[0]"
@@ -9,7 +9,7 @@
           *ngIf="vehiculo.imagenes.length > 0"
         />
         <div class="card-body">
-          <h5 class="card-title">{{ vehiculo.modelo }}</h5>
+          <h5 class="card-title"><strong>{{ vehiculo.modelo }}</strong></h5>
           <p class="card-text">{{ vehiculo.descripcion }}</p>
           <p class="card-text">
             <strong>Precio Venta:</strong>

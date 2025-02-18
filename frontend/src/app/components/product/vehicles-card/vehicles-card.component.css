@@ -1,49 +1,77 @@
+
 .card {
     border-radius: 15px;
     overflow: hidden;
-    margin-top: 10px;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    max-width: 100%;
 }
-  
+
 .card-img-top {
     height: 200px;
     object-fit: cover;
+    width: 100%; 
 }
-
-.btn-primary{
+button.btn-primary {
     background-color: #004080;
+    /* Azul oscuro */
     border-color: #004080;
     color: white;
     padding: 10px 20px;
+    margin-right: 5px;
     border-radius: 4px;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
-    margin-right: 10px;
-    
+    transition: background-color 0.3s ease;
+  }
+
+  button.btn-primary:hover {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  button.btn-secondary {
+    background-color: #6c757d;
+    /* Gris */
+    border-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.btn-secondary:hover {
+    background-color: #5a6268;
+    /* Gris más oscuro al pasar el cursor */
+  }
+
+
+
+@media (max-width: 768px) {
+    .btn-primary, .btn-secondary {
+        padding: 0.6em 1.2em;
+        font-size: 0.9rem;
+        max-width: 160px;
+    }
 }
 
 .whatsapp-container {
     display: flex;
-    justify-content: right;
-    align-items: right;
-    gap: 20px;
-    padding: 20px;
-
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    flex-wrap: wrap; 
 }
-
-.btn-secondary{
-    color: white;
-    padding: 10px 20px;
-    border-radius: 4px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-} 
-
 #imagen-vehiculo {
-    width: 400px;
-    height: 200px;
+    max-width: 100%;
+    height: auto;
     object-fit: cover;
     border-radius: 10px;
-    align-items: center;
+    transition: transform 0.3s;
+    aspect-ratio: 16/9;
 }
+

@@ -66,9 +66,10 @@ export class VehicleComponent implements OnInit {
   
     if (this.usuario !== null) {
       this.vehicleForm.patchValue({ propietario: this.usuario.id });
+      this.loadVehicle();
     }
 
-    this.loadVehicle();
+
   }
 
   openModal(modalId: string, vehicle: Vehicle): void {
@@ -76,14 +77,14 @@ export class VehicleComponent implements OnInit {
 
     if (vehicle) {
       this.vehicleForm.patchValue({
-        nombre: vehicle.nombre,
+        modelo: vehicle.nombre,
         descripcion: vehicle.descripcion,
         fechaAlta: vehicle.fechaAlta,
         fechaBaja: vehicle.fechaBaja,
         precioVenta: vehicle.precioVenta,
         precioAlquilerDiario: vehicle.precioAlquilerDiario,
         kilometros: vehicle.kilometros,
-        modelo: vehicle.modelo,
+        anio: vehicle.modelo,
         marca: vehicle.marca,
         categoria: vehicle.categoria,
         transmision: vehicle.transmision,
@@ -122,7 +123,7 @@ export class VehicleComponent implements OnInit {
     this.vehicleForm.disable();
     const formData = new FormData();
 
-    formData.append('nombre', this.vehicleForm.get('nombre')?.value);
+    formData.append('modelo', this.vehicleForm.get('nombre')?.value);
     formData.append('descripcion', this.vehicleForm.get('descripcion')?.value);
     formData.append('precioVenta', this.vehicleForm.get('precioVenta')?.value);
     formData.append(
@@ -132,7 +133,7 @@ export class VehicleComponent implements OnInit {
     formData.append('transmision', this.vehicleForm.get('transmision')?.value);
     formData.append('kilometros', this.vehicleForm.get('kilometros')?.value);
     formData.append('propietario', this.vehicleForm.get('propietario')?.value);
-    formData.append('modelo', this.vehicleForm.get('modelo')?.value);
+    formData.append('anio', this.vehicleForm.get('modelo')?.value);
     formData.append('marca', this.vehicleForm.get('marca')?.value);
     formData.append('categoria', this.vehicleForm.get('categoria')?.value);
 
@@ -165,10 +166,11 @@ export class VehicleComponent implements OnInit {
   }
 
   loadVehicle(): void {
-    this.vehicleService.getAllVehicle().subscribe((vehicles: Vehicle[]) => {
-      this.vehicles = vehicles;
-      console.log('Los vehiculos: ', this.vehicles)
-    });
+    if (this.usuario !== null) {
+      this.vehicleService.getAllVehicleByUser(this.usuario.id).subscribe((vehicles: Vehicle[]) => {
+        this.vehicles = vehicles;
+      });
+    }
   }
 
   editVehicle(): void {

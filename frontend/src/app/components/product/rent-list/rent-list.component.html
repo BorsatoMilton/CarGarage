@@ -33,8 +33,7 @@
         <td>{{ alquiler.estadoAlquiler }}</td>
         <td>
           <button (click)="openModal('cancelarAlquiler', alquiler)" class="btn btn-danger" 
-          [disabled]="alquiler.estadoAlquiler === 'CANCELADO' || alquiler.estadoAlquiler === 'NO CORFIRMADO' || alquiler.estadoAlquiler === 'FINALIZADO' || alquiler.estadoAlquiler === 'EN CURSO'">Cancelar</button> 
-
+          [disabled]="alquiler.estadoAlquiler === 'CANCELADO' || alquiler.estadoAlquiler === 'NO CONFIRMADO' || alquiler.estadoAlquiler === 'FINALIZADO' || alquiler.estadoAlquiler === 'EN CURSO'">Cancelar</button> 
         </td>
       </tr>
     </tbody>
@@ -52,3 +51,4 @@
       <button class="btn btn-danger" (click)="cancelRent(selectedRent, 'cancelarAlquiler')">Cancelar Alquiler</button>
     </div>
   </div>
+</div>

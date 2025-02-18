@@ -15,14 +15,14 @@ function sanitizeVehiculoInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    nombre: req.body.nombre,
+    modelo: req.body.nombre,
     descripcion: req.body.descripcion,
     fechaAlta: req.body.fechaAlta,
     fechaBaja: req.body.fechaBaja,
     kilometros: req.body.kilometros,
     precioVenta: req.body.precioVenta,
     precioAlquilerDiario: req.body.precioAlquilerDiario,
-    modelo: req.body.modelo,
+    anio: req.body.modelo,
     marca: req.body.marca,
     categoria: req.body.categoria,
     propietario: req.body.propietario,
@@ -41,6 +41,16 @@ function sanitizeVehiculoInput(
 async function findAll(req: Request, res: Response) {
   try {
     const vehiculos = await em.find(Vehiculo,{ fechaBaja: null},{populate: ['modelo','categoria', 'marca', 'propietario'] })
+    res.status(200).json(vehiculos)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+async function findAllByUser(req: Request, res: Response) {
+  try {
+    const propietario = req.params.id;
+    const vehiculos = await em.find(Vehiculo,{ propietario: propietario, fechaBaja: null },{populate: ['modelo','categoria', 'marca', 'propietario'] })
     res.status(200).json(vehiculos)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -67,34 +77,6 @@ async function findOneById(id:string){
   }
 }
 
- async function findNameBrand(req: Request, res: Response) {
-  try {
-    const brandId = req.params.id;
-    const marca = await em.findOneOrFail(Marca, { id: brandId });
-    if (!marca) {
-      return res.status(404).json({ message: 'Marca no encontrada' });
-    }
-
-    res.status(200).json({ nombre: marca.nombreMarca });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
- async function findNameCategory(req: Request, res: Response) {
-  try {
-    const categoryId = req.params.id;
-    const categoria = await em.findOneOrFail(Categoria, { id: categoryId });
-    if (!categoria) {
-      return res.status(404).json({ message: 'Categoria no encontrada' });
-    }
-
-    res.status(200).json({ nombre: categoria.nombreCategoria });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
 async function add(req: Request, res: Response) {
   try {
     const imagePaths = Array.isArray(req.files) ? req.files.map((file: any) => file.filename) : []; // a cada archivo que se envia se le va a poner el nombre, se trata de mapear, si no lo deja vacio. el imagepaths muestra los nombres del archivo si lo q se envia es un array
@@ -105,7 +87,7 @@ async function add(req: Request, res: Response) {
       }
 
     const vehiculoData = {
-      ...req.body.sanitizedInput, //spread operator para copiar todas las propiedades de
+      ...req.body.sanitizedInput,
       marca: ObjectId.createFromHexString(req.body.sanitizedInput.marca),
       categoria: ObjectId.createFromHexString(req.body.sanitizedInput.categoria), 
       propietario: ObjectId.createFromHexString(req.body.sanitizedInput.propietario),
@@ -186,4 +168,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findNameCategory, findNameBrand, findOneById }
+export { sanitizeVehiculoInput, findAll, findAllByUser, findOne, add, update, remove, logicRemove, findOneById }

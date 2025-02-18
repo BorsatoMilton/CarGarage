@@ -37,17 +37,17 @@ async function findAll(req: Request, res: Response) {
         const compras = await em.find(Compra,{}, { populate: ['usuario', 'vehiculo'] })
         res.status(200).json(compras)
     } catch (error: any) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({message: 'Error al obtener las compras', error: error.message })
     }
 }
 
 async function findAllByUser(req: Request, res: Response) {
     try {
         const idComprador = req.params.id
-        const compras = await em.find(Compra, { usuario: { id: idComprador } }, { populate: ['usuario', 'vehiculo'] })
+        const compras = await em.find(Compra, { usuario: idComprador  }, { populate: ['usuario', 'vehiculo'] })
         res.status(200).json(compras)
     } catch (error: any) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: 'Error al obtener las compras por usuario', error: error.message})
     }
 }
 
@@ -55,9 +55,12 @@ async function findOne(req: Request, res: Response) {
     try {
         const id = req.params.id
         const compra = await em.findOneOrFail(Compra, { id }, { populate: ['usuario', 'vehiculo'] })
+        if(!compra){
+            return res.status(404).json({ message: 'Compra no encontrada' })
+        }
         res.status(200).json(compra)
     } catch (error: any) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: 'Error al obtener la compra', error: error.messagee })
     }
 }
 
@@ -78,9 +81,12 @@ async function cancelarCompra(req: Request, res: Response) {
       return res.status(400).json({ message: "El id de la compra es requerido" });
         }
         const compraActualizar = await em.findOneOrFail(Compra, { id })
+        if(!compraActualizar){
+            return res.status(404).json({ message: 'Compra no encontrada' })
+        }
         em.assign(compraActualizar, { fechaCancelacion: new Date() })
         await em.flush()
-        res.status(200).json({ message: 'Compra actualizado', data: compraActualizar })
+        res.status(200).json({ message: 'Compra cancelada exitosamente', data: compraActualizar })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -90,8 +96,11 @@ async function remove(req: Request, res: Response) {
     try {
         const id = req.params.id
         const compra = em.getReference(Compra, id)
+        if(!compra){
+            return res.status(404).json({ message: 'Compra no encontrada' })
+        }
         await em.removeAndFlush(compra)
-        res.status(200).json({ message: 'Compra eliminado' })
+        res.status(200).json({ message: 'Compra eliminada' })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

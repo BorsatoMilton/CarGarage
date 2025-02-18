@@ -42,7 +42,7 @@ export class RentComponent implements OnInit {
   fechasReservadas: { fechaInicio: string; fechaFin: string }[] = [];
   idVehiculo: string | null = null;
   usuario: User | null = null;
-  todayDate: Date = new Date(new Date().setDate(new Date().getDate() + 1));
+  todayDate: Date = new Date() //new Date(new Date().setDate(new Date().getDate() + 1));
   fechaInvalida: boolean = false;
 
   constructor(

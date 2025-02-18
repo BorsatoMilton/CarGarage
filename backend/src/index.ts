@@ -13,6 +13,8 @@ import { correoRouter } from './components/correo/correo.routes.js';
 import cors from 'cors';
 import { alquilerRouter } from './components/alquiler/alquiler.routes.js';
 import { rolRouter } from './components/usuario/rol.routes.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import './config/cron.timelapse.js';
 
@@ -29,12 +31,31 @@ app.use(cors({
   },
 }));
 
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API Documentation',
+      version: '1.0.0',
+      description: 'API Information',
+      contact: {
+        name: 'Developer',
+      },
+      servers: [{ url: 'http://localhost:3000' }], 
+    },
+  },
+  apis: ['./dist/components/**/*.routes.js'], 
+};
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+
+
 app.use(express.json());
   
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next)
 })
-
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use('/api/categorias', categoriaRouter)
 app.use('/api/marcas', marcaRouter)
 app.use('/api/vehiculos', vehiculoRouter )

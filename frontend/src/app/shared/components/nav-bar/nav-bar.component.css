@@ -1,0 +1,17 @@
+.relative {
+    position: relative;
+  }
+  
+  #dropdown {
+    position: absolute; /* Se superpone en lugar de empujar */
+    top: 100%; /* Aparece justo debajo del botón */
+    left: 0;
+    z-index: 1050; /* Se asegura de estar encima de otros elementos */
+    min-width: 100%; /* Para que no se deforme */
+    display: none; /* Oculto por defecto */
+  }
+  
+  #dropdown.block {
+    display: block; /* Se muestra cuando está abierto */
+  }
+  

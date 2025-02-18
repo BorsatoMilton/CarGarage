@@ -60,8 +60,8 @@
             </div>
             <div class="row mt-3">
               <div class="col-md-6">
-                <label for="ano">Ano no tengo enie</label>
-                <input type="text" formControlName="ano" id="ano" class="form-control" required>
+                <label for="anio">Año</label>
+                <input type="year" formControlName="anio" id="anio" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="transmision">Transmision</label>
@@ -116,8 +116,8 @@
     <div class="modal-contentChanged">
       <span class="close" (click)="closeModal('removeVehicle')">&times;</span>
       <h2>Eliminar Vehiculo</h2>
-      <p>¿Estás seguro de que deseas eliminar el siguiente vehiculo?</p>
-      <p><strong>Nombre:</strong> {{ selectedVehicle?.nombre }}</p>
+      <p><strong>¿Estás seguro de que deseas eliminar el siguiente vehiculo?</strong></p>
+      <p><strong>Modelo:</strong> {{ selectedVehicle?.modelo }}</p>
       <button class="btn btn-secondary" (click)="closeModal('removeVehicle')">Cancelar</button>
       <button class="btn btn-danger" (click)="removeVehicle(selectedVehicle, 'removeVehicle')">Eliminar</button>
     </div>
@@ -129,8 +129,8 @@
       <h2>Editar Vehiculo</h2>
       <form [formGroup]="vehicleForm" (ngSubmit)="editVehicle()">
         <div class="form-group">
-          <label for="name">Nombre Vehiculo</label>
-          <input type="text" formControlName="nombre" id="name" name="name" class="form-control" required>
+          <label for="modelo">Modelo Vehiculo</label>
+          <input type="text" formControlName="modelo" id="modelo" name="modelo" class="form-control" required>
         </div>
         <div class="form-group">
           <label for="name">Descripcion Vehiculo</label>

@@ -41,7 +41,7 @@
       <span class="close" (click)="closeModal('confirmarAlquiler')">&times;</span>
       <h2>Confirmar Alquiler</h2>
       <p style="margin: 10px;">¿Estás seguro de que deseas <strong>confirmar</strong> el Alquiler?</p>
-      <p style="margin: 10px;"><strong>Nombre:</strong> {{ vehiculo?.nombre }}</p>
+      <p style="margin: 10px;"><strong>Nombre:</strong> {{ vehiculo?.modelo }}</p>
       <button class="btn btn-secondary" (click)="closeModal('confirmarAlquiler')">Cancelar</button>
       <button class="btn btn-success" (click)="confirmRent()">Confirmar Alquiler</button>
     </div>

@@ -45,7 +45,7 @@
     <span class="close" (click)="closeModal('confirmarCompra')">&times;</span>
     <h2>Comprar Vehiculo</h2>
     <p style="margin: 10px;">¿Estás seguro de que deseas <strong>comprar</strong> el siguiente vehiculo?</p>
-    <p style="margin: 10px;"><strong>Nombre:</strong> {{ vehiculo?.nombre }}</p>
+    <p style="margin: 10px;"><strong>Nombre:</strong> {{ vehiculo?.modelo }}</p>
     <button class="btn btn-secondary" (click)="closeModal('confirmarCompra')">Cancelar</button>
     <button class="btn btn-success"  (click)="comprar()">Comprar</button>
   </div>

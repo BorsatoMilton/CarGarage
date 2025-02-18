@@ -15,7 +15,7 @@
     </thead>
     <tbody *ngIf="compras.length > 0">
       <tr *ngFor="let compra of compras">
-        <td>{{ compra.vehiculo.nombre }}</td>
+        <td>{{ compra.vehiculo.modelo }}</td>
         <td>{{ compra.fechaCompra }}</td>
         <td>{{ compra.vehiculo.precioVenta }}</td>
         <td>
@@ -50,7 +50,7 @@
       <p>¿Estás seguro de que deseas cancelar la compra?</p>
       <p>
         <strong>Nombre Vehiculo:</strong>
-        {{ selectedPurchase?.vehiculo?.nombre }}
+        {{ selectedPurchase?.vehiculo?.modelo }}
       </p>
       <p>
         <strong>Fecha de Compra:</strong> {{ selectedPurchase?.fechaCompra }}

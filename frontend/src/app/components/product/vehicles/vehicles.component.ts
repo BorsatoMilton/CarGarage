@@ -42,11 +42,11 @@ export class VehicleComponent implements OnInit {
     private authService: AuthService
   ) {
     this.vehicleForm = this.fb.group({
-      nombre: ['', Validators.required],
+      modelo: ['', Validators.required],
       descripcion: ['', Validators.required],
       precioVenta: [''],
       precioAlquilerDiario: [''],
-      modelo: ['', Validators.required],
+      anio: ['', Validators.required],
       marca: ['', Validators.required],
       categoria: ['', Validators.required],
       propietario: [''],
@@ -67,8 +67,7 @@ export class VehicleComponent implements OnInit {
     if (this.usuario !== null) {
       this.vehicleForm.patchValue({ propietario: this.usuario.id });
       this.loadVehicle();
-    }
-
+    }   
 
   }
 
@@ -77,14 +76,14 @@ export class VehicleComponent implements OnInit {
 
     if (vehicle) {
       this.vehicleForm.patchValue({
-        modelo: vehicle.nombre,
+        modelo: vehicle.modelo,
         descripcion: vehicle.descripcion,
         fechaAlta: vehicle.fechaAlta,
         fechaBaja: vehicle.fechaBaja,
         precioVenta: vehicle.precioVenta,
         precioAlquilerDiario: vehicle.precioAlquilerDiario,
         kilometros: vehicle.kilometros,
-        anio: vehicle.modelo,
+        anio: vehicle.anio,
         marca: vehicle.marca,
         categoria: vehicle.categoria,
         transmision: vehicle.transmision,
@@ -123,7 +122,7 @@ export class VehicleComponent implements OnInit {
     this.vehicleForm.disable();
     const formData = new FormData();
 
-    formData.append('modelo', this.vehicleForm.get('nombre')?.value);
+    formData.append('modelo', this.vehicleForm.get('modelo')?.value);
     formData.append('descripcion', this.vehicleForm.get('descripcion')?.value);
     formData.append('precioVenta', this.vehicleForm.get('precioVenta')?.value);
     formData.append(
@@ -133,7 +132,7 @@ export class VehicleComponent implements OnInit {
     formData.append('transmision', this.vehicleForm.get('transmision')?.value);
     formData.append('kilometros', this.vehicleForm.get('kilometros')?.value);
     formData.append('propietario', this.vehicleForm.get('propietario')?.value);
-    formData.append('anio', this.vehicleForm.get('modelo')?.value);
+    formData.append('anio', this.vehicleForm.get('anio')?.value);
     formData.append('marca', this.vehicleForm.get('marca')?.value);
     formData.append('categoria', this.vehicleForm.get('categoria')?.value);
 
@@ -152,12 +151,13 @@ export class VehicleComponent implements OnInit {
         this.vehicleForm.reset();
         this.selectedFiles = [];
         this.closeModal('addVehicle');
-        this.ngOnInit();
+        this.loadVehicle();
         this.vehicleForm.enable();
       },
       error: (error) => {
         console.error(error);
         alert('Error al agregar el vehículo.');
+        this.ngOnInit();
         this.vehicleForm.enable();
       },
     });
@@ -170,6 +170,7 @@ export class VehicleComponent implements OnInit {
       this.vehicleService.getAllVehicleByUser(this.usuario.id).subscribe((vehicles: Vehicle[]) => {
         this.vehicles = vehicles;
       });
+      console.log(this.usuario);
     }
   }
 

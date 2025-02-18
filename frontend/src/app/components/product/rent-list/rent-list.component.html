@@ -19,7 +19,7 @@
     </thead>
     <tbody *ngIf="alquileres.length > 0">
       <tr *ngFor="let alquiler of alquileres">
-        <td>{{ alquiler.vehiculo.nombre }}</td>
+        <td>{{ alquiler.vehiculo.modelo}}</td>
         <td>{{ alquiler.fechaAlquiler | date:'yyyy-MM-dd' }}</td>
         <td>${{ alquiler.vehiculo.precioAlquilerDiario}}</td>
         <td>{{ alquiler.fechaHoraInicioAlquiler | date:'yyyy-MM-dd' }}</td>

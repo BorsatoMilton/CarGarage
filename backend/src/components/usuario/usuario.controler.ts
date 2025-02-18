@@ -50,10 +50,10 @@ async function findOneByEmailOrUsername(req: Request, res: Response) {
       { populate: ["rol"] }
     );
     if (!usuarioEncontrado) {
-      return res.status(200).json(null);
-    } else {
-      res.status(200).json(usuarioEncontrado);
-    }
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    } 
+    res.status(200).json(usuarioEncontrado);
+
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -67,6 +67,9 @@ async function findOneByEmailDestinatario(req: Request, res: Response) {
       { mail },
       { populate: ["rol"] }
     );
+    if (!usuarioEncontrado) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
     res.status(200).json(usuarioEncontrado);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -81,6 +84,9 @@ async function findOneById(req: Request, res: Response) {
       { id },
       { populate: ["rol"] }
     );
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
     res.status(200).json(usuario);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -92,7 +98,7 @@ async function findOneByEmail(email: string) {
     Usuario,
     { mail: email },
     { populate: ["rol"] }
-  );
+  );    
   try {
     return usuario;
   } catch (error: any) {
@@ -129,7 +135,7 @@ async function login(req: Request, res: Response) {
     );
 
     if (!usuarioEncontrado) {
-      return res.status(401).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     } else {
       const isMatch = await bcrypt.compare(clave, usuarioEncontrado.clave);
       if (!isMatch) {
@@ -222,7 +228,7 @@ async function update(req: Request, res: Response) {
     const id = req.params.id;
     const usuarioAactualizar = await em.findOneOrFail(Usuario, { id });
     if (!usuarioAactualizar) {
-      return res.status(400).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     } else {
       const usuario = { ...req.body.sanitizedInput, 
         telefono: req.body.sanitizedInput.telefono.toString(),
@@ -239,48 +245,56 @@ async function update(req: Request, res: Response) {
 }
 
 async function resetPasswordWithoutToken(req: Request, res: Response) {
-  const id = req.params.id;
-  const newPassword = req.body.newPassword;
+  try {
+    const id = req.params.id;
+    const newPassword = req.body.newPassword;
 
-  const usuario = await orm.em.findOne(Usuario, { id });
-  if (!usuario) {
+    const usuario = await orm.em.findOne(Usuario, { id });
+    if (!usuario) {
+      return res
+        .status(404)
+        .json({ ok: false, message: "Usuario no encontrado" });
+    }
+    const vecesHash = 10;
+    const hashClave = await bcrypt.hash(newPassword, vecesHash);
+    usuario.clave = hashClave;
+    await orm.em.persistAndFlush(usuario);
     return res
-      .status(404)
-      .json({ ok: false, message: "Usuario no encontrado" });
+      .status(200)
+      .json({ ok: true, message: "Contraseña actualizada exitosamente" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-  const vecesHash = 10;
-  const hashClave = await bcrypt.hash(newPassword, vecesHash);
-  usuario.clave = hashClave;
-  await orm.em.persistAndFlush(usuario);
-  return res
-    .status(200)
-    .json({ ok: true, message: "Contraseña actualizada exitosamente" });
 }
 
 async function resetPassword(req: Request, res: Response) {
-  const { token, newPassword } = req.body;
+  try {
+    const { token, newPassword } = req.body;
 
-  const tokenEntity = await orm.em.findOne(PasswordResetToken, { token });
-  if (!tokenEntity || tokenEntity.expiryDate < new Date()) {
-    return res
-      .status(400)
-      .json({ ok: false, message: "Token inválido o expirado" });
-  }
+    const tokenEntity = await orm.em.findOne(PasswordResetToken, { token });
+    if (!tokenEntity || tokenEntity.expiryDate < new Date()) {
+      return res
+        .status(400)
+        .json({ ok: false, message: "Token inválido o expirado" });
+    }
 
-  const user = await orm.em.findOne(Usuario, tokenEntity.user.id);
-  if (!user) {
+    const user = await orm.em.findOne(Usuario, tokenEntity.user.id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ ok: false, message: "Usuario no encontrado" });
+    }
+    const vecesHash = 10;
+    const hashClave = await bcrypt.hash(newPassword, vecesHash);
+    user.clave = hashClave;
+    await orm.em.persistAndFlush(user);
+    await orm.em.removeAndFlush(tokenEntity);
     return res
-      .status(404)
-      .json({ ok: false, message: "Usuario no encontrado" });
+      .status(200)
+      .json({ ok: true, message: "Contraseña actualizada exitosamente" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
-  const vecesHash = 10;
-  const hashClave = await bcrypt.hash(newPassword, vecesHash);
-  user.clave = hashClave;
-  await orm.em.persistAndFlush(user);
-  await orm.em.removeAndFlush(tokenEntity);
-  return res
-    .status(200)
-    .json({ ok: true, message: "Contraseña actualizada exitosamente" });
 }
 
 async function remove(req: Request, res: Response) {
@@ -288,7 +302,7 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id;
     const usuario = em.getReference(Usuario, id);
     if (!usuario) {
-      return res.status(400).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     } else {
       await em.removeAndFlush(usuario);
       res.status(200).json("Usuario eliminado con exito");

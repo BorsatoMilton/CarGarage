@@ -35,6 +35,9 @@ async function findOneByName(req: Request, res: Response) {
   try {
     const name = req.params.name.toUpperCase();
     const rol = await em.findOneOrFail(Rol, { nombreRol: name })
+    if(!rol){
+      return res.status(404).json({ message: 'Rol no encontrado' })
+    }
     res.status(200).json(rol)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -46,6 +49,9 @@ async function findOneById(req: Request, res: Response) {
   try {
     const id = req.params.id
     const rol = await em.findOneOrFail(Rol, { id })
+    if(!rol){
+      return res.status(404).json({ message: 'Rol no encontrado' })
+    }
     res.status(200).json(rol)
   } catch (error: any) {
     res.status(500).json({ message: error.message })

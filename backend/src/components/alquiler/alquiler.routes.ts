@@ -42,11 +42,9 @@ export const alquilerRouter = Router();
  *           format: date-time
  *           description: Tiempo de confirmación del alquiler
  *         locatario:
- *           type: string
- *           description: Identificador único del usuario locatario
+ *             $ref: '#/components/schemas/Usuario'
  *         vehiculo:
- *           type: string
- *           description: Identificador único del vehículo
+ *             $ref: '#/components/schemas/Vehiculo'
  *       required:
  *         - fechaAlquiler
  *         - fechaHoraInicioAlquiler

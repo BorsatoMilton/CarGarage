@@ -1,19 +1,19 @@
 import { Router } from "express";
-import {
-    findAll,
-    findOneById,
-    findOneByEmailOrUsername,
-    validatePassword,
-    checkUsername,
-    checkEmail,
-    add,
-    update,
-    resetPasswordWithoutToken,
-    remove,
-    sanitizeUsuarioInput,
-    resetPassword,
-    login,
-    findOneByEmailDestinatario,
+import { 
+  findAll, 
+  findOneById, 
+  findOneByEmailOrUsername, 
+  validatePassword, 
+  checkUsername, 
+  checkEmail, 
+  add, 
+  update, 
+  resetPasswordWithoutToken, 
+  remove, 
+  sanitizeUsuarioInput, 
+  resetPassword, 
+  login, 
+  findOneByEmailDestinatario 
 } from "./usuario.controler.js";
 
 export const usuarioRouter = Router();
@@ -93,6 +93,7 @@ export const usuarioRouter = Router();
  */
 usuarioRouter.get("/", findAll);
 
+// Endpoint GET /:id
 /**
  * @swagger
  * /api/usuario/{id}:
@@ -139,11 +140,12 @@ usuarioRouter.get("/", findAll);
  */
 usuarioRouter.get("/:id", findOneById);
 
+// Endpoint GET /checkusername/:username
 /**
  * @swagger
  * /api/usuario/checkusername/{username}:
  *   get:
- *     summary: Verifica si un nombre de usuario está disponible
+ *     summary: Verifica disponibilidad de nombre de usuario
  *     tags: [Usuario]
  *     parameters:
  *       - in: path
@@ -154,7 +156,7 @@ usuarioRouter.get("/:id", findOneById);
  *         description: Nombre de usuario
  *     responses:
  *       200:
- *         description: Nombre de usuario verificado
+ *         description: Resultado de disponibilidad
  *         content:
  *           application/json:
  *             schema:
@@ -164,7 +166,7 @@ usuarioRouter.get("/:id", findOneById);
  *                   type: boolean
  *                   example: true
  *       500:
- *         description: Error al verificar el nombre de usuario
+ *         description: Error en la verificación
  *         content:
  *           application/json:
  *             schema:
@@ -179,11 +181,12 @@ usuarioRouter.get("/:id", findOneById);
  */
 usuarioRouter.get("/checkusername/:username", checkUsername);
 
+// Endpoint GET /checkemail/:email
 /**
  * @swagger
  * /api/usuario/checkemail/{email}:
  *   get:
- *     summary: Verifica si un correo electrónico está disponible
+ *     summary: Verifica disponibilidad de correo electrónico
  *     tags: [Usuario]
  *     parameters:
  *       - in: path
@@ -194,7 +197,7 @@ usuarioRouter.get("/checkusername/:username", checkUsername);
  *         description: Correo electrónico
  *     responses:
  *       200:
- *         description: Correo electrónico verificado
+ *         description: Resultado de disponibilidad
  *         content:
  *           application/json:
  *             schema:
@@ -204,7 +207,7 @@ usuarioRouter.get("/checkusername/:username", checkUsername);
  *                   type: boolean
  *                   example: true
  *       500:
- *         description: Error al verificar el correo electrónico
+ *         description: Error en la verificación
  *         content:
  *           application/json:
  *             schema:
@@ -219,11 +222,12 @@ usuarioRouter.get("/checkusername/:username", checkUsername);
  */
 usuarioRouter.get("/checkemail/:email", checkEmail);
 
+// Endpoint GET /bymail/:mail
 /**
  * @swagger
  * /api/usuario/bymail/{mail}:
  *   get:
- *     summary: Obtiene un usuario por su correo electrónico
+ *     summary: Obtiene usuario por correo electrónico
  *     tags: [Usuario]
  *     parameters:
  *       - in: path
@@ -231,7 +235,7 @@ usuarioRouter.get("/checkemail/:email", checkEmail);
  *         schema:
  *           type: string
  *         required: true
- *         description: Correo electrónico del usuario
+ *         description: Correo electrónico
  *     responses:
  *       200:
  *         description: Usuario encontrado
@@ -265,11 +269,12 @@ usuarioRouter.get("/checkemail/:email", checkEmail);
  */
 usuarioRouter.get("/bymail/:mail", findOneByEmailDestinatario);
 
+// Endpoint GET /:user/:mail
 /**
  * @swagger
  * /api/usuario/{user}/{mail}:
  *   get:
- *     summary: Obtiene un usuario por su nombre de usuario o correo electrónico
+ *     summary: Obtiene usuario por nombre de usuario o correo
  *     tags: [Usuario]
  *     parameters:
  *       - in: path
@@ -283,7 +288,7 @@ usuarioRouter.get("/bymail/:mail", findOneByEmailDestinatario);
  *         schema:
  *           type: string
  *         required: true
- *         description: Correo electrónico del usuario
+ *         description: Correo electrónico
  *     responses:
  *       200:
  *         description: Usuario encontrado
@@ -317,11 +322,12 @@ usuarioRouter.get("/bymail/:mail", findOneByEmailDestinatario);
  */
 usuarioRouter.get("/:user/:mail", findOneByEmailOrUsername);
 
+// Endpoint POST /login
 /**
  * @swagger
  * /api/usuario/login:
  *   post:
- *     summary: Inicia sesión un usuario
+ *     summary: Inicio de sesión de usuario
  *     tags: [Usuario]
  *     requestBody:
  *       required: true
@@ -338,7 +344,7 @@ usuarioRouter.get("/:user/:mail", findOneByEmailOrUsername);
  *                 description: Contraseña del usuario
  *     responses:
  *       200:
- *         description: Inicio de sesión exitoso
+ *         description: Login exitoso
  *         content:
  *           application/json:
  *             schema:
@@ -383,6 +389,7 @@ usuarioRouter.get("/:user/:mail", findOneByEmailOrUsername);
  */
 usuarioRouter.post("/login", login);
 
+// Endpoint POST /
 /**
  * @swagger
  * /api/usuario:
@@ -430,132 +437,9 @@ usuarioRouter.post("/", sanitizeUsuarioInput, add);
 
 /**
  * @swagger
- * /api/usuario/reset:
- *   post:
- *     summary: Restablece la contraseña de un usuario
- *     tags: [Usuario]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 description: Correo electrónico del usuario
- *     responses:
- *       200:
- *         description: Contraseña restablecida
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Contraseña actualizada exitosamente
- *       400:
- *         description: Token inválido o expirado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Token inválido o expirado
- *       404:
- *         description: Usuario no encontrado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Usuario no encontrado
- *       500:
- *         description: Error al restablecer la contraseña
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Error al restablecer la contraseña
- *                 error:
- *                   type: string
- *                   example: Detalles del error
- */
-usuarioRouter.post("/reset", resetPassword);
-
-/**
- * @swagger
- * /api/usuario/validate/{id}:
- *   post:
- *     summary: Valida la contraseña de un usuario
- *     tags: [Usuario]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: ID del usuario
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               password:
- *                 type: string
- *                 description: Contraseña del usuario
- *     responses:
- *       200:
- *         description: Contraseña validada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 valid:
- *                   type: boolean
- *                   example: true
- *       404:
- *        description: Usuario no encontrado
- *        content:
- *         application/json:
- *          schema:
- *           type: object
- *           properties:
- *             message:
- *              type: string
- *              example: Usuario no encontrado
- *       500:
- *         description: Error al validar la contraseña
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Error al validar la contraseña
- *                 error:
- *                   type: string
- *                   example: Detalles del error
- */
-usuarioRouter.post("/validate/:id", validatePassword);
-
-/**
- * @swagger
  * /api/usuario/{id}:
  *   put:
- *     summary: Actualiza un usuario existente
+ *     summary: Actualiza un usuario
  *     tags: [Usuario]
  *     parameters:
  *       - in: path
@@ -576,26 +460,24 @@ usuarioRouter.post("/validate/:id", validatePassword);
  *         content:
  *           application/json:
  *             schema:
- *               type: Object
- *                  properties:
- *                   message:
- *                     type: string
- *                     example: Usuario actualizado
- *                   data:
- *                    type: object
- *                    $ref: '#/components/schemas/Usuario'
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/Usuario'
  *       404:
  *         description: Usuario no encontrado
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Usuario no encontrado
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  example: Usuario no encontrado
  *       500:
- *         description: Error al actualizar el usuario
+ *         description: Error en el servidor
  *         content:
  *           application/json:
  *             schema:

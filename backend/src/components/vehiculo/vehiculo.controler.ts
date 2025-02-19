@@ -61,6 +61,9 @@ async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
     const vehiculo = await em.findOneOrFail(Vehiculo, { id }, { populate: ['modelo','categoria', 'marca', 'propietario'] })
+    if (!vehiculo) {
+      return res.status(404).json({ message: 'Vehiculo no encontrado' })
+    }
     res.status(200).json(vehiculo)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -106,6 +109,9 @@ async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
     const vehiculoAactualizar = await em.findOneOrFail(Vehiculo, { id })
+    if(!vehiculoAactualizar){
+      return res.status(404).json({ message: 'Vehiculo no encontrado' })
+    }
     em.assign(vehiculoAactualizar, req.body.sanitizedInput)
     await em.flush()
     res
@@ -120,6 +126,9 @@ async function logicRemove(req: Request, res:Response) { // se utiliza a la hora
   try {
     const id = req.params.id
     const vehiculo = await em.findOneOrFail(Vehiculo, { id })
+    if (!vehiculo) {
+      return res.status(404).json({ message: 'Vehiculo no encontrado' })
+    }
     vehiculo.fechaBaja = new Date()
     await em.flush()
     res.status(200).json({ message: 'Vehiculo dado de baja', data: vehiculo })

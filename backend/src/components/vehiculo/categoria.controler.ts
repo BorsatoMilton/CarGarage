@@ -31,6 +31,9 @@ async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const categoria = await em.findOneOrFail(Categoria, { id });
+    if(!categoria){
+      return res.status(404).json({ message: "Categoria no encontrada" });
+    }
     res.status(200).json(categoria);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -43,6 +46,9 @@ async function findOneByName(req: Request, res: Response) {
     const categoria = await em.findOneOrFail(Categoria, {
       nombreCategoria: name,
     });
+    if (!categoria) {
+      return res.status(404).json({ message: "Categoria no encontrada" });
+    }
     res.status(200).json(categoria);
   } catch (error: any) {
     res.status(500).json({ message: error.message });

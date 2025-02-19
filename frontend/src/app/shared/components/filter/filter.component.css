@@ -1,0 +1,82 @@
+
+.filtro-container {
+    display: flex;
+    flex-wrap: wrap;              
+    align-items: center;
+    gap: 10px;                
+    background-color: #e3f2fd; 
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+
+  .filtro-container .form-group {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;              
+    min-width: 150px;            
+  }
+  
+  /* Estilo para las etiquetas */
+  .filtro-container label {
+    font-weight: bold;
+    color: #0d47a1;            
+    margin-right: 5px;
+    white-space: nowrap;         
+  }
+  
+
+  .filtro-container input,
+  .filtro-container select {
+    padding: 8px;
+    border: 1px solid #90caf9;
+    border-radius: 5px;
+    background-color: #e1f5fe;
+    color: #0d47a1;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+
+  .filtro-container input::placeholder {
+    color: #64b5f6;
+  }
+  
+
+  .filtro-container button {
+    background-color: #1565c0;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    flex: 0 1 auto;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filtro-container button:hover {
+    background-color: #0d47a1;
+  }
+  
+
+  @media (max-width: 600px) {
+    .filtro-container {
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .filtro-container .form-group {
+      flex: 1 1 100%;
+      min-width: auto;
+      margin-bottom: 5px;
+    }
+
+    .filtro-container button {
+      width: 100%;
+
+    }
+  }
+  

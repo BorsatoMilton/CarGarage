@@ -15,10 +15,9 @@ import { Output } from '@angular/core';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.css']
+  styleUrls: ['./filter.component.css'],
 })
 export class FilterComponent implements OnInit {
-
   @Output() filterChanged = new EventEmitter<any>();
 
   filterForm: FormGroup;
@@ -37,20 +36,19 @@ export class FilterComponent implements OnInit {
       priceHasta: 0,
       kilometersDesde: 0,
       kilometersHasta: 0,
-      isRentable: true,
-      isBuyable: true
+      isRentable: false,
+      isBuyable: false,
     });
   }
 
   ngOnInit(): void {
-
     this.brandService.getAllBrand().subscribe({
       next: (brands: Brand[]) => {
         this.brands = brands;
       },
       error: (err) => {
         console.error('Error al obtener marcas:', err);
-      }
+      },
     });
 
     this.categoriesService.getAllCategories().subscribe({
@@ -59,12 +57,17 @@ export class FilterComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al obtener categorías:', err);
-      }
+      },
     });
   }
 
   applyFilter(): void {
     const filterValues = this.filterForm.value;
-    this.filterChanged.emit(filterValues);    
+    this.filterChanged.emit(filterValues);
+  }
+
+  resetFilter(): void {
+    this.filterForm.reset();
+    this.filterChanged.emit({});
   }
 }

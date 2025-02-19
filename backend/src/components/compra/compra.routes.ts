@@ -164,7 +164,7 @@ compraRouter.get('/:id', findOne);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CompraInput'
+ *             $ref: '#/components/schemas/Compra'
  *     responses:
  *       201:
  *         description: Compra creada exitosamente

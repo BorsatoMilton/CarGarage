@@ -30,6 +30,9 @@ async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const marca = await em.findOneOrFail(Marca, { id });
+    if(!marca){
+      return res.status(404).json({ message: 'Marca no encontrada' });
+    }
     res.status(200).json(marca);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -39,6 +42,9 @@ async function findOneByName(req: Request, res: Response) {
   try {
     const nombre = req.params.name.toUpperCase();
     const marca = await em.findOneOrFail(Marca, { nombreMarca: nombre });
+    if(!marca){
+      return res.status(404).json({ message: 'Marca no encontrada'});
+    }
     res.status(200).json(marca);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -68,7 +74,7 @@ async function update(req: Request, res: Response) {
     const id = req.params.id;
     const marcaAactualizar = await em.findOneOrFail(Marca, { id });
     if (!marcaAactualizar) {
-      return res.status(400).json({ message: "La marca no existe" });
+      return res.status(404).json({ message: "Marca no encontrada" });
     } else {
       em.assign(marcaAactualizar, req.body.sanitizedInput);
       await em.flush();
@@ -86,7 +92,7 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id;
     const marcaAeliminar = em.getReference(Marca, id);
     if (!marcaAeliminar) {
-      return res.status(400).json({ message: "La marca no existe" });
+      return res.status(404).json({ message: "Marca no encontrada" });
     } else {
       await em.removeAndFlush(marcaAeliminar);
       res.status(200).json({ message: "Marca eliminada" });

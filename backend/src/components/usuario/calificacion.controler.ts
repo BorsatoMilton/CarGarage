@@ -69,7 +69,7 @@ async function add(req: Request, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
+/** 
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id
@@ -93,5 +93,5 @@ async function remove(req: Request, res: Response) {
     res.status(500).json({ message: error.message })
   }
 }
-
-export { sanitizeCalificacionInput, findAll, findOne, findOneByRentAndUser, add, update, remove }
+*/
+export { sanitizeCalificacionInput, findAll, findOne, findOneByRentAndUser, add}

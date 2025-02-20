@@ -61,10 +61,9 @@ export class RegisterComponent implements OnInit {
           )
           .subscribe({
             next: (usuarioEncontrado: User | null) => {
-              console.log('Usuario encontrado:', usuarioEncontrado);
               if (usuarioEncontrado) {
                 this.alertComponent.showAlert(
-                  'El usuario ya existe', 'error')
+                  'El usuario o el email ya se encuentran registrados', 'error')
                 return;
               } else {
                 this.rolService.getOneRolByName('USUARIO').subscribe({
@@ -88,7 +87,7 @@ export class RegisterComponent implements OnInit {
                     } else {
                       alertMethod(
                         'Ocurrio un error',
-                        'Oops! algo salio mal, intentelo nuevamente',
+                        'Oops! Algo salio mal, intentelo nuevamente',
                         'error'
                       );
                     }

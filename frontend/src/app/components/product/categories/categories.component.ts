@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component,  OnInit} from '@angular/core';
+import { Component,  OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { Category } from '../../../core/models/categories.interface';
 import { SearcherComponent } from '../../../shared/components/searcher/searcher.component.js';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, SearcherComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SearcherComponent, UniversalAlertComponent],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.css'
 })
@@ -20,7 +22,7 @@ categories: Category[] = [];
 filteredCategories: Category[] = [];
 selectedCategory: Category | null = null;
 
-
+@ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
 constructor(
   private fb: FormBuilder, 
@@ -75,31 +77,47 @@ onSearch(filteredCategories: Category[]): void {
   this.filteredCategories = filteredCategories.length > 0 ? filteredCategories: [];
 }
 
-checkCategoryExists(): Observable<boolean> {
-  const nombreCategoria = this.categoryForm.get('nombreCategoria')?.value;
-  return this.categoriesService.getOneCategoryByName(nombreCategoria).pipe(
+checkCategoryExists(nombreCategoria: string, excludeCategoryId?: string): Observable<boolean> {
+  return this.categoriesService.getOneCategoryByName(nombreCategoria, excludeCategoryId).pipe(
     map((categoria: Category) => !!categoria),
-    catchError(() => of(false))
   );
 }
 
 addCategory() {
   if (this.categoryForm.valid) {
     const categoryData = this.categoryForm.value;
-    this.checkCategoryExists().subscribe((existe: boolean) => {
-      if (!existe) {
-          this.categoriesService.addCategory(categoryData).subscribe(() => {
-            alert('Categoria agregada' );
-            this.categoryForm.reset();
-            this.closeModal('addCategoria');
-            this.ngOnInit();
-          });
-      }else {
-        alert('La categoria ya existe')
+
+    this.checkCategoryExists(categoryData.nombreCategoria).pipe(
+      switchMap((existe: boolean) => {
+        if (!existe) {
+          return this.categoriesService.addCategory(categoryData);
+        } 
+        return throwError(() => new Error('La categoría ya existe'));
+      })
+    ).subscribe({
+      next: () => {
+        alertMethod('Alta de categorías', 'Categoría agregada exitosamente', 'success');
+        this.categoryForm.reset();
+        this.closeModal('addCategoria');
+        this.ngOnInit();
+      },
+      error: (err) => {
+        if (err.message === 'La categoría ya existe') {
+          this.closeModal('addCategoria');
+          this.alertComponent.showAlert(err.message, 'error');
+        } else if (err.status === 500) {
+            this.alertComponent.showAlert('Error interno del servidor', 'error');
+        } else {
+          this.closeModal('addCategoria');
+          this.alertComponent.showAlert('Ocurrió un error al agregar la categoría', 'error');
+        }
         this.categoryForm.reset();
       }
     });
-  }  
+  }else{
+    alertMethod('Alta de categorías', 'Debe completar los campos', 'error');
+    return;
+  }
 }
 
 editCategory(): void {
@@ -108,11 +126,32 @@ editCategory(): void {
       ...this.selectedCategory,
       ...this.categoryForm.value
     };
-    this.categoriesService.editCategory(updatedCategory).subscribe(() => {
-      alert('Categoría actualizada');
-      this.closeModal('editCategoria');
-      this.loadCategories();
-      this.categoryForm.reset();
+    this.checkCategoryExists(updatedCategory.nombreCategoria, this.selectedCategory.id).pipe(
+      switchMap((exists: boolean) => {
+        if (exists) {
+          return throwError(() => new Error('El nombre de la categoría ya existe'));
+        } 
+        return this.categoriesService.editCategory(updatedCategory);
+      })
+    ).subscribe({
+      next: () => {
+        alertMethod('Actualización de categorías', 'Categoría actualizada exitosamente', 'success');
+        this.categoryForm.reset();
+        this.closeModal('editCategoria');
+        this.ngOnInit();
+      },
+      error: (err: any) => {
+        if (err.message === 'El nombre de la categoría ya existe') {
+          this.closeModal('editCategoria');
+          this.alertComponent.showAlert(err.message, 'error');
+        } else if (err.status === 500) {
+          this.alertComponent.showAlert('Error interno del servidor', 'error');
+        } else {
+          this.closeModal('editCategoria');
+          this.alertComponent.showAlert('Ocurrió un error al editar la categoría', 'error');
+        }
+        this.categoryForm.reset();
+      }
     });
   }
 }
@@ -120,7 +159,7 @@ editCategory(): void {
 deleteCategory(category: Category | null, modalId: string) {
   if(category){
       this.categoriesService.deleteCategory(category).subscribe(() => {
-        alert('Categoria eliminada');
+        alertMethod('Eliminación de categorias','Categoría eliminada exitosamente', 'success');
         this.ngOnInit();
         this.closeModal(modalId);
         this.categoryForm.reset();

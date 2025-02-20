@@ -4,6 +4,7 @@ import { CompraService } from '../../../core/services/compra.service.js';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 
 @Component({
   selector: 'app-purchases',
@@ -53,7 +54,7 @@ export class PurchasesComponent {
 
   cancelarCompra(compra: Compra, modalId: string): void {
     this.compraService.cancelarCompra(compra).subscribe(() => {
-      alert('Compra cancelada con exito!');
+      alertMethod('Cancelar Compra', 'Compra cancelada con exito!', 'success');
       this.ngOnInit();
       this.closeModal(modalId);
       

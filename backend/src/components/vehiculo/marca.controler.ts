@@ -29,7 +29,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const marca = await em.findOneOrFail(Marca, { id });
+    const marca = await em.findOne(Marca, { id });
     if(!marca){
       return res.status(404).json({ message: 'Marca no encontrada' });
     }
@@ -38,13 +38,26 @@ async function findOne(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
+
 async function findOneByName(req: Request, res: Response) {
   try {
-    const nombre = req.params.name.toUpperCase();
-    const marca = await em.findOneOrFail(Marca, { nombreMarca: nombre });
-    if(!marca){
-      return res.status(404).json({ message: 'Marca no encontrada'});
+    const nombre = req.params.name.toUpperCase(); 
+    const excludeBrandId = req.query.excludeBrandId;
+
+    const query: any = {};
+
+    if (nombre) {
+      query.nombreMarca = nombre; 
     }
+    if (excludeBrandId) {
+      query._id = { $ne: excludeBrandId };
+    }
+    const marca = await em.findOne(Marca, query);
+
+    if (!marca) {
+      return res.status(200).json(null);
+    }
+
     res.status(200).json(marca);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -58,7 +71,7 @@ async function add(req: Request, res: Response) {
       nombreMarca: req.body.sanitizedInput.nombreMarca,
     });
     if (marcaExistente) {
-      return res.status(400).json({ message: "La marca ya existe" });
+      return res.status(409).json({ message: "La marca ya existe" });
     } else {
       const marca = em.create(Marca, req.body.sanitizedInput);
       await em.flush();
@@ -72,7 +85,8 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const marcaAactualizar = await em.findOneOrFail(Marca, { id });
+    req.body.sanitizedInput.nombreMarca = req.body.sanitizedInput.nombreMarca.toUpperCase();
+    const marcaAactualizar = await em.findOne(Marca, { id });
     if (!marcaAactualizar) {
       return res.status(404).json({ message: "Marca no encontrada" });
     } else {

@@ -59,22 +59,29 @@ export class ProfileComponent implements OnInit {
           {
             validators: [Validators.required],
             asyncValidators: [this.validateCurrentPassword.bind(this)],
-            updateOn: 'blur', // se ejecuta la validación al salir del campo
+            updateOn: 'blur',
           },
         ],
         newPassword: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
       },
-      { validator: this.passwordsMatch }
+      { validators: this.passwordsMatch }
     );
   }
 
-  passwordsMatch(group: FormGroup) {
-    return group.get('newPassword')?.value ===
-      group.get('confirmPassword')?.value
-      ? null
-      : { notMatching: true };
+  passwordsMatch(group: AbstractControl) {
+    const newPassword = group.get('newPassword')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+  
+    if (newPassword !== confirmPassword) {
+      group.get('confirmPassword')?.setErrors({ notMatching: true });
+      return { notMatching: true };
+    } else {
+      group.get('confirmPassword')?.setErrors(null);
+      return null;
+    }
   }
+  
 
   validateCurrentPassword(
     control: AbstractControl

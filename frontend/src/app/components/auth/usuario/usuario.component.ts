@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,11 +11,15 @@ import { User } from '../../../core/models/user.interface.js';
 import { UsuariosService } from '../../../core/services/users.service.js';
 import { Rol } from '../../../core/models/rol.interface.js';
 import { RolService } from '../../../core/services/rol.service.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, UniversalAlertComponent],
   templateUrl: 'usuario.component.html',
   styleUrl: './usuario.component.css',
 })
@@ -26,6 +30,8 @@ export class UserComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
   roles: Rol[] = [];
+
+@ViewChild(UniversalAlertComponent) alertComponent! : UniversalAlertComponent
 
   constructor(
     private fb: FormBuilder,
@@ -62,8 +68,12 @@ export class UserComponent implements OnInit {
     this.rolService.getAllRol().subscribe((data) => {
       this.roles = data;
     });
-    this.userService.getAllUser().subscribe((data) => {
-      this.users = data;
+    this.loadUser();
+  }
+
+  loadUser(): void {
+    this.userService.getAllUser().subscribe((users: User[]) => {
+      this.users = users;
     });
   }
 
@@ -99,71 +109,90 @@ export class UserComponent implements OnInit {
     this.userForm.reset();
   }
 
+  checkUsernameAndMail(username: string, mail: string, excludeUserId?: string): Observable<boolean> {
+    return this.userService.getOneUserByEmailOrUsername(username, mail, excludeUserId).pipe(
+      map((user: User) => !!user)
+    );
+  }
+
   addUser() {
-    if (this.addUserForm.invalid) {
-      alert('Por favor, complete todos los campos requeridos.');
-      return;
-    }
-    const userData = {
-      ...this.addUserForm.value,
-      telefono: this.addUserForm.value.telefono.toString(),
-    };
-    this.userService.getOneUserByEmailOrUsername(userData.usuario, userData.mail).subscribe({
-      next: (user: User | null) => {
-        if (user) {
-          alert('El usuario ya existe o el mail ya está en uso!');
-          this.addUserForm.enable();
-          return;
-        }else {
-          this.userService.addUser(userData).subscribe({
-            next: () => {
-              alert('Usuario agregado con éxito');
-              this.addUserForm.reset();
-              this.closeModal('addUser');
-              this.ngOnInit();
-              this.addUserForm.enable();
-              this.addUserForm.reset();
-            },
-            error: (error) => {
-              console.error(error);
-              alert('Error al agregar el usuario.');
-              this.addUserForm.enable();
-            },
-          });
+    if (this.addUserForm.valid) {
+      const userData = {
+        ...this.addUserForm.value,
+        telefono: this.addUserForm.value.telefono.toString()
+      };
+  
+      this.checkUsernameAndMail(userData.usuario, userData.mail).pipe(
+        switchMap((exists: boolean) => {
+          if (exists) {
+            return throwError(() => new Error('El usuario ya existe'));
+          }
+          return this.userService.addUser(userData);
+        })
+      ).subscribe({
+        next: () => {
+          alertMethod('Alta de usuarios', 'Usuario creado exitosamente', 'success');
+          this.loadUser();
+          this.closeModal('addUser');
+          this.addUserForm.reset();
+        },
+        error: (err: any) => {
+          if (err.message === 'El usuario ya existe') {
+            this.alertComponent.showAlert('El usuario o mail ya están registrados', 'error');
+          } else if (err.status === 500) {
+            this.alertComponent.showAlert('Error interno del servidor', 'error');
+          } else {
+            this.alertComponent.showAlert('Ocurrió un error al agregar el usuario', 'error');
+          }
+          this.closeModal('addUser');
         }
-      },
-      error: (error) => {
-        console.error(error);
-        alert('Se ha producido un error.');
-        this.addUserForm.enable();
-      }
-    });
+      });
+    } else {
+      this.alertComponent.showAlert('Por favor, complete todos los campos requeridos.', 'error');
+    }
   }
 
   editUser(): void {
     if (this.selectedUser) {
       const updatedUser: User = {
         ...this.selectedUser,
-        ...this.userForm.value,
-        telefono: this.userForm.value.telefono.toString(),
+        ...this.userForm.value
       };
-
-      this.userService.editUser(updatedUser).subscribe(() => {
-        alert('Usuario actualizado');
-        this.closeModal('editUser');
-        this.ngOnInit();
-        this.userForm.reset();
-
+  
+      this.checkUsernameAndMail(updatedUser.usuario, updatedUser.mail, this.selectedUser.id).pipe(
+        switchMap((exists: boolean) => {
+          if (exists) {
+            return throwError(() => new Error('El usuario ya existe'));
+          }
+          return this.userService.editUser(updatedUser);
+        })
+      ).subscribe({
+        next: () => {
+          alertMethod('Actualización de usuarios', 'Usuario actualizado exitosamente', 'success');
+          this.loadUser();
+          this.closeModal('editUser');
+          this.userForm.reset();
+        },
+        error: (err: any) => {
+          this.closeModal('editUser');
+          if (err.message === 'El usuario ya existe') {
+            this.alertComponent.showAlert('El usuario o mail ya están registrados', 'error');
+          } else if (err.status === 500) {
+            this.alertComponent.showAlert('Error interno del servidor', 'error');
+          } else {
+            this.alertComponent.showAlert('Ocurrió un error al actualizar el usuario', 'error');
+          }
+        }
       });
     }
   }
-
+  
   updatePassword(): void {
     if (this.selectedUser && this.passwordForm.valid) {
       const newPassword = { newPassword: this.passwordForm.value.newPassword };
   
       this.userService.changePassword(this.selectedUser.id, newPassword).subscribe(() => {
-        alert('Contraseña actualizada');
+        alertMethod('Cambio de contraseña','Contraseña actualizada correctamente', 'success');
         this.closeModal('updatePassword');
         this.passwordForm.reset();
         this.ngOnInit();
@@ -171,11 +200,10 @@ export class UserComponent implements OnInit {
     }
   }
   
-
   removeUser(user: User | null, modalId: string) {
     if (user) {
       this.userService.deleteUser(user).subscribe(() => {
-        alert('Usuario eliminado');
+        alertMethod('Baja de usuarios','Usuario eliminado correctamente', 'success');
         this.ngOnInit();
         this.closeModal(modalId);
         this.userForm.reset();

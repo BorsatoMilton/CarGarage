@@ -4,6 +4,7 @@ import { RentsService } from '../../../core/services/rents.service.js';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { CommonModule } from '@angular/common';
 import { forEach } from 'angular';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 
 @Component({
   selector: 'app-rent-list',
@@ -60,7 +61,7 @@ export class RentListComponent {
     cancelRent(rent: Rent | null, modalId: string): void {
       if(rent){
         this.rentService.cancelRent(rent).subscribe(() => {
-          alert('Alquiler cancelado con exito!');
+          alertMethod('Cancelar Alquiler', 'Alquiler cancelado exitosamente!', 'success');
           this.ngOnInit();
           this.closeModal(modalId);
         });

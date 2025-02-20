@@ -19,7 +19,6 @@ async function addToken(req: Request, res: Response) {
       token,
       user,
       expiryDate: new Date(Date.now() + 3600000),
-      used: false
     });
     await em.persistAndFlush(passwordResetToken);
 
@@ -40,32 +39,11 @@ async function validateToken(req: Request, res: Response) {
     if (!passwordResetToken) {
         return res.status(404).json({ ok: false, message: 'Token no encontrado' });
     }
-    if (passwordResetToken.used) {
-        return res.status(400).json({ ok: false, message: 'Token ya utilizado' });
-    }
     if (passwordResetToken.expiryDate < new Date()) {
         return res.status(400).json({ ok: false, message: 'Token expirado' });
     }
     res.status(200).json({ ok: true, message: 'Token válido' });
   }
 
-async function usedToken(req: Request, res: Response) {
-    const token = req.params.token;
-    const passwordResetToken = await em.findOneOrFail(PasswordResetToken, { token: token });
-    if (!passwordResetToken) {
-        return res.status(404).json({ ok: false, message: 'Token no encontrado' });
-    }
-    if (passwordResetToken.used) {
-        return res.status(400).json({ ok: false, message: 'Token ya utilizado' });
-    }
-    passwordResetToken.used = true;
-    try {
-        await em.persistAndFlush(passwordResetToken);
-        res.status(200).json({ ok: true, message: 'Token utilizado' });
-    } catch (error: any) {
-        res.status(500).json({ ok: false, message: 'Error al utilizar el token', error: error.message });
-    }
-  }
 
-
-export{ addToken, validateToken, usedToken }  
+export{ addToken, validateToken }  

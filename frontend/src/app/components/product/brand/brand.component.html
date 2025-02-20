@@ -4,6 +4,7 @@
     <app-searcher [data]="brands" [filterAttributes]="['nombreMarca']" (filteredData)="onSearch($event)"  style="display: block; width: 70%;"></app-searcher>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrand">Añadir Marca</button>
   </div>
+  <app-universal-alert></app-universal-alert>
   <table class="table table-hover">
     <thead class="table-dark">
         <tr>

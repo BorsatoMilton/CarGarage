@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,9 +11,10 @@ import { RolService } from '../../../core/services/rol.service.js';
 import { Rol } from '../../../core/models/rol.interface.js';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { User } from '../../../core/models/user.interface.js';
-import { transition } from '@angular/animations';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 
 @Component({
   selector: 'app-rol',
@@ -29,10 +30,11 @@ export class RolComponent implements OnInit {
   selectedFiles: File[] = [];
   usuario: User | null = null;
 
+  @ViewChild(UniversalAlertComponent) alertComponent! : UniversalAlertComponent;
+  
   constructor(
     private fb: FormBuilder,
     private rolService: RolService,
-    private authService: AuthService
   ) {
     this.rolForm = this.fb.group({
       nombreRol: ['', Validators.required]
@@ -80,20 +82,20 @@ checkRolExists(): Observable<boolean> {
 
 addRol() {
     if (this.rolForm.invalid) {
-      alert('Por favor, complete todos los campos requeridos.');
+      this.alertComponent.showAlert('Por favor, complete todos los campos requeridos.', 'error');
       return;
     }
     const rolData = this.rolForm.value
     this.checkRolExists().subscribe((exists:boolean)=>{
       if(!exists){
         this.rolService.addRol(rolData).subscribe(()=>{
-          alert('Rol creado');
+          alertMethod('Creación de roles','Rol dado de alta exitosamente', 'success');
           this.closeModal('addRol');
           this.rolForm.reset();
           this.ngOnInit();
         });
       }else {
-        alert('El rol ya existe');
+        alertMethod('Creación de roles','El rol ya existe', 'error');
       }
     });
   }
@@ -113,7 +115,7 @@ addRol() {
       };
 
       this.rolService.editRol(updatedRol).subscribe(() => {
-        alert('Rol actualizado');
+        alertMethod('Edición de roles','Rol editado exitosamente', 'success');
         this.closeModal('editRol');
         this.ngOnInit();
         this.rolForm.reset();
@@ -124,7 +126,7 @@ addRol() {
   removeRol(rol: Rol | null, modalId: string) {
     if (rol) {
       this.rolService.deleteRol(rol).subscribe(() => {
-        alert('Rol eliminado');
+        alertMethod('Eliminación de roles','Rol eliminado exitosamente', 'success')
         this.ngOnInit();
         this.closeModal(modalId);
         this.rolForm.reset();

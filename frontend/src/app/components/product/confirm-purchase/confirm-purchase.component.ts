@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { VehiclesService } from '../../../core/services/vehicles.service.js';
 import { UsuariosService } from '../../../core/services/users.service.js';
@@ -9,11 +9,13 @@ import { Vehicle } from '../../../core/models/vehicles.interface.js';
 import { User } from '../../../core/models/user.interface.js';
 import { Category } from '../../../core/models/categories.interface.js';
 import { CompraService } from '../../../core/services/compra.service.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 
 @Component({
   selector: 'app-confirm-purchase',
   standalone: true,
-  imports: [CommonModule, RouterModule, ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './confirm-purchase.component.html',
   styleUrl: './confirm-purchase.component.css',
 })
@@ -25,7 +27,7 @@ export class ConfirmPurchaseComponent {
   usuario: User | null = null;
   idVehiculo: string | null = null;
   categoria: Category | null = null;
-  compraForm: FormGroup=new FormGroup({});
+  compraForm: FormGroup = new FormGroup({});
 
   constructor(
     private route: ActivatedRoute,
@@ -33,9 +35,9 @@ export class ConfirmPurchaseComponent {
     private userService: UsuariosService,
     private compraService: CompraService,
     private router: Router
-  ) {
+  ) {}
 
-  }
+  @ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -46,7 +48,11 @@ export class ConfirmPurchaseComponent {
           .getOneUserByEmail(this.destinatario)
           .subscribe((data) => {
             if (data === null) {
-              alert('Usuario no encontrado');
+              alertMethod(
+                'Confirmar Compra',
+                'Oops! El servidor no reconoce su usuario.',
+                'error'
+              );
               this.router.navigate(['/']);
             } else {
               this.usuario = data;
@@ -55,7 +61,11 @@ export class ConfirmPurchaseComponent {
 
         this.vehicleService.getOneVehicle(this.id!).subscribe((data) => {
           if (data === null) {
-            alert('Vehiculo no encontrado');
+            alertMethod(
+              'Confirmar Compra',
+              'Oops! El servidor no reconoce el vehiculo.',
+              'error'
+            );
             this.router.navigate(['/']);
           } else {
             this.vehiculo = data;
@@ -91,17 +101,35 @@ export class ConfirmPurchaseComponent {
         .addCompra(this.usuario.id, this.vehiculo.id)
         .subscribe((data) => {
           if (data === null) {
-            alert('Error al comprar el vehiculo');
+            this.alertComponent.showAlert(
+              'No se ha podido realizar la compra',
+              'error'
+            );
           } else {
-            alert('Vehiculo comprado correctamente');
-            this.compraService.avisoCompraExitosa(this.usuario!.mail).subscribe((data) => {
-              if (data === null) {
-                alert('Error al enviar el correo');
-                this.router.navigate(['/']);
-              } else {
-                alert('Se ha enviado la confirmación a su correo');
-                this.router.navigate(['/']);
-              }})
+            alertMethod(
+              'Compra Exitosa',
+              'Se ha realizado la compra con éxito',
+              'success'
+            );
+            this.compraService
+              .avisoCompraExitosa(this.usuario!.mail)
+              .subscribe((data) => {
+                if (data === null) {
+                  alertMethod(
+                    'Confirmar Compra',
+                    'Oops! El servidor no reconoce su usuario.',
+                    'error'
+                  );
+                  this.router.navigate(['/']);
+                } else {
+                  alertMethod(
+                    'Compra Exitosa',
+                    'Se ha realizado la compra con éxito!',
+                    'success'
+                  );
+                  this.router.navigate(['/']);
+                }
+              });
           }
         });
     }

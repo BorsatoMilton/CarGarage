@@ -12,7 +12,8 @@ import {
   sanitizeUsuarioInput, 
   login, 
   findOneByEmailDestinatario,
-  resetPassword
+  resetPassword,
+  validatePassword
 } from "./usuario.controler.js";
 
 export const usuarioRouter = Router();
@@ -433,6 +434,8 @@ usuarioRouter.post("/login", login);
  *                   example: Detalles del error
  */
 usuarioRouter.post("/", sanitizeUsuarioInput, add);
+
+usuarioRouter.post("/validate/:id", validatePassword)
 
 /**
  * @swagger

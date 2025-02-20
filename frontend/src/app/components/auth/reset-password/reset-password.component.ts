@@ -41,7 +41,7 @@ export class ResetPasswordComponent implements OnInit {
       this.token = params['token'];
     });
     if (!this.token) {
-      this.alertComponent.showAlert('Token inexistente', 'error');
+      alertMethod('Recuperación de contraseña','Ya se recupero la contraseña', 'error');
       this.router.navigate(['auth/login']);
     }else{
       this.passwordRecoveryService.validateToken(this.token).subscribe({
@@ -50,7 +50,7 @@ export class ResetPasswordComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al verificar el token:', error);
-          this.alertComponent.showAlert('Token inválido', 'error');
+          alertMethod('Recuperación de contraseña','Token inválido', 'error');
           this.router.navigate(['auth/login']);
         }
       });

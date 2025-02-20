@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Vehicle } from '../../../core/models/vehicles.interface.js';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Rent } from '../../../core/models/rent.interface.js';
 import { RentsService } from '../../../core/services/rents.service.js';
 import { CommonModule } from '@angular/common';
 import { VehiclesService } from '../../../core/services/vehicles.service.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 
 @Component({
   selector: 'app-confirm-rent',
@@ -17,6 +19,8 @@ export class ConfirmRentComponent {
   rent: Rent | null = null;
   vehiculo: Vehicle | null = null;
   totalAlquiler: number = 0;
+
+  @ViewChild(UniversalAlertComponent) alertComponent! : UniversalAlertComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +36,7 @@ export class ConfirmRentComponent {
         this.rentService.getOneRent(idAlquiler).subscribe({
           next: (data) => {
             if (!data) {
-              alert('Alquiler no encontrado');
+              alertMethod('Confirmar Alquiler','Oops! Algo salio mal!', 'error');
               this.router.navigate(['/']);
             } else {
               this.rent = data;
@@ -64,7 +68,7 @@ export class ConfirmRentComponent {
                   },
                   error: (err) => {
                     if (err.status === 404) {
-                      alert('Algo salio mal!');
+                      alertMethod('Confirmar Alquiler','Oops! Algo salio mal!', 'error');
                       this.router.navigate(['/']);
                     }
                   },
@@ -74,7 +78,7 @@ export class ConfirmRentComponent {
           },
           error: (err) => {
             if (err.status === 404) {
-              alert('Algo salio mal!');
+              alertMethod('Confirmar Alquiler','Oops! Algo salio mal!', 'error');
               this.router.navigate(['/']);
             }
           },
@@ -110,13 +114,12 @@ export class ConfirmRentComponent {
       };
       this.rentService.editRent(updatedRent).subscribe({
         next: () => {
-          alert('Alquiler confirmado');
+          alertMethod('Confirmar Alquiler','Alquiler confirmado con éxito!', 'success');
           this.closeModal('confirmarAlquiler');
           this.router.navigate(['/']);
         },
         error: (error) => {
-          console.error('Error al confirmar el alquiler:', error);
-          alert('Error al confirmar el alquiler');
+          this.alertComponent.showAlert('Algo salio mal!', 'error');
         },
       });
     }

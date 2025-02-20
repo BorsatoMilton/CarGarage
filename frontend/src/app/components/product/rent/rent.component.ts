@@ -20,6 +20,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 
 @Component({
   selector: 'app-rent',
@@ -203,19 +204,19 @@ export class RentComponent implements OnInit {
               .confirmRent(this.usuario.mail, idAlquiler)
               .subscribe({
                 next: () => {
-                  alert('Se le envió un mail con la confirmación del alquiler');
+                  alertMethod('Alquilar vehiculo', 'Alquiler confirmado exitosamente', 'El alquiler se ha confirmado correctamente.');
                   this.router.navigate(['/']);
                 },
                 error: (error) => {
                   console.error(error);
-                  alert('Error al confirmar el alquiler.');
+                  alertMethod('Alquilar vehiculo', 'Oops! Algo salió mal', 'error');
                 },
               });
           }
         },
         error: (error) => {
           console.error(error);
-          alert('Error al realizar el alquiler.');
+          alertMethod('Alquilar vehiculo', 'Oops! Algo salió mal', 'error');
         },
       });
     }

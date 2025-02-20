@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,14 +9,14 @@ import {
 } from '@angular/forms';
 import { VehiclesService } from '../../../core/services/vehicles.service.js';
 import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { BrandComponent } from '../brand/brand.component.js';
 import { BrandsService } from '../../../core/services/brands.service.js';
 import { Brand } from '../../../core/models/brands.interfaces.js';
 import { CategoriesService } from '../../../core/services/categories.service.js';
 import { Category } from '../../../core/models/categories.interface.js';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { User } from '../../../core/models/user.interface.js';
-import { transition } from '@angular/animations';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 
 @Component({
   selector: 'app-vehicle',
@@ -33,6 +33,8 @@ export class VehicleComponent implements OnInit {
   categories: Category[] = [];
   selectedFiles: File[] = [];
   usuario: User | null = null;
+
+  @ViewChild(UniversalAlertComponent) alertComponent! : UniversalAlertComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -111,14 +113,14 @@ export class VehicleComponent implements OnInit {
 
   addVehicle() {
     if (this.vehicleForm.invalid) {
-      alert('Por favor, complete todos los campos requeridos.');
+      this.alertComponent.showAlert('Por favor, complete todos los campos.', 'error');
       return;
     }
     if (
       this.vehicleForm.get('precioVenta')?.value === null &&
       this.vehicleForm.get('precioAlquilerDiario')?.value === null
     ) {
-      alert('Por favor, coloque un precio de venta o un precio de alquiler diario.');
+      this.alertComponent.showAlert('Por favor, ingrese un precio de venta o alquiler.', 'error');
       return;
     }
     this.vehicleForm.disable();
@@ -134,7 +136,7 @@ export class VehicleComponent implements OnInit {
     formData.append('marca', this.vehicleForm.get('marca')?.value);
     formData.append('categoria', this.vehicleForm.get('categoria')?.value);
     if (this.selectedFiles.length === 0) {
-      alert('Por favor, selecciona al menos una imagen para el vehículo.');
+      this.alertComponent.showAlert('Por favor, seleccione una imagen.', 'error');
       this.vehicleForm.enable();
       return;
     }
@@ -143,7 +145,7 @@ export class VehicleComponent implements OnInit {
     });  
     this.vehicleService.addVehicle(formData).subscribe({
       next: () => {
-        alert('Vehículo agregado con éxito');
+        alertMethod('Alta de vehiculos','Vehículo agregado exitosamente', 'success');
         this.closeModal('addVehicle');
         this.loadVehicle();
         this.vehicleForm.enable();
@@ -155,7 +157,7 @@ export class VehicleComponent implements OnInit {
       },
       error: (error) => {
         console.error(error);
-        alert('Error al agregar el vehículo.');
+        this.alertComponent.showAlert('Oops! Error al agregar vehículo', 'error');
         this.vehicleForm.enable();
       },
     });
@@ -178,7 +180,7 @@ export class VehicleComponent implements OnInit {
       };
 
       this.vehicleService.editVehicle(updatedVehicle).subscribe(() => {
-        alert('Vehiculo actualizado');
+        alertMethod('Edición de vehiculo','Vehículo editado exitosamente', 'success');
         this.closeModal('editVehicle');
         this.ngOnInit();
         this.vehicleForm.reset();
@@ -190,7 +192,7 @@ export class VehicleComponent implements OnInit {
   removeVehicle(vehicle: Vehicle | null, modalId: string) {
     if (vehicle) {
       this.vehicleService.deleteVehicle(vehicle).subscribe(() => {
-        alert('Vehiculo eliminado');
+        alertMethod('Eliminación de vehiculo','Vehículo eliminado exitosamente', 'success');
         this.ngOnInit();
         this.closeModal(modalId);
         this.vehicleForm.reset();

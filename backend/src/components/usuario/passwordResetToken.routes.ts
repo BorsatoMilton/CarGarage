@@ -9,5 +9,3 @@ recuperacionRouter.post('/', addToken);
 
 recuperacionRouter.get('/validate/:token', validateToken);
 
-
-recuperacionRouter.patch('update/:token', usedToken);

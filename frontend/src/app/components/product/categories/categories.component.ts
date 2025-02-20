@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component,  OnInit} from '@angular/core';
+import { Component,  OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { Category } from '../../../core/models/categories.interface';
 import { SearcherComponent } from '../../../shared/components/searcher/searcher.component.js';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 
 @Component({
   selector: 'app-categories',
@@ -20,7 +22,7 @@ categories: Category[] = [];
 filteredCategories: Category[] = [];
 selectedCategory: Category | null = null;
 
-
+@ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
 constructor(
   private fb: FormBuilder, 
@@ -89,13 +91,13 @@ addCategory() {
     this.checkCategoryExists().subscribe((existe: boolean) => {
       if (!existe) {
           this.categoriesService.addCategory(categoryData).subscribe(() => {
-            alert('Categoria agregada' );
+            alertMethod('Alta de categorias','Categoría agregada exitosamente', 'success');
             this.categoryForm.reset();
             this.closeModal('addCategoria');
             this.ngOnInit();
           });
       }else {
-        alert('La categoria ya existe')
+        this.alertComponent.showAlert('La categoría ya existe', 'error');
         this.categoryForm.reset();
       }
     });
@@ -109,7 +111,7 @@ editCategory(): void {
       ...this.categoryForm.value
     };
     this.categoriesService.editCategory(updatedCategory).subscribe(() => {
-      alert('Categoría actualizada');
+      alertMethod('Edición de categorias','Categoría editada exitosamente', 'success');
       this.closeModal('editCategoria');
       this.loadCategories();
       this.categoryForm.reset();
@@ -120,7 +122,7 @@ editCategory(): void {
 deleteCategory(category: Category | null, modalId: string) {
   if(category){
       this.categoriesService.deleteCategory(category).subscribe(() => {
-        alert('Categoria eliminada');
+        alertMethod('Eliminación de categorias','Categoría eliminada exitosamente', 'success');
         this.ngOnInit();
         this.closeModal(modalId);
         this.categoryForm.reset();

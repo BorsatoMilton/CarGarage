@@ -11,13 +11,12 @@ import { VehiclesService } from '../../../core/services/vehicles.service.js';
 import { Vehicle } from '../../../core/models/vehicles.interface.js';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { User } from '../../../core/models/user.interface.js';
-import { transition } from '@angular/animations';
 import { Compra } from '../../../core/models/compra.interfaces.js';
 import { CompraService } from '../../../core/services/compra.service.js';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Brand } from '../../../core/models/brands.interfaces.js';
 import { Category } from '../../../core/models/categories.interface.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 
 @Component({
   selector: 'app-compra',
@@ -34,8 +33,8 @@ export class CompraComponent implements OnInit {
   selectedFiles: File[] = [];
   usuario: User | null = null;
   idVehiculo: string | null = null;
-  categoria:Category | null = null;
-  
+  categoria: Category | null = null;
+
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehiclesService,
@@ -43,40 +42,32 @@ export class CompraComponent implements OnInit {
     private compraservice: CompraService,
     private route: ActivatedRoute,
     private router: Router
-
   ) {
-    this.compraForm = this.fb.group({ //crea un formulario reactivo con FormBuilder
+    this.compraForm = this.fb.group({
       fecha_compra: ['', Validators.required],
     });
   }
 
-  
   ngOnInit(): void {
-
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.idVehiculo = params.get('id');
-      if(this.idVehiculo === null){
-      alert('Vehiculo no encontrado');
-      this.router.navigate(['/']);
-    }else{
-      this.vehicleService.getOneVehicle(this.idVehiculo).subscribe((data) => {
-      if(data === null){
-        alert('Vehiculo no encontrado');
+      if (this.idVehiculo === null) {
+        alertMethod('Realizar Compra', 'Oops, algo fue mal!', 'error');
         this.router.navigate(['/']);
-      }else{
-        this.vehiculo = data;
-      
-
-  ;
+      } else {
+        this.vehicleService.getOneVehicle(this.idVehiculo).subscribe((data) => {
+          if (data === null) {
+            alertMethod('Realizar Compra', 'Oops, algo fue mal!', 'error');
+            this.router.navigate(['/']);
+          } else {
+            this.vehiculo = data;
+          }
+        });
       }
-    })};
     });
-    
+
     this.usuario = this.authService.getCurrentUser();
-
-    
   }
-
 
   openModal(modalId: string): void {
     console.log(this.compraForm.value);
@@ -99,24 +90,26 @@ export class CompraComponent implements OnInit {
     this.compraForm.reset();
   }
 
-
-  comprar(){
+  comprar() {
     if (this.authService.isAuthenticated()) {
-      console.log('Usuario autenticado. Procesando compra...');
-      this.compraservice.confirmarCompra(this.usuario!.mail, this.vehiculo!.id).subscribe({
-        next: () => {
-          alert('Se le envio un mail con la confirmación de la compra');
-          this.router.navigate(['/']);
-        },
-        error: (error) => {
-          console.error(error);
-          alert('Error al realizar la compra.');
-        },
-      });
+      this.compraservice
+        .confirmarCompra(this.usuario!.mail, this.vehiculo!.id)
+        .subscribe({
+          next: () => {
+            alertMethod(
+              'Realizar Compra',
+              'Compra realizada con éxito! Se envio un email a su casilla de correo para confirmar',
+              'success'
+            );
+            this.router.navigate(['/']);
+          },
+          error: (error) => {
+            console.error(error);
+            alertMethod('Realizar Compra', 'Oops, algo fue mal!', 'error');
+          },
+        });
     } else {
-      console.log('Usuario no autenticado. Redirigiendo a login...');
       this.router.navigate(['/login']);
     }
   }
-  
 }

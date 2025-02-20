@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Brand } from '../models/brands.interfaces.js';
 
@@ -25,8 +25,8 @@ export class BrandsService {
   getOneBrand(id:string): Observable<Brand> {
     return this.http.get<Brand>(`${this.apiUrl}/${id}`)
   }
-
-  getOneBrandByName(name:string): Observable<Brand> {
-    return this.http.get<Brand>(`${this.apiUrl}/byname/${name}`)
+  getOneBrandByName(name: string, excludeBrandId?: string): Observable<Brand> {
+    const params = new HttpParams().set('excludeBrandId', excludeBrandId || '');
+    return this.http.get<Brand>(`${this.apiUrl}/byname/${name}`, { params });
   }
 }

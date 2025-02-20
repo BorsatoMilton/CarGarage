@@ -30,7 +30,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const categoria = await em.findOneOrFail(Categoria, { id });
+    const categoria = await em.findOne(Categoria, { id });
     if(!categoria){
       return res.status(404).json({ message: "Categoria no encontrada" });
     }
@@ -43,11 +43,20 @@ async function findOne(req: Request, res: Response) {
 async function findOneByName(req: Request, res: Response) {
   try {
     const name = req.params.name.toUpperCase();
-    const categoria = await em.findOneOrFail(Categoria, {
-      nombreCategoria: name,
-    });
-    if (!categoria) {
-      return res.status(404).json({ message: "Categoria no encontrada" });
+    const excludeCategoryId = req.query.excludeCategoryId;
+
+    const query: any = {};
+
+    if (name) {
+      query.nombreCategoria = name;
+    }
+    if (excludeCategoryId) {
+      query._id = { $ne: excludeCategoryId };
+    }
+
+    const categoria = await em.findOne(Categoria, query);
+    if(!categoria){
+      return res.status(200).json(null);
     }
     res.status(200).json(categoria);
   } catch (error: any) {
@@ -62,7 +71,7 @@ async function add(req: Request, res: Response) {
       nombreCategoria: req.body.sanitizedInput.nombreCategoria,
     });
     if (categoriaExistente) {
-      return res.status(400).json({ message: "La categoria ya existe" });
+      return res.status(409).json({ message: "La categoria ya existe" });
     } else {
       const categoria = em.create(Categoria, req.body.sanitizedInput);
       await em.flush();
@@ -76,7 +85,8 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const categoria = await em.findOneOrFail(Categoria, { id });
+    req.body.sanitizedInput.nombreCategoria = req.body.sanitizedInput.nombreCategoria.toUpperCase();
+    const categoria = await em.findOne(Categoria, { id });
     if (!categoria) {
       return res.status(404).json({ message: "Categoria no encontrada" });
     } else {

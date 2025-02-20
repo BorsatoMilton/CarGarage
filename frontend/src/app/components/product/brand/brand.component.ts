@@ -3,8 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BrandsService } from '../../../core/services/brands.service.js';
 import { Brand } from '../../../core/models/brands.interfaces.js';
-import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { SearcherComponent } from '../../../shared/components/searcher/searcher.component.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
@@ -12,7 +12,7 @@ import { alertMethod } from '../../../shared/components/alerts/alert-function/al
 @Component({
   selector: 'app-brand',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, SearcherComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SearcherComponent, UniversalAlertComponent],
   templateUrl: './brand.component.html',
   styleUrl: './brand.component.css'
 })
@@ -73,30 +73,43 @@ onSearch(filteredBrands: Brand[]): void {
   this.filteredBrands = filteredBrands.length > 0 ? filteredBrands : [];
 }
 
-checkBrandExists(): Observable<boolean> {
-  const nombreMarca = this.brandForm.get('nombreMarca')?.value;
-  return this.brandService.getOneBrandByName(nombreMarca).pipe(
+checkBrandExists(nombreMarca: string, excludeBrandId?: string): Observable<boolean> {
+  return this.brandService.getOneBrandByName(nombreMarca, excludeBrandId).pipe(
     map((marca: Brand) => !!marca),
-    catchError(() => of(false))
   );
 }
 
 addBrand() {
   if (this.brandForm.valid) {
     const brandData = this.brandForm.value;    
-    this.checkBrandExists().subscribe((existe: boolean) => {
-      if (!existe) {
-          this.brandService.addBrand(brandData).subscribe(() => {
-            alertMethod('Alta de marcas', 'Marca agregada exitosamente', 'success');
-            this.brandForm.reset();
-            this.closeModal('addBrand');
-            this.loadBrand();   
-         });
-      } else {
-            this.alertComponent.showAlert('La marca que intenta agregar ya existe', 'error');
-            this.brandForm.reset();
+    this.checkBrandExists(brandData.nombreMarca).pipe(switchMap((exists: boolean) => {
+      if (!exists) {
+        return this.brandService.addBrand(brandData);
       }
+      return throwError(() => new Error('La marca ya existe'));
+    })).subscribe({
+      next: () => {
+      alertMethod('Alta de marcas', 'Marca creada exitosamente', 'success');
+      this.loadBrand();
+      this.closeModal('addBrand');
+      this.brandForm.reset();
+    },
+    error: (err: any) => {
+      if (err.message === 'La marca ya existe') {
+        this.closeModal('addBrand');
+        this.alertComponent.showAlert(err.message, 'error');
+      } else if (err.status === 500) {
+         this.alertComponent.showAlert('Error interno del servidor', 'error');
+      } else {
+         this.closeModal('addBrand');
+         this.alertComponent.showAlert('Ocurrió un error al agregar la marca', 'error');
+      }
+      this.brandForm.reset();
+    } 
   });
+  }else{
+    this.alertComponent.showAlert('Por favor, complete todos los campos requeridos.', 'error');
+    return
   }
 }
 
@@ -106,12 +119,31 @@ editBrand(): void {
       ...this.selectedBrand,
       ...this.brandForm.value
     };
-    this.brandService.editBrand(updatedBrand).subscribe(() => {
-      alertMethod('Edición de marcas', 'Marca editada exitosamente', 'success');
-      this.closeModal('editBrand');
-      this.loadBrand();
-      this.brandForm.reset();
-    });
+    this.checkBrandExists(updatedBrand.nombreMarca, this.selectedBrand.id).pipe(
+      switchMap((exists: boolean) => {
+        if (exists) {
+          return throwError(() => new Error('La marca ya existe'));
+        }
+        return this.brandService.editBrand(updatedBrand);
+      })
+    ).subscribe({
+      next: () => {
+        alertMethod('Actualización de marcas', 'Marca actualizada exitosamente', 'success');
+        this.loadBrand();
+        this.closeModal('editBrand');
+        this.brandForm.reset();
+      },
+      error: (err: any) => {
+        this.closeModal('editBrand');
+        if (err.message === 'La marca ya existe') {
+          this.alertComponent.showAlert(err.message, 'error');
+        } else if (err.status === 500) {
+          this.alertComponent.showAlert('Error interno del servidor', 'error');
+        } else {
+          this.alertComponent.showAlert('Ocurrió un error al actualizar la marca', 'error');
+        }
+      }
+    })
   }
 }
 

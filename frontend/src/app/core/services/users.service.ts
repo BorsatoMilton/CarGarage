@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.interface.js';
 
@@ -23,11 +23,9 @@ export class UsuariosService {
   getAllUser(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }
-  getOneUserByEmailOrUsername(
-    usuario: String,
-    mail: String
-  ): Observable<User | null> {
-    return this.http.get<User>(`${this.apiUrl}/${usuario}/${mail}`);
+  getOneUserByEmailOrUsername(usuario: string, mail: string, excludeUserId?: string): Observable<User> {
+    const params = new HttpParams().set('excludeUserId', excludeUserId || '');
+    return this.http.get<User>(`${this.apiUrl}/${usuario}/${mail}`, { params });
   }
 
   getOneUserByEmail(mail: String): Observable<User | null> {

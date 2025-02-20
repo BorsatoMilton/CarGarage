@@ -13,6 +13,8 @@ import { Rol } from '../../../core/models/rol.interface.js';
 import { RolService } from '../../../core/services/rol.service.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-usuario',
@@ -66,8 +68,12 @@ export class UserComponent implements OnInit {
     this.rolService.getAllRol().subscribe((data) => {
       this.roles = data;
     });
-    this.userService.getAllUser().subscribe((data) => {
-      this.users = data;
+    this.loadUser();
+  }
+
+  loadUser(): void {
+    this.userService.getAllUser().subscribe((users: User[]) => {
+      this.users = users;
     });
   }
 
@@ -103,74 +109,84 @@ export class UserComponent implements OnInit {
     this.userForm.reset();
   }
 
+  checkUsernameAndMail(username: string, mail: string, excludeUserId?: string): Observable<boolean> {
+    return this.userService.getOneUserByEmailOrUsername(username, mail, excludeUserId).pipe(
+      map((user: User) => !!user)
+    );
+  }
+
   addUser() {
-    if (this.addUserForm.invalid) {
+    if (this.addUserForm.valid) {
+      const userData = {
+        ...this.addUserForm.value,
+        telefono: this.addUserForm.value.telefono.toString()
+      };
+  
+      this.checkUsernameAndMail(userData.usuario, userData.mail).pipe(
+        switchMap((exists: boolean) => {
+          if (exists) {
+            return throwError(() => new Error('El usuario ya existe'));
+          }
+          return this.userService.addUser(userData);
+        })
+      ).subscribe({
+        next: () => {
+          alertMethod('Alta de usuarios', 'Usuario creado exitosamente', 'success');
+          this.loadUser();
+          this.closeModal('addUser');
+          this.addUserForm.reset();
+        },
+        error: (err: any) => {
+          if (err.message === 'El usuario ya existe') {
+            this.alertComponent.showAlert('El usuario o mail ya están registrados', 'error');
+          } else if (err.status === 500) {
+            this.alertComponent.showAlert('Error interno del servidor', 'error');
+          } else {
+            this.alertComponent.showAlert('Ocurrió un error al agregar el usuario', 'error');
+          }
+          this.closeModal('addUser');
+        }
+      });
+    } else {
       this.alertComponent.showAlert('Por favor, complete todos los campos requeridos.', 'error');
-      return;
     }
-    const userData = {
-      ...this.addUserForm.value,
-      telefono: this.addUserForm.value.telefono.toString(),
-    };
-  
-    this.userService.getOneUserByEmailOrUsername(userData.usuario, userData.mail).subscribe({
-      next: (user: User | null) => {
-        if (user) {
-          this.alertComponent.showAlert('El usuario ya existe o el mail ya está en uso!', 'error');
-          this.addUserForm.enable();
-          return;
-        } else {
-          this.createUser(userData);
-        }
-      },
-      error: (error) => {
-        if (error.status === 404) {
-          this.createUser(userData);
-        } else {
-          console.error(error);
-          this.alertComponent.showAlert('Se ha producido un error.', 'error');
-          this.addUserForm.enable();
-        }
-      }
-    });
   }
-  
-  private createUser(userData: any) {
-    this.userService.addUser(userData).subscribe({
-      next: () => {
-        alertMethod('Alta de usuarios', 'Usuario agregado correctamente', 'success');
-        this.addUserForm.reset();
-        this.closeModal('addUser');
-        this.ngOnInit();
-        this.addUserForm.enable();
-      },
-      error: (error) => {
-        console.error(error);
-        alertMethod('Alta de usuarios', 'Se ha producido un error.', 'error');
-        this.addUserForm.enable();
-      },
-    });
-  }
-  
 
   editUser(): void {
     if (this.selectedUser) {
       const updatedUser: User = {
         ...this.selectedUser,
-        ...this.userForm.value,
-        telefono: this.userForm.value.telefono.toString(),
+        ...this.userForm.value
       };
-
-      this.userService.editUser(updatedUser).subscribe(() => {
-        alertMethod('Edición de usuarios','Usuario editado correctamente', 'success');
-        this.closeModal('editUser');
-        this.ngOnInit();
-        this.userForm.reset();
-
+  
+      this.checkUsernameAndMail(updatedUser.usuario, updatedUser.mail, this.selectedUser.id).pipe(
+        switchMap((exists: boolean) => {
+          if (exists) {
+            return throwError(() => new Error('El usuario ya existe'));
+          }
+          return this.userService.editUser(updatedUser);
+        })
+      ).subscribe({
+        next: () => {
+          alertMethod('Actualización de usuarios', 'Usuario actualizado exitosamente', 'success');
+          this.loadUser();
+          this.closeModal('editUser');
+          this.userForm.reset();
+        },
+        error: (err: any) => {
+          this.closeModal('editUser');
+          if (err.message === 'El usuario ya existe') {
+            this.alertComponent.showAlert('El usuario o mail ya están registrados', 'error');
+          } else if (err.status === 500) {
+            this.alertComponent.showAlert('Error interno del servidor', 'error');
+          } else {
+            this.alertComponent.showAlert('Ocurrió un error al actualizar el usuario', 'error');
+          }
+        }
       });
     }
   }
-
+  
   updatePassword(): void {
     if (this.selectedUser && this.passwordForm.valid) {
       const newPassword = { newPassword: this.passwordForm.value.newPassword };

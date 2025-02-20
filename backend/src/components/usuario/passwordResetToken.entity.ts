@@ -14,7 +14,4 @@ export class PasswordResetToken extends BaseEntity {
   @Property()
   expiryDate!: Date;
 
-  @Property()
-  used = false;
-
 }

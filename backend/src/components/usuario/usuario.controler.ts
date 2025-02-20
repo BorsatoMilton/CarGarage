@@ -40,20 +40,23 @@ async function findAll(req: Request, res: Response) {
 
 async function findOneByEmailOrUsername(req: Request, res: Response) {
   try {
-    const usuario = req.params.user;
-    const mail = req.params.mail;
-    const usuarioEncontrado = await em.findOne(
-      Usuario,
-      {
-        $or: [{ usuario: usuario }, { mail: mail }],
-      },
-      { populate: ["rol"] }
-    );
-    if (!usuarioEncontrado) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    } 
-    res.status(200).json(usuarioEncontrado);
+    const { user, mail } = req.params; 
+    const excludeUserId = req.query.excludeUserId; 
 
+    const query: any = { $or: [] };
+
+    if (user) query.$or.push({ usuario: user });
+    if (mail) query.$or.push({ mail: mail });
+    if (excludeUserId) query._id = { $ne: excludeUserId }; 
+
+    const usuarioEncontrado = await em.findOne(Usuario, query, { populate: ["rol"] });
+
+  
+    if (!usuarioEncontrado) {
+      return res.status(200).json(null);
+    }
+
+    return res.status(200).json(usuarioEncontrado);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -68,7 +71,7 @@ async function findOneByEmailDestinatario(req: Request, res: Response) {
       { populate: ["rol"] }
     );
     if (!usuarioEncontrado) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      return res.status(409).json({ message: "Usuario no encontrado" });
     }
     res.status(200).json(usuarioEncontrado);
   } catch (error: any) {
@@ -172,7 +175,7 @@ async function validateToken(req: Request, res: Response) {
     const tokenEntity = await em.findOne(PasswordResetToken, { token });
     if (!tokenEntity || tokenEntity.expiryDate < new Date()) {
       return res
-        .status(400)
+        .status(404)
         .json({ ok: false, message: "Token inválido o expirado" });
     }
     return res.status(200).json({ ok: true, message: "Token válido" });
@@ -185,7 +188,6 @@ async function validateToken(req: Request, res: Response) {
 async function checkUsername(req: Request, res: Response) {
   try {
     const usuario = req.params.username;
-    console.log("Parametros recibidos:", req.params);
     const usuarioEncontrado = await em.findOne(Usuario, { usuario: usuario });
     if (!usuarioEncontrado) {
       return res.status(200).json(false);
@@ -219,21 +221,22 @@ async function add(req: Request, res: Response) {
         { mail: req.body.sanitizedInput.mail },
       ],
     });
+
     if (usuarioExistente) {
-      return res.status(400).json({ message: "Usuario ya existe" });
-    } else {
-      const vecesHash = 10;
-      const hashClave = await bcrypt.hash(
-        req.body.sanitizedInput.clave,
-        vecesHash
-      );
-      const usuario = em.create(Usuario, {
-        ...req.body.sanitizedInput,
-        clave: hashClave,
-      });
-      await em.flush();
-      res.status(201).json({ message: "Usuario creado", data: usuario });
+      return res.status(409).json({ message: "El usuario ya existe" });
     }
+    const vecesHash = 10;
+    const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
+
+    const usuario = em.create(Usuario, {
+      ...req.body.sanitizedInput,
+      clave: hashClave,
+    });
+
+    await em.flush();
+
+    const usuarioData = { ...usuario, clave: undefined };
+    res.status(201).json({ message: "Usuario creado", data: usuarioData });
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ message: error.message });

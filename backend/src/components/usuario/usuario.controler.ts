@@ -154,13 +154,13 @@ async function login(req: Request, res: Response) {
 
 async function validatePassword(req: Request, res: Response) {
   try {
-    const id = req.params.id;
-    const password = req.body.password;
-    const usuario = await em.findOne(Usuario, { id });
+    const userId = req.params.id;
+    const currentPassword = req.body.password
+    const usuario = await em.findOne(Usuario, { id: userId });
     if (!usuario) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     } else {
-      const isMatch = await bcrypt.compare(password, usuario.clave);
+      const isMatch = await bcrypt.compare(currentPassword, usuario.clave);
       res.status(200).json(isMatch);
     }
   } catch (error: any) {

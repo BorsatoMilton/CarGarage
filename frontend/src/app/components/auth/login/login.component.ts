@@ -3,11 +3,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { RouterModule, Router } from '@angular/router';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, UniversalAlertComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -15,6 +17,8 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});
   user: string = '';
   password: string = '';
+
+  @ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -31,7 +35,7 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     if (this.loginForm.invalid) {
-      alert('Por favor complete todos los campos correctamente.');
+      this.alertComponent.showAlert('Por favor, complete los campos', 'error');
       return;
     }
   
@@ -42,17 +46,16 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.user, this.password).subscribe({
       next: (usuario) => {
         this.authService.setUserSession(usuario);
-        alert(`Bienvenido, ${usuario.nombre}!`);
         this.router.navigate(['/']);
         
       },
       error: (error) => {
         if (error.status === 404) {
-          alert('Usuario no encontrado');
+          this.alertComponent.showAlert('Usuario no encontrado', 'error');
         } else if (error.status === 401) {
-          alert('Contraseña incorrecta');
+          this.alertComponent.showAlert('Contraseña incorrecta', 'error');
         } else {
-          alert('Error al comunicarse con el servidor');
+          this.alertComponent.showAlert('Error al iniciar sesión, intente en un momento', 'error');
         }
         this.loginForm.reset();
       }

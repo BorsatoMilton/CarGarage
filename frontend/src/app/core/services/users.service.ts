@@ -56,4 +56,8 @@ export class UsuariosService {
   checkEmail(email: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/checkemail/${email}`);
   }
+
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/reset`, { token, newPassword });
+  }
 }

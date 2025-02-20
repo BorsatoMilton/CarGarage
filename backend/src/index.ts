@@ -9,10 +9,10 @@ import { usuarioRouter } from './components/usuario/usuario.routes.js';
 import { tarjetaRouter } from './components/usuario/tarjeta.routes.js';
 import { calificacionRouter } from './components/usuario/calificacion.routes.js';
 import { compraRouter } from './components/compra/compra.routes.js';
-import { correoRouter } from './components/correo/correo.routes.js';
 import cors from 'cors';
 import { alquilerRouter } from './components/alquiler/alquiler.routes.js';
 import { rolRouter } from './components/usuario/rol.routes.js';
+import { recuperacionRouter } from './components/usuario/passwordResetToken.routes.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
@@ -63,7 +63,7 @@ app.use('/api/usuarios', usuarioRouter )
 app.use('/api/tarjetas', tarjetaRouter)
 app.use ('/api/calificaciones', calificacionRouter)
 app.use('/api/compras', compraRouter)
-app.use('/api/recuperacion', correoRouter);
+app.use('/api/recuperacion', recuperacionRouter);
 app.use('/api/alquiler', alquilerRouter);
 app.use('/api/rol', rolRouter);
 app.use('/uploads', express.static(path.resolve('src/uploads')));

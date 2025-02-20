@@ -3,7 +3,6 @@ import {
   findAll, 
   findOneById, 
   findOneByEmailOrUsername, 
-  validatePassword, 
   checkUsername, 
   checkEmail, 
   add, 
@@ -11,9 +10,9 @@ import {
   resetPasswordWithoutToken, 
   remove, 
   sanitizeUsuarioInput, 
-  resetPassword, 
   login, 
-  findOneByEmailDestinatario 
+  findOneByEmailDestinatario,
+  resetPassword
 } from "./usuario.controler.js";
 
 export const usuarioRouter = Router();
@@ -322,7 +321,7 @@ usuarioRouter.get("/bymail/:mail", findOneByEmailDestinatario);
  */
 usuarioRouter.get("/:user/:mail", findOneByEmailOrUsername);
 
-// Endpoint POST /login
+usuarioRouter.post("/reset", resetPassword)
 /**
  * @swagger
  * /api/usuario/login:

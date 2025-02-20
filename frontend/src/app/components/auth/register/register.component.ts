@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -7,15 +7,19 @@ import { Router } from '@angular/router';
 import { RolService } from '../../../core/services/rol.service.js';
 import { User } from '../../../core/models/user.interface.js';
 import { Rol } from '../../../core/models/rol.interface.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, UniversalAlertComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
+
+  @ViewChild(UniversalAlertComponent) alertComponent! : UniversalAlertComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -59,7 +63,8 @@ export class RegisterComponent implements OnInit {
             next: (usuarioEncontrado: User | null) => {
               console.log('Usuario encontrado:', usuarioEncontrado);
               if (usuarioEncontrado) {
-                alert('El usuario ya existe o el mail ya esta en uso!');
+                this.alertComponent.showAlert(
+                  'El usuario ya existe', 'error')
                 return;
               } else {
                 this.rolService.getOneRolByName('USUARIO').subscribe({
@@ -72,31 +77,43 @@ export class RegisterComponent implements OnInit {
                       this.usuariosService
                         .addUser(usuarioFinal)
                         .subscribe(() => {
-                          alert('Usuario registrado correctamente');
+                          alertMethod(
+                            'Usuario registrado',
+                            'El usuario se ha registrado correctamente',
+                            'success'
+                          );
                           this.registerForm.reset();
                           this.router.navigate(['/auth/login']);
                         });
                     } else {
-                      alert('No se pudo obtener el rol');
+                      alertMethod(
+                        'Ocurrio un error',
+                        'Oops! algo salio mal, intentelo nuevamente',
+                        'error'
+                      );
                     }
                   },
                   error: (error: Error) => {
                     console.error('Error al obtener el rol:', error);
-                    alert('Hubo un problema al obtener el rol');
+                    alertMethod(
+                      'Ocurrio un error',
+                      'Oops! algo salio mal, intentelo nuevamente',
+                      'error'
+                    );
                   },
                 });
               }
             },
             error: (error: Error) => {
               console.error('Error al obtener el usuario:', error);
-              alert('Hubo un problema al obtener el usuario');
+              alertMethod('Ocurrio un error', 'Oops! algo salio mal, intentelo nuevamente', 'error');
             },
           });
       } else {
-        alert('Por favor complete todos los campos correctamente.');
+        this.alertComponent.showAlert('Formulario invalido. Por favor complete todos los campos', 'error');
       }
     } else {
-      alert('Las contraseñas no coinciden');
+      this.alertComponent.showAlert('Las contraseñas no coinciden', 'error');
       this.registerForm.get('clave')?.reset();
       this.registerForm.get('repetirClave')?.reset();
     }

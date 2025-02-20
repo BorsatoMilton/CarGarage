@@ -8,23 +8,15 @@ import { orm } from '../../shared/db/orm.js';
 import { findOneById } from '../vehiculo/vehiculo.controler.js';
 import { getOneById } from '../alquiler/alquiler.controler.js';
 import { Alquiler } from '../alquiler/alquiler.entity.js';
+import { Usuario } from '../usuario/usuario.entity.js';
 
 
 
 dotenv.config();
 
-async function recuperarContraseña(req: Request, res: Response) {
-    const destinatario = req.body.destinatario;
+async function recuperarContraseña(token: string, user: Usuario): Promise<{ok: boolean, message: string, info?: string}> {
 
-    const user = await findOneByEmail(destinatario);
-    if (!user) {
-        return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
-    }
-
-    const token = generateToken();
     const resetLink = `http://localhost:4200/auth/reset-password?token=${token}`;
-    const tokenEntity = new PasswordResetToken(token, user);
-    await orm.em.persistAndFlush(tokenEntity);
 
     const config = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -69,23 +61,23 @@ async function recuperarContraseña(req: Request, res: Response) {
     const opciones = {
         from: process.env.EMAIL_USER,
         subject: 'Recuperación de contraseña',
-        to: destinatario,
+        to: user.mail,
         html: htmlContent 
     };
 
     try {
         const info = await config.sendMail(opciones);
-        return res.status(200).json({
+        return {
             ok: true,
             message: 'Correo enviado correctamente',
             info: info.response
-        });
+        };
     } catch (error: any) {
-        return res.status(500).json({
+        return {
             ok: false,
             message: 'Error al enviar el correo',
-            error: error.message
-        });
+            info: error.message
+        };
     }
 };
 

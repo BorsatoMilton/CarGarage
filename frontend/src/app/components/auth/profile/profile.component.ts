@@ -8,6 +8,7 @@ import { User } from '../../../core/models/user.interface.js';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 
 @Component({
   selector: 'app-profile',
@@ -158,10 +159,10 @@ export class ProfileComponent implements OnInit {
           this.authService.setUserSession(updatedUser);
           this.profileForm.reset();
           this.ngOnInit();
-          alert('Perfil actualizado correctamente');
+          alertMethod('Actualizar perfil','Perfil actualizado correctamente', 'success');
         },
         error: () => {
-          alert('Error al actualizar el perfil');
+          alertMethod('Hubo un error','Error al actualizar el perfil', 'error');
         },
       });
     }
@@ -176,11 +177,10 @@ export class ProfileComponent implements OnInit {
             this.closeModal('updatePassword');
             this.passwordForm.reset();
             this.ngOnInit();
-            alert('Contraseña actualizada correctamente');
+            alertMethod('Actualizar perfil','Contraseña actualizada correctamente', 'success');
           },
           error: () => {
-            console.error('Error al cambiar la contraseña');
-            alert('Error al cambiar la contraseña');
+            alertMethod('Actualizar perfil','Error al actualizar la contraseña', 'error');
           },
         });
     } else {

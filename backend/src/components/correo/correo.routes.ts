@@ -66,4 +66,4 @@ export const correoRouter = Router();
  *               message: "Error al enviar el correo de recuperación"
  *               error: "Detalles del error"
  */
-correoRouter.post("/", recuperarContraseña);
+//correoRouter.post("/", recuperarContraseña);

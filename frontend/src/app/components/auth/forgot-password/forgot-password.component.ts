@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { PasswordRecoveryService } from '../../../core/services/password-recovery.service';
 import { RouterModule} from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 
 @Component({
   selector: 'app-forgot-password',
@@ -31,11 +32,11 @@ export class ForgotPasswordComponent {
       const email = this.recoverForm.get('email')?.value;
       this.passwordRecoveryService.sendRecoveryEmail(email).subscribe({
         next: () => {
-          alert('Se ha enviado un correo a tu dirección de email');
+          alertMethod('Correo Enviado','Se ha enviado un correo a tu dirección de email', 'success');
         },
         error: (error) => {
           console.error('Error al enviar el correo:', error);
-          alert('Hubo un error al enviar el correo. Por favor, inténtalo nuevamente.');
+          alertMethod('Hubo un error', 'Hubo un error al enviar el correo. Por favor inténtalo nuevamente.', 'error');
         }
       });
     }

@@ -28,7 +28,7 @@ export const calificacionRouter = Router();
  *           type: string
  *           description: ID del usuario que realizó la calificación
  *         alquiler:
- +           $ref: '#/components/schemas/Alquiler'
+ *           $ref: '#/components/schemas/Alquiler'
  *       required:
  *         - fechaCalificacion
  *         - valoracion

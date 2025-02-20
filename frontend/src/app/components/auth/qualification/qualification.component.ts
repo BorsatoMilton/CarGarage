@@ -9,17 +9,20 @@ import { User } from '../../../core/models/user.interface.js';
 import { RentsService } from '../../../core/services/rents.service.js';
 import { Rent } from '../../../core/models/rent.interface.js';
 import { Qualification } from '../../../core/models/qualification.inteface.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import {
   ReactiveFormsModule,
   Validators,
   FormGroup,
   FormBuilder,
 } from '@angular/forms';
+import { ViewChild } from '@angular/core';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 
 @Component({
   selector: 'app-qualification',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, UniversalAlertComponent],
   templateUrl: './qualification.component.html',
   styleUrl: './qualification.component.css',
 })
@@ -30,6 +33,8 @@ export class QualificationComponent implements OnInit {
   locador: User | null = null;
   rating: number = 0;
   comment: string = '';
+
+  @ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -74,7 +79,7 @@ export class QualificationComponent implements OnInit {
       .subscribe({
         next: (calificacion) => {
           if (calificacion) {
-            alert('Ya has calificado a este usuario por este alquiler.');
+            this.alertComponent.showAlert('Ya has calificado a este usuario', 'info');
             this.router.navigate(['/']);
           }
         },
@@ -101,12 +106,13 @@ export class QualificationComponent implements OnInit {
 
     this.qualifiactionService.createQualification(nuevaCalificacion).subscribe({
       next: (respuesta) => {
-        alert('Calificación enviada con éxito.');
+        alertMethod('Califica al usuario','Usuario calificado correctamente', 'success');
         console.log('Calificación enviada con éxito:', respuesta);
 
         this.router.navigate(['/']);
       },
       error: (error) => {
+        alertMethod('Califica al usuario','Error al enviar la calificación', 'error');
         console.error('Error al enviar la calificación:', error);
       },
     });

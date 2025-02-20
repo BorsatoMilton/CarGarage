@@ -165,6 +165,23 @@ async function validatePassword(req: Request, res: Response) {
   }
 }
 
+
+async function validateToken(req: Request, res: Response) {
+  try {
+    const token = req.params.token;
+    const tokenEntity = await em.findOne(PasswordResetToken, { token });
+    if (!tokenEntity || tokenEntity.expiryDate < new Date()) {
+      return res
+        .status(400)
+        .json({ ok: false, message: "Token inválido o expirado" });
+    }
+    return res.status(200).json({ ok: true, message: "Token válido" });
+  }
+  catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function checkUsername(req: Request, res: Response) {
   try {
     const usuario = req.params.username;
@@ -329,4 +346,5 @@ export {
   login,
   findOneByEmailOrUsername,
   findOneByEmailDestinatario,
+  validateToken,
 };

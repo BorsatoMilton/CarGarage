@@ -198,25 +198,27 @@ export class RentComponent implements OnInit {
       };
       this.rentService.addRent(rentData).subscribe({
         next: (response) => {
-          if (this.usuario?.mail && this.idVehiculo) {
+          if (this.usuario && this.idVehiculo) {
             const idAlquiler = response.id;
-            this.rentService
-              .confirmRent(this.usuario.mail, idAlquiler)
-              .subscribe({
-                next: () => {
-                  alertMethod('Alquilar vehiculo', 'Alquiler confirmado exitosamente', 'El alquiler se ha confirmado correctamente.');
-                  this.router.navigate(['/']);
-                },
-                error: (error) => {
-                  console.error(error);
-                  alertMethod('Alquilar vehiculo', 'Oops! Algo salió mal', 'error');
-                },
-              });
+            this.rentService.confirmRent(this.usuario, idAlquiler).subscribe({
+              next: () => {
+                alertMethod(
+                  'Alquilar vehiculo',
+                  'Se ha enviado un mail a su casilla de correo para confirmar el alquiler',
+                  'success'
+                );
+                this.router.navigate(['/']);
+              },
+              error: (error) => {
+                console.error(error);
+                alertMethod('Alquilar vehiculo', 'Oops! Algo salió mal al confirmar el alquiler', 'error');
+              },
+            });
           }
         },
         error: (error) => {
           console.error(error);
-          alertMethod('Alquilar vehiculo', 'Oops! Algo salió mal', 'error');
+          alertMethod('Alquilar vehiculo', 'Oops! Algo salió mal al crear el alquiler', 'error');
         },
       });
     }

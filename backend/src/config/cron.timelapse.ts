@@ -12,7 +12,7 @@ cron.schedule("*/1 * * * *", async () => {
   try {
     const alquileresNoConfirmados = await em.find(Alquiler, {
       estadoAlquiler: "PENDIENTE",
-      tiempoConfirmacion: { $lt: ahora }, //lt = less than en mongo
+      tiempoConfirmacion: { $lt: ahora },
     });
 
     const alquileresEnCurso = await em.find(Alquiler, {

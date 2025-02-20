@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Alquiler } from './alquiler.entity.js'
 import { orm } from '../../shared/db/orm.js'
+import { confirmRentMail } from '../correo/correo.controller.js'
 
 const em = orm.em
 
@@ -106,6 +107,37 @@ async function update(req: Request, res: Response) {
   }  
 }
 
+async function confirmRent(req: Request, res: Response) {
+  try {
+    const usuario = req.body; 
+    const id = req.params.id;
+    
+    const alquiler = await em.findOne(
+      Alquiler, 
+      { id }, 
+      { populate: ['vehiculo', 'vehiculo.marca'] }
+    );
+    
+    if (!alquiler) {
+      return res.status(404).json({ message: 'Alquiler no encontrado' });
+    }
+
+    const correoResultado = await confirmRentMail(usuario, alquiler);
+
+    if (!correoResultado.ok) {
+      return res.status(500).json(correoResultado);
+    }
+    
+    res.status(201).json({ ok: true, message: 'Alquiler confirmado' });
+  } catch (error: any) {
+    console.error('Error en confirmRent:', error); 
+    res.status(500).json({ 
+      message: 'Error al confirmar el alquiler',
+      error: error.message 
+    });
+  }
+}
+
 async function cancelRent(req: Request, res: Response) {
   try {
     const id = req.params.id;
@@ -132,4 +164,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeAlquilerInput, findAll, findAllByVehicle, findAllByUser, findOne, getOneById, add, update, remove, cancelRent }
+export { sanitizeAlquilerInput, findAll, findAllByVehicle, findAllByUser, findOne, getOneById, add, update, remove, confirmRent, cancelRent }

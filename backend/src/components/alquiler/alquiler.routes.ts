@@ -9,8 +9,9 @@ import {
   update,
   remove,
   cancelRent,
+  confirmRent
 } from "./alquiler.controler.js";
-import { confirmRent } from "../correo/correo.controller.js";
+
 export const alquilerRouter = Router();
 /**
  * @swagger
@@ -264,7 +265,7 @@ alquilerRouter.post("/", sanitizeAlquilerInput, add);
  *       200:
  *         description: Alquiler confirmado
  */
-alquilerRouter.post("/confirmarAlquiler", confirmRent);
+alquilerRouter.post("/confirmarAlquiler/:id", confirmRent);
 
 /**
  * @swagger

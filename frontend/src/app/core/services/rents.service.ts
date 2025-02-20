@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Rent } from '../models/rent.interface.js';
+import { User } from '../models/user.interface.js';
 @Injectable({
   providedIn: 'root'
 })
@@ -41,7 +42,7 @@ export class RentsService {
     return this.http.put<Rent>(`${this.url}/cancelar/${rent.id}`, rent);
   }
 
-  confirmRent(mail:String, idAlquiler: number): Observable<Rent> {
-    return this.http.post<Rent>(`${this.url}/confirmarAlquiler`, {id: idAlquiler, destinatario: mail});
+  confirmRent(usuario: User,  idAlquiler: number): Observable<Rent> {
+    return this.http.post<Rent>(`${this.url}/confirmarAlquiler/${idAlquiler}`,  usuario);
   }
 }

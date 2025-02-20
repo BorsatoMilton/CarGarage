@@ -223,15 +223,8 @@ async function confirmarCompra(req: Request, res: Response) {
     }
 }
 
-async function confirmRent(req: Request, res: Response) {
-    const destinatario = req.body.destinatario;
-    const idAlquiler = String(req.body.id);
-    const confirmLinkRent = `http://localhost:4200/product/confirm-rent?id=${idAlquiler}`;
-    const alquiler = await getOneById(idAlquiler);
-
-    if (!alquiler) {
-        return res.status(404).json({ ok: false, message: 'Alquiler no encontrado' });
-    }
+async function confirmRentMail(destinatario: Usuario, alquiler: Alquiler):  Promise<{ok: boolean, message: string, info?: string}> {
+    const confirmLinkRent = `http://localhost:4200/product/confirm-rent?id=${alquiler.id}`;
 
     const config = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -268,25 +261,24 @@ async function confirmRent(req: Request, res: Response) {
     const opciones = {
         from: process.env.EMAIL_USER,
         subject: 'Confirmación de Alquiler',
-        to: destinatario,
+        to: destinatario.mail,
         html: htmlContent
     };
 
-    config.sendMail(opciones, (error: Error | null, info: any) => {
-        if (error) {
-            return res.status(500).json({
-                ok: false,
-                message: 'Error al enviar el correo',
-                error: error.message
-            });
-        }
-
-        return res.status(200).json({
+    try {
+        const info = await config.sendMail(opciones);
+        return {
             ok: true,
             message: 'Correo enviado correctamente',
             info: info.response
-        });
-    });
+        };
+    } catch (error: any) {
+        return {
+            ok: false,
+            message: 'Error al enviar el correo',
+            info: error.message
+        };
+    }
 }
 
 
@@ -361,6 +353,6 @@ async function avisoPuntuarAlquiler(locatario: string, locador: string, alquiler
 }
 
 
-export { recuperarContraseña, confirmarCompra, avisoCompraExitosa , confirmRent, avisoPuntuarAlquiler
+export { recuperarContraseña, confirmarCompra, avisoCompraExitosa , confirmRentMail, avisoPuntuarAlquiler
 };
 

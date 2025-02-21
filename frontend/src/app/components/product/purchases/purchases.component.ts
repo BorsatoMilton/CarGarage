@@ -53,7 +53,7 @@ export class PurchasesComponent {
   
 
   cancelarCompra(compra: Compra, modalId: string): void {
-    this.compraService.cancelarCompra(compra).subscribe(() => {
+    this.compraService.cancelarCompra(compra.id).subscribe(() => {
       alertMethod('Cancelar Compra', 'Compra cancelada con exito!', 'success');
       this.ngOnInit();
       this.closeModal(modalId);

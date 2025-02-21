@@ -10,32 +10,28 @@
         <th>FECHA COMPRA</th>
         <th>PRECIO</th>
         <th>VENDEDOR</th>
+        <th>ESTADO</th>
         <th>ACCIONES</th>
       </tr>
     </thead>
     <tbody *ngIf="compras.length > 0">
       <tr *ngFor="let compra of compras">
-        <td>{{ compra.vehiculo.modelo }}</td>
-        <td>{{ compra.fechaCompra }}</td>
-        <td>{{ compra.vehiculo.precioVenta }}</td>
+        <td>{{ compra.vehiculo.modelo }} {{compra.vehiculo.anio}}</td>
+        <td>{{ compra.fechaCompra | date: 'yyyy-MM-dd'}} </td>
+        <td>${{ compra.vehiculo.precioVenta }}</td>
         <td>
-          {{ compra.vehiculo.propietario }}
+          {{ compra.vehiculo.propietario.nombre }} {{ compra.vehiculo.propietario.apellido }}
         </td>
+        <td>{{compra.estadoCompra}}</td>
 
         <td>
-          <ng-container
-            *ngIf="compra.fechaCancelacion !== null; else cancelButton"
-          >
-            <span class="badge" id="span-cancelada">Cancelada</span>
-          </ng-container>
-          <ng-template #cancelButton>
-            <button
-              (click)="openModal('cancelarCompra', compra)"
-              class="btn btn-danger"
-            >
-              Cancelar
-            </button>
-          </ng-template>
+          <button
+          (click)="openModal('cancelarCompra', compra)"
+          class="btn btn-danger"
+          [disabled]="compra.estadoCompra === 'CANCELADA' || compra.estadoCompra === 'CONFIRMADA' || compra.estadoCompra === 'NO CONFIRMADA'"
+        >
+          Cancelar
+        </button>
         </td>
       </tr>
     </tbody>

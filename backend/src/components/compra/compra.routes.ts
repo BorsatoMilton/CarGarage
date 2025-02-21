@@ -105,7 +105,7 @@ compraRouter.get('/', findAll);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.get('/byuser/:id', findAllByUser);
+compraRouter.get('/byuser/:userId', findAllByUser);
 
 compraRouter.get('/:id', findOne);
 
@@ -247,7 +247,7 @@ compraRouter.patch('/confirmarCompra/:idCompra', confirmarCompra);
 /**
  * @swagger
  * /api/compras/cancelarCompra:
- *   delete:
+ *   patch:
  *     summary: Cancela una compra
  *     tags: [Compra]
  *     requestBody:
@@ -300,7 +300,7 @@ compraRouter.patch('/confirmarCompra/:idCompra', confirmarCompra);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.delete('/cancelarCompra', cancelarCompra);
+compraRouter.patch('/cancelarCompra/:id', cancelarCompra);
 
 /**
  * @swagger

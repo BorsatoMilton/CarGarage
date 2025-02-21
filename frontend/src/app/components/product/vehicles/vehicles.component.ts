@@ -21,7 +21,7 @@ import { alertMethod } from '../../../shared/components/alerts/alert-function/al
 @Component({
   selector: 'app-vehicle',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, UniversalAlertComponent],
   templateUrl: 'vehicles.component.html',
   styleUrl: './vehicles.component.css',
 })
@@ -46,12 +46,11 @@ export class VehicleComponent implements OnInit {
     this.vehicleForm = this.fb.group({
       modelo: ['', Validators.required],
       descripcion: ['', Validators.required],
-      precioVenta: [''],
-      precioAlquilerDiario: [''],
+      precioVenta: [null],
+      precioAlquilerDiario: [null],
       anio: ['', Validators.required],
-      marca: ['', Validators.required],
-      categoria: ['', Validators.required],
-      propietario: [''],
+      marca: [null, Validators.required],
+      categoria: [null, Validators.required],
       transmision: ['', Validators.required],
       kilometros: [0, Validators.required],
     });
@@ -67,7 +66,6 @@ export class VehicleComponent implements OnInit {
     this.usuario = this.authService.getCurrentUser();
   
     if (this.usuario !== null) {
-      this.vehicleForm.patchValue({ propietario: this.usuario.id });
       this.loadVehicle();
     }   
 
@@ -86,8 +84,8 @@ export class VehicleComponent implements OnInit {
         precioAlquilerDiario: vehicle.precioAlquilerDiario,
         kilometros: vehicle.kilometros,
         anio: vehicle.anio,
-        marca: vehicle.marca,
-        categoria: vehicle.categoria,
+        marca: vehicle.marca?.id,
+        categoria: vehicle.categoria?.id,
         transmision: vehicle.transmision,
       });
     }
@@ -131,7 +129,9 @@ export class VehicleComponent implements OnInit {
     formData.append('precioAlquilerDiario', this.vehicleForm.get('precioAlquilerDiario')?.value);
     formData.append('transmision', this.vehicleForm.get('transmision')?.value);
     formData.append('kilometros', this.vehicleForm.get('kilometros')?.value);
-    formData.append('propietario', this.vehicleForm.get('propietario')?.value);
+    if(this.usuario){
+      formData.append('propietario', this.usuario.id.toString());
+    }
     formData.append('anio', this.vehicleForm.get('anio')?.value);
     formData.append('marca', this.vehicleForm.get('marca')?.value);
     formData.append('categoria', this.vehicleForm.get('categoria')?.value);
@@ -171,24 +171,30 @@ export class VehicleComponent implements OnInit {
     }
   }
 
-  editVehicle(): void {
-    if (this.selectedVehicle) {
-      this.ngOnInit();
-      const updatedVehicle: Vehicle = {
-        ...this.selectedVehicle,
-        ...this.vehicleForm.value,
-      };
+editVehicle(): void {
+  if (this.selectedVehicle) {
 
-      this.vehicleService.editVehicle(updatedVehicle).subscribe(() => {
-        alertMethod('Edición de vehiculo','Vehículo editado exitosamente', 'success');
-        this.closeModal('editVehicle');
-        this.ngOnInit();
-        this.vehicleForm.reset();
-        this.selectedFiles = [];
-      });
+    if (
+      this.vehicleForm.get('precioVenta')?.value === null &&
+      this.vehicleForm.get('precioAlquilerDiario')?.value === null
+    ){
+      alertMethod('Edición de vehículo', 'Por favor, ingrese un precio de venta o alquiler', 'error');
+      return
     }
-  }
+    const formValue = this.vehicleForm.value;
+    const updatedVehicle: Vehicle = {
+      ...this.selectedVehicle,
+      ...formValue,
+      propietario: this.selectedVehicle.propietario
+    };
 
+    this.vehicleService.editVehicle(updatedVehicle).subscribe(() => {
+      alertMethod('Edición de vehículo', 'Vehículo editado exitosamente', 'success');
+      this.closeModal('editVehicle');
+      this.loadVehicle();
+    });
+  }
+}
   removeVehicle(vehicle: Vehicle | null, modalId: string) {
     if (vehicle) {
       this.vehicleService.deleteVehicle(vehicle).subscribe(() => {

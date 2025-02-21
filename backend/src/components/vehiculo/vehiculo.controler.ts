@@ -50,8 +50,9 @@ async function findAll(req: Request, res: Response) {
 
 async function findAllByUser(req: Request, res: Response) {
   try {
+    em.clear()
     const propietario = req.params.id;
-    const vehiculos = await em.find(Vehiculo,{ propietario: propietario, fechaBaja: null },{populate: ['modelo','categoria', 'marca', 'propietario'] })
+    const vehiculos = await em.find(Vehiculo,{ propietario: propietario, fechaBaja: null },{populate: ['modelo','categoria', 'marca', 'propietario', 'compra'] })
     res.status(200).json(vehiculos)
   } catch (error: any) {
     res.status(500).json({ message: error.message })

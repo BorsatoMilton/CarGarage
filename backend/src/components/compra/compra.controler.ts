@@ -48,8 +48,8 @@ async function findAll(req: Request, res: Response) {
 
 async function findAllByUser(req: Request, res: Response) {
     try {
-        const idComprador = req.params.id
-        const compras = await em.find(Compra, { usuario: idComprador  }, { populate: ['usuario', 'vehiculo'] })
+        const idComprador = req.params.userId
+        const compras = await em.find(Compra, { usuario: idComprador  }, { populate: ['usuario', 'vehiculo', 'vehiculo.propietario'] })
         res.status(200).json(compras)
     } catch (error: any) {
         res.status(500).json({ message: 'Error al obtener las compras por usuario', error: error.message})
@@ -140,23 +140,6 @@ async function confirmarCompra(req: Request, res: Response) {
 
 async function confirmarCompraMail(req: Request, res: Response) {
     try {
-        /*const destinatario = req.body.destinatario
-        const idVehiculo = req.body.idVehiculo
-        if (!idVehiculo) {
-            return res.status(400).json({ message: "El id de la compra es requerido" });
-        }
-        if (!destinatario) {
-            return res.status(400).json({ message: "El mail del destinatario es requerido" });
-        }
-        const vehiculo = await em.findOne(Vehiculo, { id: idVehiculo })
-        if(!vehiculo){
-            return res.status(404).json({ message: 'Vehiculo no encontrado' })
-        }
-        const user = await findOneByEmail(destinatario)
-        if(!user){
-            return res.status(404).json({ message: 'Usuario no encontrado' })
-        }
-        */
         const idCompra = req.params.idCompra
 
         if (!idCompra) {
@@ -176,21 +159,16 @@ async function confirmarCompraMail(req: Request, res: Response) {
     }
 }
 
-
-
 async function cancelarCompra(req: Request, res: Response) {
     try {
-        const id = req.body.id
-        if (!id) {
-      return res.status(400).json({ message: "El id de la compra es requerido" });
-        }
-        const compraActualizar = await em.findOneOrFail(Compra, { id })
-        if(!compraActualizar){
+        const compraId = req.params.id
+        const compra = await em.findOne(Compra, {id: compraId})
+        if(!compra){
             return res.status(404).json({ message: 'Compra no encontrada' })
         }
-        em.assign(compraActualizar, { fechaCancelacion: new Date() })
+        compra.estadoCompra = 'CANCELADA';
         await em.flush()
-        res.status(200).json({ message: 'Compra cancelada exitosamente', data: compraActualizar })
+        res.status(200).json(compra)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }

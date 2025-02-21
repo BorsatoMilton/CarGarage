@@ -38,6 +38,10 @@ export class CompraService {
     return this.http.patch<Compra>(`${this.apiUrl}/confirmarCompra/${idCompra}`, {});
   }
 
+  cancelarCompra(idCompra: string): Observable<Compra> {
+    return this.http.patch<Compra>(`${this.apiUrl}/cancelarCompra/${idCompra}`, {});
+  }
+
   confirmarCompraAviso(idCompra: string): Observable<Compra> {
     return this.http.post<Compra>(`${this.apiUrl}/confirmarCompraAviso/${idCompra}`, {});
   }
@@ -46,9 +50,6 @@ export class CompraService {
     return this.http.post<Compra>(`${this.apiUrl}/avisoCompraExitosa/${mail}`, {idVehiculo: idVehiculo});
   }
 
-  cancelarCompra(compra: Compra): Observable<Compra> {
-    console.log('Compra a cancelar:', compra);
-    return this.http.delete<Compra>(`${this.apiUrl}/cancelarCompra`, { body: compra });
-  }
+
 
 }

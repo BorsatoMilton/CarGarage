@@ -167,6 +167,7 @@ async function cancelarCompra(req: Request, res: Response) {
             return res.status(404).json({ message: 'Compra no encontrada' })
         }
         compra.estadoCompra = 'CANCELADA';
+        compra.fechaCancelacion = new Date();
         await em.flush()
         res.status(200).json(compra)
     } catch (error: any) {

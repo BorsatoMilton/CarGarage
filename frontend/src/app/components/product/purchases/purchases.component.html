@@ -49,7 +49,7 @@
         {{ selectedPurchase?.vehiculo?.modelo }}
       </p>
       <p>
-        <strong>Fecha de Compra:</strong> {{ selectedPurchase?.fechaCompra }}
+        <strong>Fecha de Compra:</strong> {{ selectedPurchase?.fechaCompra | date: 'yyyy-MM-dd' }}
       </p>
       <button class="btn btn-secondary" (click)="closeModal('cancelarCompra')">
         Cancelar

@@ -41,6 +41,10 @@ cron.schedule("*/1 * * * *", async () => {
       fechaLimiteConfirmacion: { $lt: ahora },
     })
 
+    const comprasCanceladas = await em.find(Compra, {
+      estadoCompra: "CANCELADA",
+    })
+
     if (alquileresNoConfirmados.length > 0) {
       console.log(
         `${alquileresNoConfirmados.length} alquiler(es) no fueron confirmados a tiempo.`
@@ -91,6 +95,17 @@ cron.schedule("*/1 * * * *", async () => {
       console.log(`${comprasSinConfirmarABorrar.length} compra(as) no confirmadas fueron borradas`)
       for (const compra of comprasSinConfirmarABorrar) {
         const diferenciaTiempo = Date.now() - new Date(compra.fechaLimiteConfirmacion).getTime();
+        const sieteDiasEnMs = 7 * 24 * 60 * 60 * 1000;
+        if (diferenciaTiempo >= sieteDiasEnMs) {
+          await em.removeAndFlush(compra);
+        }
+      }
+    }
+
+    if (comprasCanceladas.length > 0) {
+      console.log(`${comprasCanceladas.length} compra(as) canceladas fueron borradas`)
+      for (const compra of comprasCanceladas) {
+        const diferenciaTiempo = Date.now() - new Date(compra.fechaCancelacion).getTime();
         const sieteDiasEnMs = 7 * 24 * 60 * 60 * 1000;
         if (diferenciaTiempo >= sieteDiasEnMs) {
           await em.removeAndFlush(compra);

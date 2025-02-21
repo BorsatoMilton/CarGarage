@@ -83,7 +83,7 @@
                 <a
                   [routerLink]="['/product/rent', vehiculo.id]"
                   class="btn btn-secondary w-50 mx-1 mb-2"
-                  [class.disabled]="!vehiculo.precioAlquilerDiario || vehiculo.propietario.id === usuarioActual?.id"
+                  [class.disabled]="!vehiculo.precioAlquilerDiario || vehiculo.propietario.id === usuarioActual?.id || vehiculo.compra?.estadoCompra === 'PENDIENTE'"
                   >Alquilar</a
                 >
               </div>

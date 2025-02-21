@@ -26,12 +26,24 @@ export class CompraService {
     return this.http.get<Compra[]>(`${this.apiUrl}/byuser/${userId}`);
   }
 
-  confirmarCompra(mail:string, id: string): Observable<Compra> {
-    return this.http.post<Compra>(`${this.apiUrl}/confirmarCompra`, {id: id, destinatario: mail});
+  getOneCompra(id: string): Observable<Compra> {
+    return this.http.get<Compra>(`${this.apiUrl}/${id}`);
   }
 
-  avisoCompraExitosa(mail:string): Observable<Compra> {
-    return this.http.post<Compra>(`${this.apiUrl}/avisoCompraExitosa`, { destinatario: mail});
+  getOneCompraByVehiculo(idVehiculo: string): Observable<Compra> {
+    return this.http.get<Compra>(`${this.apiUrl}/byvehiculo/${idVehiculo}`);
+  }
+
+  confirmarCompra(idCompra: string): Observable<Compra> {
+    return this.http.patch<Compra>(`${this.apiUrl}/confirmarCompra/${idCompra}`, {});
+  }
+
+  confirmarCompraAviso(idCompra: string): Observable<Compra> {
+    return this.http.post<Compra>(`${this.apiUrl}/confirmarCompraAviso/${idCompra}`, {});
+  }
+
+  avisoCompraExitosa(mail:string, idVehiculo: string): Observable<Compra> {
+    return this.http.post<Compra>(`${this.apiUrl}/avisoCompraExitosa/${mail}`, {idVehiculo: idVehiculo});
   }
 
   cancelarCompra(compra: Compra): Observable<Compra> {

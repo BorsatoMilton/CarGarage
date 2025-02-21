@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { Compra } from "./compra.entity.js";
 import { orm } from "../../shared/db/orm.js";
+import { findOneByEmail } from "../usuario/usuario.controler.js";
+import { avisoCompraExitosaMail} from "../correo/correo.controller.js";
+import { Vehiculo } from "../vehiculo/vehiculo.entity.js";
+import { confirmarCompraMailCorreo } from "../correo/correo.controller.js";
 
 
 const em = orm.em
@@ -13,14 +17,15 @@ function sanitizeCompraInput (
   req.body.sanitizedInput = 
     {
         fechaCompra: new Date(),
-        fechaLimitePago: (() => {
+        fechaLimiteConfirmacion: (() => {
             const fecha = new Date(); 
-            fecha.setDate(fecha.getDate() + 7); 
+            fecha.setMinutes(fecha.getDate() + 1); 
             return fecha; 
         })(),
         fechaCancelacion:req.body.fechaCancelacion,
         usuario: req.body.comprador,
-        vehiculo: req.body.vehiculo
+        vehiculo: req.body.vehiculo,
+        estadoCompra: req.body.estado,
       }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -54,25 +59,124 @@ async function findAllByUser(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
     try {
         const id = req.params.id
-        const compra = await em.findOneOrFail(Compra, { id }, { populate: ['usuario', 'vehiculo'] })
-        if(!compra){
-            return res.status(404).json({ message: 'Compra no encontrada' })
-        }
+        const compra = await em.findOne(Compra, { id }, { populate: ['usuario', 'vehiculo', 'vehiculo.propietario', 'vehiculo.marca', 'vehiculo.categoria'] })
         res.status(200).json(compra)
     } catch (error: any) {
         res.status(500).json({ message: 'Error al obtener la compra', error: error.messagee })
     }
 }
 
+async function findOneByVehiculo(req: Request, res: Response) {
+    try {
+        const idVehiculo = req.params.idVehiculo
+        const compra = await em.findOne(Compra, { vehiculo: idVehiculo }, { populate: ['usuario', 'vehiculo'] })
+        res.status(200).json(compra)
+    }catch(error: any){
+        res.status(500).json({ message: error.message })
+    }
+}
+
 async function add(req: Request, res: Response) {
     try {
-        const compra = em.create(Compra, req.body.sanitizedInput)
+        const compraAdd = {
+            ...req.body.sanitizedInput,
+            estadoCompra: 'PENDIENTE'
+        }
+        const compra = em.create(Compra, compraAdd)
         await em.flush()
         res.status(201).json(compra)
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
 }
+
+async function avisoCompraExitosa(req: Request, res: Response) {
+    try {
+        const destinatario = req.params.mail
+        const idVehiculo = req.body.idVehiculo
+        const vehiculo = await em.findOne(Vehiculo, { id: idVehiculo }, { populate: ['propietario', 'marca', 'categoria'] })
+        if (!destinatario) {
+            return res.status(400).json({ message: "El mail del destinatario es requerido" });
+        }
+        if (!idVehiculo) {
+            return res.status(400).json({ message: "El id del vehiculo es requerido" });
+        }
+        if (!vehiculo) {
+            return res.status(404).json({ ok: false, message: 'Vehiculo no encontrado' });
+        }
+        const user = await findOneByEmail(destinatario);
+        if (!user) {
+            return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
+        }
+        const correoResultado = await avisoCompraExitosaMail(user, vehiculo);
+        if (!correoResultado.ok) {
+            return res.status(500).json({ ok: false, message: correoResultado.message, error: correoResultado.info });
+          }
+        res.status(201).json({ ok: true, message: 'Se ha confirmado la compra exitosamente', info: correoResultado.info });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+async function confirmarCompra(req: Request, res: Response) {
+    try {
+        const idCompra = req.params.idCompra
+        if (!idCompra) {
+            return res.status(400).json({ message: "La compra es requerida" });
+        }
+        const compra = await em.findOne(Compra, idCompra);
+        if (!compra) {
+          return res.status(404).json({ message: "Compra no encontrada" });
+        }
+        compra.estadoCompra = 'CONFIRMADA';
+        
+        await em.flush()
+        res.status(200).json(compra)
+    
+    }catch(error: any){
+        res.status(500).json({ message: error.message })
+    }
+}
+
+async function confirmarCompraMail(req: Request, res: Response) {
+    try {
+        /*const destinatario = req.body.destinatario
+        const idVehiculo = req.body.idVehiculo
+        if (!idVehiculo) {
+            return res.status(400).json({ message: "El id de la compra es requerido" });
+        }
+        if (!destinatario) {
+            return res.status(400).json({ message: "El mail del destinatario es requerido" });
+        }
+        const vehiculo = await em.findOne(Vehiculo, { id: idVehiculo })
+        if(!vehiculo){
+            return res.status(404).json({ message: 'Vehiculo no encontrado' })
+        }
+        const user = await findOneByEmail(destinatario)
+        if(!user){
+            return res.status(404).json({ message: 'Usuario no encontrado' })
+        }
+        */
+        const idCompra = req.params.idCompra
+
+        if (!idCompra) {
+            return res.status(400).json({ message: "La compra es requerida" });
+        }
+        const compra = await em.findOneOrFail(Compra, { id: idCompra }, { populate: ['usuario', 'vehiculo', 'vehiculo.marca'] })
+        if(!compra){
+            return res.status(404).json({ message: 'Compra no encontrada' })
+        }
+        const correoResultado = await confirmarCompraMailCorreo(compra)
+        if(!correoResultado.ok){
+            return res.status(500).json({ message: correoResultado.message, error: correoResultado.info })
+        }
+        res.status(201).json({ message: 'Se ha enviado la confirmacion por mail exitosamente', info: correoResultado.info })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
 
 async function cancelarCompra(req: Request, res: Response) {
     try {
@@ -106,4 +210,4 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-export { sanitizeCompraInput, findAll, findAllByUser, findOne, add, cancelarCompra, remove }
+export { sanitizeCompraInput, findAll, findAllByUser, findOne,findOneByVehiculo ,add,confirmarCompraMail ,confirmarCompra,cancelarCompra, avisoCompraExitosa, remove }

@@ -1,5 +1,6 @@
 
 <div class="page-container">
+  <app-universal-alert></app-universal-alert>
   <div class="vehicle-container">
     <div *ngIf="vehiculo">
       <img id="imagen-vehiculo" *ngIf="vehiculo.imagenes && vehiculo.imagenes.length > 0"
@@ -29,24 +30,23 @@
       <p><strong>Mail:</strong> {{vehiculo?.propietario?.mail}} </p>
       <p><strong>Telefono:</strong> {{vehiculo?.propietario?.telefono}} </p>
       <p><strong>Direccion:</strong> {{vehiculo?.propietario?.direccion}} </p>
+
+      <p *ngIf="vehiculo?.compra?.estadoCompra === 'PENDIENTE'" class="alert alert-warning">
+        Este vehículo está reservado para su compra.
+      </p>
       
-      <button type="button" class="btn btn-primary" (click)="openModal('confirmarCompra')">Comprar</button>
+      <button type="button" class="btn btn-primary" (click)="openModal('comprar')" [class.disabled]="vehiculo?.compra?.estadoCompra === 'PENDIENTE'">Comprar</button>
     </div>
   </div>
 </div>
-<div class="propietario-container">
-  <a [href]="'https://wa.me/' + vehiculo?.propietario?.telefono" target="_blank" id="imagen-propietario"> <img
-      src="http://localhost:3000/uploads/propietario2.png"> </a>
-</div>
 
-
-<div id="confirmarCompra" class="modalChanged">
+<div id="comprar" class="modalChanged">
   <div class="modal-contentChanged">
-    <span class="close" (click)="closeModal('confirmarCompra')">&times;</span>
+    <span class="close" (click)="closeModal('comprar')">&times;</span>
     <h2>Comprar Vehiculo</h2>
     <p style="margin: 10px;">¿Estás seguro de que deseas <strong>comprar</strong> el siguiente vehiculo?</p>
     <p style="margin: 10px;"><strong>Nombre:</strong> {{ vehiculo?.modelo }}</p>
-    <button class="btn btn-secondary" (click)="closeModal('confirmarCompra')">Cancelar</button>
+    <button class="btn btn-secondary" (click)="closeModal('comprar')">Cancelar</button>
     <button class="btn btn-success"  (click)="comprar()">Comprar</button>
   </div>
 </div>

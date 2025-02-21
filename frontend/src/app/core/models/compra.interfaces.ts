@@ -2,10 +2,12 @@ import { User } from "./user.interface.js";
 import { Vehicle } from "./vehicles.interface.js";
 
 export interface Compra {
-    idCompra : string;
+    filter(arg0: (compra: any) => boolean): Compra[];
+    id : string;
     vehiculo: Vehicle;
-    comprador: User;
+    usuario: User;
     fechaCompra: Date;
     fechaCancelacion: Date;
- 
+    estadoCompra: string;
+    fechaLimiteConfirmacion: Date;
 }

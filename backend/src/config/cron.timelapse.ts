@@ -2,6 +2,8 @@ import cron from "node-cron";
 import { Alquiler } from "../components/alquiler/alquiler.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { avisoPuntuarAlquiler } from "../components/correo/correo.controller.js";
+import { Compra } from "../components/compra/compra.entity.js";
+import { Vehiculo } from "../components/vehiculo/vehiculo.entity.js";
 
 cron.schedule("*/1 * * * *", async () => {
   console.log("Revisando estados de alquiler...");
@@ -24,6 +26,11 @@ cron.schedule("*/1 * * * *", async () => {
       estadoAlquiler: "EN CURSO",
       fechaHoraDevolucion: { $lt: ahora },
     }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario', 'vehiculo.marca'] });
+
+    const comprasSinConfirmar = await em.find(Compra, {
+      estadoCompra: "PENDIENTE",
+      fechaLimiteConfirmacion: { $lt: ahora },
+    });
 
     if (alquileresNoConfirmados.length > 0) {
       console.log(
@@ -52,7 +59,14 @@ cron.schedule("*/1 * * * *", async () => {
         await avisoPuntuarAlquiler(alquiler.locatario.id, alquiler.vehiculo.propietario.id ,alquiler);
       }
     }
-
+    
+    if (comprasSinConfirmar.length > 0) {
+      console.log(`${comprasSinConfirmar.length} compra(as) han quedado sin confirmar.`)
+      for (const compra of comprasSinConfirmar) {
+        await em.removeAndFlush(compra);
+      }
+    }
+    
     await em.flush();
     console.log("Estados de alquiler actualizados correctamente.");
   } catch (error) {

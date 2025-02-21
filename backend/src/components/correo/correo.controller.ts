@@ -2,15 +2,11 @@ import { Request, Response } from 'express';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import { findOneByEmail } from '../usuario/usuario.controler.js';
-import { generateToken } from '../../shared/db/tokenGenerator.js';
-import { PasswordResetToken } from '../usuario/passwordResetToken.entity.js';
-import { orm } from '../../shared/db/orm.js';
-import { findOneById } from '../vehiculo/vehiculo.controler.js';
-import { getOneById } from '../alquiler/alquiler.controler.js';
+import { findOneById } from '../vehiculo/vehiculo.controler.js';;
 import { Alquiler } from '../alquiler/alquiler.entity.js';
 import { Usuario } from '../usuario/usuario.entity.js';
-
-
+import { Vehiculo } from '../vehiculo/vehiculo.entity.js';
+import { Compra } from '../compra/compra.entity.js';
 
 dotenv.config();
 
@@ -81,22 +77,15 @@ async function recuperarContraseña(token: string, user: Usuario): Promise<{ok: 
     }
 };
 
-async function avisoCompraExitosa(req: Request, res: Response) {
-    const destinatario = req.body.destinatario;
-    console.log(destinatario);
-    const user = await findOneByEmail(destinatario);
-    if (!user) {
-        return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
-    }
-
+async function avisoCompraExitosaMail(user: Usuario, vehiculo: Vehiculo): Promise<{ ok: boolean; message: string; info?: string }> {
     const config = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
         secure: true,
         auth: {
-            user: process.env.EMAIL_USER, 
-            pass: process.env.EMAIL_PASS
-        }
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
     });
 
     const htmlContent = `
@@ -117,51 +106,127 @@ async function avisoCompraExitosa(req: Request, res: Response) {
         <div class="container">
             <h2>¡Compra Exitosa!</h2>
             <p>Hola <strong>${user.nombre}</strong>,</p>
-            <p>Queremos informarte que tu compra se ha realizado con éxito. En breve, el propietario se pondra en contacto contigo para coordinar la entrega.</p>
+            <p>Queremos informarte que tu compra se ha realizado con éxito. En breve, el propietario se pondra en contacto contigo para coordinar la forma de pago y la entrega.</p>
             <p>Si tienes alguna consulta, no dudes en comunicarte con nuestro equipo de soporte.</p>
         </div>
     </body>
     </html>
     `;
 
+    const htmlContentPropietario = `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vehículo Vendido</title>
+        <style>
+            body { 
+                font-family: Arial, sans-serif; 
+                background-color: #f8f9fa; 
+                color: #333; 
+                margin: 0; 
+                padding: 20px; 
+            }
+            .container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                background: #fff; 
+                padding: 20px; 
+                border-radius: 8px; 
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            }
+            h2 { 
+                color: #28a745; /* Verde para indicar éxito */
+                text-align: center; 
+            }
+            p { 
+                font-size: 16px; 
+                line-height: 1.5; 
+            }
+            .details { 
+                margin-top: 20px; 
+                padding: 15px; 
+                background-color: #f1f1f1; 
+                border-radius: 5px; 
+            }
+            .details strong { 
+                color: #007bff; 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>¡Tu vehículo ha sido vendido!</h2>
+            <p>Hola <strong>${vehiculo.propietario.nombre}</strong>,</p>
+            <p>Nos complace informarte que tu vehículo ha sido vendido exitosamente. A continuación, te proporcionamos los detalles de la transacción:</p>
+            
+            <div class="details">
+                <p><strong>Vehículo:</strong> ${vehiculo.marca.nombreMarca} ${vehiculo.modelo} (${vehiculo.anio})</p>
+                <p><strong>Comprador:</strong> ${user.nombre} ${user.apellido}</p>
+                <p><strong>Contacto: </strong> ${user.mail} || ${user.telefono}</p>
+                <p><strong>Precio de venta:</strong> $${vehiculo.precioVenta}</p>
+            </div>
+    
+            <p>Por favor, ponte en contacto con el comprador para coordinar la entrega y forma de pago del vehículo. Si necesitas asistencia, no dudes en contactar a nuestro equipo de soporte.</p>
+            <p>¡Gracias por confiar en nosotros!</p>
+        </div> 
+    </body>
+    </html>
+    `;
+
+    const opcionesPropietario = {
+        from: process.env.EMAIL_USER,
+        subject: 'Vehículo Vendido',
+        to: vehiculo.propietario.mail,
+        html: htmlContentPropietario,
+    };
+
     const opciones = {
         from: process.env.EMAIL_USER,
         subject: 'Compra Exitosa',
-        to: destinatario,
-        html: htmlContent 
+        to: user.mail,
+        html: htmlContent,
     };
 
     try {
-        const info = await config.sendMail(opciones);
-        return res.status(200).json({
+        const infoComprador = await config.sendMail(opciones);
+
+        const infoPropietario = await config.sendMail(opcionesPropietario);
+
+        return {
             ok: true,
-            message: 'Correo enviado correctamente',
-            info: info.response
-        });
+            message: 'Correos enviados correctamente',
+            info: `Comprador: ${infoComprador.response}, Propietario: ${infoPropietario.response}`,
+        };
     } catch (error: any) {
-        return res.status(500).json({
-            ok: false,
-            message: 'Error al enviar el correo',
-            error: error.message
-        });
+        console.error('Error al enviar correos:', error);
+
+        if (error.response && error.response.includes(user.mail)) {
+            return {
+                ok: false,
+                message: 'Error al enviar el correo al comprador',
+                info: error.message,
+            };
+        } else if (error.response && error.response.includes(vehiculo.propietario.mail)) {
+            return {
+                ok: false,
+                message: 'Error al enviar el correo al propietario',
+                info: error.message,
+            };
+        } else {
+            return {
+                ok: false,
+                message: 'Error al enviar los correos',
+                info: error.message,
+            };
+        }
     }
 }
 
+async function confirmarCompraMailCorreo(compra: Compra): Promise<{ok: boolean, message: string, info?: string}> {
 
-async function confirmarCompra(req: Request, res: Response) {
-    const destinatario = req.body.destinatario;
-    const id = req.body.id;
-    const confirmLink = `http://localhost:4200/product/confirm-purchase?id=${id}&destinatario=${destinatario}`;
-
-    const user = await findOneByEmail(destinatario);
-    if (!user) {
-        return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
-    }
-
-    const vehiculo = await findOneById(id);
-    if (!vehiculo) {
-        return res.status(404).json({ ok: false, message: 'Vehículo no encontrado' });
-    }
+    const confirmLink = `http://localhost:4200/product/confirm-purchase?id=${compra.id}`;
 
     const config = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -191,8 +256,8 @@ async function confirmarCompra(req: Request, res: Response) {
     <body>
         <div class="container">
             <h2>Confirmación de compra</h2>
-            <p>Hola <strong>${user.nombre}</strong>,</p>
-            <p>Para confirmar la compra del vehículo <strong>${vehiculo.marca.nombreMarca} ${vehiculo.modelo}</strong>, haz clic en el siguiente enlace:</p>
+            <p>Hola <strong>${compra.usuario.nombre}</strong>,</p>
+            <p>Para confirmar la compra del vehículo <strong>${compra.vehiculo.marca.nombreMarca} ${compra.vehiculo.modelo}</strong>, haz clic en el siguiente enlace:</p>
             <a href="${confirmLink}" class="button">Confirmar compra</a>
             <p>Si no realizaste esta solicitud, ignora este mensaje.</p>
         </div>
@@ -203,23 +268,23 @@ async function confirmarCompra(req: Request, res: Response) {
     const opciones = {
         from: process.env.EMAIL_USER,
         subject: 'Confirmación de compra',
-        to: destinatario,
+        to: compra.usuario.mail,
         html: htmlContent 
     };
 
     try {
         const info = await config.sendMail(opciones);
-        return res.status(200).json({
+        return {
             ok: true,
             message: 'Correo enviado correctamente',
             info: info.response
-        });
+        };
     } catch (error: any) {
-        return res.status(500).json({
+        return {
             ok: false,
             message: 'Error al enviar el correo',
-            error: error.message
-        });
+            info: error.message
+        };
     }
 }
 
@@ -353,6 +418,6 @@ async function avisoPuntuarAlquiler(locatario: string, locador: string, alquiler
 }
 
 
-export { recuperarContraseña, confirmarCompra, avisoCompraExitosa , confirmRentMail, avisoPuntuarAlquiler
+export { recuperarContraseña, confirmarCompraMailCorreo, avisoCompraExitosaMail , confirmRentMail, avisoPuntuarAlquiler
 };
 

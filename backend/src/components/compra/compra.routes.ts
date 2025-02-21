@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { findAll, findOne, add, remove, sanitizeCompraInput, cancelarCompra, findAllByUser } from "./compra.controler.js";
-import { avisoCompraExitosa, confirmarCompra } from "../correo/correo.controller.js";
+import { findAll, findOne, add, remove, sanitizeCompraInput, findOneByVehiculo, confirmarCompraMail ,cancelarCompra, avisoCompraExitosa, findAllByUser, confirmarCompra } from "./compra.controler.js";
+
 
 export const compraRouter = Router();
 
@@ -18,7 +18,7 @@ export const compraRouter = Router();
  *           type: string
  *           format: date-time
  *           description: Fecha de la compra
- *         fechaLimitePago:
+ *         fechaLimiteConfirmacion:
  *           type: string
  *           format: date-time
  *           description: Fecha límite para el pago
@@ -33,7 +33,7 @@ export const compraRouter = Router();
  *           $ref: '#/components/schemas/Vehiculo'
  *       required:
  *         - fechaCompra
- *         - fechaLimitePago
+ *         - fechaLimiteConfirmacion
  *         - usuario
  *         - vehiculo
  */
@@ -106,6 +106,10 @@ compraRouter.get('/', findAll);
  *                   example: Detalles del error
  */
 compraRouter.get('/byuser/:id', findAllByUser);
+
+compraRouter.get('/:id', findOne);
+
+compraRouter.get('/byvehiculo/:idVehiculo', findOneByVehiculo);
 
 /**
  * @swagger
@@ -211,7 +215,7 @@ compraRouter.post('/', sanitizeCompraInput, add);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.post('/avisoCompraExitosa', avisoCompraExitosa);
+compraRouter.post('/avisoCompraExitosa/:mail', avisoCompraExitosa);
 
 /**
  * @swagger
@@ -236,7 +240,9 @@ compraRouter.post('/avisoCompraExitosa', avisoCompraExitosa);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.post('/confirmarCompra', confirmarCompra);
+compraRouter.post('/confirmarCompraAviso/:idCompra', confirmarCompraMail);
+
+compraRouter.patch('/confirmarCompra/:idCompra', confirmarCompra);
 
 /**
  * @swagger

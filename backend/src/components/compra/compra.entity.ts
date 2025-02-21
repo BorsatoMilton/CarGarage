@@ -1,11 +1,9 @@
 import {
     Entity,
     Property,
-    Collection,
-    OneToMany,
-    OneToOne,
     ManyToOne,
-    Rel
+    Rel,
+    OneToOne
 
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
@@ -19,19 +17,23 @@ export class Compra extends BaseEntity{
     fechaCompra!:Date
     
     @Property({ nullable: false })
-    fechaLimitePago!:Date
+    fechaLimiteConfirmacion!:Date
     
     @Property({ nullable: true })
     fechaCancelacion!:Date
 
-    @ManyToOne(() => Usuario, { nullable: false })
-    usuario!: Rel<Usuario>
-
     @Property({ nullable: false })
+    estadoCompra!:string
+
+    @OneToOne(() => Vehiculo, (vehiculo) => vehiculo.compra, { 
+        nullable: false,
+        unique: true,
+        owner: true 
+    })
     vehiculo!: Rel<Vehiculo>
 
-    
-    
+    @ManyToOne(() => Usuario, { nullable: false })
+    usuario!: Rel<Usuario>
 }
 
 

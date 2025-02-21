@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -17,11 +17,12 @@ import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../../../core/models/categories.interface.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 
 @Component({
   selector: 'app-compra',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, UniversalAlertComponent],
   templateUrl: 'compra.component.html',
   styleUrl: './compra.component.css',
 })
@@ -34,12 +35,15 @@ export class CompraComponent implements OnInit {
   usuario: User | null = null;
   idVehiculo: string | null = null;
   categoria: Category | null = null;
+  compra: Compra | null = null;
+
+@ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehiclesService,
     private authService: AuthService,
-    private compraservice: CompraService,
+    private compraService: CompraService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -61,12 +65,26 @@ export class CompraComponent implements OnInit {
             this.router.navigate(['/']);
           } else {
             this.vehiculo = data;
+            this.obtenerCompra(this.vehiculo.id);
           }
         });
       }
     });
-
     this.usuario = this.authService.getCurrentUser();
+  }
+
+
+  obtenerCompra(idVehiculo: string): void {
+    this.compraService.getOneCompraByVehiculo(idVehiculo).subscribe((data) => {
+      if (data === null) {
+        this.compra = null
+        if (this.vehiculo) {
+          this.vehiculo.compra = {} as Compra;
+          return;
+        }
+      }
+      if(this.vehiculo) this.vehiculo.compra = data
+    })
   }
 
   openModal(modalId: string): void {
@@ -90,26 +108,40 @@ export class CompraComponent implements OnInit {
     this.compraForm.reset();
   }
 
-  comprar() {
-    if (this.authService.isAuthenticated()) {
-      this.compraservice
-        .confirmarCompra(this.usuario!.mail, this.vehiculo!.id)
-        .subscribe({
-          next: () => {
+  
+
+  comprar(): void {
+    this.closeModal('comprar');
+    if (this.vehiculo !== null && this.usuario !== null) {
+      this.compraService
+        .addCompra(this.usuario.id, this.vehiculo.id)
+        .subscribe((dataCompra) => {
+          if (dataCompra === null) {
+            this.alertComponent.showAlert(
+              'No se ha podido realizar la compra',
+              'error'
+            );
+          } else {
             alertMethod(
-              'Realizar Compra',
-              'Compra realizada con éxito! Se envio un email a su casilla de correo para confirmar',
+              'Compra Exitosa',
+              'Se ha enviado un mail a su casilla de correo para confirmar la compra',
               'success'
             );
             this.router.navigate(['/']);
-          },
-          error: (error) => {
-            console.error(error);
-            alertMethod('Realizar Compra', 'Oops, algo fue mal!', 'error');
-          },
+            console.log(dataCompra)
+            this.compraService.confirmarCompraAviso(dataCompra.id).subscribe((data) => {
+              if (data === null) {
+                alertMethod(
+                  'Confirmar Compra',
+                  'Oops! El servidor no reconoce su usuario.',
+                  'error'
+                );
+              }
+            });
+          }
         });
-    } else {
-      this.router.navigate(['/login']);
-    }
+      }
   }
+
 }
+

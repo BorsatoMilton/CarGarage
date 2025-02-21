@@ -40,7 +40,7 @@ function sanitizeVehiculoInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const vehiculos = await em.find(Vehiculo,{ fechaBaja: null},{populate: ['modelo','categoria', 'marca', 'propietario'] })
+    const vehiculos = await em.find(Vehiculo,{ fechaBaja: null},{populate: ['modelo','categoria', 'marca', 'propietario', 'compra'] })
     res.status(200).json(vehiculos)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -60,7 +60,7 @@ async function findAllByUser(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const vehiculo = await em.findOneOrFail(Vehiculo, { id }, { populate: ['modelo','categoria', 'marca', 'propietario'] })
+    const vehiculo = await em.findOneOrFail(Vehiculo, { id }, { populate: ['modelo','categoria', 'marca', 'propietario', 'compra'] })
     if (!vehiculo) {
       return res.status(404).json({ message: 'Vehiculo no encontrado' })
     }

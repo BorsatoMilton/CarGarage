@@ -37,8 +37,9 @@ export class VehiclesCardComponent {
   loadVehicles() {
     this.vehicleService.getAllVehicle().subscribe({
       next: (data: Vehicle[]) => {
-        this.vehicles = data.filter((vehicle) => !vehicle.compra);
+        this.vehicles = data.filter((vehicle) => vehicle.compra?.estadoCompra !== 'CONFIRMADA'); //FALTA VALIDAR, PORQUE ES ASINCRONO Y NO SE VALIDA EN EL MOMENTO, HAY QUE HACER OTRO METODO PARA OBTENER LA COMRPA DE CADA VEHICULO
         this.filteredVehicles = this.vehicles;
+        console.log('Vehiculos:', this.filteredVehicles);
       },
       error: (err) => {
         console.error('Error al obtener vehiculos:', err);

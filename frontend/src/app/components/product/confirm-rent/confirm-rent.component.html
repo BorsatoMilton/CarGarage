@@ -1,5 +1,6 @@
 <div class="page-container">
     <div class="vehicle-container">
+      <app-universal-alert></app-universal-alert>
       <div *ngIf="vehiculo">
         <img id="imagen-vehiculo" *ngIf="vehiculo.imagenes && vehiculo.imagenes.length > 0"
           [src]="'http://localhost:3000/uploads/' + vehiculo.imagenes[0]" alt="Imagen del vehículo" />

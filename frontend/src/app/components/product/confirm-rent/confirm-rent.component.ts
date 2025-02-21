@@ -11,7 +11,7 @@ import { UniversalAlertComponent } from '../../../shared/components/alerts/unive
 @Component({
   selector: 'app-confirm-rent',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UniversalAlertComponent],
   templateUrl: './confirm-rent.component.html',
   styleUrl: './confirm-rent.component.css',
 })
@@ -39,6 +39,14 @@ export class ConfirmRentComponent {
               alertMethod('Confirmar Alquiler','Oops! Algo salio mal!', 'error');
               this.router.navigate(['/']);
             } else {
+              if (data.estadoAlquiler !== 'PENDIENTE') {
+                this.router.navigate(['/']);
+                alertMethod(
+                  'Confirmar Alquiler',
+                  `Oops! Este alquiler se encuentra en estado ${data.estadoAlquiler}`,
+                  'error'
+                );
+              }
               this.rent = data;
               if (this.rent) {
                 this.vehicleService.getOneVehicle(this.rent.vehiculo.id).subscribe({
@@ -106,13 +114,8 @@ export class ConfirmRentComponent {
   }
 
   confirmRent() {
-
     if (this.rent !== null) {
-      const updatedRent = {
-        ...this.rent,
-        estadoAlquiler: 'CONFIRMADO'
-      };
-      this.rentService.editRent(updatedRent).subscribe({
+      this.rentService.confirmRent(this.rent.id).subscribe({
         next: () => {
           alertMethod('Confirmar Alquiler','Alquiler confirmado con éxito!', 'success');
           this.closeModal('confirmarAlquiler');

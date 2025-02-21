@@ -47,6 +47,10 @@ export class ConfirmPurchaseComponent {
                 'error'
               );
             } else {
+              if(data.estadoCompra !== 'PENDIENTE'){
+                this.router.navigate(['/']);
+                alertMethod('Confirmar Compra', `Oops! Esta compra se encuentra en estado ${data.estadoCompra}`, 'error');
+              }
               this.selectedCompra = data;
               this.vehiculo = data.vehiculo;
               this.usuario = data.usuario;

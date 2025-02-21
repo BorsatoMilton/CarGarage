@@ -50,7 +50,7 @@ export class ResetPasswordComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al verificar el token:', error);
-          alertMethod('Recuperación de contraseña','Token inválido', 'error');
+          alertMethod('Recuperación de contraseña','Token utilizado o invalido', 'error');
           this.router.navigate(['auth/login']);
         }
       });

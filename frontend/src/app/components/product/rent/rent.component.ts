@@ -200,7 +200,7 @@ export class RentComponent implements OnInit {
         next: (response) => {
           if (this.usuario && this.idVehiculo) {
             const idAlquiler = response.id;
-            this.rentService.confirmRent(this.usuario, idAlquiler).subscribe({
+            this.rentService.confirmRentMail(this.usuario, idAlquiler).subscribe({
               next: () => {
                 alertMethod(
                   'Alquilar vehiculo',

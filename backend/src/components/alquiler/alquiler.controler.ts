@@ -107,7 +107,7 @@ async function update(req: Request, res: Response) {
   }  
 }
 
-async function confirmRent(req: Request, res: Response) {
+async function confirmarAlquilerMail(req: Request, res: Response) {
   try {
     const usuario = req.body; 
     const id = req.params.id;
@@ -138,6 +138,18 @@ async function confirmRent(req: Request, res: Response) {
   }
 }
 
+async function confirmRent(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const alquiler = em.getReference(Alquiler, id);
+    alquiler.estadoAlquiler = 'CONFIRMADO';
+    await em.flush();
+    res.status(200).json({ message: 'Alquiler Confirmado', data: alquiler });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Error al confirmar el alquiler', error: error.message });
+  }
+}
+
 async function cancelRent(req: Request, res: Response) {
   try {
     const id = req.params.id;
@@ -164,4 +176,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeAlquilerInput, findAll, findAllByVehicle, findAllByUser, findOne, getOneById, add, update, remove, confirmRent, cancelRent }
+export { sanitizeAlquilerInput, findAll, findAllByVehicle, findAllByUser, findOne, getOneById, add, update, remove,confirmRent, confirmarAlquilerMail, cancelRent }

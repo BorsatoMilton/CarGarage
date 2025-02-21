@@ -6,10 +6,10 @@ import {
   findAllByUser,
   findOne,
   add,
-  update,
   remove,
   cancelRent,
-  confirmRent
+  confirmarAlquilerMail,
+  confirmRent,
 } from "./alquiler.controler.js";
 
 export const alquilerRouter = Router();
@@ -265,12 +265,12 @@ alquilerRouter.post("/", sanitizeAlquilerInput, add);
  *       200:
  *         description: Alquiler confirmado
  */
-alquilerRouter.post("/confirmarAlquiler/:id", confirmRent);
+alquilerRouter.post("/confirmarAlquilerMail/:id", confirmarAlquilerMail);
 
 /**
  * @swagger
  * /api/alquiler/{id}:
- *   put:
+ *   patch:
  *     summary: Actualiza un alquiler existente
  *     tags: [Alquiler]
  *     parameters:
@@ -321,7 +321,7 @@ alquilerRouter.post("/confirmarAlquiler/:id", confirmRent);
  *                   example: Detalles del error
  */
 
-alquilerRouter.put("/:id", sanitizeAlquilerInput, update);
+alquilerRouter.patch("/confirmarAlquiler/:id", confirmRent); //Acomodar el swagger
 /**
  * @swagger
  * /api/alquiler/cancelar/{id}:

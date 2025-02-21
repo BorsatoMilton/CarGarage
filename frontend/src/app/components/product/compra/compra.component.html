@@ -34,8 +34,12 @@
       <p *ngIf="vehiculo?.compra?.estadoCompra === 'PENDIENTE'" class="alert alert-warning">
         Este vehículo está reservado para su compra.
       </p>
+
+      <p *ngIf="vehiculo?.compra?.estadoCompra === 'CONFIRMADA'" class="alert alert-warning">
+        Este vehículo está comprado.
+      </p>
       
-      <button type="button" class="btn btn-primary" (click)="openModal('comprar')" [class.disabled]="vehiculo?.compra?.estadoCompra === 'PENDIENTE'">Comprar</button>
+      <button type="button" class="btn btn-primary" (click)="openModal('comprar')" [class.disabled]="vehiculo?.compra?.estadoCompra === 'PENDIENTE' || vehiculo?.compra?.estadoCompra === 'CONFIRMADA'">Comprar</button>
     </div>
   </div>
 </div>

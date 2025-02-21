@@ -19,7 +19,7 @@ function sanitizeCompraInput (
         fechaCompra: new Date(),
         fechaLimiteConfirmacion: (() => {
             const fecha = new Date(); 
-            fecha.setMinutes(fecha.getDate() + 1); 
+            fecha.setMinutes(fecha.getMinutes() + 1); 
             return fecha; 
         })(),
         fechaCancelacion:req.body.fechaCancelacion,

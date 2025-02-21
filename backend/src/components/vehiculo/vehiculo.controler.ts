@@ -40,6 +40,7 @@ function sanitizeVehiculoInput(
 
 async function findAll(req: Request, res: Response) {
   try {
+    em.clear()
     const vehiculos = await em.find(Vehiculo,{ fechaBaja: null},{populate: ['modelo','categoria', 'marca', 'propietario', 'compra'] })
     res.status(200).json(vehiculos)
   } catch (error: any) {

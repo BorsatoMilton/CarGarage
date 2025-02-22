@@ -1,5 +1,6 @@
 import { User } from './user.interface';
 import { Rent } from './rent.interface';
+import { Compra } from './compra.interfaces.js';
 
 export interface Qualification {
     idCalificacion: string;
@@ -8,4 +9,5 @@ export interface Qualification {
     usuario: User;
     alquiler: Rent;
     comentario: string;
+    compra: Compra
 }

@@ -7,7 +7,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../../core/models/user.interface.js';
 import { RentsService } from '../../../core/services/rents.service.js';
+import { CompraService } from '../../../core/services/compra.service.js';
 import { Rent } from '../../../core/models/rent.interface.js';
+import { Compra } from '../../../core/models/compra.interfaces.js';
 import { Qualification } from '../../../core/models/qualification.inteface.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import {
@@ -18,29 +20,38 @@ import {
 } from '@angular/forms';
 import { ViewChild } from '@angular/core';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { catchError, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-qualification',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, UniversalAlertComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    UniversalAlertComponent,
+  ],
   templateUrl: './qualification.component.html',
   styleUrl: './qualification.component.css',
 })
 export class QualificationComponent implements OnInit {
   qualificationForm: FormGroup;
-  locatario: User | null = null;
+  usuarioAcalificar: User | null = null;
   rent: Rent | null = null;
-  locador: User | null = null;
+  compra: Compra | null = null;
   rating: number = 0;
   comment: string = '';
+  esAlquiler: boolean = false;
+  userRole: string = '';
 
   @ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private qualifiactionService: QualificationsService,
+    private qualificationService: QualificationsService,
     private usuarioService: UsuariosService,
+    private compraService: CompraService,
     private rentService: RentsService,
     private fb: FormBuilder
   ) {
@@ -50,69 +61,184 @@ export class QualificationComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    const idLocatario = this.route.snapshot.paramMap.get('locatario')!;
-    const idLocador = this.route.snapshot.paramMap.get('locador')!;
-    const idAlquiler = this.route.snapshot.paramMap.get('id')!;
+  async ngOnInit(): Promise<void> {
+    const idUsuario = this.route.snapshot.paramMap.get('usuarioAcalificar');
+    const idObjeto = this.route.snapshot.paramMap.get('id');
   
-    if (idLocatario) {
-      this.usuarioService.getOneUserById(idLocatario).subscribe((user) => {
-        this.locatario = user;
-        this.verificarCalificacion(user.id, idAlquiler);
-      });
+    if (!idUsuario || !idObjeto) {
+      alertMethod('Error', 'Parámetros inválidos', 'error');
+      this.router.navigate(['/']);
+      return;
     }
   
-    if (idLocador) {
-      this.usuarioService.getOneUserById(idLocador).subscribe((user) => {
-        this.locador = user;
-        this.verificarCalificacion(user.id, idAlquiler); 
-      });
+    const existeCalificacion = await this.verificarCalificacion(idUsuario, idObjeto);
+  
+    if (existeCalificacion) {
+      alertMethod('Calificar a usuario', 'Ya has calificado a este usuario', 'error');
+      this.router.navigate(['/']);
+      return;
     }
   
-    this.rentService.getOneRent(idAlquiler).subscribe((rent) => {
-      this.rent = rent;
-    });
+    this.buscarDatosParaCalificar(idUsuario, idObjeto);
   }
-  
-  private verificarCalificacion(usuarioId: string, alquilerId: string): void {
-    this.qualifiactionService.checkQualificationExists(usuarioId, alquilerId)
-      .subscribe({
-        next: (calificacion) => {
-          if (calificacion) {
-            this.alertComponent.showAlert('Ya has calificado a este usuario', 'info');
-            this.router.navigate(['/']);
+
+  private buscarDatosParaCalificar(idUsuario: string, idObjeto: string): void {
+
+    if (idUsuario) {
+      this.usuarioService.getOneUserById(idUsuario).subscribe((user) => {
+        this.usuarioAcalificar = user;
+        console.log('Usuario a calificar:', this.usuarioAcalificar);
+
+        this.verificarObjeto(idObjeto);
+      });
+    }
+  }
+
+  /*private verificarObjeto(id: string): void {
+    this.rentService.getOneRent(id).pipe(
+      catchError(() => of(null)), // Si hay error, devuelve null
+      switchMap(alquiler => {
+        if (alquiler) {
+          this.esAlquiler = true;
+          this.rent = alquiler;
+          return of(alquiler);
+        } else {
+          return this.compraService.getOneCompra(id).pipe(
+            catchError(() => of(null))
+          );
+        }
+      })
+    ).subscribe(transaccion => {
+      if (transaccion) {
+        if (!this.rent) {
+          this.compra = transaccion as Compra;
+          this.esAlquiler = false;
+        }
+      } else {
+        console.error('No se encontró transacción');
+        this.router.navigate(['/']);
+      }
+    });
+  } */
+
+    private verificarObjeto(id: string): void {
+      this.rentService.getOneRent(id).subscribe({
+        next: (alquiler) => {
+          if (alquiler) {
+            this.esAlquiler = true;
+            this.rent = alquiler;
+            
+            // Determinar rol
+            if (alquiler.locatario.id === this.usuarioAcalificar?.id) {
+              this.userRole = 'Locatario';
+              this.usuarioAcalificar = alquiler.locatario;
+            } else {
+              this.userRole = 'Locador';
+              this.usuarioAcalificar = alquiler.vehiculo.propietario;
+            }
+          } else {
+            this.compraService.getOneCompra(id).subscribe({
+              next: (compra) => {
+                this.compra = compra;
+                this.esAlquiler = false;
+                
+                // Determinar rol
+                if (compra.usuario.id === this.usuarioAcalificar?.id) {
+                  this.userRole = 'Comprador';
+                  this.usuarioAcalificar = compra.usuario;
+                } else {
+                  this.userRole = 'Vendedor';
+                  this.usuarioAcalificar = compra.vehiculo.propietario;
+                }
+              }
+            });
           }
+        }
+      });
+    }
+
+  private async verificarCalificacion(usuarioId: string, idObjeto: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.qualificationService.checkQualificationExists(usuarioId, idObjeto).subscribe({
+        next: (calificacion) => {
+          // Si recibes un objeto, existe la calificación
+          resolve(!!calificacion); 
         },
         error: (error) => {
-          console.error('Error al obtener la calificación:', error);
-        },
+          // Si es error 404, no existe calificación
+          if (error.status === 404) {
+            resolve(false);
+          } else {
+            console.error('Error verificando calificación:', error);
+            resolve(true); // En otros errores, prevenir calificación
+          }
+        }
       });
+    });
   }
-  
+
 
   onSubmit(): void {
-    const usuarioACalificar: User | null = this.locatario || this.locador;
-    if (!usuarioACalificar) {
+    if (!this.usuarioAcalificar) {
       console.error('No se encontró un usuario para calificar.');
       return;
     }
 
-    const nuevaCalificacion: Qualification = {
-      ...this.qualificationForm.value,
-      fechaCalificacion: new Date(),
-      usuario: usuarioACalificar.id,
-      alquiler: this.rent!.id,
-    };
+    let nuevaCalificacion: Qualification | null = null;
 
-    this.qualifiactionService.createQualification(nuevaCalificacion).subscribe({
+    if (this.esAlquiler) {
+      if (this.rent) {
+        nuevaCalificacion = {
+          ...this.qualificationForm.value,
+          fechaCalificacion: new Date(),
+          usuario: this.usuarioAcalificar.id,
+          alquiler: this.rent.id,
+        };
+      } else {
+        console.error('No se encontró un alquiler para calificar.');
+        return;
+      }
+    } else {
+      if (this.compra) {
+        nuevaCalificacion = {
+          ...this.qualificationForm.value,
+          fechaCalificacion: new Date(),
+          usuario: this.usuarioAcalificar.id,
+          compra: this.compra.id,
+        };
+      } else {
+        console.error('No se encontró una compra para calificar.');
+        return;
+      }
+    }
+
+    if (!nuevaCalificacion) {
+      this.router.navigate(['/']);
+      alertMethod(
+        'Califica al usuario',
+        'Error al enviar la calificación. No se encontro que calificar!',
+        'error'
+      );
+      return;
+    }
+
+    this.qualificationService.createQualification(nuevaCalificacion).subscribe({
       next: (respuesta) => {
-        alertMethod('Califica al usuario','Usuario calificado correctamente', 'success');
+        alertMethod(
+          'Califica al usuario',
+          'Usuario calificado correctamente',
+          'success'
+        );
         console.log('Calificación enviada con éxito:', respuesta);
 
         this.router.navigate(['/']);
       },
       error: (error) => {
-        alertMethod('Califica al usuario','Error al enviar la calificación', 'error');
+        alertMethod(
+          'Califica al usuario',
+          'Error al enviar la calificación',
+          'error'
+        );
         console.error('Error al enviar la calificación:', error);
       },
     });

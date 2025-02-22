@@ -2,12 +2,13 @@ import {
     Entity,
     Property,
     ManyToOne,
-    Rel
+    Rel,
+    OneToOne
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Usuario } from './usuario.entity.js'
-import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
 import { Alquiler } from '../alquiler/alquiler.entity.js'
+import { Compra } from '../compra/compra.entity.js'
 
 @Entity()
 export class Calificacion extends BaseEntity {
@@ -20,8 +21,19 @@ export class Calificacion extends BaseEntity {
     @Property({ nullable: true })
     comentario?: string
 
-    @Property({ nullable: false })
-    alquiler!: Rel<Alquiler>
+    @OneToOne(() => Alquiler, (alquiler) => alquiler.calificacion, {     
+        nullable: true,
+        unique: true,
+        owner: true 
+    })
+    alquiler?: Rel<Alquiler>
+
+    @OneToOne(() => Compra, (compra) => compra.calificacion, {     
+        nullable: true,
+        unique: true,
+        owner: true 
+    })
+    compra?: Rel<Compra>
 
     @ManyToOne(() => Usuario, { nullable: false })
     usuario!: Rel<Usuario>

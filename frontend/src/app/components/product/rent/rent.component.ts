@@ -202,12 +202,12 @@ export class RentComponent implements OnInit {
             const idAlquiler = response.id;
             this.rentService.confirmRentMail(this.usuario, idAlquiler).subscribe({
               next: () => {
+                this.router.navigate(['/']);
                 alertMethod(
                   'Alquilar vehiculo',
                   'Se ha enviado un mail a su casilla de correo para confirmar el alquiler',
                   'success'
                 );
-                this.router.navigate(['/']);
               },
               error: (error) => {
                 console.error(error);

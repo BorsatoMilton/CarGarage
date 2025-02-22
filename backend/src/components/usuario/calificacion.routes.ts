@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {findAll, findOne, add, findOneByRentAndUser, sanitizeCalificacionInput} from './calificacion.controler.js';
+import {findAll, findOne, add, findOneByObjectAndUser, sanitizeCalificacionInput} from './calificacion.controler.js';
 
 export const calificacionRouter = Router();
 
@@ -106,7 +106,7 @@ calificacionRouter.get('/:id', findOne);
 
 /**
  * @swagger
- * /api/calificaciones/{userId}/{rentId}:
+ * /api/calificaciones/{userId}/{objectId}:
  *   get:
  *     summary: Obtiene una calificación por usuario y alquiler
  *     tags: [Calificaciones]
@@ -118,7 +118,7 @@ calificacionRouter.get('/:id', findOne);
  *         schema:
  *           type: string
  *       - in: path
- *         name: rentId
+ *         name: objectId
  *         required: true
  *         description: ID del alquiler relacionado
  *         schema:
@@ -133,7 +133,7 @@ calificacionRouter.get('/:id', findOne);
  *       500:
  *         description: Error interno del servidor
  */
-calificacionRouter.get('/:userId/:rentId', findOneByRentAndUser);
+calificacionRouter.get('/:userId/:objectId', findOneByObjectAndUser);
 
 /**
  * @swagger

@@ -37,7 +37,7 @@ export class VehiclesCardComponent {
   loadVehicles() {
     this.vehicleService.getAllVehicle().subscribe({
       next: (data: Vehicle[]) => {
-        this.vehicles = data.filter((vehicle) => vehicle?.compra?.estadoCompra !== 'CONFIRMADA'); 
+        this.vehicles = data.filter((vehicle) => vehicle?.compra?.estadoCompra !== 'CONFIRMADA' && vehicle?.compra?.estadoCompra !== 'FINALIZADA'); 
         this.filteredVehicles = this.vehicles;
         console.log('Vehiculos:', this.filteredVehicles);
       },

@@ -1,9 +1,9 @@
 import cron from "node-cron";
 import { Alquiler } from "../components/alquiler/alquiler.entity.js";
 import { orm } from "../shared/db/orm.js";
-import { avisoPuntuarAlquiler } from "../components/correo/correo.controller.js";
+import { avisoPuntuarAlquiler, avisoPuntuarCompra } from "../components/correo/correo.controller.js";
 import { Compra } from "../components/compra/compra.entity.js";
-import { Vehiculo } from "../components/vehiculo/vehiculo.entity.js";
+
 
 cron.schedule("*/1 * * * *", async () => {
   console.log("Revisando estados de alquiler...");
@@ -45,6 +45,10 @@ cron.schedule("*/1 * * * *", async () => {
       estadoCompra: "CANCELADA",
     })
 
+    const comprasFinalizadas = await em.find(Compra, {
+      estadoCompra: "CONFIRMADA",}, { populate: ['usuario', 'vehiculo', 'vehiculo.propietario', 'vehiculo.marca']
+    })
+    
     if (alquileresNoConfirmados.length > 0) {
       console.log(
         `${alquileresNoConfirmados.length} alquiler(es) no fueron confirmados a tiempo.`
@@ -112,6 +116,16 @@ cron.schedule("*/1 * * * *", async () => {
         }
       }
     }
+
+    if (comprasFinalizadas.length > 0) {
+      console.log(`${comprasFinalizadas.length} compra(as) finalizadas`)
+      for (const compra of comprasFinalizadas) {
+          console.log('Compra finalizada', compra.usuario, compra.vehiculo.propietario)
+          await avisoPuntuarCompra(compra.usuario.id, compra.vehiculo.propietario.id ,compra);
+          compra.estadoCompra = 'FINALIZADA'
+        }
+    }
+    
       
     await em.flush();
     console.log("Estados de alquiler actualizados correctamente.");

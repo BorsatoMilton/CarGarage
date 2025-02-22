@@ -10,15 +10,17 @@ export class QualificationsService {
 
   constructor(private http: HttpClient) { }
 
+  private apiUrl = 'http://localhost:3000/api/calificaciones';
+
   getQualificationsByUserId(userId: string) {
-    return this.http.get<any>(`http://localhost:3000/api/calificaciones/${userId}`);
+    return this.http.get<Qualification>(`${this.apiUrl}/${userId}`);
   }
 
   createQualification(qualification: Qualification) {
-    return this.http.post<any>('http://localhost:3000/api/calificaciones', qualification);
+    return this.http.post<Qualification>(`${this.apiUrl}`, qualification);
   }
 
   checkQualificationExists(userId: string, rentId: string) {
-    return this.http.get<any>(`http://localhost:3000/api/calificaciones/${userId}/${rentId}`);
+    return this.http.get<Qualification>(`${this.apiUrl}/${userId}/${rentId}`);
   }
 }

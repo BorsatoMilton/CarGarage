@@ -15,6 +15,7 @@ function sanitizeCalificacionInput(
     comentario: req.body.comentario,
     usuario: req.body.usuario,
     alquiler: req.body.alquiler,
+    compra: req.body.compra
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -44,54 +45,35 @@ async function findOne(req: Request, res: Response) {
   }
 }
 
-async function findOneByRentAndUser(req: Request, res: Response) {
+async function findOneByObjectAndUser(req: Request, res: Response) {
   try {
-    const userId = req.params.userId
-    const rentId = req.params.rentId
-    const calificacion = await em.findOneOrFail(Calificacion, { usuario: userId, alquiler: rentId })
-    res.status(200).json(calificacion)
+    const userId = req.params.userId;
+    const objectId = req.params.objectId;
+    
+    const calificacion = await em.findOne(Calificacion, { 
+      usuario: userId,
+      $or: [{ alquiler: objectId }, { compra: objectId }]
+    });
+
+    if (!calificacion) {
+      return res.status(404).json({ message: 'Calificación no encontrada' });
+    }
+
+    res.status(200).json(calificacion);
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
 
 async function add(req: Request, res: Response) {
   try {
-    const existe = await em.findOne(Calificacion, { usuario: req.body.usuario, alquiler: req.body.alquiler })
-    if (existe) {
-      return res.status(400).json({ message: 'Ya has calificado a este usuario por este alquiler.' })
-    }else{
-      const calificacion = em.create(Calificacion, req.body.sanitizedInput)
-      await em.flush()
-      res.status(201).json({ message: 'Calificacion creada', data: calificacion })
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
-}
-/** 
-async function update(req: Request, res: Response) {
-  try {
-    const id = req.params.id
-    const calificacionAactualizar = await em.findOneOrFail(Calificacion, { id })
-    em.assign(calificacionAactualizar, req.body.sanitizedInput)
+    const calificacion = em.create(Calificacion, req.body.sanitizedInput)
     await em.flush()
-    res
-      .status(200)
-      .json({ message: 'Calificacion Actualizada', data: calificacionAactualizar })
+    res.status(201).json({ message: 'Calificacion creada', data: calificacion })
+
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-async function remove(req: Request, res: Response) {
-  try {
-    const id = req.params.id
-    const calificacion = em.getReference(Calificacion, id)
-    await em.removeAndFlush(calificacion)
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
-}
-*/
-export { sanitizeCalificacionInput, findAll, findOne, findOneByRentAndUser, add}
+export { sanitizeCalificacionInput, findAll, findOne, findOneByObjectAndUser, add}

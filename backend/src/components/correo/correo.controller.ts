@@ -417,6 +417,76 @@ async function avisoPuntuarAlquiler(locatario: string, locador: string, alquiler
     }
 }
 
+async function avisoPuntuarCompra(comprador: string, vendedor: string, compra: Compra) {
+    if (!vendedor || !comprador || !compra) {
+        console.log('Faltan datos para enviar el correo de calificación');
+        return;
+    }
+
+    const compradorLink = `http://localhost:4200/auth/rate/${vendedor}/${compra.id}`;
+    const vendedorLink = `http://localhost:4200/auth/rate/${comprador}/${compra.id}`;
+
+    const config = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
+    const generateEmailContent = (nombre: string, apellido: string, link: string) => `
+        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4;">
+            <div style="max-width: 600px; background: #fff; padding: 20px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #333;">Califica tu experiencia</h2>
+                <p style="color: #555;">Hola ${nombre} ${apellido},</p>
+                <p style="color: #555;">Tu proceso de compra ha finalizado. A continuación, te mostramos algunos detalles:</p>
+                <ul style="text-align: left; color: #555; padding-left: 20px;">
+                    <li><strong>Fecha de compra:</strong> ${compra.fechaCompra}</li>
+                    <li><strong>Vehiculo:</strong>${compra.vehiculo.marca.nombreMarca} ${compra.vehiculo.modelo}  ${compra.vehiculo.anio}</</li>
+                    <li><strong>Precio: </strong> ${compra.vehiculo.precioVenta}</li>
+                </ul>
+                <p style="color: #555;">Por favor, califica tu experiencia haciendo clic en el siguiente botón:</p>
+                <a href="${link}" 
+                   style="display: inline-block; padding: 12px 20px; background-color: #007bff; color: white; text-decoration: none; font-size: 16px; border-radius: 5px;">
+                   Calificar ahora
+                </a>
+                <p style="margin-top: 20px; color: #777;">¡Gracias por usar nuestros servicios!</p>
+            </div>
+        </div>
+    `;
+
+    const opcionesVendedor = {
+        from: process.env.EMAIL_USER,
+        subject: 'Califica tu experiencia de compra',
+        to: compra.vehiculo.propietario.mail,
+        html: generateEmailContent(compra.vehiculo.propietario.nombre, compra.vehiculo.propietario.apellido, vendedorLink)
+    };
+
+    const opcionesComprador = {
+        from: process.env.EMAIL_USER,
+        subject: 'Califica tu experiencia de compra',
+        to: compra.usuario.mail,
+        html: generateEmailContent(compra.usuario.nombre, compra.usuario.apellido, compradorLink)
+    };
+
+    try {
+        const [infoComprador, infoVendedor] = await Promise.all([
+            config.sendMail(opcionesVendedor),
+            config.sendMail(opcionesComprador)
+        ]);
+
+        console.log('Correos de calificación enviados correctamente', {
+            locatario: infoComprador.response,
+            locador: infoVendedor.response
+        });
+    } catch (error: any) {
+        console.error('Error al enviar el correo de calificación', error.message);
+    }
+}
+
+
 async function envioMailPropietarioAvisoCorreo(alquiler: Alquiler){
 
     const config = nodemailer.createTransport({
@@ -448,7 +518,7 @@ async function envioMailPropietarioAvisoCorreo(alquiler: Alquiler){
 
     const opciones = {
         from: process.env.EMAIL_USER,
-        subject: 'Confirmación de Alquiler',
+        subject: 'Nuevo Alquiler',
         to: alquiler.vehiculo.propietario.mail,
         html: htmlContent
     };
@@ -460,6 +530,6 @@ async function envioMailPropietarioAvisoCorreo(alquiler: Alquiler){
 }
 
 
-export { recuperarContraseña, confirmarCompraMailCorreo, avisoCompraExitosaMail , confirmRentMail, avisoPuntuarAlquiler, envioMailPropietarioAvisoCorreo
+export { recuperarContraseña, confirmarCompraMailCorreo, avisoCompraExitosaMail , confirmRentMail, avisoPuntuarAlquiler, envioMailPropietarioAvisoCorreo, avisoPuntuarCompra    
 };
 

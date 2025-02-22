@@ -60,6 +60,9 @@ async function findOne(req: Request, res: Response) {
     try {
         const id = req.params.id
         const compra = await em.findOne(Compra, { id }, { populate: ['usuario', 'vehiculo', 'vehiculo.propietario', 'vehiculo.marca', 'vehiculo.categoria'] })
+        if(!compra){
+            return res.status(200).json(null)
+        }
         res.status(200).json(compra)
     } catch (error: any) {
         res.status(500).json({ message: 'Error al obtener la compra', error: error.messagee })

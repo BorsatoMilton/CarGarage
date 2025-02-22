@@ -9,6 +9,7 @@ import {
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
 import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
+import { Calificacion } from '../usuario/calificacion.entity.js'
 
 @Entity()
 export class Compra extends BaseEntity{
@@ -24,6 +25,11 @@ export class Compra extends BaseEntity{
 
     @Property({ nullable: false })
     estadoCompra!:string
+
+    @OneToOne(() => Calificacion, (calificacion) => calificacion.compra,{
+        mappedBy: 'compra', nullable: true  
+    })
+    calificacion?: Rel<Calificacion> | null;
 
     @OneToOne(() => Vehiculo, (vehiculo) => vehiculo.compra, { 
         nullable: false,

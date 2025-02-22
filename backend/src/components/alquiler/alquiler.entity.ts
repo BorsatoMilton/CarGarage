@@ -9,6 +9,7 @@ import {
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
+import { Calificacion } from '../usuario/calificacion.entity.js'
 
 @Entity()
 export class Alquiler extends BaseEntity {
@@ -33,5 +34,10 @@ export class Alquiler extends BaseEntity {
     
     @ManyToOne(() => Vehiculo , { nullable: false })
     vehiculo!: Rel<Vehiculo>
+
+    @OneToOne(() => Calificacion, (calificacion) => calificacion.alquiler,{
+        mappedBy: 'alquiler', nullable: true  
+    })
+    calificacion?: Rel<Calificacion> | null;
 
 }

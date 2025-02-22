@@ -45,7 +45,7 @@ async function findOne(req: Request, res: Response) {
     const id = req.params.id;
     const alquiler = await em.findOne(Alquiler, { id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] });
     if(!alquiler){
-      return res.status(404).json({ message: 'Alquiler no encontrado' });
+      return res.status(200).json(null);
     }
     res.status(200).json(alquiler);
   } catch (error: any) {

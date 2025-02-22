@@ -417,7 +417,49 @@ async function avisoPuntuarAlquiler(locatario: string, locador: string, alquiler
     }
 }
 
+async function envioMailPropietarioAvisoCorreo(alquiler: Alquiler){
 
-export { recuperarContraseña, confirmarCompraMailCorreo, avisoCompraExitosaMail , confirmRentMail, avisoPuntuarAlquiler
+    const config = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_USER, 
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
+    const htmlContent = `
+        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4;">
+            <div style="max-width: 600px; background: #fff; padding: 20px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #333;">Nuevo Alquiler</h2>
+                <p style="color: #555;">Hola, ${alquiler.vehiculo.propietario.nombre}</p>
+                <p style="color: #555;">Te informamos que tu vehiculo ${alquiler.vehiculo.modelo} ${alquiler.vehiculo.anio} se ha alquilado.</p>
+                <p style="color: #555;">Detalles del alquiler:</p>
+                <ul style="text-align: left; color: #555; padding-left: 20px;">
+                    <li><strong>Locatario:</strong> ${alquiler.locatario.nombre} ${alquiler.locatario.apellido}</li>
+                    <li><strong>Contacto:</strong> ${alquiler.locatario.mail} | ${alquiler.locatario.telefono}</li>
+                    <li><strong>Fecha de inicio:</strong> ${alquiler.fechaHoraInicioAlquiler}</li>
+                    <li><strong>Fecha de devolución:</strong> ${alquiler.fechaHoraDevolucion}</li>
+                </ul>
+            </div>
+        </div>
+    `;
+
+    const opciones = {
+        from: process.env.EMAIL_USER,
+        subject: 'Confirmación de Alquiler',
+        to: alquiler.vehiculo.propietario.mail,
+        html: htmlContent
+    };
+    try {
+        config.sendMail(opciones)
+    } catch (error: any) {
+        console.error('Error al enviar el correo de aviso de alquiler', error.message);
+    }
+}
+
+
+export { recuperarContraseña, confirmarCompraMailCorreo, avisoCompraExitosaMail , confirmRentMail, avisoPuntuarAlquiler, envioMailPropietarioAvisoCorreo
 };
 

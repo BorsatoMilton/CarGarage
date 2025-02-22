@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Alquiler } from './alquiler.entity.js'
 import { orm } from '../../shared/db/orm.js'
-import { confirmRentMail } from '../correo/correo.controller.js'
+import { confirmRentMail, envioMailPropietarioAvisoCorreo } from '../correo/correo.controller.js'
 
 const em = orm.em
 
@@ -144,6 +144,7 @@ async function confirmRent(req: Request, res: Response) {
     const alquiler = em.getReference(Alquiler, id);
     alquiler.estadoAlquiler = 'CONFIRMADO';
     await em.flush();
+    envioMailPropietarioAviso(id)
     res.status(200).json({ message: 'Alquiler Confirmado', data: alquiler });
   } catch (error: any) {
     res.status(500).json({ message: 'Error al confirmar el alquiler', error: error.message });
@@ -176,4 +177,21 @@ async function remove(req: Request, res: Response) {
   }
 }
 
+
+async function envioMailPropietarioAviso(id:string){
+  try{
+    const alquiler = await em.findOne(Alquiler, {id:id}, {populate: ['locatario', 'vehiculo', 'vehiculo.propietario']})
+    if(!alquiler){
+      throw new Error("No se encuentra el alquiler")
+    }
+    await envioMailPropietarioAvisoCorreo(alquiler)
+
+  }catch(error: any){
+    console.error(error.message)
+  }
+  
+
+
+
+}
 export { sanitizeAlquilerInput, findAll, findAllByVehicle, findAllByUser, findOne, getOneById, add, update, remove,confirmRent, confirmarAlquilerMail, cancelRent }

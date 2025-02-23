@@ -26,10 +26,11 @@ function sanitizeCalificacionInput(
   next()
 }
 
-async function findAll(req: Request, res: Response) {
+async function findAllByUser(req: Request, res: Response) {
   try {
-    const calificaciones = await em.find(Calificacion,{})
-    res.status(200).json({ message: 'Calificaciones', data: calificaciones })
+    const idUsuario = req.params.idUsuario
+    const calificaciones = await em.find(Calificacion,{usuario: idUsuario})
+    res.status(200).json(calificaciones)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -76,4 +77,4 @@ async function add(req: Request, res: Response) {
   }
 }
 
-export { sanitizeCalificacionInput, findAll, findOne, findOneByObjectAndUser, add}
+export { sanitizeCalificacionInput, findAllByUser, findOne, findOneByObjectAndUser, add}

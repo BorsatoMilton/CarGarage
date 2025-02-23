@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Qualification } from '../models/qualification.inteface.js';
+import { Observable, ObservedValueOf } from 'rxjs';
 
 
 @Injectable({
@@ -12,8 +13,8 @@ export class QualificationsService {
 
   private apiUrl = 'http://localhost:3000/api/calificaciones';
 
-  getQualificationsByUserId(userId: string) {
-    return this.http.get<Qualification>(`${this.apiUrl}/${userId}`);
+  getQualificationsByUserId(userId: string): Observable<Qualification[]> {
+    return this.http.get<Qualification[]>(`${this.apiUrl}/${userId}`);
   }
 
   createQualification(qualification: Qualification) {

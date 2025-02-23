@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../../../core/models/categories.interface.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { QualificationCalculator } from '../../../shared/components/qualification-calculator/qualification-calculator.js';
 
 @Component({
   selector: 'app-compra',
@@ -33,10 +34,15 @@ export class CompraComponent implements OnInit {
   vehiculo: Vehicle | null = null;
   selectedFiles: File[] = [];
   usuario: User | null = null;
+  promedioCalificaciones: number = 0;
+  cantidadCalificaciones: number = 0;
   idVehiculo: string | null = null;
   categoria: Category | null = null;
   compra: Compra | null = null;
   currentSlideIndex = 0;
+  lightboxActive: boolean = false;
+  selectedImage: string = '';
+  selectedImageIndex: number = 0;
 
 @ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
@@ -45,6 +51,7 @@ export class CompraComponent implements OnInit {
     private vehicleService: VehiclesService,
     private authService: AuthService,
     private compraService: CompraService,
+    private qualificationCalculator: QualificationCalculator,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -67,13 +74,43 @@ export class CompraComponent implements OnInit {
           } else {
             this.vehiculo = data;
             this.obtenerCompra(this.vehiculo.id);
+            this.cargarCalificacionesPropietario();
           }
         });
       }
     });
     this.usuario = this.authService.getCurrentUser();
+
   }
 
+
+  private cargarCalificacionesPropietario(): void {
+    if (!this.vehiculo?.propietario?.id) return;
+  
+    this.qualificationCalculator.getPromedio(this.vehiculo.propietario.id).subscribe({
+      next: (promedio) => {
+        this.promedioCalificaciones = promedio;
+        this.obtenerCantidadCalificaciones(this.vehiculo!.propietario!.id)
+      },
+      error: (err) => {
+        console.error('Error obteniendo calificaciones:', err);
+        this.promedioCalificaciones = 0;
+      }
+    });
+  }
+  
+  private obtenerCantidadCalificaciones(idPropietario:string){
+    this.qualificationCalculator.getCalificacionesTotal(idPropietario).subscribe({
+      next: (cantidad) => {
+        this.cantidadCalificaciones = cantidad;
+      },
+      error: (err) => {
+        console.error('Error obteniendo cantidad de calificaciones:', err);
+        this.cantidadCalificaciones = 0;
+      }
+    });
+
+  }
 
   obtenerCompra(idVehiculo: string): void {
     this.compraService.getOneCompraByVehiculo(idVehiculo).subscribe((data) => {
@@ -87,8 +124,6 @@ export class CompraComponent implements OnInit {
       if(this.vehiculo) this.vehiculo.compra = data
     })
   }
-
-
 
 nextSlide(): void {
   if (this.vehiculo && this.vehiculo.imagenes) {
@@ -130,6 +165,29 @@ goToSlide(index: number): void {
     this.compraForm.reset();
   }
 
+  openLightbox(index: number): void {
+  this.selectedImageIndex = index;
+  this.selectedImage = this.vehiculo?.imagenes[index] || '';
+  this.lightboxActive = true;
+}
+
+closeLightbox(): void {
+  this.lightboxActive = false;
+}
+
+changeLightboxImage(direction: number): void {
+  if (!this.vehiculo?.imagenes) return;
+  
+  const length = this.vehiculo.imagenes.length;
+  this.selectedImageIndex = (this.selectedImageIndex + direction + length) % length;
+  this.selectedImage = this.vehiculo.imagenes[this.selectedImageIndex];
+}
+
+closeLightboxOnBackdrop(event: MouseEvent): void {
+  if (event.target === event.currentTarget) {
+    this.closeLightbox();
+  }
+}
   
 
   comprar(): void {

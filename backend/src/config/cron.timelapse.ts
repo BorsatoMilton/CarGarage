@@ -96,7 +96,6 @@ cron.schedule("*/1 * * * *", async () => {
     }
 
     if (comprasSinConfirmarABorrar.length > 0) {
-      console.log(`${comprasSinConfirmarABorrar.length} compra(as) no confirmadas fueron borradas`)
       for (const compra of comprasSinConfirmarABorrar) {
         const diferenciaTiempo = Date.now() - new Date(compra.fechaLimiteConfirmacion).getTime();
         const sieteDiasEnMs = 7 * 24 * 60 * 60 * 1000;

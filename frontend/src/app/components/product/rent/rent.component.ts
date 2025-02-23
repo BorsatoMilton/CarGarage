@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { QualificationCalculator } from '../../../shared/components/qualification-calculator/qualification-calculator.js';
 
 @Component({
   selector: 'app-rent',
@@ -46,11 +47,14 @@ export class RentComponent implements OnInit {
   todayDate: Date = new Date() //new Date(new Date().setDate(new Date().getDate() + 1));
   fechaInvalida: boolean = false;
   currentSlideIndex = 0;
+  promedioCalificaciones: number = 0;
+  cantidadCalificaciones: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private vehiculoService: VehiclesService,
+    private qualificationCalculator: QualificationCalculator,
     private rentService: RentsService,
     private authService: AuthService,
     private router: Router
@@ -90,6 +94,7 @@ export class RentComponent implements OnInit {
       this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe(
         (data: Vehicle) => {
           this.vehiculo = data;
+          this.cargarCalificacionesPropietario();
         },
         (error) => {
           console.error('Error para obtener el vehiculo:', error);
@@ -111,6 +116,36 @@ export class RentComponent implements OnInit {
         });
     }
     this.usuario = this.authService.getCurrentUser();
+  }
+
+
+  
+  private cargarCalificacionesPropietario(): void {
+    if (!this.vehiculo?.propietario?.id) return;
+  
+    this.qualificationCalculator.getPromedio(this.vehiculo.propietario.id).subscribe({
+      next: (promedio) => {
+        this.promedioCalificaciones = promedio;
+        this.obtenerCantidadCalificaciones(this.vehiculo!.propietario!.id)
+      },
+      error: (err) => {
+        console.error('Error obteniendo calificaciones:', err);
+        this.promedioCalificaciones = 0;
+      }
+    });
+  }
+  
+  private obtenerCantidadCalificaciones(idPropietario:string){
+    this.qualificationCalculator.getCalificacionesTotal(idPropietario).subscribe({
+      next: (cantidad) => {
+        this.cantidadCalificaciones = cantidad;
+      },
+      error: (err) => {
+        console.error('Error obteniendo cantidad de calificaciones:', err);
+        this.cantidadCalificaciones = 0;
+      }
+    });
+
   }
 
   dateRangeValidatorFactory() {

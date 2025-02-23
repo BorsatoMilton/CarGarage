@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {findAll, findOne, add, findOneByObjectAndUser, sanitizeCalificacionInput} from './calificacion.controler.js';
+import {findAllByUser, findOne, add, findOneByObjectAndUser, sanitizeCalificacionInput} from './calificacion.controler.js';
 
 export const calificacionRouter = Router();
 
@@ -47,7 +47,7 @@ export const calificacionRouter = Router();
  * @swagger
  * /api/calificaciones:
  *   get:
- *     summary: Obtiene todas las calificaciones
+ *     summary: Obtiene todas las calificaciones de un usuario
  *     tags: [Calificaciones]
  *     responses:
  *       200:
@@ -70,7 +70,7 @@ export const calificacionRouter = Router();
  *              example: Error al obtener las calificaciones
  */
 
-calificacionRouter.get('/', findAll);
+calificacionRouter.get('/:idUsuario', findAllByUser);
 /**
  * @swagger
  * /api/calificaciones/{id}:

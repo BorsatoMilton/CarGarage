@@ -1,45 +1,128 @@
-
-<div class="page-container">
+<div class="page-container container-fluid py-3 py-md-4">
   <app-universal-alert></app-universal-alert>
-  <div class="vehicle-container">
-    <div *ngIf="vehiculo">
-      <img id="imagen-vehiculo" *ngIf="vehiculo.imagenes && vehiculo.imagenes.length > 0"
-        [src]="'http://localhost:3000/uploads/' + vehiculo.imagenes[0]" alt="Imagen del vehículo" />
-      <p *ngIf="!vehiculo.imagenes?.length">No hay imágenes disponibles para este vehículo.</p>
-    </div>
-    
-    <div class="vehicle-details">
-      <div class="anuncio">
-        <strong>Descripción del vehiculo</strong>
-      </div>
-      <hr>
-      <p><strong>Modelo:</strong> {{vehiculo?.modelo}}</p>
-      <p><strong>Color:</strong> Blanco</p>
-      <p><strong>Categoria:</strong> {{vehiculo?.categoria?.nombreCategoria}} </p>
-      <p><strong>Marca:</strong> {{vehiculo?.marca?.nombreMarca}}</p>
-      <p><strong>Descripción:</strong> {{vehiculo?.descripcion}}</p>
-      <p><strong>Transmisión:</strong> {{vehiculo?.transmision}}</p>
-      <p><strong>Precio Venta:</strong> {{ vehiculo?.precioVenta | currency:'ARS' }}</p>
-      <p><strong>Precio Alquiler:</strong> {{ vehiculo?.precioAlquilerDiario| currency:'ARS' }}</p>
-      <div class="anuncio">
-        <strong>Descripción del propietario</strong>
-      </div>
-      <hr>
-      <p><strong>Nombre:</strong>{{vehiculo?.propietario?.nombre}} </p>
-      <p><strong>Apellido:</strong> {{vehiculo?.propietario?.apellido}} </p>
-      <p><strong>Mail:</strong> {{vehiculo?.propietario?.mail}} </p>
-      <p><strong>Telefono:</strong> {{vehiculo?.propietario?.telefono}} </p>
-      <p><strong>Direccion:</strong> {{vehiculo?.propietario?.direccion}} </p>
-
-      <p *ngIf="vehiculo?.compra?.estadoCompra === 'PENDIENTE'" class="alert alert-warning">
-        Este vehículo está reservado para su compra.
-      </p>
-
-      <p *ngIf="vehiculo?.compra?.estadoCompra === 'CONFIRMADA'" class="alert alert-warning">
-        Este vehículo está comprado.
-      </p>
+  <div class="vehicle-container card shadow-lg">
+    <div class="row g-3 g-md-4">
       
-      <button type="button" class="btn btn-primary" (click)="openModal('comprar')" [class.disabled]="vehiculo?.compra?.estadoCompra === 'PENDIENTE' || vehiculo?.compra?.estadoCompra === 'CONFIRMADA'">Comprar</button>
+
+      <div class="col-12 col-md-6">
+        <div class="card h-100">
+          <div class="card-body p-0">
+            <div class="image-carousel">
+              <div class="carousel-container" *ngIf="(vehiculo?.imagenes?.length ?? 0) > 0">
+                <div class="carousel-slide" 
+                     *ngFor="let imagen of vehiculo?.imagenes; let i = index"
+                     [class.active]="i === currentSlideIndex">
+                  <img [src]="'http://localhost:3000/uploads/' + imagen" 
+                       alt="Imagen del vehículo"
+                       class="carousel-image img-fluid">
+                </div>
+
+                <button class="carousel-control prev" (click)="previousSlide()">&#10094;</button>
+                <button class="carousel-control next" (click)="nextSlide()">&#10095;</button>
+
+                <div class="carousel-indicators">
+                  <span *ngFor="let imagen of vehiculo?.imagenes; let i = index" 
+                        [class.active]="i === currentSlideIndex"
+                        (click)="goToSlide(i)"></span>
+                </div>
+              </div>
+
+              <div *ngIf="!vehiculo?.imagenes?.length" class="no-images text-center p-4">
+                <i class="bi bi-image fs-1 text-muted"></i>
+                <p class="text-muted mt-2">No hay imágenes disponibles</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-12 col-md-6">
+        <div class="card h-100">
+          <div class="card-body p-3 p-md-4">
+            <h2 class="card-title mb-3 mb-md-4 fw-bold text-primary h4">{{vehiculo?.modelo}}</h2>
+            
+ 
+            <div class="vehicle-specs mb-4 mb-md-5">
+              <h4 class="section-title mb-2 mb-md-3 h5">
+                <i class="bi bi-card-checklist me-2"></i>Especificaciones
+              </h4>
+              <dl class="row">
+                <dt class="col-5 col-md-4">Categoría</dt>
+                <dd class="col-7 col-md-8">{{vehiculo?.categoria?.nombreCategoria}}</dd>
+
+                <dt class="col-5 col-md-4">Marca</dt>
+                <dd class="col-7 col-md-8">{{vehiculo?.marca?.nombreMarca}}</dd>
+
+                <dt class="col-5 col-md-4">Transmisión</dt>
+                <dd class="col-7 col-md-8 text-capitalize">{{vehiculo?.transmision}}</dd>
+
+                <dt class="col-5 col-md-4">Precio Venta</dt>
+                <dd class="col-7 col-md-8 fw-bold text-success">{{ vehiculo?.precioVenta | currency:'ARS':'symbol':'1.0-0' }}</dd>
+
+                <dt class="col-5 col-md-4">Alquiler Diario</dt>
+                <dd class="col-7 col-md-8 fw-bold text-info">{{ vehiculo?.precioAlquilerDiario | currency:'ARS':'symbol':'1.0-0' }}</dd>
+              </dl>
+            </div>
+
+    
+            <div class="owner-info mb-4 mb-md-5">
+              <h4 class="section-title mb-2 mb-md-3 h5">
+                <i class="bi bi-person-badge me-2"></i>Propietario
+              </h4>
+              <dl class="row">
+                <dt class="col-5 col-md-4">Nombre</dt>
+                <dd class="col-7 col-md-8">{{vehiculo?.propietario?.nombre}} {{vehiculo?.propietario?.apellido}}</dd>
+
+                <dt class="col-5 col-md-4">Contacto</dt>
+                <dd class="col-7 col-md-8">
+                  <a href="mailto:{{vehiculo?.propietario?.mail}}" class="text-decoration-none">
+                    <i class="bi bi-envelope me-2"></i>{{vehiculo?.propietario?.mail}}
+                  </a>
+                </dd>
+
+                <dt class="col-5 col-md-4">Teléfono</dt>
+                <dd class="col-7 col-md-8">
+                  <i class="bi bi-telephone me-2"></i>{{vehiculo?.propietario?.telefono || 'No disponible'}}
+                </dd>
+
+                <dt class="col-5 col-md-4">Ubicación</dt>
+                <dd class="col-7 col-md-8">
+                  <i class="bi bi-geo-alt me-2"></i>{{vehiculo?.propietario?.direccion || 'No especificada'}}
+                </dd>
+              </dl>
+            </div>
+
+    
+            <div *ngIf="vehiculo?.compra" class="status-alerts mb-4">
+              <div *ngIf="vehiculo?.compra?.estadoCompra === 'PENDIENTE'" 
+                   class="alert alert-warning d-flex align-items-center py-2">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <div class="small">Vehículo reservado - Pendiente de confirmación</div>
+              </div>
+
+              <div *ngIf="vehiculo?.compra?.estadoCompra === 'CONFIRMADA'" 
+                   class="alert alert-success d-flex align-items-center py-2">
+                <i class="bi bi-check-circle me-2"></i>
+                <div class="small">Vehículo vendido - Transacción completada</div>
+              </div>
+            </div>
+
+       
+            <div class="d-grid gap-2 mt-3 mt-md-4">
+              <button type="button" 
+                      class="btn btn-primary fw-bold py-2 py-md-3"
+                      (click)="openModal('comprar')"
+                      [disabled]="vehiculo?.compra?.estadoCompra === 'PENDIENTE' || vehiculo?.compra?.estadoCompra === 'CONFIRMADA' || vehiculo?.compra?.estadoCompra === 'FINALIZADA'">
+                <i class="bi bi-currency-dollar me-2"></i>
+                <span class="small">
+                  {{ vehiculo?.precioVenta ? ('Comprar por ' + (vehiculo?.precioVenta | currency:'ARS':'symbol':'1.0-0')) : 'Solicitar compra' }}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -47,10 +130,14 @@
 <div id="comprar" class="modalChanged">
   <div class="modal-contentChanged">
     <span class="close" (click)="closeModal('comprar')">&times;</span>
-    <h2>Comprar Vehiculo</h2>
-    <p style="margin: 10px;">¿Estás seguro de que deseas <strong>comprar</strong> el siguiente vehiculo?</p>
-    <p style="margin: 10px;"><strong>Nombre:</strong> {{ vehiculo?.modelo }}</p>
-    <button class="btn btn-secondary" (click)="closeModal('comprar')">Cancelar</button>
-    <button class="btn btn-success"  (click)="comprar()">Comprar</button>
+    <h2 class="h5 mb-3">Comprar Vehiculo</h2>
+    <div class="mb-3">
+      <p>¿Estás seguro de comprar este vehículo?</p>
+      <p class="fw-bold">{{ vehiculo?.modelo }}</p>
+    </div>
+    <div class="d-flex gap-2 justify-content-end">
+      <button class="btn btn-secondary btn-sm" (click)="closeModal('comprar')">Cancelar</button>
+      <button class="btn btn-success btn-sm" (click)="comprar()">Confirmar</button>
+    </div>
   </div>
 </div>

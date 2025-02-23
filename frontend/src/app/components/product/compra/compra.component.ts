@@ -36,6 +36,7 @@ export class CompraComponent implements OnInit {
   idVehiculo: string | null = null;
   categoria: Category | null = null;
   compra: Compra | null = null;
+  currentSlideIndex = 0;
 
 @ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
@@ -86,6 +87,27 @@ export class CompraComponent implements OnInit {
       if(this.vehiculo) this.vehiculo.compra = data
     })
   }
+
+
+
+nextSlide(): void {
+  if (this.vehiculo && this.vehiculo.imagenes) {
+    this.currentSlideIndex = 
+      (this.currentSlideIndex + 1) % this.vehiculo.imagenes.length;
+  }
+}
+
+previousSlide(): void {
+  if (this.vehiculo && this.vehiculo.imagenes) {
+    this.currentSlideIndex = 
+      (this.currentSlideIndex - 1 + this.vehiculo.imagenes.length) % 
+      this.vehiculo.imagenes.length;
+  }
+}
+
+goToSlide(index: number): void {
+  this.currentSlideIndex = index;
+}
 
   openModal(modalId: string): void {
     console.log(this.compraForm.value);

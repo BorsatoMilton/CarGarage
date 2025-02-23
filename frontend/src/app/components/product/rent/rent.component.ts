@@ -45,6 +45,7 @@ export class RentComponent implements OnInit {
   usuario: User | null = null;
   todayDate: Date = new Date() //new Date(new Date().setDate(new Date().getDate() + 1));
   fechaInvalida: boolean = false;
+  currentSlideIndex = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -186,6 +187,25 @@ export class RentComponent implements OnInit {
     )?.value;
     this.fechaInvalida = this.isDateDisabled(fechaSeleccionada);
   }
+
+nextSlide(): void {
+  if (this.vehiculo && this.vehiculo.imagenes) {
+    this.currentSlideIndex = 
+      (this.currentSlideIndex + 1) % this.vehiculo.imagenes.length;
+  }
+}
+
+previousSlide(): void {
+  if (this.vehiculo && this.vehiculo.imagenes) {
+    this.currentSlideIndex = 
+      (this.currentSlideIndex - 1 + this.vehiculo.imagenes.length) % 
+      this.vehiculo.imagenes.length;
+  }
+}
+
+goToSlide(index: number): void {
+  this.currentSlideIndex = index;
+}
 
   rent(): void {
     if (this.authService.isAuthenticated()) {

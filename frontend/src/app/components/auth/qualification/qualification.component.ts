@@ -20,7 +20,6 @@ import {
 } from '@angular/forms';
 import { ViewChild } from '@angular/core';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
-import { catchError, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-qualification',
@@ -94,32 +93,6 @@ export class QualificationComponent implements OnInit {
     }
   }
 
-  /*private verificarObjeto(id: string): void {
-    this.rentService.getOneRent(id).pipe(
-      catchError(() => of(null)), // Si hay error, devuelve null
-      switchMap(alquiler => {
-        if (alquiler) {
-          this.esAlquiler = true;
-          this.rent = alquiler;
-          return of(alquiler);
-        } else {
-          return this.compraService.getOneCompra(id).pipe(
-            catchError(() => of(null))
-          );
-        }
-      })
-    ).subscribe(transaccion => {
-      if (transaccion) {
-        if (!this.rent) {
-          this.compra = transaccion as Compra;
-          this.esAlquiler = false;
-        }
-      } else {
-        console.error('No se encontró transacción');
-        this.router.navigate(['/']);
-      }
-    });
-  } */
 
     private verificarObjeto(id: string): void {
       this.rentService.getOneRent(id).subscribe({
@@ -161,16 +134,16 @@ export class QualificationComponent implements OnInit {
     return new Promise((resolve) => {
       this.qualificationService.checkQualificationExists(usuarioId, idObjeto).subscribe({
         next: (calificacion) => {
-          // Si recibes un objeto, existe la calificación
+
           resolve(!!calificacion); 
         },
         error: (error) => {
-          // Si es error 404, no existe calificación
+      
           if (error.status === 404) {
             resolve(false);
           } else {
             console.error('Error verificando calificación:', error);
-            resolve(true); // En otros errores, prevenir calificación
+            resolve(true); 
           }
         }
       });

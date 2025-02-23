@@ -26,15 +26,14 @@
         <td>${{ Vehicle.precioVenta || 'NO SE VENDE'}}</td>
         <td>{{ Vehicle.propietario.nombre }} {{ Vehicle.propietario.apellido }}</td>
         <td>
-
           <ng-container *ngIf="!Vehicle.compra || Vehicle.compra?.estadoCompra === 'NO CONFIRMADA' || Vehicle.compra?.estadoCompra === 'CANCELADA'; else reservadoOVendido">
             <button (click)="openModal('editVehicle', Vehicle)" class="btn btn-primary">Editar</button>
             <button (click)="openModal('removeVehicle', Vehicle)" class="btn btn-danger">Eliminar</button>
           </ng-container>
-
+        
           <ng-template #reservadoOVendido>
             <span *ngIf="Vehicle.compra?.estadoCompra === 'PENDIENTE'" class="text-warning">Reservado</span>
-            <span *ngIf="Vehicle.compra?.estadoCompra === 'CONFIRMADA'" class="text-success">Vendido</span>
+            <span *ngIf="Vehicle.compra?.estadoCompra === 'CONFIRMADA' || Vehicle.compra?.estadoCompra === 'FINALIZADA'" class="text-success">Vendido</span>
           </ng-template>
         </td>
       </tr>

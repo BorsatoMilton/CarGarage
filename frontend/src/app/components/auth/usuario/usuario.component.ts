@@ -13,13 +13,13 @@ import { Rol } from '../../../core/models/rol.interface.js';
 import { RolService } from '../../../core/services/rol.service.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
-import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import {  map, Observable, switchMap, throwError } from 'rxjs';
+import {SearcherComponent} from '../../../shared/components/searcher/searcher.component.js';
 
 @Component({
   selector: 'app-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, UniversalAlertComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, UniversalAlertComponent, SearcherComponent],
   templateUrl: 'usuario.component.html',
   styleUrl: './usuario.component.css',
 })
@@ -28,6 +28,7 @@ export class UserComponent implements OnInit {
   userForm: FormGroup = new FormGroup({});
   passwordForm: FormGroup = new FormGroup({}); 
   users: User[] = [];
+  filteredUsers: User[] = [];
   selectedUser: User | null = null;
   roles: Rol[] = [];
 
@@ -74,7 +75,12 @@ export class UserComponent implements OnInit {
   loadUser(): void {
     this.userService.getAllUser().subscribe((users: User[]) => {
       this.users = users;
+      this.filteredUsers = users;
     });
+  }
+
+  onSearch(filteredUsers: User[]): void {
+    this.filteredUsers = filteredUsers.length > 0 ? filteredUsers : [];
   }
 
   openModal(modalId: string, user: User): void {

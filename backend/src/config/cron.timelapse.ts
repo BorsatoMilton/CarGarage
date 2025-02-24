@@ -60,7 +60,6 @@ cron.schedule("*/1 * * * *", async () => {
 
     if (alquileresNoConfirmadosAborrar.length > 0) {
       for (const alquiler of alquileresNoConfirmadosAborrar) {
-        console.log(`${alquileresNoConfirmadosAborrar.length} alquiler(es) no confirmados fueron borrados`)
         const diferenciaTiempo = Date.now() - new Date(alquiler.tiempoConfirmacion).getTime();
         const sieteDiasEnMs = 7 * 24 * 60 * 60 * 1000;
         if (diferenciaTiempo >= sieteDiasEnMs) {

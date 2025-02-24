@@ -1,14 +1,18 @@
 <div class="container my-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1><strong>LISTADO DE COMPRAS</strong></h1>
+
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+    <h2 class="mb-3 mb-md-0"><strong class="text-primary">Gestión de Compras</strong></h2>
   </div>
 
-  <table class="table table-hover">
-    <thead class="table-dark">
+
+
+  <div class="table-responsive rounded-3 shadow-sm">
+    <table class="table table-hover table-striped mb-0">
+    <thead class="table-primary">
       <tr>
         <th>VEHICULO</th>
-        <th>FECHA COMPRA</th>
-        <th>PRECIO</th>
+        <th class="d-none d-md-table-cell">FECHA COMPRA</th>
+        <th class="d-none d-md-table-cell">PRECIO</th>
         <th>VENDEDOR</th>
         <th>ESTADO</th>
         <th>ACCIONES</th>
@@ -16,21 +20,23 @@
     </thead>
     <tbody *ngIf="compras.length > 0">
       <tr *ngFor="let compra of compras">
-        <td>{{ compra.vehiculo.modelo }} {{compra.vehiculo.anio}}</td>
-        <td>{{ compra.fechaCompra | date: 'yyyy-MM-dd'}} </td>
-        <td>${{ compra.vehiculo.precioVenta }}</td>
-        <td>
+        <td data-label="Vehículo">{{ compra.vehiculo.modelo }} {{compra.vehiculo.anio}}</td>
+        <td data-label="Fecha Compra" class="d-none d-md-table-cell">{{ compra.fechaCompra | date: 'yyyy-MM-dd'}} </td>
+        <td data-label="Precio" class="d-none d-md-table-cell">${{ compra.vehiculo.precioVenta }}</td>
+        <td data-label="Vendedor">
           {{ compra.vehiculo.propietario.nombre }} {{ compra.vehiculo.propietario.apellido }}
         </td>
-        <td>{{compra.estadoCompra}}</td>
+        <td data-label="Estado">{{compra.estadoCompra}}</td>
 
-        <td>
+        <td data-label="Acciones">
           <button
           (click)="openModal('cancelarCompra', compra)"
-          class="btn btn-danger"
+          class="btn btn-lg btn-outline-danger"
+          data-bs-toggle="modal"
           [disabled]="compra.estadoCompra === 'CANCELADA' || compra.estadoCompra === 'CONFIRMADA' || compra.estadoCompra === 'NO CONFIRMADA'"
         >
-          Cancelar
+          <i class="bi bi-pencil"></i>
+          
         </button>
         </td>
       </tr>
@@ -39,6 +45,7 @@
   </table>
 </div>
 
+</div>
   <div id="cancelarCompra" class="modalChanged">
     <div class="modal-contentChanged">
       <span class="close" (click)="closeModal('cancelarCompra')">&times;</span>

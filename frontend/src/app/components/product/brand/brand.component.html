@@ -1,28 +1,58 @@
 <div class="container my-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>LISTADO DE MARCAS</h2>
-    <app-searcher [data]="brands" [filterAttributes]="['nombreMarca']" (filteredData)="onSearch($event)"  style="display: block; width: 70%;"></app-searcher>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrand">Añadir Marca</button>
-  </div>
   <app-universal-alert></app-universal-alert>
-  <table class="table table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>NOMBRE</th>
-            <th>ACCIONES</th>
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+    <h2 class="mb-3 mb-md-0"><strong class="text-primary">Gestión de Marcas</strong></h2>
+    <app-searcher [data]="brands" [filterAttributes]="['nombreMarca']" (filteredData)="onSearch($event)"  style="display: block; width: 70%;"></app-searcher>
+    <button
+      type="button"
+      class="btn btn-primary btn-lg"
+      data-bs-toggle="modal"
+      data-bs-target="#addBrand"
+    >
+      <i class="bi bi-person-plus me-2"></i>Añadir Marca
+    </button>
+  </div>
+ 
+
+  <div class="table-responsive rounded-3 shadow-sm">
+    <table class="table table-hover table-striped mb-0">
+      <thead class="table-primary">
+          <tr>
+              <th>Nombre</th>
+              <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="brands.length > 0">
+          <tr *ngFor="let brand of filteredBrands">
+              <td data-label="Nombre">{{ brand.nombreMarca }}</td>
+              <td data-label="Acciones">
+                <button
+                (click)="openModal('editBrand', brand)"
+                class="btn btn-lg btn-outline-primary"
+                data-bs-toggle="modal"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                (click)="openModal('removeBrand', brand)"
+                class="btn btn-lg btn-outline-danger"
+                data-bs-toggle="modal"
+              >
+                <i class="bi bi-key"></i>
+              </button>
+              </td>
           </tr>
-       </thead>
-       <tbody *ngIf="brands.length > 0">
-         <tr *ngFor="let brand of filteredBrands">
-            <td>{{ brand.nombreMarca }}</td>
-            <td>
-                <button  (click)="openModal('editBrand', brand)"class="btn btn-primary">Editar</button>
-                <button  (click)="openModal('removeBrand', brand)"class="btn btn-danger">Eliminar</button>
-            </td>
+      </tbody>
+      <tfoot *ngIf="filteredBrands.length === 0">
+        <tr>
+          <td colspan="8" class="text-center py-5 text-muted">
+            <i class="bi bi-people display-6 d-block mb-2"></i>
+            No hay marcas registradas
+          </td>
         </tr>
-    </tbody>
-    <p *ngIf="filteredBrands.length === 0">No hay marcas que coincidan con ese nombre</p>
-  </table>
+      </tfoot>
+    </table>
+  </div>
   
   
     <div class="modal fade" id="addBrand" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -34,7 +64,7 @@
         </div>
         <div class="modal-body">
             <form [formGroup]="brandForm" (ngSubmit)="addBrand()">
-                <div class="form-group">
+                <div class="col-md-12">
                 <label for="name">Nombre Marca</label>
                 <input type="text" formControlName="nombreMarca" id="name" name="name" class="form-control" required>
                 </div>

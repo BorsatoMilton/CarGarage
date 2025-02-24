@@ -1,51 +1,63 @@
 <div class="container my-4">
   <app-universal-alert></app-universal-alert>
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>LISTA DE VEHICULOS</h2>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVehicle">Añadir
-      Vehiculo</button>
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+    <h2 class="mb-3 mb-md-0"><strong class="text-primary">Gestión de Publicaciones</strong></h2>
+    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#addVehicle">
+      <i class="bi bi-person-plus me-2"></i>Añadir Vehículo
+    </button>
   </div>
 
 
-  <table class="table table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th>MODELO</th>
-        <th>DESCRIPCION</th>
-        <th>PRECIO ALQUILER DIARIO</th>
-        <th>PRECIO VENTA</th>
-        <th>PROPIETARIO</th>
-        <th>ACCIONES</th>
-      </tr>
-    </thead>
-    <tbody *ngIf="vehicles.length > 0">
-      <tr *ngFor="let Vehicle of vehicles">
-        <td>{{ Vehicle.modelo }}</td>
-        <td>{{ Vehicle.descripcion }}</td>
-        <td>${{ Vehicle.precioAlquilerDiario || 'NO SE ALQUILA' }}</td>
-        <td>${{ Vehicle.precioVenta || 'NO SE VENDE'}}</td>
-        <td>{{ Vehicle.propietario.nombre }} {{ Vehicle.propietario.apellido }}</td>
-        <td>
-          <ng-container *ngIf="!Vehicle.compra || Vehicle.compra?.estadoCompra === 'NO CONFIRMADA' || Vehicle.compra?.estadoCompra === 'CANCELADA'; else reservadoOVendido">
-            <button (click)="openModal('editVehicle', Vehicle)" class="btn btn-primary">Editar</button>
-            <button (click)="openModal('removeVehicle', Vehicle)" class="btn btn-danger">Eliminar</button>
-          </ng-container>
-        
-          <ng-template #reservadoOVendido>
-            <span *ngIf="Vehicle.compra?.estadoCompra === 'PENDIENTE'" class="text-warning">Reservado</span>
-            <span *ngIf="Vehicle.compra?.estadoCompra === 'CONFIRMADA' || Vehicle.compra?.estadoCompra === 'FINALIZADA'" class="text-success">Vendido</span>
-          </ng-template>
-        </td>
-      </tr>
-    </tbody>
-    <p *ngIf="vehicles.length === 0" class="text-center text-muted">No hay vehículos</p>
-  </table>
-  
+  <div class="table-responsive rounded-3 shadow-sm">
+    <table class="table table-hover table-striped mb-0">
+      <thead class="table-primary">
+        <tr>
+          <th>MODELO</th>
+          <th class="d-none d-md-table-cell">DESCRIPCIÓN</th>
+          <th class="d-none d-md-table-cell">KILOMETROS</th>
+          <th>PRECIO ALQUILER DIARIO</th>
+          <th>PRECIO VENTA</th>
+          <th>ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="vehicles.length > 0">
+        <tr *ngFor="let Vehicle of vehicles">
+          <td data-label="Modelo">{{ Vehicle.modelo }}</td>
+          <td data-label="Descripción"  class="d-none d-md-table-cell">{{ Vehicle.descripcion }}</td>
+          <td data-label="Kilometros" class="d-none d-md-table-cell"> {{Vehicle.kilometros}}</td>
+          <td data-label="Precio Alquiler Diario">${{ Vehicle.precioAlquilerDiario || 'NO SE ALQUILA' }}</td>
+          <td data-label="Precio Venta">${{ Vehicle.precioVenta || 'NO SE VENDE'}}</td>
+          <td data-label="Acciones">
+            <ng-container
+              *ngIf="!Vehicle.compra || Vehicle.compra?.estadoCompra === 'NO CONFIRMADA' || Vehicle.compra?.estadoCompra === 'CANCELADA'; else reservadoOVendido">
+              <button (click)="openModal('editVehicle', Vehicle)" class="btn btn-lg btn-outline-primary"
+                data-bs-toggle="modal">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button (click)="openModal('removeVehicle', Vehicle)" class="btn btn-lg btn-outline-danger"
+                data-bs-toggle="modal">
+                <i class="bi bi-key"></i>
+              </button>
+            </ng-container>
+
+            <ng-template #reservadoOVendido>
+              <span *ngIf="Vehicle.compra?.estadoCompra === 'PENDIENTE'" class="text-warning">Reservado</span>
+              <span
+                *ngIf="Vehicle.compra?.estadoCompra === 'CONFIRMADA' || Vehicle.compra?.estadoCompra === 'FINALIZADA'"
+                class="text-success">Vendido</span>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+      <p *ngIf="vehicles.length === 0" class="text-center text-muted">No hay publicaciones</p>
+    </table>
+  </div>
+
   <div class="modal fade" id="addVehicle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Nuevo Vehiculo</h5>
+          <h1 class="modal-title">Nuevo Vehiculo</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -54,19 +66,20 @@
               <div class="col-md-6">
                 <label for="modelo">Modelo del Vehiculo</label>
                 <input type="text" formControlName="modelo" id="modelo" class="form-control" required>
+              </div>
+              <div class="col-md-6">
                 <label for="descripcion">Descripcion del Vehiculo</label>
                 <input type="text" formControlName="descripcion" id="descripcion" class="form-control" required>
               </div>
-
               <div class="col-md-6">
                 <label for="precioVenta">Precio de Venta</label>
                 <input type="number" formControlName="precioVenta" id="precioVenta" class="form-control">
+              </div>
+              <div class="col-md-6">
                 <label for="precioAlquilerDiario">Precio de Alquiler Diario</label>
                 <input type="number" formControlName="precioAlquilerDiario" id="precioAlquilerDiario"
                   class="form-control">
               </div>
-            </div>
-            <div class="row mt-3">
               <div class="col-md-6">
                 <label for="anio">Año</label>
                 <input type="year" formControlName="anio" id="anio" class="form-control" required>
@@ -80,12 +93,12 @@
                 </select>
               </div>
             </div>
-            <div class="row mt-3">
+            <div class="row">
               <div class="col-md-6">
                 <label for="kilometros">Kilometros</label>
-                <input type="number" formControlName="kilometros" id="kilometros" class="form-control" value="0" min="0" required>
+                <input type="number" formControlName="kilometros" id="kilometros" class="form-control" value="0" min="0"
+                  required>
               </div>
-            <div class="row mt-3">
               <div class="col-md-6">
                 <label for="marca">Marca del Vehiculo</label>
                 <select id="marca" formControlName="marca" class="form-control">
@@ -101,18 +114,18 @@
                   </option>
                 </select>
               </div>
-            </div>
-            <div class="form-group mt-3">
-              <label for="file">Imagenes del Vehiculo</label>
-              <input type="file" id="file" (change)="onFilesSelected($event)" class="form-control" accept="image/*"
-                multiple>
-            </div>
-          </div>
 
-          <div class="modal-footer mt-3">
+              <div class="col-12">
+                <label for="file">Imagenes del Vehiculo</label>
+                <input type="file" id="file" (change)="onFilesSelected($event)" class="form-control" accept="image/*"
+                  multiple>
+              </div>
+            </div>
+
+            <div class="modal-footer mt-3">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
               <button type="submit" class="btn btn-primary" [disabled]="vehicleForm.invalid">Guardar</button>
-          </div>
+            </div>
           </form>
         </div>
       </div>
@@ -134,51 +147,65 @@
   <div id="editVehicle" class="modalChanged">
     <div class="modal-contentChanged">
       <span class="close" (click)="closeModal('editVehicle')">&times;</span>
-      <h2>Editar Vehiculo</h2>
+      <h2>Editar Vehículo</h2>
       <form [formGroup]="vehicleForm" (ngSubmit)="editVehicle()">
-        <div class="form-group">
-          <label for="modelo">Modelo Vehiculo</label>
-          <input type="text" formControlName="modelo" id="modelo" name="modelo" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="name">Descripcion Vehiculo</label>
-          <input type="text" formControlName="descripcion" id="description" name="description" class="form-control"
-            required>
-        </div>
-        <div class="form-group">
-          <label for="venta">Precio Venta</label>
-          <input type="number" formControlName="precioVenta" id="venta" name="venta" class="form-control">
-          <label for="preciodiario">Precio Alquiler Diario</label>
-          <input type="number" formControlName="precioAlquilerDiario" id="preciodiario" name="preciodiario"
-            class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="transmision">Transmisión</label>
-          <select id="transmision" formControlName="transmision" id="transmision" name="transmision"
-            class="form-control">
-            <option value="AUTOMÁTICO">Automático</option>
-            <option value="MANUAL">Manual</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <div class="form-group">
-            <label for="kilometros">Kilometros</label>
-            <input type="number" formControlName="kilometros" id="kilometros" name="kilometros" class="form-control"
-              value="0" min="0" max="1000000" required>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="modelo">Modelo del Vehiculo</label>
+            <input type="text" formControlName="modelo" id="modelo" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label for="descripcion">Descripcion del Vehiculo</label>
+            <input type="text" formControlName="descripcion" id="descripcion" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label for="precioVenta">Precio de Venta</label>
+            <input type="number" formControlName="precioVenta" id="precioVenta" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label for="precioAlquilerDiario">Precio de Alquiler Diario</label>
+            <input type="number" formControlName="precioAlquilerDiario" id="precioAlquilerDiario"
+              class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label for="anio">Año</label>
+            <input type="year" formControlName="anio" id="anio" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label for="transmision">Transmision</label>
+            <select id="transmision" formControlName="transmision" class="form-control">
+              <option value="" disabled selected>Seleccione una transmision</option>
+              <option value="AUTOMÁTICO">Automático</option>
+              <option value="MANUAL">Manual</option>
+            </select>
           </div>
         </div>
-        <div class="form-group">
-          <label for="marca">Marca del Vehículo</label>
-          <select id="marca" formControlName="marca" class="form-control">
-            <option *ngFor="let brand of brands" [ngValue]="brand.id">{{ brand.nombreMarca}}</option>
-          </select>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="kilometros">Kilometros</label>
+            <input type="number" formControlName="kilometros" id="kilometros" class="form-control" value="0" min="0"
+              required>
+          </div>
+          <div class="col-md-6">
+            <label for="marca">Marca del Vehiculo</label>
+            <select id="marca" formControlName="marca" class="form-control">
+              <option value="" disabled selected>Seleccione una marca</option>
+              <option *ngFor="let brand of brands" [ngValue]="brand.id">{{ brand.nombreMarca }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="categoria">Categoria del Vehiculo</label>
+            <select id="categoria" formControlName="categoria" class="form-control">
+              <option value="" disabled selected>Seleccione una categoria</option>
+              <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.nombreCategoria }}
+              </option>
+            </select>
+          </div>
+
         </div>
-        <div class="form-group">
-          <label for="categoria">Categoria del Vehículo</label>
-          <select id="categoria" formControlName="categoria" class="form-control">
-            <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.nombreCategoria }}</option>
-          </select>
-        </div>
+
+ 
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeModal('editVehicle')">Cancelar</button>
           <button type="submit" class="btn btn-primary" [disabled]="vehicleForm.invalid">Guardar cambios</button>

@@ -1,50 +1,86 @@
 <div class="container my-4">
   <app-universal-alert></app-universal-alert>
-  <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2>LISTA DE USUARIOS</h2>
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUser">Añadir
-        Usuario</button>
-    </div>
-    <table class="table table-hover">
-      <thead class="table-dark">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+    <h2 class="mb-3 mb-md-0"><strong class="text-primary">Gestión de Usuarios</strong></h2>
+    <app-searcher [data]="users" [filterAttributes]="['usuario', 'nombre', 'apellido', 'mail']" (filteredData)="onSearch($event)"  style="display: block; width: 70%;"></app-searcher>
+    <button
+      type="button"
+      class="btn btn-primary btn-lg"
+      data-bs-toggle="modal"
+      data-bs-target="#addUser"
+    >
+      <i class="bi bi-person-plus me-2"></i>Añadir Usuario
+    </button>
+  </div>
+  
+  <div class="table-responsive rounded-3 shadow-sm">
+    <table class="table table-hover table-striped mb-0">
+      <thead class="table-primary">
         <tr>
-          <th>USUARIO</th>
-          <th>NOMBRE</th>
-          <th>APELLIDO</th>
-          <th>MAIL</th>
-          <th>DIRECCION</th>
-          <th>TELEFONO</th>
-          <th>ROL</th>
-          <th>ACCIONES</th>
+          <th>Usuario</th>
+          <th class="d-none d-md-table-cell">Nombre</th>
+          <th class="d-none d-md-table-cell">Apellido</th>
+          <th>Mail</th>
+          <th class="d-none d-lg-table-cell">Dirección</th>
+          <th class="d-none d-md-table-cell">Teléfono</th>
+          <th>Rol</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody *ngIf="users.length > 0">
-        <tr *ngFor="let User of users">
-          <td>{{ User.usuario }}</td>
-          <td>{{ User.nombre }}</td>
-          <td>{{ User.apellido }}</td>
-          <td>{{ User.mail }}</td>
-          <td>{{ User.direccion }}</td>
-          <td>{{ User.telefono }}</td>
-          <td>{{ User.rol.nombreRol }}</td>
-          <td>
-            <button (click)="openModal('editUser', User)" class="btn btn-primary" data-bs-toggle="modal"
-              data-bs-target="#editUserModal" id="boton-editar">Editar</button>
-              <button (click)="openModal('updatePassword', User)" class="btn btn-warning" data-bs-toggle="modal"
-              data-bs-target="#changePaswwordUserModal">Actualizar Clave</button>
-            <button (click)="openModal('removeUser', User)" class="btn btn-danger" data-bs-toggle="modal"
-              data-bs-target="#removeUserModal" id="boton-eliminar">Eliminar</button>
+        <tr *ngFor="let User of filteredUsers">
+          <td data-label="Usuario">{{ User.usuario }}</td>
+          <td data-label="Nombre"  class="d-none d-md-table-cell">{{ User.nombre }}</td>
+          <td data-label="Apellido"class="d-none d-md-table-cell">{{ User.apellido }}</td>
+          <td data-label="Mail">{{ User.mail }}</td>
+          <td data-label="Dirección" class="d-none d-lg-table-cell">{{ User.direccion }}</td>
+          <td data-label="Teléfono" class="d-none d-md-table-cell">{{ User.telefono }}</td>
+          <td data-label="Rol" ><span class="badge bg-secondary">{{ User.rol.nombreRol }}</span></td>
+          <td data-label="Acciones">
+            <div class="d-flex flex-nowrap gap-1">
+              <button
+                (click)="openModal('editUser', User)"
+                class="btn btn-lg btn-outline-primary"
+                data-bs-toggle="modal"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                (click)="openModal('updatePassword', User)"
+                class="btn btn-lg btn-outline-warning"
+                data-bs-toggle="modal"
+              >
+                <i class="bi bi-key"></i>
+              </button>
+              <button
+                (click)="openModal('removeUser', User)"
+                class="btn btn-lg btn-outline-danger"
+                data-bs-toggle="modal"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
-      <p *ngIf="users.length === 0" class="text-center text-muted">No hay usuarios</p>
+      <tfoot *ngIf="filteredUsers.length === 0">
+        <tr>
+          <td colspan="8" class="text-center py-5 text-muted">
+            <i class="bi bi-people display-6 d-block mb-2"></i>
+            No hay usuarios registrados
+          </td>
+        </tr>
+      </tfoot>
     </table>
+  </div>
 </div>
+
+
     <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Nuevo Usuario</h5>
+            <h1 class="modal-title">Nuevo Usuario</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -73,13 +109,11 @@
               <div class="col-md-6">
                   <label for="telefono">Telefono</label>
                   <input type="text" formControlName="telefono" id="telefono" class="form-control" required>
+                  <label for="rol">Rol</label>
+                  <select id="rol" formControlName="rol" class="form-control">
+                    <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombreRol }}</option>
+                  </select>
               </div>
-              </div>
-              <div class="form-group">
-                <label for="rol">Rol</label>
-                <select id="rol" formControlName="rol" class="form-control">
-                  <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombreRol }}</option>
-                </select>
               </div>
             <div class="modal-footer mt-3">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -122,8 +156,8 @@
             <label for="Editmail">Mail</label>
             <input type="email" formControlName="mail" id="Editmail" name="Editmail" class="form-control" required>
           </div>
-          </div>
-          <div class="row">
+
+
           <div class="col-md-6">
             <label for="Editdireccion">Direccion</label>
             <input type="text" formControlName="direccion" id="Editdireccion" name="Editdireccion"
@@ -133,8 +167,7 @@
             <label for="Edittelefono">Telefono</label>
             <input type="number" formControlName="telefono" id="Edittelefono" name="Edittelefono" class="form-control" required>
           </div>
-          </div>
-          <div class="form-group">
+            <div class="col-md-12">
             <label for="Editrol">Rol</label>
             <select id="Editrol" formControlName="rol" name="Editrol" class="form-control">
               <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombreRol }}</option>
@@ -144,7 +177,7 @@
             <button type="button" class="btn btn-secondary" (click)="closeModal('editUser')">Cancelar</button>
             <button type="submit" class="btn btn-primary"[disabled]="userForm.invalid">Guardar cambios</button>
           </div>
-  
+          </div> 
         </form>
       </div>
     </div>

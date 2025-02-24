@@ -1,45 +1,53 @@
 <div class="container my-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1><strong>LISTADO DE ALQUILERES</strong></h1>
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+    <h2 class="mb-3 mb-md-0"><strong class="text-primary">Gestión de Alquileres</strong></h2>
   </div>
 
-  <table class="table table-hover">
-    <thead class="table-dark">
+  <div class="table-responsive rounded-3 shadow-sm">
+    <table class="table table-hover table-striped mb-0">
+      <thead class="table-primary">
       <tr>
         <th>AUTO</th>
-        <th>FECHA ALQUILER</th>
+        <th class="d-none d-md-table-cell">FECHA ALQUILER</th>
         <th>PRECIO DIARIO</th>
         <th>INICIO ALQUILER</th>
         <th>FIN ALQUILER</th>
-        <th>PROPIETARIO</th>
-        <th>CONTACTO</th>
+        <th class="d-none d-md-table-cell">PROPIETARIO</th>
+        <th class="d-none d-md-table-cell">CONTACTO</th>
         <th>ESTADO</th>
         <th>ACCIONES</th>
       </tr>
     </thead>
     <tbody *ngIf="alquileres.length > 0">
       <tr *ngFor="let alquiler of alquileres">
-        <td>{{ alquiler.vehiculo.modelo}}</td>
-        <td>{{ alquiler.fechaAlquiler | date:'yyyy-MM-dd' }}</td>
-        <td>${{ alquiler.vehiculo.precioAlquilerDiario}}</td>
-        <td>{{ alquiler.fechaHoraInicioAlquiler | date:'yyyy-MM-dd' }}</td>
-        <td>{{ alquiler.fechaHoraDevolucion | date:'yyyy-MM-dd' }}</td>
-        <td>
+        <td data-label="Auto">{{ alquiler.vehiculo.modelo}} {{alquiler.vehiculo.anio}}</td>
+        <td data-label="Fecha Alquiler" class="d-none d-md-table-cell">{{ alquiler.fechaAlquiler | date:'yyyy-MM-dd' }}</td>
+        <td data-label="Precio Diario">${{ alquiler.vehiculo.precioAlquilerDiario}}</td>
+        <td data-label="Inicio Alquiler">{{ alquiler.fechaHoraInicioAlquiler | date:'yyyy-MM-dd' }}</td>
+        <td data-label="Fin Alquiler">{{ alquiler.fechaHoraDevolucion | date:'yyyy-MM-dd' }}</td>
+        <td  data-label="Propietario" class="d-none d-md-table-cell">
           {{ alquiler.vehiculo.propietario.nombre}} {{ alquiler.vehiculo.propietario.apellido}}
         </td>
-        <td><strong>Email:</strong> {{ alquiler.vehiculo.propietario.mail }} <br>
+        <td data-label="Contacto" class="d-none d-md-table-cell"><strong>Email:</strong> {{ alquiler.vehiculo.propietario.mail }} <br>
           <strong>Tel:</strong> {{ alquiler.vehiculo.propietario.telefono  || 'Sin celular'}}
         </td>
-        <td>{{ alquiler.estadoAlquiler }}</td>
-        <td>
-          <button (click)="openModal('cancelarAlquiler', alquiler)" class="btn btn-danger" 
-          [disabled]="alquiler.estadoAlquiler === 'CANCELADO' || alquiler.estadoAlquiler === 'NO CONFIRMADO' || alquiler.estadoAlquiler === 'FINALIZADO' || alquiler.estadoAlquiler === 'EN CURSO'">Cancelar</button> 
+        <td data-label="Estado">{{ alquiler.estadoAlquiler }}</td>
+        <td data-label="Acciones">
+          <button
+          (click)="openModal('cancelarAlquiler', alquiler)"
+          class="btn btn-lg btn-outline-danger"
+          data-bs-toggle="modal"
+          [disabled]="alquiler.estadoAlquiler === 'CANCELADO' || alquiler.estadoAlquiler === 'NO CONFIRMADO' || alquiler.estadoAlquiler === 'FINALIZADO' || alquiler.estadoAlquiler === 'EN CURSO'" 
+        >
+          <i class="bi bi-trash"></i>
+        </button>
+
         </td>
       </tr>
     </tbody>
     <p *ngIf="alquileres.length === 0" class="text-center text-muted">No hay alquileres</p>
   </table>
-
+</div>
 
   <div id="cancelarAlquiler" class="modalChanged">
     <div class="modal-contentChanged">

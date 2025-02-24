@@ -3,6 +3,8 @@ import { Alquiler } from "../components/alquiler/alquiler.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { avisoPuntuarAlquiler, avisoPuntuarCompra } from "../components/correo/correo.controller.js";
 import { Compra } from "../components/compra/compra.entity.js";
+import { Vehiculo } from "../components/vehiculo/vehiculo.entity.js";
+import { remove } from "../components/vehiculo/vehiculo.controler.js";
 
 
 cron.schedule("*/1 * * * *", async () => {
@@ -48,6 +50,10 @@ cron.schedule("*/1 * * * *", async () => {
     const comprasFinalizadas = await em.find(Compra, {
       estadoCompra: "CONFIRMADA",}, { populate: ['usuario', 'vehiculo', 'vehiculo.propietario', 'vehiculo.marca']
     })
+
+    const vehiculosDadosDeBaja = await em.find(Vehiculo, {
+      fechaBaja: { $ne: null },
+    })
     
     if (alquileresNoConfirmados.length > 0) {
       console.log(
@@ -86,7 +92,7 @@ cron.schedule("*/1 * * * *", async () => {
         await avisoPuntuarAlquiler(alquiler.locatario.id, alquiler.vehiculo.propietario.id ,alquiler);
       }
     }
-    
+
     if (comprasSinConfirmar.length > 0) {
       console.log(`${comprasSinConfirmar.length} compra(as) han quedado sin confirmar.`)
       for (const compra of comprasSinConfirmar) {
@@ -123,6 +129,19 @@ cron.schedule("*/1 * * * *", async () => {
           compra.estadoCompra = 'FINALIZADA'
         }
     }
+
+    if (vehiculosDadosDeBaja.length > 0) {
+      const treintaDiasEnMs = 30 * 24 * 60 * 60 * 1000;
+      for (const vehiculo of vehiculosDadosDeBaja) {
+        if (vehiculo.fechaBaja) { 
+          const diferenciaTiempo = Date.now() - new Date(vehiculo.fechaBaja).getTime();
+          if (diferenciaTiempo >= treintaDiasEnMs) {
+            await remove(vehiculo.id);
+          }
+        }
+      }
+    }
+    
     
       
     await em.flush();

@@ -17,11 +17,12 @@ import { AuthService } from '../../../core/services/auth.service.js';
 import { User } from '../../../core/models/user.interface.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-vehicle',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, UniversalAlertComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, UniversalAlertComponent, MatIconModule],
   templateUrl: 'vehicles.component.html',
   styleUrl: './vehicles.component.css',
 })

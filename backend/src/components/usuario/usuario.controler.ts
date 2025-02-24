@@ -3,6 +3,7 @@ import { Usuario } from "./usuario.entity.js";
 import { orm } from "../../shared/db/orm.js";
 import { PasswordResetToken } from "./passwordResetToken.entity.js";
 import bcrypt from "bcrypt";
+import { Vehiculo } from "../vehiculo/vehiculo.entity.js";
 
 const em = orm.em;
 
@@ -320,10 +321,11 @@ async function resetPassword(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const usuario = em.getReference(Usuario, id);
+    const usuario = await em.findOne(Usuario, { id: id }, { populate: ['tarjetas', 'calificacionesUsuario', 'compras', 'alquilerLocatorio'] });
     if (!usuario) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     } else {
+      await vehiclesUsersLogicRemove(usuario);
       await em.removeAndFlush(usuario);
       res.status(200).json("Usuario eliminado con exito");
     }
@@ -331,6 +333,18 @@ async function remove(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
+
+
+async function vehiclesUsersLogicRemove(usuario:Usuario): Promise<void>{
+  const vehiculos = await em.find(Vehiculo, { propietario: usuario.id });
+  for (const vehiculo of vehiculos) {
+    vehiculo.fechaBaja = new Date();
+    await em.persistAndFlush(vehiculo);
+  }
+}
+
+
+
 
 export {
   sanitizeUsuarioInput,

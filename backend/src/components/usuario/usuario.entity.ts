@@ -4,7 +4,8 @@ import {
     ManyToOne,
     Rel,
     OneToMany, 
-    Collection
+    Collection,
+    Cascade
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Tarjeta } from './tarjeta.entity.js'
@@ -37,19 +38,19 @@ export class Usuario extends BaseEntity {
     @Property({ nullable: false})
     telefono!: string
 
-    @OneToMany(() => Tarjeta, tarjeta => tarjeta.usuario, { nullable: false })
+    @OneToMany(() => Tarjeta, tarjeta => tarjeta.usuario, { nullable: false, cascade: [ Cascade.REMOVE ] })
     tarjetas = new Collection<Tarjeta>(this)
 
-    @OneToMany(() => Calificacion, calificacion => calificacion.usuario, { nullable: false })
+    @OneToMany(() => Calificacion, calificacion => calificacion.usuario, { nullable: false, cascade: [ Cascade.REMOVE ] })
     calificacionesUsuario = new Collection<Calificacion>(this)
 
-    @OneToMany(() => Compra, compra => compra.usuario , { nullable: false })
+    @OneToMany(() => Compra, compra => compra.usuario , { nullable: false, cascade: [ Cascade.REMOVE ] })
     compras = new Collection<Compra>(this)
 
-    @OneToMany(() => Vehiculo, vehiculo => vehiculo.propietario)
+    @OneToMany(() => Vehiculo, vehiculo => vehiculo.propietario, { nullable: true, cascade: [Cascade.REMOVE]   })
     vehiculos = new Collection<Vehiculo>(this)
     
-    @OneToMany(() => Alquiler, alquiler => alquiler.locatario, { nullable: false })
+    @OneToMany(() => Alquiler, alquiler => alquiler.locatario, { nullable: false, cascade: [Cascade.REMOVE]   })
     alquilerLocatorio= new Collection<Alquiler>(this)
 
     @ManyToOne(() => Rol, { nullable: false})

@@ -30,14 +30,21 @@
 
         <td data-label="Acciones">
           <button
+          *ngIf="compra.estadoCompra !== 'CANCELADA' && compra.estadoCompra !== 'CONFIRMADA' && compra.estadoCompra !== 'NO CONFIRMADA' && compra.estadoCompra !== 'FINALIZADA'" 
           (click)="openModal('cancelarCompra', compra)"
           class="btn btn-lg btn-outline-danger"
           data-bs-toggle="modal"
-          [disabled]="compra.estadoCompra === 'CANCELADA' || compra.estadoCompra === 'CONFIRMADA' || compra.estadoCompra === 'NO CONFIRMADA'"
         >
           <i class="bi bi-pencil"></i>
-          
         </button>
+        <button 
+          *ngIf="compra.estadoCompra === 'FINALIZADA' || compra.estadoCompra ===  'NO CONFIRMADA' || compra.estadoCompra === 'CANCELADA'" 
+          (click)="openModal('borrarCompra', compra)" 
+          class="btn btn-sm btn-outline-danger ms-4"
+          data-bs-toggle="modal">
+        <mat-icon>delete</mat-icon>
+        </button>
+        <p *ngIf="compra.vehiculo.fechaBaja" style="color: red;">Quedan {{diasRestantes(compra)}} restantes antes que se borre la compra</p>
         </td>
       </tr>
     </tbody>
@@ -66,6 +73,31 @@
         (click)="cancelarCompra(selectedPurchase!, 'cancelarCompra')"
       >
         Cancelar Compra
+      </button>
+    </div>
+  </div>
+
+
+  <div id="borrarCompra" class="modalChanged">
+    <div class="modal-contentChanged">
+      <span class="close" (click)="closeModal('borrarCompra')">&times;</span>
+      <h2>Borrar Compra</h2>
+      <p>¿Estás seguro de que deseas borrar la compra?</p>
+      <p>
+        <strong>Nombre Vehiculo:</strong>
+        {{ selectedPurchase?.vehiculo?.modelo }}
+      </p>
+      <p>
+        <strong>Fecha de Compra:</strong> {{ selectedPurchase?.fechaCompra | date: 'yyyy-MM-dd' }}
+      </p>
+      <button class="btn btn-secondary" (click)="closeModal('borrarCompra')">
+        Cancelar
+      </button>
+      <button
+        class="btn btn-danger"
+        (click)="borrarCompra(selectedPurchase!, 'borrarCompra')"
+      >
+        Borrar Compra
       </button>
     </div>
   </div>

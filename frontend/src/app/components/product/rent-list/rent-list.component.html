@@ -34,14 +34,21 @@
         <td data-label="Estado">{{ alquiler.estadoAlquiler }}</td>
         <td data-label="Acciones">
           <button
+          *ngIf="alquiler.estadoAlquiler !== 'CANCELADO' && alquiler.estadoAlquiler !== 'CONFIRMADO' && alquiler.estadoAlquiler !== 'NO CONFIRMADO' && alquiler.estadoAlquiler !== 'FINALIZADO' && alquiler.estadoAlquiler !== 'EN CURSO'"
           (click)="openModal('cancelarAlquiler', alquiler)"
           class="btn btn-lg btn-outline-danger"
           data-bs-toggle="modal"
-          [disabled]="alquiler.estadoAlquiler === 'CANCELADO' || alquiler.estadoAlquiler === 'NO CONFIRMADO' || alquiler.estadoAlquiler === 'FINALIZADO' || alquiler.estadoAlquiler === 'EN CURSO'" 
         >
           <i class="bi bi-trash"></i>
         </button>
-
+        <button 
+          *ngIf="alquiler.estadoAlquiler === 'FINALIZADO' || alquiler.estadoAlquiler === 'CANCELADO'" 
+          (click)="openModal('borrarAlquiler', alquiler)" 
+          class="btn btn-sm btn-outline-danger ms-4"
+          data-bs-toggle="modal">
+        <mat-icon>delete</mat-icon>
+        </button>
+        <p *ngIf="alquiler.vehiculo.fechaBaja" style="color: red;">Quedan {{diasRestantes(alquiler)}} restantes antes que se borre el alquiler</p>
         </td>
       </tr>
     </tbody>
@@ -60,3 +67,17 @@
     </div>
   </div>
 </div>
+
+
+<div id="borrarAlquiler" class="modalChanged">
+  <div class="modal-contentChanged">
+    <span class="close" (click)="closeModal('borrarAlquiler')">&times;</span>
+    <h2><strong>Borrar Alquiler</strong></h2>
+    <p>¿Estás seguro de que deseas borrar el siguiente alquiler?</p>
+    <p><strong>Fecha Alquiler:</strong> {{ selectedRent?.fechaAlquiler | date:'yyyy-MM-dd'}}</p>
+    <button class="btn btn-secondary" (click)="closeModal('borrarAlquiler')">Cancelar</button>
+    <button class="btn btn-danger" (click)="removeRent(selectedRent, 'borrarAlquiler')">Borrar Alquiler</button>
+  </div>
+</div>
+
+

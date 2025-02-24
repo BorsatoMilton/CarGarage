@@ -50,6 +50,8 @@ export class CompraService {
     return this.http.post<Compra>(`${this.apiUrl}/avisoCompraExitosa/${mail}`, {idVehiculo: idVehiculo});
   }
 
-
+  borrarCompra(idCompra: string): Observable<Compra> {
+    return this.http.delete<Compra>(`${this.apiUrl}/${idCompra}`);
+  }
 
 }

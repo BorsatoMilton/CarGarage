@@ -19,7 +19,7 @@ function sanitizeAlquilerInput(
     vehiculo: req.body.vehiculo,
     tiempoConfirmacion: (() => {
       const fecha = new Date()
-      fecha.setMinutes(fecha.getDate() + 1)
+      fecha.setHours(fecha.getDate() + 6)
       return fecha})(),
   }
 

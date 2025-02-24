@@ -19,7 +19,7 @@ function sanitizeCompraInput (
         fechaCompra: new Date(),
         fechaLimiteConfirmacion: (() => {
             const fecha = new Date(); 
-            fecha.setMinutes(fecha.getMinutes() + 1); 
+            fecha.setHours(fecha.getDate() + 24); 
             return fecha; 
         })(),
         fechaCancelacion:req.body.fechaCancelacion,
@@ -181,7 +181,7 @@ async function cancelarCompra(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
     try {
         const id = req.params.id
-        const compra = em.getReference(Compra, id)
+        const compra = await em.findOne(Compra, { id: id })
         if(!compra){
             return res.status(404).json({ message: 'Compra no encontrada' })
         }

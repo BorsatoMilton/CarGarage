@@ -97,7 +97,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id
-    const rol = em.getReference(Rol, id)
+    const rol = await em.findOne(Rol, { id: id }, { populate: ['usuarios'] })
     if(!rol){
       return res.status(404).json({ message: 'Rol no encontrado' })
     }else{

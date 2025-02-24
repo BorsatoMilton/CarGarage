@@ -5,11 +5,12 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-purchases',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, MatIconModule],
   templateUrl: './purchases.component.html',
   styleUrl: './purchases.component.css'
 })
@@ -28,8 +29,17 @@ export class PurchasesComponent {
         this.compras = data;
       });
     }
-      
   }
+
+  diasRestantes(compra: Compra): number {
+    const fechaBaja = new Date(compra.vehiculo.fechaBaja);
+    const treintaDiasEnMs = 30 * 24 * 60 * 60 * 1000;
+    const tiempoFinal = fechaBaja.getTime() + treintaDiasEnMs;
+    const tiempoRestante = tiempoFinal - Date.now();
+    
+    const dias = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
+    return Math.max(dias, 0); 
+}
 
   openModal(modalId: string, purchase: Compra): void{
     this.selectedPurchase = purchase;
@@ -58,6 +68,14 @@ export class PurchasesComponent {
       this.ngOnInit();
       this.closeModal(modalId);
       
+    });
+  }
+
+  borrarCompra(compra:Compra, modalId: string): void {
+    this.compraService.borrarCompra(compra.id).subscribe(() => {
+      alertMethod('Borrar Compra', 'Compra borrada con exito!', 'success');
+      this.ngOnInit();
+      this.closeModal(modalId);
     });
   }
 

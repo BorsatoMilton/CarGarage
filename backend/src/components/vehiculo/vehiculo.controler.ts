@@ -124,10 +124,10 @@ async function update(req: Request, res: Response) {
   }
 }
 
-async function logicRemove(req: Request, res:Response) { // se utiliza a la hora de establecer una fecha de baja, es una baja logica, no fisica
+async function logicRemove(req: Request, res:Response) {
   try {
     const id = req.params.id
-    const vehiculo = await em.findOneOrFail(Vehiculo, { id })
+    const vehiculo = await em.findOne(Vehiculo, { id })
     if (!vehiculo) {
       return res.status(404).json({ message: 'Vehiculo no encontrado' })
     }
@@ -140,21 +140,16 @@ async function logicRemove(req: Request, res:Response) { // se utiliza a la hora
   
 }
 
-
-async function remove(req: Request, res: Response) {
-  try {
-  const id = req.params.id;
-
-  const vehiculo = await em.findOne(Vehiculo, { id });
+async function remove(vehiculoId: string): Promise<void> {
+  const vehiculo = await em.findOne(Vehiculo, { id: vehiculoId }, {populate: ['compra', 'alquileres']});
   if (!vehiculo) {
-    return res.status(404).json({ message: 'Vehículo no encontrado' });
+    throw new Error('Vehículo no encontrado');
   }
 
   const imagePaths = vehiculo.imagenes.map((imageName: string) => 
     path.resolve('src/uploads', imageName)
   );
 
- 
   const unlinkPromises = imagePaths.map((imagePath) => {
     return new Promise((resolve, reject) => {
       fs.unlink(imagePath, (err) => {
@@ -169,14 +164,8 @@ async function remove(req: Request, res: Response) {
   });
   
   await Promise.all(unlinkPromises);
-
-  
   await em.removeAndFlush(vehiculo);
-  res.status(200).json({ message: 'Vehículo y sus imágenes eliminados correctamente' });
-
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
 }
+
 
 export { sanitizeVehiculoInput, findAll, findAllByUser, findOne, add, update, remove, logicRemove, findOneById }

@@ -3,13 +3,13 @@ import { Rent } from '../../../core/models/rent.interface.js';
 import { RentsService } from '../../../core/services/rents.service.js';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { CommonModule } from '@angular/common';
-import { forEach } from 'angular';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-rent-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './rent-list.component.html',
   styleUrl: './rent-list.component.css'
 })
@@ -57,11 +57,31 @@ export class RentListComponent {
       }
       this.selectedRent = null;
     }
+
+    diasRestantes(alquiler: Rent): number {
+      const fechaBaja = new Date(alquiler.vehiculo.fechaBaja);
+      const treintaDiasEnMs = 30 * 24 * 60 * 60 * 1000;
+      const tiempoFinal = fechaBaja.getTime() + treintaDiasEnMs;
+      const tiempoRestante = tiempoFinal - Date.now();
+      
+      const dias = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
+      return Math.max(dias, 0); 
+  }
     
     cancelRent(rent: Rent | null, modalId: string): void {
       if(rent){
         this.rentService.cancelRent(rent).subscribe(() => {
           alertMethod('Cancelar Alquiler', 'Alquiler cancelado exitosamente!', 'success');
+          this.ngOnInit();
+          this.closeModal(modalId);
+        });
+      }
+    }
+
+    removeRent(rent: Rent | null, modalId: string): void {
+      if(rent){
+        this.rentService.deleteRent(rent).subscribe(() => {
+          alertMethod('Borrar Alquiler', 'Alquiler borrado exitosamente!', 'success');
           this.ngOnInit();
           this.closeModal(modalId);
         });

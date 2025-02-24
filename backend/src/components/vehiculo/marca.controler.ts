@@ -104,13 +104,12 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const marcaAeliminar = em.getReference(Marca, id);
+    const marcaAeliminar = await em.findOne(Marca, id, { populate: ['vehiculos'] });
     if (!marcaAeliminar) {
       return res.status(404).json({ message: "Marca no encontrada" });
-    } else {
-      await em.removeAndFlush(marcaAeliminar);
-      res.status(200).json({ message: "Marca eliminada" });
     }
+    await em.removeAndFlush(marcaAeliminar);
+    res.status(200).json({ message: "Marca eliminada con sus vehículos" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

@@ -5,7 +5,8 @@ import {
     Rel,
     OneToMany,
     Collection,
-    OneToOne
+    OneToOne,
+    Cascade
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
@@ -48,8 +49,8 @@ export class Vehiculo extends BaseEntity {
     imagenes!: string[];
 
     @OneToOne(() => Compra, (compra) => compra.vehiculo,{
-     mappedBy: 'vehiculo', nullable: true  
-    })
+     mappedBy: 'vehiculo', nullable: true, cascade: [Cascade.REMOVE]  
+    }, )
     compra?: Rel<Compra> | null;
 
     @ManyToOne(() => Categoria , { nullable: false })
@@ -61,6 +62,6 @@ export class Vehiculo extends BaseEntity {
     @ManyToOne(() => Usuario , { nullable: false })
     propietario!: Rel<Usuario>
 
-    @OneToMany(()=> Alquiler , alquiler => alquiler.vehiculo, { nullable: true })
+    @OneToMany(()=> Alquiler , alquiler => alquiler.vehiculo, { nullable: true , cascade: [Cascade.REMOVE] })
     alquileres = new Collection<Alquiler>(this)
 }

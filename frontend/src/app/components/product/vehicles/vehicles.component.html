@@ -45,6 +45,13 @@
               <span
                 *ngIf="Vehicle.compra?.estadoCompra === 'CONFIRMADA' || Vehicle.compra?.estadoCompra === 'FINALIZADA'"
                 class="text-success">Vendido</span>
+                <button 
+                *ngIf="Vehicle.compra?.estadoCompra === 'FINALIZADA'" 
+                (click)="openModal('removeVehicle', Vehicle)" 
+                class="btn btn-sm btn-outline-danger ms-4"
+                data-bs-toggle="modal">
+                <mat-icon>delete</mat-icon>
+              </button>
             </ng-template>
           </td>
         </tr>

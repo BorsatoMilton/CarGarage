@@ -4,7 +4,8 @@ import {
     Collection,
     OneToMany,
     ManyToOne,
-    Rel
+    Rel,
+    Cascade
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Categoria } from './categoria.entity.js'
@@ -17,9 +18,7 @@ export class Marca extends BaseEntity{
     @Property({ nullable: false })
     nombreMarca!: string
 
-    @OneToMany(()=> Vehiculo, vehiculo => vehiculo.marca, { nullable: true })
+    @OneToMany(()=> Vehiculo, vehiculo => vehiculo.marca, { nullable: true, cascade: [Cascade.REMOVE]   })
     vehiculos = new Collection<Vehiculo>(this)
 
-    @ManyToOne(()=> Categoria, { nullable: true })
-    categoria!: Rel<Categoria>
 }

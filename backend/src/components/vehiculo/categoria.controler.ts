@@ -102,7 +102,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const categoria = em.getReference(Categoria, id);
+    const categoria = await em.findOne(Categoria, { id: id }, {populate: ['vehiculos']});
     if (!categoria) {
       res.status(404).json({ message: "Categoria no encontrada" });
     } else {

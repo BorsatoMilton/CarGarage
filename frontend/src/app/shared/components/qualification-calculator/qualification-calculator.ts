@@ -13,7 +13,7 @@ export class QualificationCalculator {
     return this.qualificationService.getQualificationsByUserId(idUsuario).pipe(
       map(qualifications => {
         if (!qualifications?.length) return 0;
-        const sum = qualifications.reduce((acc, curr) => acc + curr.valoracion, 0);
+        const sum = qualifications.reduce((acc, curr) => acc + Number(curr.valoracion), 0);
         return this.redondearPromedio(sum / qualifications.length);
       }),
       catchError(error => {

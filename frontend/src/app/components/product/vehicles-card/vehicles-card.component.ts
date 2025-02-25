@@ -7,6 +7,10 @@ import { User } from '../../../core/models/user.interface.js';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { FilterComponent } from '../../../shared/components/filter/filter.component.js';
 import { HostListener } from '@angular/core';
+import { MatBottomSheet} from '@angular/material/bottom-sheet'; 
+import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component'; 
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
+
 
 @Component({
   selector: 'app-vehicles-card',
@@ -25,7 +29,8 @@ export class VehiclesCardComponent {
 
   constructor(
     private vehicleService: VehiclesService,
-    private authService: AuthService
+    private authService: AuthService,
+    private bottomSheet: MatBottomSheet
   ) {}
 
   ngOnInit(): void {
@@ -39,7 +44,6 @@ export class VehiclesCardComponent {
       next: (data: Vehicle[]) => {
         this.vehicles = data.filter((vehicle) => vehicle?.compra?.estadoCompra !== 'CONFIRMADA' && vehicle?.compra?.estadoCompra !== 'FINALIZADA'); 
         this.filteredVehicles = this.vehicles;
-        console.log('Vehiculos:', this.filteredVehicles);
       },
       error: (err) => {
         console.error('Error al obtener vehiculos:', err);
@@ -49,10 +53,6 @@ export class VehiclesCardComponent {
 
   toggleFilter() {
     this.showFilter = !this.showFilter;
-  }
-
-  toggleDetalles(id: string): void {
-    this.vehiculoSeleccionado = this.vehiculoSeleccionado === id  ? null : id;
   }
 
   onFilterChanged(filters: any): void {
@@ -104,6 +104,22 @@ export class VehiclesCardComponent {
   private checkScreenSize(): void {
     this.isMobile = window.innerWidth < 992;
     this.showFilter = !this.isMobile;
+  }
+
+  openVehicleDetails(vehicle: Vehicle): void {
+    const config: BottomSheetConfig<Vehicle> = {
+      title: 'Detalles del Vehículo',
+      fields: [
+        { key: 'modelo', label: 'Modelo' },
+        { key: 'anio', label: 'Año' },
+        { key: 'marca.nombreMarca', label: 'Marca' },
+        { key: 'kilometros', label: 'Kilómetros' },
+        { key: 'propietario.telefono', label: 'Contacto' },
+      ],
+      data: vehicle,
+    };
+  
+    this.bottomSheet.open(BottomSheetComponent, { data: config });
   }
 
   @HostListener('window:resize', ['$event'])

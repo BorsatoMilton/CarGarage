@@ -110,58 +110,59 @@ export class VehicleComponent implements OnInit {
     this.vehicleForm.reset();
   }
 
-  addVehicle() {
-    if (this.vehicleForm.invalid) {
-      this.alertComponent.showAlert('Por favor, complete todos los campos.', 'error');
-      return;
-    }
-    if (
-      this.vehicleForm.get('precioVenta')?.value === null &&
-      this.vehicleForm.get('precioAlquilerDiario')?.value === null
-    ) {
-      this.alertComponent.showAlert('Por favor, ingrese un precio de venta o alquiler.', 'error');
-      return;
-    }
-    this.vehicleForm.disable();
-    const formData = new FormData();
-    formData.append('modelo', this.vehicleForm.get('modelo')?.value);
-    formData.append('descripcion', this.vehicleForm.get('descripcion')?.value);
-    formData.append('precioVenta', this.vehicleForm.get('precioVenta')?.value);
-    formData.append('precioAlquilerDiario', this.vehicleForm.get('precioAlquilerDiario')?.value);
-    formData.append('transmision', this.vehicleForm.get('transmision')?.value);
-    formData.append('kilometros', this.vehicleForm.get('kilometros')?.value);
-    if(this.usuario){
-      formData.append('propietario', this.usuario.id.toString());
-    }
-    formData.append('anio', this.vehicleForm.get('anio')?.value);
-    formData.append('marca', this.vehicleForm.get('marca')?.value);
-    formData.append('categoria', this.vehicleForm.get('categoria')?.value);
-    if (this.selectedFiles.length === 0) {
-      this.alertComponent.showAlert('Por favor, seleccione una imagen.', 'error');
-      this.vehicleForm.enable();
-      return;
-    }
-    this.selectedFiles.forEach((file) => {
-      formData.append('imagenes', file, file.name);
-    });  
-    this.vehicleService.addVehicle(formData).subscribe({
-      next: () => {
-        alertMethod('Alta de vehiculos','Vehículo agregado exitosamente', 'success');
-        this.closeModal('addVehicle');
-        this.loadVehicle();
-        this.vehicleForm.enable();
-        this.vehicleForm.reset();
-        if (this.usuario) {
-          this.vehicleForm.patchValue({ propietario: this.usuario.id });
+  addVehicle(): void {
+    if (this.vehicleForm.valid) {
+      const formValue = this.vehicleForm.value;
+  
+      const vehicleData = {
+        ...formValue,
+        precioVenta: formValue.precioVenta ? Number(formValue.precioVenta) : null,
+        precioAlquilerDiario: formValue.precioAlquilerDiario ? Number(formValue.precioAlquilerDiario) : null,
+        kilometros: Number(formValue.kilometros),
+        anio: Number(formValue.anio),
+        marca: formValue.marca,
+        categoria: formValue.categoria,
+        propietario: this.usuario?.id
+      };
+
+      const formData = new FormData();
+      Object.entries(vehicleData).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(key, value.toString());
+        } else {
+          formData.append(key, ''); 
         }
-        this.selectedFiles = [];
-      },
-      error: (error) => {
-        console.error(error);
-        this.alertComponent.showAlert('Oops! Error al agregar vehículo', 'error');
-        this.vehicleForm.enable();
-      },
-    });
+      });
+  
+      this.selectedFiles.forEach(file => {
+        formData.append('imagenes', file, file.name);
+      });
+  
+      this.vehicleService.addVehicle(formData).subscribe({
+        next: () => {
+          alertMethod('Alta de vehiculos','Vehículo agregado exitosamente', 'success');
+          this.loadVehicle();
+          this.closeModal('addVehicle');
+        },
+        error: (err) => {
+          this.handleVehicleError(err);
+        }
+      });
+    } else {
+      this.alertComponent.showAlert('Complete todos los campos', 'error');
+    }
+  }
+  
+  private handleVehicleError(err: any): void {
+    let errorMessage = 'Error al guardar el vehículo';
+    
+    if (err.error?.message?.includes('invalid input syntax')) {
+      errorMessage = 'Error en los datos numéricos (ej: precio, año)';
+    } else if (err.status === 400) {
+      errorMessage = 'Datos del vehículo inválidos';
+    }
+    
+    this.alertComponent.showAlert(errorMessage, 'error');
   }
 
   loadVehicle(): void {
@@ -172,30 +173,41 @@ export class VehicleComponent implements OnInit {
     }
   }
 
-editVehicle(): void {
-  if (this.selectedVehicle) {
+  editVehicle(): void {
 
-    if (
-      this.vehicleForm.get('precioVenta')?.value === null &&
-      this.vehicleForm.get('precioAlquilerDiario')?.value === null
-    ){
-      alertMethod('Edición de vehículo', 'Por favor, ingrese un precio de venta o alquiler', 'error');
-      return
+    if (!this.selectedVehicle) {
+      alertMethod('Edición de vehículo', 'No se ha seleccionado ningún vehículo para editar', 'error');
+      return;
     }
+
+    const precioVenta = this.vehicleForm.get('precioVenta')?.value;
+    const precioAlquilerDiario = this.vehicleForm.get('precioAlquilerDiario')?.value;
+  
+    if (precioVenta === null && precioAlquilerDiario === null) {
+      alertMethod('Edición de vehículo', 'Por favor, ingrese un precio de venta o alquiler', 'error');
+      return;
+    }
+
     const formValue = this.vehicleForm.value;
     const updatedVehicle: Vehicle = {
-      ...this.selectedVehicle,
-      ...formValue,
-      propietario: this.selectedVehicle.propietario
+      ...this.selectedVehicle, 
+      ...formValue, 
+      propietario: this.selectedVehicle.propietario, 
     };
-
-    this.vehicleService.editVehicle(updatedVehicle).subscribe(() => {
-      alertMethod('Edición de vehículo', 'Vehículo editado exitosamente', 'success');
-      this.closeModal('editVehicle');
-      this.loadVehicle();
+  
+    this.vehicleService.editVehicle(updatedVehicle).subscribe({
+      next: () => {
+        alertMethod('Edición de vehículo', 'Vehículo editado exitosamente', 'success');
+        this.closeModal('editVehicle'); 
+        this.loadVehicle(); 
+      },
+      error: (err) => {
+        console.error('Error al editar el vehículo:', err);
+        alertMethod('Edición de vehículo', 'Hubo un error al editar el vehículo', 'error');
+      },
     });
   }
-}
+  
   removeVehicle(vehicle: Vehicle | null, modalId: string) {
     if (vehicle) {
       this.vehicleService.deleteVehicle(vehicle).subscribe(() => {

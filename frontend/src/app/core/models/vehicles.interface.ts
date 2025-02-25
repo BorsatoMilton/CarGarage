@@ -5,7 +5,7 @@ import { User } from "./user.interface.js";
 
 export interface Vehicle {
     id: string;
-    anio: string;
+    anio: number;
     descripcion: string;
     fechaAlta: Date;
     fechaBaja: Date;

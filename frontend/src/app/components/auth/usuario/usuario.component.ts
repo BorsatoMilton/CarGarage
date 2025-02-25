@@ -15,6 +15,9 @@ import { UniversalAlertComponent } from '../../../shared/components/alerts/unive
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import {  map, Observable, switchMap, throwError } from 'rxjs';
 import {SearcherComponent} from '../../../shared/components/searcher/searcher.component.js';
+import { MatBottomSheet} from '@angular/material/bottom-sheet'; 
+import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component'; 
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
 
 @Component({
   selector: 'app-usuario',
@@ -38,6 +41,7 @@ export class UserComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UsuariosService,
     private rolService: RolService,
+    private bottomSheet: MatBottomSheet
   ) {
     this.addUserForm = this.fb.group({
       usuario: ['', Validators.required],
@@ -119,6 +123,21 @@ export class UserComponent implements OnInit {
     return this.userService.getOneUserByEmailOrUsername(username, mail, excludeUserId).pipe(
       map((user: User) => !!user)
     );
+  }
+
+  openUserDetails(user: User): void {
+    const config: BottomSheetConfig<User> = {
+      title: 'Detalles del Usuario',
+      fields: [
+        { key: 'nombre', label: 'Nombre' },
+        { key: 'apellido', label: 'Apellido' },
+        { key: 'direccion', label: 'Dirección' },
+        { key: 'telefono', label: 'Teléfono' },
+        { key: 'rol.nombreRol', label: 'Rol' },
+      ],
+      data: user,
+    };
+    this.bottomSheet.open(BottomSheetComponent, { data: config });
   }
 
   addUser() {

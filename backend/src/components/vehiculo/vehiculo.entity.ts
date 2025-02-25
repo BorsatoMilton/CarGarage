@@ -30,22 +30,22 @@ export class Vehiculo extends BaseEntity {
     @Property({ type: 'date', nullable: true })
     fechaBaja?: Date
 
-    @Property({ nullable: true })
+    @Property({ nullable: true, type: 'decimal' })
     precioVenta?: number
 
     @Property({ nullable: false})
     transmision!: string
 
-    @Property({ nullable: true })
+    @Property({ nullable: true, type: 'decimal' })
     precioAlquilerDiario?: number
 
-    @Property({ nullable: false })
+    @Property({ nullable: false, type: 'int'  })
     kilometros!: number
 
-    @Property({ nullable: true })
-    anio!: string
+    @Property({ nullable: false, type: 'int'  })
+    anio!: number
 
-    @Property({ nullable: true, type: 'text' }) 
+    @Property({ nullable: false, type: 'text' }) 
     imagenes!: string[];
 
     @OneToOne(() => Compra, (compra) => compra.vehiculo,{

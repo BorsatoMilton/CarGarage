@@ -135,7 +135,7 @@ async function login(req: Request, res: Response) {
     const usuarioEncontrado = await em.findOne(
       Usuario,
       { usuario: usuario },
-      { populate: ["rol"] }
+      { populate: ['rol'] }
     );
 
     if (!usuarioEncontrado) {

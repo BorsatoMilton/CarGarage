@@ -478,8 +478,8 @@ async function avisoPuntuarCompra(comprador: string, vendedor: string, compra: C
         ]);
 
         console.log('Correos de calificación enviados correctamente', {
-            locatario: infoComprador.response,
-            locador: infoVendedor.response
+            comprador: infoComprador.response,
+            vendedor: infoVendedor.response
         });
     } catch (error: any) {
         console.error('Error al enviar el correo de calificación', error.message);

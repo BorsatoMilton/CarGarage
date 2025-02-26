@@ -18,15 +18,18 @@ import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import './config/cron.timelapse.js';
 
+import { mercadoPagoRouter } from './components/mercadoPago/mercadopago.routes.js';
+
 const app = express();
 
-const allowedOrigins = ['http://localhost:4200' ]; //despues faltaria colocar el dominio de nuestra pagina
+const allowedOrigins = ['http://localhost:4200' ];
 app.use(cors({
   origin: (origin, callback) => {
+    // Permitir solicitudes sin 'origin' (como las de Mercado Pago)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed')); 
+      callback(new Error('Not allowed by CORS'));
     }
   },
 }));
@@ -67,6 +70,7 @@ app.use('/api/recuperacion', recuperacionRouter);
 app.use('/api/alquiler', alquilerRouter);
 app.use('/api/rol', rolRouter);
 app.use('/uploads', express.static(path.resolve('src/uploads')));
+app.use('/api/mercadopago', mercadoPagoRouter);
 
 
 app.use((_, res) => {

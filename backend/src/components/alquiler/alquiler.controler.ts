@@ -21,6 +21,7 @@ function sanitizeAlquilerInput(
       const fecha = new Date()
       fecha.setHours(fecha.getDate() + 6)
       return fecha})(),
+    fechaPago: req.body.fechaPago
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -42,6 +43,7 @@ async function findAll(req: Request, res: Response) {
 
 async function findOne(req: Request, res: Response) {
   try {
+    em.clear()
     const id = req.params.id;
     const alquiler = await em.findOne(Alquiler, { id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] });
     if(!alquiler){
@@ -84,7 +86,11 @@ async function findAllByUser(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const alquiler = em.create(Alquiler, req.body.sanitizedInput);
+    const alquilerACrear = {
+      ...req.body.sanitizedInput,
+      fechaPago: null,
+    }
+    const alquiler = em.create(Alquiler, alquilerACrear);
     await em.flush();
     res.status(201).json(alquiler);
   } catch (error: any) {

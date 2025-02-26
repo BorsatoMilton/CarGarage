@@ -28,7 +28,13 @@ export class Alquiler extends BaseEntity {
 
     @Property({ nullable: false })
     tiempoConfirmacion!: Date
+
+    @Property({ nullable: true })
+    fechaPago?: Date
     
+    @Property({ nullable: true, unique: true })
+    paymentId?: string | null;
+
     @ManyToOne(() => Usuario , { nullable: false })
     locatario!: Rel<Usuario>
     

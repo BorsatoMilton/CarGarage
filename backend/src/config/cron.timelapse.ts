@@ -7,7 +7,7 @@ import { Vehiculo } from "../components/vehiculo/vehiculo.entity.js";
 import { remove } from "../components/vehiculo/vehiculo.controler.js";
 
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/30 * * * *", async () => {
   console.log("Revisando estados de alquiler...");
 
   const ahora = new Date();

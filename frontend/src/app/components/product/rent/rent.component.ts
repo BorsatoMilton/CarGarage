@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RentsService } from '../../../core/services/rents.service.js';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -23,6 +23,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import { QualificationCalculator } from '../../../shared/components/qualification-calculator/qualification-calculator.js';
 
+declare const MercadoPago: any;
+
 @Component({
   selector: 'app-rent',
   standalone: true,
@@ -38,17 +40,23 @@ import { QualificationCalculator } from '../../../shared/components/qualificatio
   templateUrl: './rent.component.html',
   styleUrls: ['./rent.component.css'],
 })
-export class RentComponent implements OnInit {
+export class RentComponent implements OnInit, OnDestroy {
+  total: number = 0;
+  diasAlquiler: number = 0;
+  private mercadoPago: any;
   rentForm: FormGroup;
   vehiculo: Vehicle | undefined;
   fechasReservadas: { fechaInicio: string; fechaFin: string }[] = [];
   idVehiculo: string | null = null;
   usuario: User | null = null;
-  todayDate: Date = new Date() //new Date(new Date().setDate(new Date().getDate() + 1));
+  todayDate: Date = new Date(); //new Date(new Date().setDate(new Date().getDate() + 1));
   fechaInvalida: boolean = false;
   currentSlideIndex = 0;
   promedioCalificaciones: number = 0;
   cantidadCalificaciones: number = 0;
+  lightboxActive: boolean = false;
+  selectedImage: string = '';
+  selectedImageIndex: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -66,6 +74,79 @@ export class RentComponent implements OnInit {
       },
       { validators: this.dateRangeValidatorFactory() }
     );
+  }
+
+  ngOnInit(): void {
+    this.idVehiculo = this.route.snapshot.paramMap.get('id');
+    if (this.idVehiculo) {
+      this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe(
+        (data: Vehicle) => {
+          this.vehiculo = data;
+          this.cargarCalificacionesPropietario();
+        },
+        (error) => {
+          console.error('Error para obtener el vehiculo:', error);
+        }
+      );
+      this.rentService
+        .getRentsByVehicle(this.idVehiculo)
+        .subscribe((reservas) => {
+          if (!reservas) {
+            return;
+          } else {
+            this.fechasReservadas = reservas
+              .filter(
+                (reserva: any) =>
+                  reserva.estadoAlquiler !== 'CANCELADO' &&
+                  reserva.estadoAlquiler !== 'NO CONFIRMADO'
+              )
+              .map((reserva: any) => ({
+                fechaInicio: reserva.fechaHoraInicioAlquiler,
+                fechaFin: reserva.fechaHoraDevolucion,
+              }));
+          }
+        });
+    }
+    this.usuario = this.authService.getCurrentUser();
+    this.loadMercadoPago();
+    this.setupDateListeners();
+  }
+
+  ngOnDestroy(): void {
+    this.cleanupMercadoPago();
+  }
+
+  private async loadMercadoPago(): Promise<void> {
+    await this.loadScript('https://sdk.mercadopago.com/js/v2');
+    this.mercadoPago = new MercadoPago(
+      'APP_USR-a87c590b-5901-4e82-b6d8-eab5ff09384f',
+      {
+        locale: 'es-AR',
+      }
+    );
+  }
+
+  private loadScript(src: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) return resolve();
+
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = (error) => reject(error);
+      document.head.appendChild(script);
+    });
+  }
+
+  private cleanupMercadoPago(): void {
+    const container = document.querySelector('.mercadopago-button');
+    if (container) container.innerHTML = '';
+  }
+
+  private setupDateListeners(): void {
+    this.rentForm.valueChanges.subscribe(() => {
+      this.calculateTotal();
+    });
   }
 
   dateFilter = (d: Date | null): boolean => {
@@ -88,64 +169,117 @@ export class RentComponent implements OnInit {
     return true;
   };
 
-  ngOnInit(): void {
-    this.idVehiculo = this.route.snapshot.paramMap.get('id');
-    if (this.idVehiculo) {
-      this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe(
-        (data: Vehicle) => {
-          this.vehiculo = data;
-          this.cargarCalificacionesPropietario();
-        },
-        (error) => {
-          console.error('Error para obtener el vehiculo:', error);
-        }
+  private calculateTotal(): void {
+    const inicio = this.rentForm.get('fechaHoraInicioAlquiler')?.value;
+    const fin = this.rentForm.get('fechaHoraDevolucion')?.value;
+
+    if (inicio && fin && this.vehiculo) {
+      const diffTime = Math.abs(
+        new Date(fin).getTime() - new Date(inicio).getTime()
       );
-      this.rentService
-        .getRentsByVehicle(this.idVehiculo)
-        .subscribe((reservas) => {
-          if (!reservas) {
-            return;
-          } else {
-            this.fechasReservadas = reservas
-              .filter((reserva: any) => reserva.estadoAlquiler !== 'CANCELADO' && reserva.estadoAlquiler !== 'NO CONFIRMADO')
-              .map((reserva: any) => ({
-                fechaInicio: reserva.fechaHoraInicioAlquiler,
-                fechaFin: reserva.fechaHoraDevolucion,
-              }));
-          }
+      this.diasAlquiler = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      this.total = this.diasAlquiler * this.vehiculo.precioAlquilerDiario;
+    }
+  }
+
+  async confirmarPago(): Promise<void> {
+    if (!this.vehiculo || !this.diasAlquiler) return;
+
+    if (this.authService.isAuthenticated()) {
+
+        const rentData: Rent = {
+            ...this.rentForm.value,
+            fechaAlquiler: new Date(),
+            estadoAlquiler: 'PENDIENTE',
+            locatario: this.usuario?.id,
+            vehiculo: this.idVehiculo,
+            locador: this.vehiculo?.propietario,
+            tiempoConfirmacion: (() => {
+              const fecha = new Date()
+              fecha.setHours(fecha.getDate() + 6)
+              return fecha})(),
+        };
+
+        this.rentService.addRent(rentData).subscribe({
+            next: (rent) => {
+                const alquilerId = rent.id;
+
+                const paymentData = {
+                    items: [
+                        {
+                            title: `Alquiler de ${this.vehiculo?.marca.nombreMarca} ${this.vehiculo?.modelo}`,
+                            unit_price: this.vehiculo?.precioAlquilerDiario,
+                            quantity: this.diasAlquiler,
+                            currency_id: 'ARS',
+                        },
+                    ],
+                    external_reference: alquilerId, 
+                };
+
+                this.rentService.createPaymentPreference(paymentData).subscribe({
+                    next: (preference) => {
+                        this.mercadoPago.checkout({
+                            preference: { id: preference.id },
+                            autoOpen: true, 
+                        });
+                        const interval = setInterval(() => {
+                          this.rentService.getOneRent(alquilerId).subscribe({
+                            next: (rent: Rent) => {
+                              if (rent.fechaPago) {
+                                clearInterval(interval);
+                                this.router.navigate(['/']);
+                                alertMethod('Pago exitoso', 'El pago fue aprobado correctamente', 'success');
+                              }
+                            },
+                            error: (error: any) => {
+                              console.error('Error al obtener el alquiler:', error);
+                            }
+                          });
+                        }, 5000);
+                    },
+                    error: (error: any) => {
+                        console.error('Error en la preferencia de pago:', error);
+                        alertMethod('Error en pago', 'No se pudo generar la preferencia de pago', 'error');
+                    }
+                });
+            },
+            error: (error: any) => {
+                console.error('Error al crear alquiler:', error);
+                alertMethod('Error en alquiler', 'No se pudo generar el alquiler', 'error');
+            },
         });
     }
-    this.usuario = this.authService.getCurrentUser();
-  }
+}
 
-
-  
   private cargarCalificacionesPropietario(): void {
     if (!this.vehiculo?.propietario?.id) return;
-  
-    this.qualificationCalculator.getPromedio(this.vehiculo.propietario.id).subscribe({
-      next: (promedio) => {
-        this.promedioCalificaciones = promedio;
-        this.obtenerCantidadCalificaciones(this.vehiculo!.propietario!.id)
-      },
-      error: (err) => {
-        console.error('Error obteniendo calificaciones:', err);
-        this.promedioCalificaciones = 0;
-      }
-    });
-  }
-  
-  private obtenerCantidadCalificaciones(idPropietario:string){
-    this.qualificationCalculator.getCalificacionesTotal(idPropietario).subscribe({
-      next: (cantidad) => {
-        this.cantidadCalificaciones = cantidad;
-      },
-      error: (err) => {
-        console.error('Error obteniendo cantidad de calificaciones:', err);
-        this.cantidadCalificaciones = 0;
-      }
-    });
 
+    this.qualificationCalculator
+      .getPromedio(this.vehiculo.propietario.id)
+      .subscribe({
+        next: (promedio) => {
+          this.promedioCalificaciones = promedio;
+          this.obtenerCantidadCalificaciones(this.vehiculo!.propietario!.id);
+        },
+        error: (err) => {
+          console.error('Error obteniendo calificaciones:', err);
+          this.promedioCalificaciones = 0;
+        },
+      });
+  }
+
+  private obtenerCantidadCalificaciones(idPropietario: string) {
+    this.qualificationCalculator
+      .getCalificacionesTotal(idPropietario)
+      .subscribe({
+        next: (cantidad) => {
+          this.cantidadCalificaciones = cantidad;
+        },
+        error: (err) => {
+          console.error('Error obteniendo cantidad de calificaciones:', err);
+          this.cantidadCalificaciones = 0;
+        },
+      });
   }
 
   dateRangeValidatorFactory() {
@@ -223,26 +357,9 @@ export class RentComponent implements OnInit {
     this.fechaInvalida = this.isDateDisabled(fechaSeleccionada);
   }
 
-nextSlide(): void {
-  if (this.vehiculo && this.vehiculo.imagenes) {
-    this.currentSlideIndex = 
-      (this.currentSlideIndex + 1) % this.vehiculo.imagenes.length;
-  }
-}
-
-previousSlide(): void {
-  if (this.vehiculo && this.vehiculo.imagenes) {
-    this.currentSlideIndex = 
-      (this.currentSlideIndex - 1 + this.vehiculo.imagenes.length) % 
-      this.vehiculo.imagenes.length;
-  }
-}
-
-goToSlide(index: number): void {
-  this.currentSlideIndex = index;
-}
-
   rent(): void {
+    const boton = document.getElementById('rentButton');
+    
     if (this.authService.isAuthenticated()) {
       const rentData: Rent = {
         ...this.rentForm.value,
@@ -255,27 +372,82 @@ goToSlide(index: number): void {
         next: (response) => {
           if (this.usuario && this.idVehiculo) {
             const idAlquiler = response.id;
-            this.rentService.confirmRentMail(this.usuario, idAlquiler).subscribe({
-              next: () => {
-                this.router.navigate(['/']);
-                alertMethod(
-                  'Alquilar vehiculo',
-                  'Se ha enviado un mail a su casilla de correo para confirmar el alquiler',
-                  'success'
-                );
-              },
-              error: (error) => {
-                console.error(error);
-                alertMethod('Alquilar vehiculo', 'Oops! Algo salió mal al confirmar el alquiler', 'error');
-              },
-            });
+            this.rentService
+              .confirmRentMail(this.usuario, idAlquiler)
+              .subscribe({
+                next: () => {
+                  this.router.navigate(['/']);
+                  alertMethod(
+                    'Alquilar vehiculo',
+                    'Se ha enviado un mail a su casilla de correo para confirmar el alquiler',
+                    'success'
+                  );
+                },
+                error: (error) => {
+                  console.error(error);
+                  alertMethod(
+                    'Alquilar vehiculo',
+                    'Oops! Algo salió mal al confirmar el alquiler',
+                    'error'
+                  );
+                },
+              });
           }
         },
         error: (error) => {
           console.error(error);
-          alertMethod('Alquilar vehiculo', 'Oops! Algo salió mal al crear el alquiler', 'error');
+          alertMethod(
+            'Alquilar vehiculo',
+            'Oops! Algo salió mal al crear el alquiler',
+            'error'
+          );
         },
       });
+    }
+  }
+
+
+
+  nextSlide(): void {
+    if (this.vehiculo && this.vehiculo.imagenes) {
+      this.currentSlideIndex =
+        (this.currentSlideIndex + 1) % this.vehiculo.imagenes.length;
+    }
+  }
+
+  previousSlide(): void {
+    if (this.vehiculo && this.vehiculo.imagenes) {
+      this.currentSlideIndex =
+        (this.currentSlideIndex - 1 + this.vehiculo.imagenes.length) %
+        this.vehiculo.imagenes.length;
+    }
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlideIndex = index;
+  }
+
+  openLightbox(index: number): void {
+    this.selectedImageIndex = index;
+    this.selectedImage = this.vehiculo?.imagenes[index] || '';
+    this.lightboxActive = true;
+  }
+  
+  closeLightbox(): void {
+    this.lightboxActive = false;
+  }
+  
+  changeLightboxImage(direction: number): void {
+    if (!this.vehiculo?.imagenes) return;
+    
+    const length = this.vehiculo.imagenes.length;
+    this.selectedImageIndex = (this.selectedImageIndex + direction + length) % length;
+    this.selectedImage = this.vehiculo.imagenes[this.selectedImageIndex];
+  }
+  
+  closeLightboxOnBackdrop(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeLightbox();
     }
   }
 }

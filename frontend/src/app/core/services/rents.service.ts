@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Rent } from '../models/rent.interface.js';
@@ -45,5 +45,17 @@ export class RentsService {
 
   confirmRentMail(usuario: User,  idAlquiler: string): Observable<Rent> {
     return this.http.post<Rent>(`${this.url}/confirmarAlquilerMail/${idAlquiler}`,  usuario);
+  }
+
+  createPaymentPreference(items: any): Observable<any> {
+    return this.http.post<any>(
+      'http://localhost:3000/api/mercadopago/create-preference', 
+      items, 
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+      }
+    );
   }
 }

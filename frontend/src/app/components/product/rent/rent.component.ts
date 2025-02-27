@@ -22,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import { QualificationCalculator } from '../../../shared/components/qualification-calculator/qualification-calculator.js';
+import { environment } from '../../../environments/environments.js';
 
 declare const MercadoPago: any;
 
@@ -120,7 +121,7 @@ export class RentComponent implements OnInit, OnDestroy {
   private async loadMercadoPago(): Promise<void> {
     await this.loadScript('https://sdk.mercadopago.com/js/v2');
     this.mercadoPago = new MercadoPago(
-      'APP_USR-93fac75c-0a4a-491b-8185-c38073362c89',
+      environment.mercadoPagoKey,
       {
         locale: 'es-AR',
       }

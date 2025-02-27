@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { VehiclesService } from '../../../core/services/vehicles.service.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { environment } from '../../../environments/environments.js';
 
 
 declare const MercadoPago: any;
@@ -90,7 +91,7 @@ export class ConfirmRentComponent implements OnInit, OnDestroy {
   private async loadMercadoPago(): Promise<void> {
     await this.loadScript('https://sdk.mercadopago.com/js/v2');
     this.mercadoPago = new MercadoPago(
-      'APP_USR-93fac75c-0a4a-491b-8185-c38073362c89',
+      environment.mercadoPagoKey,
       {
         locale: 'es-AR',
       }

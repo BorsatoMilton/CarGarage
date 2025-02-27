@@ -32,7 +32,7 @@ function sanitizeUsuarioInput(req: Request, res: Response, next: NextFunction) {
 
 async function findAll(req: Request, res: Response) {
   try {
-    const usuarios = await em.find(Usuario, {}, { populate: ["rol"] });
+    const usuarios = await em.find(Usuario, {} );
     res.status(200).json(usuarios);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -50,7 +50,7 @@ async function findOneByEmailOrUsername(req: Request, res: Response) {
     if (mail) query.$or.push({ mail: mail });
     if (excludeUserId) query._id = { $ne: excludeUserId }; 
 
-    const usuarioEncontrado = await em.findOne(Usuario, query, { populate: ["rol"] });
+    const usuarioEncontrado = await em.findOne(Usuario, query );
 
   
     if (!usuarioEncontrado) {
@@ -68,8 +68,7 @@ async function findOneByEmailDestinatario(req: Request, res: Response) {
     const mail = req.params.mail;
     const usuarioEncontrado = await em.findOneOrFail(
       Usuario,
-      { mail },
-      { populate: ["rol"] }
+      { mail }
     );
     if (!usuarioEncontrado) {
       return res.status(409).json({ message: "Usuario no encontrado" });
@@ -85,8 +84,7 @@ async function findOneById(req: Request, res: Response) {
     const id = req.params.id;
     const usuario = await em.findOneOrFail(
       Usuario,
-      { id },
-      { populate: ["rol"] }
+      { id }
     );
     if (!usuario) {
       return res.status(404).json({ message: "Usuario no encontrado" });
@@ -100,8 +98,7 @@ async function findOneById(req: Request, res: Response) {
 async function findOneByEmail(email: string) {
   const usuario = await em.findOne(
     Usuario,
-    { mail: email },
-    { populate: ["rol"] }
+    { mail: email }
   );    
   try {
     return usuario;
@@ -115,8 +112,7 @@ async function findOneByUser(req: Request, res: Response) {
     const user = req.params.user;
     const usuario = await em.findOne(
       Usuario,
-      { usuario: user },
-      { populate: ["rol"] }
+      { usuario: user }
     );
     if (!usuario) {
       return res.status(404).json({ message: "Usuario no encontrado" });
@@ -134,8 +130,7 @@ async function login(req: Request, res: Response) {
     const clave = req.body.password;
     const usuarioEncontrado = await em.findOne(
       Usuario,
-      { usuario: usuario },
-      { populate: ['rol'] }
+      { usuario: usuario }
     );
 
     if (!usuarioEncontrado) {

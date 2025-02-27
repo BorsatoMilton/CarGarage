@@ -9,8 +9,6 @@ import {
 } from '@angular/forms';
 import { User } from '../../../core/models/user.interface.js';
 import { UsuariosService } from '../../../core/services/users.service.js';
-import { Rol } from '../../../core/models/rol.interface.js';
-import { RolService } from '../../../core/services/rol.service.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import {  map, Observable, switchMap, throwError } from 'rxjs';
@@ -33,14 +31,13 @@ export class UserComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
   selectedUser: User | null = null;
-  roles: Rol[] = [];
+
 
 @ViewChild(UniversalAlertComponent) alertComponent! : UniversalAlertComponent
 
   constructor(
     private fb: FormBuilder,
     private userService: UsuariosService,
-    private rolService: RolService,
     private bottomSheet: MatBottomSheet
   ) {
     this.addUserForm = this.fb.group({
@@ -70,9 +67,6 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.rolService.getAllRol().subscribe((data) => {
-      this.roles = data;
-    });
     this.loadUser();
   }
 
@@ -97,7 +91,7 @@ export class UserComponent implements OnInit {
         mail: user.mail,
         telefono: user.telefono,
         direccion: user.direccion,
-        rol: user.rol.id,
+        rol: user.rol,
       });
     }
     const modalDiv = document.getElementById(modalId);
@@ -133,7 +127,7 @@ export class UserComponent implements OnInit {
         { key: 'apellido', label: 'Apellido' },
         { key: 'direccion', label: 'Dirección' },
         { key: 'telefono', label: 'Teléfono' },
-        { key: 'rol.nombreRol', label: 'Rol' },
+        { key: 'rol', label: 'Rol' },
       ],
       data: user,
     };

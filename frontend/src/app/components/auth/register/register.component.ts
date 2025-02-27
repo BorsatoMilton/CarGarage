@@ -1,12 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuariosService } from '../../../core/services/users.service.js';
 import { Router } from '@angular/router';
-import { RolService } from '../../../core/services/rol.service.js';
 import { User } from '../../../core/models/user.interface.js';
-import { Rol } from '../../../core/models/rol.interface.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 @Component({
@@ -19,13 +22,12 @@ import { UniversalAlertComponent } from '../../../shared/components/alerts/unive
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
 
-  @ViewChild(UniversalAlertComponent) alertComponent! : UniversalAlertComponent;
+  @ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
   constructor(
     private fb: FormBuilder,
     private usuariosService: UsuariosService,
-    private router: Router,
-    private rolService: RolService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -63,53 +65,51 @@ export class RegisterComponent implements OnInit {
             next: (usuarioEncontrado: User | null) => {
               if (usuarioEncontrado) {
                 this.alertComponent.showAlert(
-                  'El usuario o el email ya se encuentran registrados', 'error')
+                  'El usuario o el email ya se encuentran registrados',
+                  'error'
+                );
                 return;
-              } else {
-                this.rolService.getOneRolByName('USUARIO').subscribe({
-                  next: (rolEncontrado: Rol) => {
-                    if (rolEncontrado) {
-                      const usuarioFinal = {
-                        ...this.registerForm.value,
-                        rol: rolEncontrado.id,
-                      };
-                      this.usuariosService
-                        .addUser(usuarioFinal)
-                        .subscribe(() => {
-                          alertMethod(
-                            'Usuario registrado',
-                            'El usuario se ha registrado correctamente',
-                            'success'
-                          );
-                          this.registerForm.reset();
-                          this.router.navigate(['/auth/login']);
-                        });
-                    } else {
-                      alertMethod(
-                        'Ocurrio un error',
-                        'Oops! Algo salio mal, intentelo nuevamente',
-                        'error'
-                      );
-                    }
-                  },
-                  error: (error: Error) => {
-                    console.error('Error al obtener el rol:', error);
-                    alertMethod(
-                      'Ocurrio un error',
-                      'Oops! algo salio mal, intentelo nuevamente',
-                      'error'
-                    );
-                  },
-                });
               }
+
+              const usuarioFinal = {
+                ...this.registerForm.value,
+                rol: 'USUARIO',
+              };
+
+              this.usuariosService.addUser(usuarioFinal).subscribe({
+                next: () => {
+                  alertMethod(
+                    'Usuario registrado',
+                    'El usuario se ha registrado correctamente',
+                    'success'
+                  );
+                  this.registerForm.reset();
+                  this.router.navigate(['/auth/login']);
+                },
+                error: (error) => {
+                  console.error('Error al crear usuario:', error);
+                  alertMethod(
+                    'Ocurrió un error',
+                    'Error al registrar el usuario',
+                    'error'
+                  );
+                },
+              });
             },
             error: (error: Error) => {
-              console.error('Error al obtener el usuario:', error);
-              alertMethod('Ocurrio un error', 'Oops! algo salio mal, intentelo nuevamente', 'error');
+              console.error('Error al verificar usuario:', error);
+              alertMethod(
+                'Error',
+                'Error al verificar disponibilidad de datos',
+                'error'
+              );
             },
           });
       } else {
-        this.alertComponent.showAlert('Formulario invalido. Por favor complete todos los campos', 'error');
+        this.alertComponent.showAlert(
+          'Formulario inválido. Complete todos los campos',
+          'error'
+        );
       }
     } else {
       this.alertComponent.showAlert('Las contraseñas no coinciden', 'error');

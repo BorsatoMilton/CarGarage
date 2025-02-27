@@ -27,7 +27,7 @@ export class NavBarComponent {
 
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
-      this.userRole = user?.rol.nombreRol || null;
+      this.userRole = user?.rol || null;
     });
 }
 

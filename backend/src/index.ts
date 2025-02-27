@@ -11,7 +11,6 @@ import { calificacionRouter } from './components/usuario/calificacion.routes.js'
 import { compraRouter } from './components/compra/compra.routes.js';
 import cors from 'cors';
 import { alquilerRouter } from './components/alquiler/alquiler.routes.js';
-import { rolRouter } from './components/usuario/rol.routes.js';
 import { recuperacionRouter } from './components/usuario/passwordResetToken.routes.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
@@ -67,7 +66,6 @@ app.use ('/api/calificaciones', calificacionRouter)
 app.use('/api/compras', compraRouter)
 app.use('/api/recuperacion', recuperacionRouter);
 app.use('/api/alquiler', alquilerRouter);
-app.use('/api/rol', rolRouter);
 app.use('/uploads', express.static(path.resolve('src/uploads')));
 app.use('/api/mercadopago', mercadoPagoRouter);
 

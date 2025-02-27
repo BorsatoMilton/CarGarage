@@ -101,7 +101,6 @@ export class QualificationComponent implements OnInit {
             this.esAlquiler = true;
             this.rent = alquiler;
             
-            // Determinar rol
             if (alquiler.locatario.id === this.usuarioAcalificar?.id) {
               this.userRole = 'Locatario';
               this.usuarioAcalificar = alquiler.locatario;
@@ -115,7 +114,6 @@ export class QualificationComponent implements OnInit {
                 this.compra = compra;
                 this.esAlquiler = false;
                 
-                // Determinar rol
                 if (compra.usuario.id === this.usuarioAcalificar?.id) {
                   this.userRole = 'Comprador';
                   this.usuarioAcalificar = compra.usuario;

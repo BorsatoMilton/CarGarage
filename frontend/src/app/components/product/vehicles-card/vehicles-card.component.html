@@ -48,7 +48,7 @@
                    [class.disabled]="
                      !vehiculo.precioVenta ||
                      vehiculo.propietario.id === usuarioActual?.id ||
-                     usuarioActual?.rol?.nombreRol === 'ADMIN'
+                     usuarioActual?.rol === 'ADMIN'
                    ">
                   Comprar
                 </a>
@@ -58,7 +58,7 @@
                      !vehiculo.precioAlquilerDiario ||
                      vehiculo.propietario.id === usuarioActual?.id ||
                      vehiculo?.compra?.estadoCompra === 'PENDIENTE' ||
-                     usuarioActual?.rol?.nombreRol === 'ADMIN'
+                     usuarioActual?.rol === 'ADMIN'
                    ">
                   Alquilar
                 </a>

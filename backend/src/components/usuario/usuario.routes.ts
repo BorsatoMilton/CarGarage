@@ -50,7 +50,8 @@ export const usuarioRouter = Router();
  *           type: string
  *           description: Dirección del usuario
  *         rol:
- *           $ref: '#/components/schemas/Rol'
+ *           type: string
+ *           description: Rol del usuario
  *       required:
  *         - usuario
  *         - mail

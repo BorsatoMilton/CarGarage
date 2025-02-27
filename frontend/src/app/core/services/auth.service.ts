@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { User } from '../models/user.interface.js';
 import { Router } from '@angular/router';
-import { RolService } from './rol.service.js';
 
 
 @Injectable({
@@ -18,7 +17,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(this.getCurrentUser());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router, private rolService: RolService) {
+  constructor(private http: HttpClient, private router: Router) {
    }
 
    login(user: string, password: string): Observable<User> {

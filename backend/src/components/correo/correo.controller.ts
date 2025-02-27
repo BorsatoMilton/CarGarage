@@ -1,8 +1,5 @@
-import { Request, Response } from 'express';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-import { findOneByEmail } from '../usuario/usuario.controler.js';
-import { findOneById } from '../vehiculo/vehiculo.controler.js';;
 import { Alquiler } from '../alquiler/alquiler.entity.js';
 import { Usuario } from '../usuario/usuario.entity.js';
 import { Vehiculo } from '../vehiculo/vehiculo.entity.js';

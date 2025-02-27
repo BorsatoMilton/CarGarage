@@ -37,7 +37,7 @@
           <td data-label="Mail">{{ User.mail }}</td>
           <td data-label="Dirección" class="d-none d-lg-table-cell">{{ User.direccion }}</td>
           <td data-label="Teléfono" class="d-none d-md-table-cell">{{ User.telefono }}</td>
-          <td data-label="Rol" ><span class="badge bg-secondary">{{ User.rol.nombreRol }}</span></td>
+          <td data-label="Rol" ><span class="badge bg-secondary">{{ User.rol }}</span></td>
           <td data-label="Acciones">
             <div class="d-flex flex-nowrap gap-1">
               <button
@@ -118,7 +118,9 @@
                   <input type="text" formControlName="telefono" id="telefono" class="form-control" required>
                   <label for="rol">Rol</label>
                   <select id="rol" formControlName="rol" class="form-control">
-                    <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombreRol }}</option>
+                    <option value="" disabled selected>Seleccione un Rol</option>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USUARIO">USUARIO</option>
                   </select>
               </div>
               </div>
@@ -175,10 +177,12 @@
             <input type="number" formControlName="telefono" id="Edittelefono" name="Edittelefono" class="form-control" required>
           </div>
             <div class="col-md-12">
-            <label for="Editrol">Rol</label>
-            <select id="Editrol" formControlName="rol" name="Editrol" class="form-control">
-              <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombreRol }}</option>
-            </select>
+              <label for="Editrol">Transmision</label>
+              <select id="Editrol" formControlName="rol" name="Editrol" class="form-control">
+                <option value="" disabled selected>Seleccione un Rol</option>
+                <option value="ADMIN">ADMIN</option>
+                <option value="USUARIO">USUARIO</option>
+              </select>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="closeModal('editUser')">Cancelar</button>

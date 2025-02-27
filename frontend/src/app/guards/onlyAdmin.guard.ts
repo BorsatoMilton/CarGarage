@@ -15,10 +15,9 @@ export const onlyAdmin: CanActivateFn = (route, state) => {
 
   const currentUser = authService.getCurrentUser();
   
-  if(currentUser && currentUser.rol.nombreRol === 'ADMIN') {
+  if(currentUser && currentUser.rol === 'ADMIN') {
         return true; 
   } else {    
-    alert('Sin permiso');
     router.navigate(['/']);
     return false;
   }

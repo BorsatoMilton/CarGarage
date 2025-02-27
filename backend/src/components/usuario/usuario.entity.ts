@@ -13,7 +13,7 @@ import { Calificacion } from './calificacion.entity.js'
 import { Compra } from '../compra/compra.entity.js'
 import {Vehiculo} from '../vehiculo/vehiculo.entity.js'
 import { Alquiler } from '../alquiler/alquiler.entity.js'
-import { Rol } from './rol.entity.js'
+
 
 @Entity()
 export class Usuario extends BaseEntity {
@@ -38,6 +38,9 @@ export class Usuario extends BaseEntity {
     @Property({ nullable: false})
     telefono!: string
 
+    @Property({ nullable: false})
+    rol!: string
+
     @OneToMany(() => Tarjeta, tarjeta => tarjeta.usuario, { nullable: false, cascade: [ Cascade.REMOVE ] })
     tarjetas = new Collection<Tarjeta>(this)
 
@@ -53,7 +56,5 @@ export class Usuario extends BaseEntity {
     @OneToMany(() => Alquiler, alquiler => alquiler.locatario, { nullable: false, cascade: [Cascade.REMOVE]   })
     alquilerLocatorio= new Collection<Alquiler>(this)
 
-    @ManyToOne(() => Rol, { nullable: false})
-    rol!: Rel<Rol> 
 
   }

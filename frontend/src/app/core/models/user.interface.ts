@@ -1,5 +1,3 @@
-import { Rol } from "./rol.interface.js";
-
 export interface User {
     id: string;
     usuario: string;
@@ -12,5 +10,5 @@ export interface User {
     tarjeta?: string;
     calificacion?: string;
     pedido?: string;
-    rol: Rol;
+    rol: string
 }

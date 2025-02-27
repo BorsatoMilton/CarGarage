@@ -11,6 +11,7 @@ import { PurchasesComponent } from './purchases/purchases.component.js';
 import { RentListComponent } from './rent-list/rent-list.component.js';
 import { RentComponent } from './rent/rent.component.js';
 import { ConfirmRentComponent } from './confirm-rent/confirm-rent.component.js';
+import { PaymentStatusComponent } from './payment-status/payment-status.component.js';
 
 export const productRoutes: Routes = [
     {path: 'categories', component: CategoriesComponent, canActivate: [onlyAdmin]},
@@ -22,5 +23,6 @@ export const productRoutes: Routes = [
     {path: 'rent/:id', component:RentComponent, canActivate: [isLoggedInGuard]},
     {path: 'confirm-rent', component:ConfirmRentComponent},
     {path: 'purchases', component: PurchasesComponent, canActivate: [isLoggedInGuard]},
+    { path: 'payment-status', component: PaymentStatusComponent }, 
     {path: '', component: VehiclesCardComponent},
 ];

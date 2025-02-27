@@ -5,31 +5,36 @@ import { confirmRentMail, envioMailPropietarioAvisoCorreo } from '../correo/corr
 
 const em = orm.em
 
-function sanitizeAlquilerInput(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  req.body.sanitizedInput = {
-    fechaAlquiler: new Date(),
-    fechaHoraInicioAlquiler: req.body.fechaHoraInicioAlquiler,
-    fechaHoraDevolucion: req.body.fechaHoraDevolucion,
-    estadoAlquiler: req.body.estadoAlquiler,
-    locatario: req.body.locatario,
-    vehiculo: req.body.vehiculo,
-    tiempoConfirmacion: (() => {
-      const fecha = new Date()
-      fecha.setHours(fecha.getDate() + 6)
-      return fecha})(),
-    fechaPago: req.body.fechaPago
-  }
+function sanitizeAlquilerInput(req: Request, res: Response, next: NextFunction) {
+  try {
+      const fechaAlquiler = new Date();
+      const fechaInicio = new Date(req.body.fechaHoraInicioAlquiler);
+      const fechaDevolucion = new Date(req.body.fechaHoraDevolucion);
 
-  Object.keys(req.body.sanitizedInput).forEach((key) => {
-    if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key]
-    }
-  })
-  next()
+      // Validación de fechas
+      if (isNaN(fechaInicio.getTime())) throw new Error('Fecha de inicio inválida');
+      if (isNaN(fechaDevolucion.getTime())) throw new Error('Fecha de devolución inválida');
+
+      req.body.sanitizedInput = {
+          fechaAlquiler: fechaAlquiler,
+          fechaHoraInicioAlquiler: fechaInicio,
+          fechaHoraDevolucion: fechaDevolucion,
+          estadoAlquiler: req.body.estadoAlquiler,
+          locatario: req.body.locatario,
+          vehiculo: req.body.vehiculo,
+          tiempoConfirmacion: calcularFechaLimite(fechaAlquiler, fechaInicio),
+          fechaPago: null,
+          paymentId: null
+      };
+      next();
+  } catch (error) {
+      res.status(400).json({ message: error instanceof Error ? error.message : 'Error en fechas' });
+  }
+}
+
+function calcularFechaLimite(fechaAlquiler: Date, fechaInicio: Date): Date | null {
+  const tiempoEntreFechas = fechaInicio.getTime() - fechaAlquiler.getTime();
+  return tiempoEntreFechas > 0 ? new Date(fechaAlquiler.getTime() + tiempoEntreFechas * 0.7) : null;
 }
 
 async function findAll(req: Request, res: Response) {

@@ -49,7 +49,7 @@ export class RentComponent implements OnInit, OnDestroy {
   fechasReservadas: { fechaInicio: string; fechaFin: string }[] = [];
   idVehiculo: string | null = null;
   usuario: User | null = null;
-  todayDate: Date = new Date(); //new Date(new Date().setDate(new Date().getDate() + 1));
+  todayDate: Date = new Date(new Date().setDate(new Date().getDate() + 1));
   fechaInvalida: boolean = false;
   currentSlideIndex = 0;
   promedioCalificaciones: number = 0;
@@ -57,6 +57,7 @@ export class RentComponent implements OnInit, OnDestroy {
   lightboxActive: boolean = false;
   selectedImage: string = '';
   selectedImageIndex: number = 0;
+  isRentButtonDisabled : boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -119,7 +120,7 @@ export class RentComponent implements OnInit, OnDestroy {
   private async loadMercadoPago(): Promise<void> {
     await this.loadScript('https://sdk.mercadopago.com/js/v2');
     this.mercadoPago = new MercadoPago(
-      'APP_USR-a87c590b-5901-4e82-b6d8-eab5ff09384f',
+      'APP_USR-93fac75c-0a4a-491b-8185-c38073362c89',
       {
         locale: 'es-AR',
       }
@@ -149,6 +150,20 @@ export class RentComponent implements OnInit, OnDestroy {
     });
   }
 
+  private calculateTotal(): void {
+    const inicio = this.rentForm.get('fechaHoraInicioAlquiler')?.value;
+    const fin = this.rentForm.get('fechaHoraDevolucion')?.value;
+
+    if (inicio && fin && this.vehiculo) {
+      const diffTime = Math.abs(
+        new Date(fin).getTime() - new Date(inicio).getTime()
+      );
+      this.diasAlquiler = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      this.diasAlquiler = this.diasAlquiler === 0 ? 1 : this.diasAlquiler;
+      this.total = this.diasAlquiler * this.vehiculo.precioAlquilerDiario;
+    }
+  }
+
   dateFilter = (d: Date | null): boolean => {
     if (!d) return false;
 
@@ -169,118 +184,6 @@ export class RentComponent implements OnInit, OnDestroy {
     return true;
   };
 
-  private calculateTotal(): void {
-    const inicio = this.rentForm.get('fechaHoraInicioAlquiler')?.value;
-    const fin = this.rentForm.get('fechaHoraDevolucion')?.value;
-
-    if (inicio && fin && this.vehiculo) {
-      const diffTime = Math.abs(
-        new Date(fin).getTime() - new Date(inicio).getTime()
-      );
-      this.diasAlquiler = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      this.total = this.diasAlquiler * this.vehiculo.precioAlquilerDiario;
-    }
-  }
-
-  async confirmarPago(): Promise<void> {
-    if (!this.vehiculo || !this.diasAlquiler) return;
-
-    if (this.authService.isAuthenticated()) {
-
-        const rentData: Rent = {
-            ...this.rentForm.value,
-            fechaAlquiler: new Date(),
-            estadoAlquiler: 'PENDIENTE',
-            locatario: this.usuario?.id,
-            vehiculo: this.idVehiculo,
-            locador: this.vehiculo?.propietario,
-            tiempoConfirmacion: (() => {
-              const fecha = new Date()
-              fecha.setHours(fecha.getDate() + 6)
-              return fecha})(),
-        };
-
-        this.rentService.addRent(rentData).subscribe({
-            next: (rent) => {
-                const alquilerId = rent.id;
-
-                const paymentData = {
-                    items: [
-                        {
-                            title: `Alquiler de ${this.vehiculo?.marca.nombreMarca} ${this.vehiculo?.modelo}`,
-                            unit_price: this.vehiculo?.precioAlquilerDiario,
-                            quantity: this.diasAlquiler,
-                            currency_id: 'ARS',
-                        },
-                    ],
-                    external_reference: alquilerId, 
-                };
-
-                this.rentService.createPaymentPreference(paymentData).subscribe({
-                    next: (preference) => {
-                        this.mercadoPago.checkout({
-                            preference: { id: preference.id },
-                            autoOpen: true, 
-                        });
-                        const interval = setInterval(() => {
-                          this.rentService.getOneRent(alquilerId).subscribe({
-                            next: (rent: Rent) => {
-                              if (rent.fechaPago) {
-                                clearInterval(interval);
-                                this.router.navigate(['/']);
-                                alertMethod('Pago exitoso', 'El pago fue aprobado correctamente', 'success');
-                              }
-                            },
-                            error: (error: any) => {
-                              console.error('Error al obtener el alquiler:', error);
-                            }
-                          });
-                        }, 5000);
-                    },
-                    error: (error: any) => {
-                        console.error('Error en la preferencia de pago:', error);
-                        alertMethod('Error en pago', 'No se pudo generar la preferencia de pago', 'error');
-                    }
-                });
-            },
-            error: (error: any) => {
-                console.error('Error al crear alquiler:', error);
-                alertMethod('Error en alquiler', 'No se pudo generar el alquiler', 'error');
-            },
-        });
-    }
-}
-
-  private cargarCalificacionesPropietario(): void {
-    if (!this.vehiculo?.propietario?.id) return;
-
-    this.qualificationCalculator
-      .getPromedio(this.vehiculo.propietario.id)
-      .subscribe({
-        next: (promedio) => {
-          this.promedioCalificaciones = promedio;
-          this.obtenerCantidadCalificaciones(this.vehiculo!.propietario!.id);
-        },
-        error: (err) => {
-          console.error('Error obteniendo calificaciones:', err);
-          this.promedioCalificaciones = 0;
-        },
-      });
-  }
-
-  private obtenerCantidadCalificaciones(idPropietario: string) {
-    this.qualificationCalculator
-      .getCalificacionesTotal(idPropietario)
-      .subscribe({
-        next: (cantidad) => {
-          this.cantidadCalificaciones = cantidad;
-        },
-        error: (err) => {
-          console.error('Error obteniendo cantidad de calificaciones:', err);
-          this.cantidadCalificaciones = 0;
-        },
-      });
-  }
 
   dateRangeValidatorFactory() {
     return (group: AbstractControl): ValidationErrors | null => {
@@ -357,16 +260,86 @@ export class RentComponent implements OnInit, OnDestroy {
     this.fechaInvalida = this.isDateDisabled(fechaSeleccionada);
   }
 
+  async confirmarPago(): Promise<void> {
+    if (!this.vehiculo || !this.diasAlquiler) return;
+
+    if (this.authService.isAuthenticated()) {
+
+        const rentalData = {
+          fechaHoraInicioAlquiler: this.rentForm.get('fechaHoraInicioAlquiler')?.value,
+          fechaHoraDevolucion: this.rentForm.get('fechaHoraDevolucion')?.value,
+          locatario: this.usuario?.id,
+          vehiculo: this.idVehiculo,
+          fechaPago: new Date().toISOString(),
+        };
+
+        const paymentData = {
+            items: [
+                {
+                    title: `Alquiler de ${this.vehiculo?.marca.nombreMarca} ${this.vehiculo?.modelo}`,
+                    unit_price: this.vehiculo?.precioAlquilerDiario,
+                    quantity: this.diasAlquiler,
+                    currency_id: 'ARS',
+                },
+            ],
+            external_reference: Date.now().toString(),
+            rentalData, 
+        };
+        this.rentService.createPaymentPreference(paymentData).subscribe({
+            next: (preference) => {
+                this.mercadoPago.checkout({
+                    preference: { id: preference.id },
+                    autoOpen: true, 
+                });
+            },
+            error: (error: any) => {
+                console.error('Error en la preferencia de pago:', error);
+                alertMethod('Error en pago', 'No se pudo generar la preferencia de pago', 'error');
+            }
+        });
+    }
+}
+
+  private cargarCalificacionesPropietario(): void {
+    if (!this.vehiculo?.propietario?.id) return;
+
+    this.qualificationCalculator
+      .getPromedio(this.vehiculo.propietario.id)
+      .subscribe({
+        next: (promedio) => {
+          this.promedioCalificaciones = promedio;
+          this.obtenerCantidadCalificaciones(this.vehiculo!.propietario!.id);
+        },
+        error: (err) => {
+          console.error('Error obteniendo calificaciones:', err);
+          this.promedioCalificaciones = 0;
+        },
+      });
+  }
+
+  private obtenerCantidadCalificaciones(idPropietario: string) {
+    this.qualificationCalculator
+      .getCalificacionesTotal(idPropietario)
+      .subscribe({
+        next: (cantidad) => {
+          this.cantidadCalificaciones = cantidad;
+        },
+        error: (err) => {
+          console.error('Error obteniendo cantidad de calificaciones:', err);
+          this.cantidadCalificaciones = 0;
+        },
+      });
+  }
+
+
   rent(): void {
-    const boton = document.getElementById('rentButton');
-    
+    this.isRentButtonDisabled = true;
     if (this.authService.isAuthenticated()) {
       const rentData: Rent = {
         ...this.rentForm.value,
-        estadoAlquiler: 'PENDIENTE',
-        locatario: this.usuario?.id,
-        vehiculo: this.idVehiculo,
-        locador: this.vehiculo?.propietario,
+        estadoAlquiler: 'RESERVADO',
+        locatario: this.usuario!.id,
+        vehiculo: this.idVehiculo!,
       };
       this.rentService.addRent(rentData).subscribe({
         next: (response) => {

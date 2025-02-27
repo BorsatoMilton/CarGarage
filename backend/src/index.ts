@@ -25,7 +25,6 @@ const app = express();
 const allowedOrigins = ['http://localhost:4200' ];
 app.use(cors({
   origin: (origin, callback) => {
-    // Permitir solicitudes sin 'origin' (como las de Mercado Pago)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {

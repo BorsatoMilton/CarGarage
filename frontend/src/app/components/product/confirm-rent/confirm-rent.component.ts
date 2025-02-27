@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Vehicle } from '../../../core/models/vehicles.interface.js';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Rent } from '../../../core/models/rent.interface.js';
@@ -8,6 +8,9 @@ import { VehiclesService } from '../../../core/services/vehicles.service.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 
+
+declare const MercadoPago: any;
+
 @Component({
   selector: 'app-confirm-rent',
   standalone: true,
@@ -15,10 +18,12 @@ import { UniversalAlertComponent } from '../../../shared/components/alerts/unive
   templateUrl: './confirm-rent.component.html',
   styleUrl: './confirm-rent.component.css',
 })
-export class ConfirmRentComponent {
+export class ConfirmRentComponent implements OnInit, OnDestroy {
   rent: Rent | null = null;
   vehiculo: Vehicle | null = null;
+  private mercadoPago: any;
   totalAlquiler: number = 0;
+  diasAlquiler: number = 0;
 
   @ViewChild(UniversalAlertComponent) alertComponent! : UniversalAlertComponent;
 
@@ -39,7 +44,7 @@ export class ConfirmRentComponent {
               alertMethod('Confirmar Alquiler','Oops! Algo salio mal!', 'error');
               this.router.navigate(['/']);
             } else {
-              if (data.estadoAlquiler !== 'PENDIENTE') {
+              if (data.estadoAlquiler !== 'RESERVADO') {
                 this.router.navigate(['/']);
                 alertMethod(
                   'Confirmar Alquiler',
@@ -53,25 +58,7 @@ export class ConfirmRentComponent {
                   next: (data) => {
                     this.vehiculo = data;
                     if (this.vehiculo?.precioAlquilerDiario) {
-                      const fechaInicio = this.rent
-                        ? new Date(this.rent.fechaHoraInicioAlquiler)
-                        : null;
-                      const fechaDevolucion = this.rent
-                        ? new Date(this.rent.fechaHoraDevolucion)
-                        : null;
-                      const diferenciaMilisegundos =
-                        fechaDevolucion && fechaInicio
-                          ? fechaDevolucion.getTime() - fechaInicio.getTime()
-                          : 0;
-                      const diferenciaDias = Math.ceil(
-                        diferenciaMilisegundos / (24 * 60 * 60 * 1000)
-                      );
-                      if (diferenciaDias > 0) {
-                        this.totalAlquiler =
-                          diferenciaDias * this.vehiculo.precioAlquilerDiario;
-                      } else {
-                        this.totalAlquiler = this.vehiculo.precioAlquilerDiario;
-                      }
+                      this.calculateTotal()
                     }
                   },
                   error: (err) => {
@@ -93,6 +80,38 @@ export class ConfirmRentComponent {
         });
       }
     });
+    this.loadMercadoPago();
+  }
+
+  ngOnDestroy(): void {
+    this.cleanupMercadoPago();
+  }
+
+  private async loadMercadoPago(): Promise<void> {
+    await this.loadScript('https://sdk.mercadopago.com/js/v2');
+    this.mercadoPago = new MercadoPago(
+      'APP_USR-93fac75c-0a4a-491b-8185-c38073362c89',
+      {
+        locale: 'es-AR',
+      }
+    );
+  }
+
+  private loadScript(src: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) return resolve();
+
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = (error) => reject(error);
+      document.head.appendChild(script);
+    });
+  }
+
+  private cleanupMercadoPago(): void {
+    const container = document.querySelector('.mercadopago-button');
+    if (container) container.innerHTML = '';
   }
 
   openModal(modalId: string): void {
@@ -113,7 +132,56 @@ export class ConfirmRentComponent {
     }
   }
 
-  confirmRent() {
+  private calculateTotal(): void {
+    const inicio = this.rent?.fechaHoraInicioAlquiler
+    const fin = this.rent?.fechaHoraDevolucion
+
+    if (inicio && fin && this.vehiculo) {
+      const diffTime = Math.abs(
+        new Date(fin).getTime() - new Date(inicio).getTime()
+      );
+      this.diasAlquiler = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      this.diasAlquiler = this.diasAlquiler === 0 ? 1 : this.diasAlquiler;
+      this.totalAlquiler = this.diasAlquiler * this.vehiculo.precioAlquilerDiario;
+    }
+  }
+
+
+  async confirmRent(): Promise<void> {
+    if (this.rent !== null) {
+      const rentalData = {
+        idAlquiler: this.rent.id!,
+      };
+      const paymentData = {
+          items: [
+              {
+                  title: `Alquiler de ${this.vehiculo?.marca.nombreMarca} ${this.vehiculo?.modelo}`,
+                  unit_price: this.vehiculo?.precioAlquilerDiario,
+                  quantity: this.diasAlquiler,
+                  currency_id: 'ARS',
+              },
+          ],
+          external_reference: Date.now().toString(),
+          rentalData,
+      };
+      this.rentService.createPaymentPreference(paymentData).subscribe({
+          next: (preference) => {
+              this.mercadoPago.checkout({
+                  preference: { id: preference.id },
+                  autoOpen: true, 
+              });
+          },
+          error: (error: any) => {
+              console.error('Error en la preferencia de pago:', error);
+              alertMethod('Error en pago', 'No se pudo generar la preferencia de pago', 'error');
+          }
+      });
+    }
+  }
+
+
+
+  /* confirmRent() {
     if (this.rent !== null) {
       this.rentService.confirmRent(this.rent.id).subscribe({
         next: () => {
@@ -126,5 +194,5 @@ export class ConfirmRentComponent {
         },
       });
     }
-  }
+  }*/
 }

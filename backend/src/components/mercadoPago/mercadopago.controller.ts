@@ -8,20 +8,25 @@ const em = orm.em;
 
 
 async function createPreference(req: Request, res: Response) {
-    console.log('Creando preferencia de pago', req.body);
     try {
+        console.log('🚀 Creando preferencia de pago:', req.body);
+
+        const { items, external_reference, rentalData } = req.body;
         const body = {
-            items: req.body.items.map((item: any) => ({
+            items: items.map((item: any) => ({
                 title: item.title,
                 unit_price: Number(item.unit_price),
                 quantity: Number(item.quantity),
                 currency_id: 'ARS',
             })),
-            external_reference: req.body.external_reference,
+            external_reference: external_reference,
+            metadata: {
+                rentalData: JSON.stringify(rentalData),
+            },
             back_urls: {
-                success: 'http://localhost:4200/success', 
-                failure: 'http://localhost:4200/failure',
-                pending: 'http://localhost:4200/pending'
+                success: 'http://localhost:4200/product/payment-status?status=approved',
+                failure: 'http://localhost:4200/product/payment-status?status=failure',
+                pending: 'http://localhost:4200/product/payment-status?status=pending'
             },
             auto_return: 'approved',
         };
@@ -29,14 +34,7 @@ async function createPreference(req: Request, res: Response) {
         const preferenceClient = new Preference(mercadoPagoClient);
         const preference = await preferenceClient.create({ body });
 
-        const alquiler = await em.findOne(Alquiler, { id: req.body.external_reference });
-
-        if (alquiler) {
-            alquiler.paymentId = preference.id;
-            await em.persistAndFlush(alquiler);
-        }
-        
-        res.json({ id: preference.id }); // Solo enviar el ID de la preferencia
+        res.json({ id: preference.id });
 
     } catch (error) {
         console.error(error);

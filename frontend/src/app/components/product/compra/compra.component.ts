@@ -13,6 +13,7 @@ import { AuthService } from '../../../core/services/auth.service.js';
 import { User } from '../../../core/models/user.interface.js';
 import { Compra } from '../../../core/models/compra.interfaces.js';
 import { CompraService } from '../../../core/services/compra.service.js';
+import { SimilarVehiclesCarouselComponent } from '../similar-vehicles-carousel/similar-vehicles-carousel.component.js';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../../../core/models/categories.interface.js';
@@ -23,7 +24,7 @@ import { QualificationCalculator } from '../../../shared/components/qualificatio
 @Component({
   selector: 'app-compra',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, UniversalAlertComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, UniversalAlertComponent, SimilarVehiclesCarouselComponent],
   templateUrl: 'compra.component.html',
   styleUrl: './compra.component.css',
 })

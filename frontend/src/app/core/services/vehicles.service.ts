@@ -31,5 +31,9 @@ export class VehiclesService {
   getOneVehicle(id: string): Observable<Vehicle> {
     return this.http.get<Vehicle>(`${this.apiUrl}/${id}`);
   }
+
+  getVehiclesByCategory(categoryId: string): Observable<Vehicle[]> {
+    return this.http.get<Vehicle[]>(`${this.apiUrl}/categoria/${categoryId}`);
+  }
   
 }

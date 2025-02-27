@@ -16,6 +16,7 @@ import { AuthService } from '../../../core/services/auth.service.js';
 import { FormGroup } from '@angular/forms';
 import { Rent } from '../../../core/models/rent.interface.js';
 import { CommonModule } from '@angular/common';
+import { SimilarVehiclesCarouselComponent } from '../similar-vehicles-carousel/similar-vehicles-carousel.component.js';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,6 +38,7 @@ declare const MercadoPago: any;
     MatInputModule,
     MatFormFieldModule,
     MatNativeDateModule,
+    SimilarVehiclesCarouselComponent
   ],
   templateUrl: './rent.component.html',
   styleUrls: ['./rent.component.css'],
@@ -79,40 +81,41 @@ export class RentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.idVehiculo = this.route.snapshot.paramMap.get('id');
-    if (this.idVehiculo) {
-      this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe(
-        (data: Vehicle) => {
-          this.vehiculo = data;
-          this.cargarCalificacionesPropietario();
-        },
-        (error) => {
-          console.error('Error para obtener el vehiculo:', error);
-        }
-      );
-      this.rentService
-        .getRentsByVehicle(this.idVehiculo)
-        .subscribe((reservas) => {
-          if (!reservas) {
-            return;
-          } else {
-            this.fechasReservadas = reservas
-              .filter(
-                (reserva: any) =>
-                  reserva.estadoAlquiler !== 'CANCELADO' &&
-                  reserva.estadoAlquiler !== 'NO CONFIRMADO'
-              )
-              .map((reserva: any) => ({
-                fechaInicio: reserva.fechaHoraInicioAlquiler,
-                fechaFin: reserva.fechaHoraDevolucion,
-              }));
+    this.route.paramMap.subscribe((params) => {
+      this.idVehiculo = params.get('id');
+      if (this.idVehiculo) {
+        this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe({
+          next: (data: Vehicle) => {
+            console.log("Vehículo obtenido:", data);
+            this.vehiculo = data;
+            this.cargarCalificacionesPropietario();
+          },
+          error: (error) => {
+            console.error('Error para obtener el vehiculo:', error);
           }
         });
-    }
+  
+        this.rentService.getRentsByVehicle(this.idVehiculo).subscribe((reservas) => {
+          if (!reservas) return;
+          this.fechasReservadas = reservas
+            .filter(
+              (reserva: any) =>
+                reserva.estadoAlquiler !== 'CANCELADO' &&
+                reserva.estadoAlquiler !== 'NO CONFIRMADO'
+            )
+            .map((reserva: any) => ({
+              fechaInicio: reserva.fechaHoraInicioAlquiler,
+              fechaFin: reserva.fechaHoraDevolucion,
+            }));
+        });
+      }
+    });
+  
     this.usuario = this.authService.getCurrentUser();
     this.loadMercadoPago();
     this.setupDateListeners();
   }
+  
 
   ngOnDestroy(): void {
     this.cleanupMercadoPago();

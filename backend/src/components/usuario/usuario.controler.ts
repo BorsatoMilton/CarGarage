@@ -221,7 +221,8 @@ async function add(req: Request, res: Response) {
     if (usuarioExistente) {
       return res.status(409).json({ message: "El usuario ya existe" });
     }
-    const vecesHash = 10;
+    if(req.body.sanitizedInput.clave.length >= 6){
+      const vecesHash = 10;
     const hashClave = await bcrypt.hash(req.body.sanitizedInput.clave, vecesHash);
 
     const usuario = em.create(Usuario, {
@@ -233,6 +234,10 @@ async function add(req: Request, res: Response) {
 
     const usuarioData = { ...usuario, clave: undefined };
     res.status(201).json({ message: "Usuario creado", data: usuarioData });
+    }else{
+      res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
+    }
+    
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ message: error.message });
@@ -246,6 +251,9 @@ async function update(req: Request, res: Response) {
     if (!usuarioAactualizar) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     } else {
+      if(req.body.sanitizedInput.clave){
+        return res.status(400).json({ message: "No se puede modificar la contraseña desde update" });
+      }
       const usuario = { ...req.body.sanitizedInput, 
         telefono: req.body.sanitizedInput.telefono.toString(),
       };
@@ -264,6 +272,12 @@ async function resetPasswordWithoutToken(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const newPassword = req.body.newPassword;
+
+    if (newPassword.length < 6) {
+      return res
+        .status(400)
+        .json({ ok: false, message: "La contraseña debe tener al menos 6 caracteres" });
+    }
 
     const usuario = await orm.em.findOne(Usuario, { id });
     if (!usuario) {
@@ -287,6 +301,11 @@ async function resetPassword(req: Request, res: Response) {
   try {
     const { token, newPassword } = req.body;
 
+    if (newPassword.length < 6) {
+      return res
+        .status(400)
+        .json({ ok: false, message: "La contraseña debe tener al menos 6 caracteres" });
+    }
     const tokenEntity = await orm.em.findOne(PasswordResetToken, { token });
     if (!tokenEntity || tokenEntity.expiryDate < new Date()) {
       return res

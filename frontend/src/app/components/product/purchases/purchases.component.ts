@@ -6,6 +6,9 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import { MatIconModule } from '@angular/material/icon';
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component.js';
 
 @Component({
   selector: 'app-purchases',
@@ -19,7 +22,8 @@ export class PurchasesComponent {
   selectedPurchase: Compra | null = null;
 
   constructor(private compraService: CompraService,
-    private authService: AuthService
+    private authService: AuthService,
+    private bottomSheet: MatBottomSheet
   ) { }
 
   ngOnInit(): void {
@@ -40,6 +44,22 @@ export class PurchasesComponent {
     const dias = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
     return Math.max(dias, 0); 
 }
+
+openPurchaseDetails(purchase: Compra): void {
+        const config: BottomSheetConfig<Compra> = {
+          title: 'Detalles de la Compra',
+          fields: [
+            { key: 'vehiculo.modelo', label: 'Modelo' },
+            { key: 'vehiculo.anio', label: 'Año' },
+            { key: 'vehiculo.precioVenta', label: 'Precio' },
+            { key: 'vehiculo.propietario.nombre', label: 'Vendedor Nombre' },
+            { key: 'vehiculo.propietario.apellido', label: 'Vendedor Apellido' },
+            { key: 'estadoCompra', label: 'Estado' },
+          ],
+          data: purchase,
+        };
+        this.bottomSheet.open(BottomSheetComponent, { data: config });
+  }
 
   openModal(modalId: string, purchase: Compra): void{
     this.selectedPurchase = purchase;

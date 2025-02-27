@@ -29,6 +29,7 @@
         <td data-label="Estado">{{compra.estadoCompra}}</td>
 
         <td data-label="Acciones">
+        <div class="d-flex flex-nowrap gap-1">
           <button
           *ngIf="compra.estadoCompra !== 'CANCELADA' && compra.estadoCompra !== 'CONFIRMADA' && compra.estadoCompra !== 'NO CONFIRMADA' && compra.estadoCompra !== 'FINALIZADA'" 
           (click)="openModal('cancelarCompra', compra)"
@@ -45,7 +46,11 @@
         <mat-icon>delete</mat-icon>
         </button>
         <p *ngIf="compra.vehiculo.fechaBaja" style="color: red;">Quedan {{diasRestantes(compra)}} restantes antes que se borre la compra</p>
-        </td>
+        <button class="btn btn-light btn-details ms-auto d-table-cell d-md-none" (click)="openPurchaseDetails(compra)">
+          <span class="material-icons">info</span>
+        </button>
+      </div>  
+      </td>
       </tr>
     </tbody>
     <p *ngIf="compras.length === 0">No hay compras</p>

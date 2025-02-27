@@ -18,6 +18,9 @@ import { User } from '../../../core/models/user.interface.js';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import {MatIconModule} from '@angular/material/icon';
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
+import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component.js';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-vehicle',
@@ -42,7 +45,8 @@ export class VehicleComponent implements OnInit {
     private vehicleService: VehiclesService,
     private brandService: BrandsService,
     private categoriesService: CategoriesService,
-    private authService: AuthService
+    private authService: AuthService,
+    private bottomSheet: MatBottomSheet
   ) {
     this.vehicleForm = this.fb.group({
       modelo: ['', Validators.required],
@@ -70,6 +74,23 @@ export class VehicleComponent implements OnInit {
       this.loadVehicle();
     }   
 
+  }
+
+  openVehicleDetails(vehicle: Vehicle): void {
+       const config: BottomSheetConfig<Vehicle> = {
+          title: 'Detalles del Vehículo',
+          fields: [
+            { key: 'modelo', label: 'Modelo' },
+            { key: 'anio', label: 'Año' },
+            { key: 'descripcion', label: 'Descripción' },
+            { key: 'kilometros', label: 'Kilometros' },
+            { key: 'transmision', label: 'Transmisión' },
+            { key: 'precioAlquilerDiario', label: 'Precio Alquiler Diario' },
+            { key: 'precioVenta', label: 'Precio Venta' },
+          ],
+          data: vehicle,
+        };
+        this.bottomSheet.open(BottomSheetComponent, { data: config });
   }
 
   openModal(modalId: string, vehicle: Vehicle): void {

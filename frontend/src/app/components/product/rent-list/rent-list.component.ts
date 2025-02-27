@@ -5,6 +5,9 @@ import { AuthService } from '../../../core/services/auth.service.js';
 import { CommonModule } from '@angular/common';
 import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
 import { MatIconModule } from '@angular/material/icon';
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component.js';
 
 @Component({
   selector: 'app-rent-list',
@@ -18,7 +21,8 @@ export class RentListComponent {
     selectedRent: Rent | null = null;
   
     constructor(private rentService: RentsService,
-      private authService: AuthService
+      private authService: AuthService,
+      private bottomSheet: MatBottomSheet
     ) { }
   
     ngOnInit(): void {
@@ -37,6 +41,26 @@ export class RentListComponent {
         this.alquileres = data;
       });
     }
+
+     openRentDetails(rent: Rent): void {
+       const config: BottomSheetConfig<Rent> = {
+         title: 'Detalles del Alquiler',
+         fields: [
+           { key: 'vehiculo.modelo', label: 'Auto' },
+           { key: 'vehiculo.anio', label: 'Año' },
+           { key: 'fechaAlquiler', label: 'Fecha Alquiler' },
+           { key: 'precioAlquilerDiario', label: 'Precio Diario' },
+           { key: 'fechaHoraInicioAlquiler', label: 'Fecha Inicio Alquiler' },
+           { key: 'fechaHoraDevolucion', label: 'Fecha Devolucion' },
+           { key: 'vehiculo.propietario.nombre', label: 'Nombre Propietario' },
+           { key: 'vehiculo.propietario.apellido', label: 'Apellido Propietario' },
+           { key: 'vehiculo.propietario.telefono', label: 'Contacto' },
+           { key: 'estadoAlquiler', label: 'Estado' },
+         ],
+         data: rent,
+       };
+       this.bottomSheet.open(BottomSheetComponent, { data: config });
+     }
     
     openModal(modalId: string, rent: Rent): void{
       this.selectedRent = rent;

@@ -22,7 +22,7 @@
       </thead>
       <tbody *ngIf="vehicles.length > 0">
         <tr *ngFor="let Vehicle of vehicles">
-          <td data-label="Modelo">{{ Vehicle.modelo }}</td>
+          <td data-label="Modelo">{{ Vehicle.modelo }} {{Vehicle.anio}}</td>
           <td data-label="Descripción"  class="d-none d-md-table-cell">{{ Vehicle.descripcion }}</td>
           <td data-label="Kilometros" class="d-none d-md-table-cell"> {{Vehicle.kilometros}}</td>
           <td data-label="Precio Alquiler Diario">{{ Vehicle.precioAlquilerDiario ? ('$' + Vehicle.precioAlquilerDiario) : 'NO SE ALQUILA' }}
@@ -30,6 +30,7 @@
           <td data-label="Precio Venta">{{ Vehicle.precioVenta ? ('$' + Vehicle.precioVenta) : 'NO SE VENDE' }}
           </td>
           <td data-label="Acciones">
+            <div class="d-flex flex-nowrap gap-1">
             <ng-container
               *ngIf="!Vehicle.compra || Vehicle.compra?.estadoCompra === 'NO CONFIRMADA' || Vehicle.compra?.estadoCompra === 'CANCELADA'; else reservadoOVendido">
               <button (click)="openModal('editVehicle', Vehicle)" class="btn btn-lg btn-outline-primary"
@@ -55,6 +56,10 @@
                 <mat-icon>delete</mat-icon>
               </button>
             </ng-template>
+            <button class="btn btn-light btn-details ms-auto d-table-cell d-md-none" (click)="openVehicleDetails(Vehicle)">
+              <span class="material-icons">info</span>
+            </button>
+          </div>
           </td>
         </tr>
       </tbody>

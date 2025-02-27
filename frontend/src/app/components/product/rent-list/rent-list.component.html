@@ -1,3 +1,5 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <div class="container my-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
     <h2 class="mb-3 mb-md-0"><strong class="text-primary">Gestión de Alquileres</strong></h2>
@@ -33,6 +35,7 @@
         </td>
         <td data-label="Estado">{{ alquiler.estadoAlquiler }}</td>
         <td data-label="Acciones">
+          <div class="d-flex flex-nowrap gap-1">
           <button
           *ngIf="alquiler.estadoAlquiler !== 'CANCELADO' && alquiler.estadoAlquiler !== 'CONFIRMADO' && alquiler.estadoAlquiler !== 'NO CONFIRMADO' && alquiler.estadoAlquiler !== 'FINALIZADO' && alquiler.estadoAlquiler !== 'EN CURSO'"
           (click)="openModal('cancelarAlquiler', alquiler)"
@@ -48,8 +51,14 @@
           data-bs-toggle="modal">
         <mat-icon>delete</mat-icon>
         </button>
+        <button class="btn btn-light btn-details ms-auto d-table-cell d-md-none" (click)="openRentDetails(alquiler)">
+          <span class="material-icons">
+            info
+          </span>
+        </button>
         <p *ngIf="alquiler.vehiculo.fechaBaja" style="color: red;">Quedan {{diasRestantes(alquiler)}} restantes antes que se borre el alquiler</p>
-        </td>
+      </div>  
+      </td>
       </tr>
     </tbody>
     <p *ngIf="alquileres.length === 0" class="text-center text-muted">No hay alquileres</p>

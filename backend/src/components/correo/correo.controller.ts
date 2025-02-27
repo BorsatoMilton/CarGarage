@@ -299,7 +299,15 @@ async function confirmRentMail(destinatario: Usuario, alquiler: Alquiler):  Prom
             user: process.env.EMAIL_USER, 
             pass: process.env.EMAIL_PASS
         }
-    });
+    })
+
+    const fechaInicio = new Date(alquiler.fechaHoraInicioAlquiler).getTime();
+    const fechaFin = new Date(alquiler.fechaHoraDevolucion).getTime();
+    const diasAlquiler = Math.ceil((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24));
+
+    const precioDiario = alquiler.vehiculo?.precioAlquilerDiario || 0;
+    diasAlquiler > 0 ? diasAlquiler : 1;
+    const precioTotal = diasAlquiler * precioDiario;
 
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4;">
@@ -312,6 +320,8 @@ async function confirmRentMail(destinatario: Usuario, alquiler: Alquiler):  Prom
                     <li><strong>Vehículo:</strong> ${alquiler.vehiculo?.marca.nombreMarca || 'N/A'} ${alquiler.vehiculo?.modelo || ''}</li>
                     <li><strong>Fecha de inicio:</strong> ${alquiler.fechaHoraInicioAlquiler}</li>
                     <li><strong>Fecha de devolución:</strong> ${alquiler.fechaHoraDevolucion}</li>
+                    <li><strong>Duración:</strong> ${diasAlquiler} día(s)</li>
+                    <li><strong>Precio total:</strong> $${precioTotal.toFixed(2)}</li>
                 </ul>
                 <p style="color: #555;">Para confirmar el alquiler, haz clic en el siguiente botón:</p>
                 <a href="${confirmLinkRent}" 
@@ -529,7 +539,74 @@ async function envioMailPropietarioAvisoCorreo(alquiler: Alquiler){
     }
 }
 
+async function envioAvisoParaConfirmarAlquiler(destinatario: Usuario, alquiler: Alquiler): Promise<{ok: boolean, message: string, info?: string}> {
+    const confirmLinkRent = `http://localhost:4200/product/confirm-rent?id=${alquiler.id}`;
 
-export { recuperarContraseña, confirmarCompraMailCorreo, avisoCompraExitosaMail , confirmRentMail, avisoPuntuarAlquiler, envioMailPropietarioAvisoCorreo, avisoPuntuarCompra    
+    const config = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_USER, 
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
+    const fechaInicio = new Date(alquiler.fechaHoraInicioAlquiler).getTime();
+    const fechaFin = new Date(alquiler.fechaHoraDevolucion).getTime();
+    const diasAlquiler = Math.ceil((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24));
+
+    const precioDiario = alquiler.vehiculo?.precioAlquilerDiario || 0;
+    diasAlquiler > 0 ? diasAlquiler : 1;
+    const precioTotal = diasAlquiler * precioDiario;
+
+    const htmlContent = `
+        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4;">
+            <div style="max-width: 600px; background: #fff; padding: 20px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #333;">Confirmación de Alquiler</h2>
+                <p style="color: #555;">Hola, ${destinatario.nombre}</p>
+                <p style="color: #555;">Has solicitado un alquiler recientemente y quedan 12 horas restantes para que confirmes la operación.</p>
+                <p style="color: #555;">Detalles del alquiler:</p>
+                <ul style="text-align: left; color: #555; padding-left: 20px;">
+                    <li><strong>Vehículo:</strong> ${alquiler.vehiculo?.marca.nombreMarca || 'N/A'} ${alquiler.vehiculo?.modelo || ''}</li>
+                    <li><strong>Fecha de inicio:</strong> ${alquiler.fechaHoraInicioAlquiler}</li>
+                    <li><strong>Fecha de devolución:</strong> ${alquiler.fechaHoraDevolucion}</li>
+                    <li><strong>Duración:</strong> ${diasAlquiler} día(s)</li>
+                    <li><strong>Precio total:</strong> $${precioTotal.toFixed(2)}</li>
+                </ul>
+                <p style="color: #555;">Para confirmar el alquiler, haz clic en el siguiente botón:</p>
+                <a href="${confirmLinkRent}" 
+                   style="display: inline-block; padding: 12px 20px; background-color: #007bff; color: white; text-decoration: none; font-size: 16px; border-radius: 5px;">
+                   Confirmar Alquiler
+                </a>
+                <p style="margin-top: 20px; color: #777;">Si no realizaste esta solicitud, ignora este mensaje.</p>
+            </div>
+        </div>
+    `;
+
+    const opciones = {
+        from: process.env.EMAIL_USER,
+        subject: 'QUEDAN MENOS DE 12 HORAS PARA CONFIRMAR',
+        to: destinatario.mail,
+        html: htmlContent
+    };
+
+    try {
+        const info = await config.sendMail(opciones);
+        return {
+            ok: true,
+            message: 'Correo enviado correctamente',
+            info: info.response
+        };
+    } catch (error: any) {
+        return {
+            ok: false,
+            message: 'Error al enviar el correo',
+            info: error.message
+        };
+    }
+
+}
+export { recuperarContraseña, confirmarCompraMailCorreo, avisoCompraExitosaMail , confirmRentMail, avisoPuntuarAlquiler, envioMailPropietarioAvisoCorreo, avisoPuntuarCompra, envioAvisoParaConfirmarAlquiler    
 };
 

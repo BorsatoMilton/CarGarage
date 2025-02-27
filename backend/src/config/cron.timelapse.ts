@@ -1,23 +1,29 @@
 import cron from "node-cron";
 import { Alquiler } from "../components/alquiler/alquiler.entity.js";
 import { orm } from "../shared/db/orm.js";
-import { avisoPuntuarAlquiler, avisoPuntuarCompra } from "../components/correo/correo.controller.js";
+import { avisoPuntuarAlquiler, avisoPuntuarCompra, envioAvisoParaConfirmarAlquiler } from "../components/correo/correo.controller.js";
 import { Compra } from "../components/compra/compra.entity.js";
 import { Vehiculo } from "../components/vehiculo/vehiculo.entity.js";
 import { remove } from "../components/vehiculo/vehiculo.controler.js";
+import { populate } from "dotenv";
 
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/30 * * * *", async () => {
   console.log("Revisando estados de alquiler...");
 
   const ahora = new Date();
   const em = orm.em.fork();
 
   try {
-    const alquileresNoConfirmados = await em.find(Alquiler, {
-      estadoAlquiler: "PENDIENTE",
+    const alquileresReservadosSinConfirmar = await em.find(Alquiler, {
+      estadoAlquiler: "RESERVADO",
       tiempoConfirmacion: { $lt: ahora },
     });
+
+    const alquileresReservados = await em.find(Alquiler, {
+      estadoAlquiler: "RESERVADO",
+      tiempoConfirmacion: { $lt: new Date(ahora.getTime() + 12 * 60 * 60 * 1000) },
+    }, {populate: ['locatario', 'vehiculo', 'vehiculo.marca']});
 
     const alquileresNoConfirmadosAborrar = await em.find(Alquiler, {
       estadoAlquiler: "NO CONFIRMADO",
@@ -55,21 +61,32 @@ cron.schedule("*/1 * * * *", async () => {
       fechaBaja: { $ne: null },
     })
     
-    if (alquileresNoConfirmados.length > 0) {
+    if (alquileresReservadosSinConfirmar.length > 0) {
       console.log(
-        `${alquileresNoConfirmados.length} alquiler(es) no fueron confirmados a tiempo.`
+        `${alquileresReservadosSinConfirmar.length} alquiler(es) no fueron confirmados a tiempo.`
       );
-      for (const alquiler of alquileresNoConfirmados) {
+      for (const alquiler of alquileresReservadosSinConfirmar) {
         alquiler.estadoAlquiler = "NO CONFIRMADO";
       }
     }
 
+    if(alquileresReservados.length > 0) {
+      console.log(
+        `${alquileresReservados.length} alquiler(es) están próximos a quedarse sin confirmar.`
+      );
+      for (const alquiler of alquileresReservados) {
+        await envioAvisoParaConfirmarAlquiler(alquiler.locatario, alquiler);
+      }
+    }
+    
     if (alquileresNoConfirmadosAborrar.length > 0) {
       for (const alquiler of alquileresNoConfirmadosAborrar) {
-        const diferenciaTiempo = Date.now() - new Date(alquiler.tiempoConfirmacion).getTime();
-        const sieteDiasEnMs = 7 * 24 * 60 * 60 * 1000;
-        if (diferenciaTiempo >= sieteDiasEnMs) {
-          await em.removeAndFlush(alquiler);
+        if (alquiler.tiempoConfirmacion) {
+          const diferenciaTiempo = Date.now() - new Date(alquiler.tiempoConfirmacion).getTime();
+          const sieteDiasEnMs = 7 * 24 * 60 * 60 * 1000;
+          if (diferenciaTiempo >= sieteDiasEnMs) {
+            await em.removeAndFlush(alquiler);
+          }
         }
       }
     }

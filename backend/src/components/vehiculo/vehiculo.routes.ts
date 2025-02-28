@@ -176,6 +176,39 @@ vehiculoRouter.get('/:id', findOne);
  */
 vehiculoRouter.get('/user/:id', findAllByUser);
 
+/**
+ * @swagger
+ * /api/vehiculos/categoria/{id}:
+ *   get:
+ *     summary: Obtiene una lista de vehículos por ID de categoría
+ *     tags: [Vehiculo]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la categoría
+ *     responses:
+ *       200:
+ *         description: Lista de vehículos por categoría
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Vehiculo'
+ *       500:
+ *         description: Error al obtener los vehículos por categoría
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener los vehículos por categoría
+ */
 vehiculoRouter.get('/categoria/:id', findAllByCategory);
 
 /**

@@ -320,7 +320,6 @@ alquilerRouter.post("/confirmarAlquilerMail/:id", confirmarAlquilerMail);
  *                   type: string
  *                   example: Detalles del error
  */
-
 alquilerRouter.patch("/confirmarAlquiler/:id", confirmRent); //Acomodar el swagger
 /**
  * @swagger

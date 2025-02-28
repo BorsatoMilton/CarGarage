@@ -107,8 +107,78 @@ compraRouter.get('/', findAll);
  */
 compraRouter.get('/byuser/:userId', findAllByUser);
 
+/**
+ * @swagger
+ * /api/compras/byvehiculo/{idVehiculo}:
+ *   get:
+ *     summary: Obtiene compras por ID de vehículo
+ *     tags: [Compra]
+ *     parameters:
+ *       - in: path
+ *         name: idVehiculo
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del vehículo
+ *     responses:
+ *       200:
+ *         description: Lista de compras del vehículo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Compra'
+ *       500:
+ *         description: Error al obtener las compras por vehículo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener las compras por vehículo
+ *                 error:
+ *                   type: string
+ *                   example: Detalles del error
+ */
 compraRouter.get('/:id', findOne);
 
+/**
+ * @swagger
+ * /api/compras/byvehiculo/{idVehiculo}:
+ *   get:
+ *     summary: Obtiene compras por ID de vehículo
+ *     tags: [Compra]
+ *     parameters:
+ *       - in: path
+ *         name: idVehiculo
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del vehículo
+ *     responses:
+ *       200:
+ *         description: Lista de compras del vehículo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Compra'
+ *       500:
+ *         description: Error al obtener las compras por vehículo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error al obtener las compras por vehículo
+ *                 error:
+ *                   type: string
+ *                   example: Detalles del error
+ */
 compraRouter.get('/byvehiculo/:idVehiculo', findOneByVehiculo);
 
 /**
@@ -242,6 +312,63 @@ compraRouter.post('/avisoCompraExitosa/:mail', avisoCompraExitosa);
  */
 compraRouter.post('/confirmarCompraAviso/:idCompra', confirmarCompraMail);
 
+
+/**
+ * @swagger
+ * /api/compras/confirmarCompra:
+ *   patch:
+ *     summary: Confirma una compra
+ *     tags: [Compra]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idCompra:
+ *                 type: string
+ *                 description: ID de la compra a confirmar
+ *     responses:
+ *       200:
+ *         description: Compra confirmada exitosamente
+ *       400:
+ *         description: ID de compra requerido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: El id de la compra es requerido
+ *                 data: 
+ *                  type: object
+ *                 example: {Compra}
+ *       404:
+ *         description: Compra no encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Compra no encontrada
+ *       500:
+ *         description: Error al confirmar la compra
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error al confirmar la compra
+ *                 error:
+ *                   type: string
+ *                   example: Detalles del error
+ */
 compraRouter.patch('/confirmarCompra/:idCompra', confirmarCompra);
 
 /**

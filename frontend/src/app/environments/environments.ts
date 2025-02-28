@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    mercadoPagoKey: 'APP_USR-93fac75c-0a4a-491b-8185-c38073362c89'
+    mercadoPagoKey: 'APP_USR-91059f97-35f1-49eb-b90a-bdf2ce1c3b0b'
 };

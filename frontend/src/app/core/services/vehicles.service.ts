@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Vehicle } from '../models/vehicles.interface.js';
 import { map } from 'rxjs/operators';
+import { AuthToken } from '../../functions/authToken.function.js';
 
 @Injectable({
   providedIn: 'root'
@@ -12,28 +13,34 @@ export class VehiclesService {
 
   constructor(private http:HttpClient) { }
   addVehicle(formData: FormData): Observable<Vehicle> {
-    return this.http.post<Vehicle>(this.apiUrl, formData);
+    const authToken = new AuthToken();
+    return this.http.post<Vehicle>(this.apiUrl, formData, { headers: authToken.getAuthHeaders()});
   }
   deleteVehicle(vehicle: Vehicle): Observable<Vehicle> {
-    return this.http.patch<Vehicle>(`${this.apiUrl}/${vehicle.id}`, {});
+    const authToken = new AuthToken();
+    return this.http.patch<Vehicle>(`${this.apiUrl}/${vehicle.id}`, {}, { headers: authToken.getAuthHeaders()});
   }
   editVehicle(vehicle: Vehicle): Observable<Vehicle> {
-    return this.http.put<Vehicle>(`${this.apiUrl}/${vehicle.id}`, vehicle);
+    const authToken = new AuthToken();
+    return this.http.put<Vehicle>(`${this.apiUrl}/${vehicle.id}`, vehicle, { headers: authToken.getAuthHeaders()});
   }
   getAllVehicle(): Observable<Vehicle[]> {
     return this.http.get<Vehicle[]>(this.apiUrl);
   }
 
   getAllVehicleByUser(id: string): Observable<Vehicle[]> {
-    return this.http.get<Vehicle[]>(`${this.apiUrl}/user/${id}`);
+    const authToken = new AuthToken();
+    return this.http.get<Vehicle[]>(`${this.apiUrl}/user/${id}`, { headers: authToken.getAuthHeaders() });
   }
 
   getOneVehicle(id: string): Observable<Vehicle> {
-    return this.http.get<Vehicle>(`${this.apiUrl}/${id}`);
+    const authToken = new AuthToken();
+    return this.http.get<Vehicle>(`${this.apiUrl}/${id}`, { headers: authToken.getAuthHeaders() });
   }
 
   getVehiclesByCategory(categoryId: string): Observable<Vehicle[]> {
-    return this.http.get<Vehicle[]>(`${this.apiUrl}/categoria/${categoryId}`);
+    const authToken = new AuthToken();
+    return this.http.get<Vehicle[]>(`${this.apiUrl}/categoria/${categoryId}`, { headers: authToken.getAuthHeaders() });
   }
   
 }

@@ -163,7 +163,8 @@ export class ProfileComponent implements OnInit {
       const updatedUser: User = { ...this.usuario, ...this.profileForm.value };
       this.userService.editUser(updatedUser).subscribe({
         next: () => {
-          this.authService.setUserSession(updatedUser);
+          const token = this.authService.getCurrentToken()
+          this.authService.setUserSession(updatedUser, token );
           this.profileForm.reset();
           this.ngOnInit();
           alertMethod('Actualizar perfil','Perfil actualizado correctamente', 'success');

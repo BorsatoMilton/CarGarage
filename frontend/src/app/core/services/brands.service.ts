@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Brand } from '../models/brands.interfaces.js';
+import { AuthToken } from '../../functions/authToken.function.js';
 
 @Injectable({
   providedIn: 'root'
@@ -11,22 +12,28 @@ export class BrandsService {
 
   constructor(private http:HttpClient) { }
   addBrand(brand: Brand): Observable<Brand> {
-    return this.http.post<Brand>(this.apiUrl, brand);
+    const authToken = new AuthToken(); 
+    return this.http.post<Brand>(this.apiUrl, brand, { headers: authToken.getAuthHeaders()});
   }
   deleteBrand(brand: Brand): Observable<Brand> {
-    return this.http.delete<Brand>(`${this.apiUrl}/${brand.id}`);
+    const authToken = new AuthToken();
+    return this.http.delete<Brand>(`${this.apiUrl}/${brand.id}`, { headers: authToken.getAuthHeaders()});
   }
   editBrand(brand: Brand): Observable<Brand> {
-    return this.http.put<Brand>(`${this.apiUrl}/${brand.id}`, brand);
+    const authToken = new AuthToken();
+    return this.http.put<Brand>(`${this.apiUrl}/${brand.id}`, brand, { headers: authToken.getAuthHeaders()});
   }
   getAllBrand(): Observable<Brand[]> {
-    return this.http.get<Brand[]>(this.apiUrl);
+    const authToken = new AuthToken();
+    return this.http.get<Brand[]>(this.apiUrl, { headers: authToken.getAuthHeaders()});
   }
   getOneBrand(id:string): Observable<Brand> {
-    return this.http.get<Brand>(`${this.apiUrl}/${id}`)
+    const authToken = new AuthToken();
+    return this.http.get<Brand>(`${this.apiUrl}/${id}`, { headers: authToken.getAuthHeaders()});
   }
   getOneBrandByName(name: string, excludeBrandId?: string): Observable<Brand> {
+    const authToken = new AuthToken();
     const params = new HttpParams().set('excludeBrandId', excludeBrandId || '');
-    return this.http.get<Brand>(`${this.apiUrl}/byname/${name}`, { params });
+    return this.http.get<Brand>(`${this.apiUrl}/byname/${name}`, { params, headers: authToken.getAuthHeaders() } );
   }
 }

@@ -16,13 +16,13 @@ import { PaymentStatusComponent } from './payment-status/payment-status.componen
 export const productRoutes: Routes = [
     {path: 'categories', component: CategoriesComponent, canActivate: [onlyAdmin]},
     {path: 'brands', component: BrandComponent, canActivate: [onlyAdmin]},
-    {path: 'vehicles', component: VehicleComponent, canActivate: [isLoggedInGuard]}, //Aca no se como se manejaria
+    {path: 'vehicles', component: VehicleComponent, canActivate: [isLoggedInGuard]},
     {path: 'compra/:id', component: CompraComponent, canActivate: [isLoggedInGuard]},
-    {path: 'confirm-purchase', component: ConfirmPurchaseComponent},
+    {path: 'confirm-purchase', component: ConfirmPurchaseComponent, canActivate: [isLoggedInGuard]},
     {path: 'rent-list', component:RentListComponent, canActivate: [isLoggedInGuard]},
     {path: 'rent/:id', component:RentComponent, canActivate: [isLoggedInGuard]},
-    {path: 'confirm-rent', component:ConfirmRentComponent},
+    {path: 'confirm-rent', component:ConfirmRentComponent, canActivate: [isLoggedInGuard]},
     {path: 'purchases', component: PurchasesComponent, canActivate: [isLoggedInGuard]},
-    { path: 'payment-status', component: PaymentStatusComponent }, 
+    { path: 'payment-status', component: PaymentStatusComponent }, //¿¿????
     {path: '', component: VehiclesCardComponent},
 ];

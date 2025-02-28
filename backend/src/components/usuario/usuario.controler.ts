@@ -4,6 +4,10 @@ import { orm } from "../../shared/db/orm.js";
 import { PasswordResetToken } from "./passwordResetToken.entity.js";
 import bcrypt from "bcrypt";
 import { Vehiculo } from "../vehiculo/vehiculo.entity.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config()
 
 const em = orm.em;
 
@@ -140,8 +144,13 @@ async function login(req: Request, res: Response) {
       if (!isMatch) {
         return res.status(401).json({ message: "Contraseña incorrecta" });
       }
+      const token = jwt.sign(
+        { id: usuarioEncontrado.id, rol: usuarioEncontrado.rol }, 
+        process.env.SECRECT_KEY_WEBTOKEN || 'your-secret-key', 
+        { expiresIn: '1h' } 
+      );
 
-      res.status(200).json(usuarioEncontrado);
+      res.status(200).json({ user: usuarioEncontrado, token: token });
     }
   } catch (error: any) {
     res.status(500).json({ message: error.message });

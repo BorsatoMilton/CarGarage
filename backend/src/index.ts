@@ -9,6 +9,7 @@ import { usuarioRouter } from './components/usuario/usuario.routes.js';
 import { tarjetaRouter } from './components/usuario/tarjeta.routes.js';
 import { calificacionRouter } from './components/usuario/calificacion.routes.js';
 import { compraRouter } from './components/compra/compra.routes.js';
+import { faqRouter } from './components/faq/faq.routes.js';
 import cors from 'cors';
 import { alquilerRouter } from './components/alquiler/alquiler.routes.js';
 import { recuperacionRouter } from './components/usuario/passwordResetToken.routes.js';
@@ -68,6 +69,7 @@ app.use('/api/recuperacion', recuperacionRouter);
 app.use('/api/alquiler', alquilerRouter);
 app.use('/uploads', express.static(path.resolve('src/uploads')));
 app.use('/api/mercadopago', mercadoPagoRouter);
+app.use('/api/faq', faqRouter);
 
 
 app.use((_, res) => {

@@ -8,6 +8,7 @@ import { onlyAdmin } from '../../guards/onlyAdmin.guard';
 import { isLoggedInGuard } from '../../guards/is-logged-in.guard.js';
 import { ProfileComponent } from './profile/profile.component';
 import { QualificationComponent } from './qualification/qualification.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const authRoutes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -16,6 +17,7 @@ export const authRoutes: Routes = [
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'users', component: UserComponent, canActivate: [onlyAdmin] },
     { path: 'profile', component: ProfileComponent, canActivate: [isLoggedInGuard] },
-    { path: 'rate/:usuarioAcalificar/:id', component: QualificationComponent }
+    { path: 'rate/:usuarioAcalificar/:id', component: QualificationComponent },
+    { path: 'dashboard', component: DashboardComponent, canActivate: [onlyAdmin] }
 
 ];

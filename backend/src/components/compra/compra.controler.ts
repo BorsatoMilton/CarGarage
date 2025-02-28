@@ -5,6 +5,7 @@ import { findOneByEmail } from "../usuario/usuario.controler.js";
 import { avisoCompraExitosaMail} from "../correo/correo.controller.js";
 import { Vehiculo } from "../vehiculo/vehiculo.entity.js";
 import { confirmarCompraMailCorreo } from "../correo/correo.controller.js";
+import { Usuario } from "../usuario/usuario.entity.js";
 
 
 const em = orm.em
@@ -81,6 +82,11 @@ async function findOneByVehiculo(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
     try {
+        const usuario = await em.findOne(Usuario, { id: req.body.sanitizedInput.usuario })
+        const vehiculo = await em.findOne(Vehiculo, { id: req.body.sanitizedInput.vehiculo })
+        if(!usuario || !vehiculo){
+            return res.status(404).json({ message: 'Usuario o vehiculo no encontrado' })
+        }
         const compraAdd = {
             ...req.body.sanitizedInput,
             estadoCompra: 'PENDIENTE'

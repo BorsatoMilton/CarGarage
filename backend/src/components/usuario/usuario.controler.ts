@@ -32,7 +32,7 @@ function sanitizeUsuarioInput(req: Request, res: Response, next: NextFunction) {
 
 async function findAll(req: Request, res: Response) {
   try {
-    const usuarios = await em.find(Usuario, {} );
+    const usuarios = await em.find(Usuario, {}, { populate: ['vehiculos.compra', 'compras', 'alquilerLocatario'] });
     res.status(200).json(usuarios);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -335,7 +335,7 @@ async function resetPassword(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const usuario = await em.findOne(Usuario, { id: id }, { populate: ['tarjetas', 'calificacionesUsuario', 'compras', 'alquilerLocatorio'] });
+    const usuario = await em.findOne(Usuario, { id: id }, { populate: ['tarjetas', 'calificacionesUsuario', 'compras', 'alquilerLocatario'] });
     if (!usuario) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     } else {

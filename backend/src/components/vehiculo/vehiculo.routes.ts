@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findAllByUser } from './vehiculo.controler.js';
+import { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findAllByUser, findAllByCategory } from './vehiculo.controler.js';
 import upload from '../../config/multer.upload.images.js';
 
 export const vehiculoRouter = Router();
@@ -175,6 +175,8 @@ vehiculoRouter.get('/:id', findOne);
  *                   example: Error al obtener los vehículos por usuario
  */
 vehiculoRouter.get('/user/:id', findAllByUser);
+
+vehiculoRouter.get('/categoria/:id', findAllByCategory);
 
 /**
  * @swagger

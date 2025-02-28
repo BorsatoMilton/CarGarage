@@ -54,7 +54,7 @@ export class Usuario extends BaseEntity {
     vehiculos = new Collection<Vehiculo>(this)
     
     @OneToMany(() => Alquiler, alquiler => alquiler.locatario, { nullable: false, cascade: [Cascade.REMOVE]   })
-    alquilerLocatorio= new Collection<Alquiler>(this)
+    alquilerLocatario= new Collection<Alquiler>(this)
 
 
   }

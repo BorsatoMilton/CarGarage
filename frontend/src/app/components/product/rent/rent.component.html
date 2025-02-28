@@ -165,7 +165,7 @@
         </div>
       </div>
 
-      <!-- Botones de Acción -->
+
       <div class="flex flex-col space-y-4">
         <button
           type="button"
@@ -194,6 +194,13 @@
   </div>
 </div>
 
+
+<app-similar-vehicles-carousel
+    *ngIf="vehiculo"
+    [categoryId]="vehiculo.categoria.id"
+    [excludeVehicleId]="vehiculo.id"
+    [isRent]="true"
+></app-similar-vehicles-carousel>
 
 
 

@@ -1,6 +1,6 @@
 .modalChanged {
   display: none;
-  position: fixed;
+  position:fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -9,6 +9,7 @@
   z-index: 1050;
   overflow-y: auto;
 }
+
 
 .modal-contentChanged {
   position: relative;
@@ -21,6 +22,37 @@
   transition: transform 0.3s ease-out;
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+button.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+  padding: 10px 20px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.btn-secondary:hover {
+  background-color: #5a6268;
+}
+button.btn-danger {
+  background-color: #d9534f;
+  border-color: #d43f3a;
+  color: white;
+  padding: 10px 20px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.btn-danger:hover {
+  background-color: #c9302c;
+}
+
+
 
 
 .close {

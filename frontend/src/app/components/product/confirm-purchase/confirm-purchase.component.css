@@ -3,28 +3,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  min-height: 80vh;
   background-color: #f4f4f4;
 
 }
 
 .vehicle-container {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-}
-
-.imagen-vehiculo {
-  width: 500px;
-  height: 500px;
-
-  object-fit: cover;
-  border-radius: 10px;
+max-width: 1200px;
+width: 100%;
+align-items: flex-start;
 }
 
 #imagen-vehiculo {
@@ -45,7 +39,8 @@
 .vehicle-details {
   display: flex;
   flex-direction: column;
-
+  flex: 1;
+  min-width: 300px;
   font-family: Arial, sans-serif;
   font-size: 16px;
   color: #333;
@@ -128,4 +123,58 @@
   border-radius: 5px;
   cursor: pointer;
   margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+  .vehicle-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #imagen-vehiculo {
+    max-width: 400px;
+    aspect-ratio: 16/9;
+  }
+  @media (max-width: 480px) {
+    .page-container {
+      padding: 10px;
+    }
+    #imagen-vehiculo {
+      max-width: 300px; /* Tamaño más pequeño para móviles */
+      aspect-ratio: 16/9; /* Cambia relación de aspecto si es necesario */
+    }
+    
+    .vehicle-container {
+      padding: 15px;
+    }
+    
+    .vehicle-details {
+      font-size: 0.9rem;
+    }
+    
+    .btn {
+      width: 100%; /* Botones full width en móvil */
+      margin-bottom: 10px;
+    }
+  }
+  .modal-contentChanged {
+    max-width: 95%; /* Más espacio en móviles */
+    padding: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    .modal-contentChanged button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    
+    .modal-contentChanged {
+      text-align: center;
+    }
+  }
+
+
+    
+  
+  
 }

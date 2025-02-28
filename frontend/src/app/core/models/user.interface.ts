@@ -10,7 +10,7 @@ export interface User {
     apellido: string;
     mail: string;
     compras: Compra[];
-    alquileres: Rent[];
+    alquilerLocatario: Rent[];
     vehiculos: Vehicle[];
     direccion: string;
     telefono: string;

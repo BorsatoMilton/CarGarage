@@ -29,42 +29,45 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.vehicleService.getAllVehicle().subscribe((data) => {
-      this.vehiculos = data;
-      this.totalVehiculos = data.length;
+      const vehiculosDisponibles = data.filter(vehiculo => !vehiculo.fechaBaja && !vehiculo.compra);
+      this.vehiculos = vehiculosDisponibles;
+      this.totalVehiculos = vehiculosDisponibles.length;
     });
 
     this.compraService.getAllCompra().subscribe((compras) => {
-      this.totalCompras = compras.length;
+      const comprasConfirmadas = compras.filter(compra => compra.estadoCompra === 'CONFIRMADA');
+      this.totalCompras = comprasConfirmadas.length;
       
-      this.totalIngresosPorCompras = compras.reduce((acc, compra) => {
+      this.totalIngresosPorCompras = comprasConfirmadas.reduce((acc, compra) => {
         const precio = compra.vehiculo.precioVenta ?? 0;
         return acc + (typeof precio === 'number' ? precio : 0);
       }, 0);
     });
 
-    /*this.usersService.getAllUser().subscribe((usuarios) => {
-      this.usuariosActivos = usuarios.map((usuario) => {
-        return {
-          nombre: usuario.nombre + ' ' + usuario.apellido,
-          cantCompras: usuario.compras.length,
-          cantAlquileres: usuario.alquileres.length,
-          cantVentas: (() => {
-            let cantidadVentas : number = 0;
-            for(let vehiculo of usuario.vehiculos) {
-              if(vehiculo.compra){
-                cantidadVentas++;
-              }
-            }
-            return cantidadVentas;
-          })()
-        };
-      })
-    })*/
+    this.usersService.getAllUser().subscribe((usuarios) => {
+      this.usuariosActivos = usuarios
+        .map((usuario) => {
+          const cantCompras = usuario.compras.length;
+          const cantAlquileres = usuario.alquilerLocatario.length;
+          const cantVentas = usuario.vehiculos.reduce((acc, vehiculo) => vehiculo.compra ? acc + 1 : acc, 0);
+          const total = cantCompras + cantAlquileres + cantVentas;
+          return {
+            nombre: usuario.nombre + ' ' + usuario.apellido,
+            cantCompras,
+            cantAlquileres,
+            cantVentas,
+            total
+          };
+        })
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 10); 
+    });
 
     this.rentService.getAllRents().subscribe((reservas) => {
-      this.totalReservas = reservas.length;
+      const reservasConfirmadas = reservas.filter(reserva => reserva.estadoAlquiler === 'CONFIRMADO');
+      this.totalReservas = reservasConfirmadas.length;
       
-      this.totalIngresosPorReserva = reservas.reduce((acc, reserva) => {
+      this.totalIngresosPorReserva = reservasConfirmadas.reduce((acc, reserva) => {
         const dias = this.calcularDias(reserva);
         const precioDiario = reserva.vehiculo?.precioAlquilerDiario ?? 0;
         return acc + (dias * (typeof precioDiario === 'number' ? precioDiario : 0));

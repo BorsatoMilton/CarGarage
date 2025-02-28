@@ -47,8 +47,8 @@
     </div>
     
     <div class="row">
-    <div class="card mt-4 col-md-12 border right-2 listados">
-      <div class="card-header">Lista de Vehículos</div>
+    <div class="card mt-4 col-md-6 border right-2 listados">
+      <div class="card-header">Lista de vehículos activos</div>
       <div class="card-body">
         <table class="table table-striped">
           <thead>
@@ -66,12 +66,13 @@
               <td>{{ vehiculo.precioVenta ? ('$' + vehiculo.precioVenta) : 'NO SE VENDE'}}</td>
               <td>{{ vehiculo.precioAlquilerDiario ? ('$' + vehiculo.precioAlquilerDiario) : 'NO SE ALQUILA' }}</td>
             </tr>
+            <p *ngIf="vehiculos.length === 0">No hay vehículos activos</p>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!--<div class="card mt-4 col-md-6 border left-2 listados">
+    <div class="card mt-4 col-md-6 border left-2 listados">
         <div class="card-header">Usuarios mas activos</div>
         <div class="card-body">
           <table class="table table-striped">
@@ -80,7 +81,7 @@
                 <th>Nombre</th>
                 <th>Ventas</th>
                 <th>Compras</th>
-                <th>Alquileresr</th>
+                <th>Alquileres</th>
               </tr>
             </thead>
             <tbody>
@@ -90,10 +91,11 @@
                 <td>{{ usuario.cantCompras}}</td>
                 <td>{{ usuario.cantAlquileres}}</td>
               </tr>
+              <p *ngIf="usuariosActivos.length === 0">No hay usuarios activos</p>
             </tbody>
           </table>
         </div>
-      </div>-->
+      </div>
     </div>
     
     

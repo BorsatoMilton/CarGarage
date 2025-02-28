@@ -41,7 +41,7 @@ export class ResetPasswordComponent implements OnInit {
       this.token = params['token'];
     });
     if (!this.token) {
-      alertMethod('Recuperación de contraseña','Ya se recupero la contraseña', 'error');
+      alertMethod('Recuperación de contraseña','Oops algo sucedio! Necesitas un token, tal vez ya utilizaste este link', 'error');
       this.router.navigate(['auth/login']);
     }else{
       this.passwordRecoveryService.validateToken(this.token).subscribe({

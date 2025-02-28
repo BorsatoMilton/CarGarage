@@ -21,22 +21,25 @@ export class AuthService {
    }
 
    login(user: string, password: string): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/login`, { user, password }).pipe(
-      map((usuario: User) => {
-        this.setUserSession(usuario);
-        return usuario;
+    return this.http.post<{ user: User, token: string }>(`${this.apiUrl}/login`, { user, password }).pipe(
+      map((response) => {
+        const { user, token } = response;
+        this.setUserSession(user, token);
+        return user;
       })
     );
   }
   
-  setUserSession(usuario: User): void {
+  setUserSession(usuario: User, token: string): void {
     sessionStorage.setItem('user', JSON.stringify(usuario));
+    sessionStorage.setItem('token', token);
     this.isAuthenticatedSubject.next(true); 
     this.currentUserSubject.next(usuario); 
   }
   
   logout(): void {
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     this.isAuthenticatedSubject.next(false);
     this.currentUserSubject.next(null); 
     this.router.navigate(['/auth/login']); 
@@ -51,4 +54,8 @@ export class AuthService {
     return userString ? JSON.parse(userString) : null;
   }
   
+  getCurrentToken(): string  {
+    const tokenString = sessionStorage.getItem('token');
+    return tokenString!;
+  }  
 }

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Rent } from '../models/rent.interface.js';
 import { User } from '../models/user.interface.js';
+import { AuthToken } from '../../functions/authToken.function.js';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,48 +14,59 @@ export class RentsService {
 
   constructor(private http: HttpClient) { }
   getAllRents(): Observable<Rent[]> {
-    return this.http.get<Rent[]>(this.url);
+    const authToken = new AuthToken();
+    return this.http.get<Rent[]>(this.url, { headers: authToken.getAuthHeaders() });
   }
 
   getRentsByVehicle(id: string): Observable<Rent[]> {
-    return this.http.get<Rent[]>(`${this.url}/vehiculo/${id}`);
+    const authToken = new AuthToken();
+    return this.http.get<Rent[]>(`${this.url}/vehiculo/${id}`, { headers: authToken.getAuthHeaders() });
   }
 
   getRentsByUser(id: string): Observable<Rent[]> {
-    return this.http.get<Rent[]>(`${this.url}/usuario/${id}`);
+    const authToken = new AuthToken();
+    return this.http.get<Rent[]>(`${this.url}/usuario/${id}`, { headers: authToken.getAuthHeaders() });
   }
 
   getOneRent(id: string): Observable<Rent> {
-    return this.http.get<Rent>(`${this.url}/${id}`);
+    const authToken = new AuthToken();
+    return this.http.get<Rent>(`${this.url}/${id}`, { headers: authToken.getAuthHeaders() });
   }
 
   addRent(rent:Rent): Observable<Rent> {
-    return this.http.post<Rent>(this.url, rent);
+    const authToken = new AuthToken();
+    return this.http.post<Rent>(this.url, rent, { headers: authToken.getAuthHeaders() });
   }
 
   confirmRent(idRent: string): Observable<Rent> {
-    return this.http.patch<Rent>(`${this.url}/confirmarAlquiler/${idRent}`, {});
+    const authToken = new AuthToken();
+    return this.http.patch<Rent>(`${this.url}/confirmarAlquiler/${idRent}`, {}, { headers: authToken.getAuthHeaders() });
   }
 
   deleteRent(rent: Rent): Observable<Rent> {
-    return this.http.delete<Rent>(`${this.url}/${rent.id}`);
+    const authToken = new AuthToken();
+    return this.http.delete<Rent>(`${this.url}/${rent.id}`, { headers: authToken.getAuthHeaders() });
   }
 
   cancelRent(rent: Rent): Observable<Rent> {
-    return this.http.put<Rent>(`${this.url}/cancelar/${rent.id}`, rent);
+    const authToken = new AuthToken();
+    return this.http.put<Rent>(`${this.url}/cancelar/${rent.id}`, rent, { headers: authToken.getAuthHeaders() });
   }
 
   confirmRentMail(usuario: User,  idAlquiler: string): Observable<Rent> {
-    return this.http.post<Rent>(`${this.url}/confirmarAlquilerMail/${idAlquiler}`,  usuario);
+    const authToken = new AuthToken();
+    return this.http.post<Rent>(`${this.url}/confirmarAlquilerMail/${idAlquiler}`,  usuario, { headers: authToken.getAuthHeaders() });
   }
 
   createPaymentPreference(items: any): Observable<any> {
+    const authToken = new AuthToken();
     return this.http.post<any>(
       'http://localhost:3000/api/mercadopago/create-preference', 
       items, 
       {
         headers: new HttpHeaders({
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...authToken.getAuthHeaders()
         })
       }
     );

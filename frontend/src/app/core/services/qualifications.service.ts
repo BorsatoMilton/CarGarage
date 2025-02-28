@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Qualification } from '../models/qualification.inteface.js';
-import { Observable, ObservedValueOf } from 'rxjs';
+import { Observable } from 'rxjs';
+import { AuthToken } from '../../functions/authToken.function.js';
 
 
 @Injectable({
@@ -14,7 +15,8 @@ export class QualificationsService {
   private apiUrl = 'http://localhost:3000/api/calificaciones';
 
   getQualificationsByUserId(userId: string): Observable<Qualification[]> {
-    return this.http.get<Qualification[]>(`${this.apiUrl}/${userId}`);
+    const authToken = new AuthToken();
+    return this.http.get<Qualification[]>(`${this.apiUrl}/${userId}`, { headers: authToken.getAuthHeaders() });
   }
 
   createQualification(qualification: Qualification) {

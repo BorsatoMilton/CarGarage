@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.interface.js';
+import { AuthToken } from '../../functions/authToken.function.js';
 
 @Injectable({
   providedIn: 'root',
@@ -15,21 +16,22 @@ export class UsuariosService {
     return this.http.post<User>(this.apiUrl, data);
   }
   deleteUser(user: User): Observable<User> {
-    return this.http.delete<User>(`${this.apiUrl}/${user.id}`);
+    const authToken = new AuthToken();
+    return this.http.delete<User>(`${this.apiUrl}/${user.id}`, { headers: authToken.getAuthHeaders() });
   }
   editUser(user: User): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${user.id}`, user);
+    const authToken = new AuthToken();
+    return this.http.put<User>(`${this.apiUrl}/${user.id}`, user, { headers: authToken.getAuthHeaders() });
   }
+
   getAllUser(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+    const authToken = new AuthToken();
+    return this.http.get<User[]>(this.apiUrl, { headers: authToken.getAuthHeaders() });
   }
+
   getOneUserByEmailOrUsername(usuario: string, mail: string, excludeUserId?: string): Observable<User> {
     const params = new HttpParams().set('excludeUserId', excludeUserId || '');
     return this.http.get<User>(`${this.apiUrl}/${usuario}/${mail}`, { params });
-  }
-
-  getOneUserByEmail(mail: String): Observable<User | null> {
-    return this.http.get<User>(`${this.apiUrl}/bymail/${mail}`);
   }
 
   getOneUserById(id: string): Observable<User> {
@@ -37,22 +39,25 @@ export class UsuariosService {
   }
 
   changePassword(id: string, data: any): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${id}`, data);
+    const authToken = new AuthToken();
+    return this.http.patch<User>(`${this.apiUrl}/${id}`, data, { headers: authToken.getAuthHeaders() });
   }
 
   validatePassword(id: string, password: string): Observable<boolean> {
+    const authToken = new AuthToken();
     return this.http.post<boolean>(`${this.apiUrl}/validate/${id}`, {
       password,
-    });
+    }, { headers: authToken.getAuthHeaders()});
   }
 
   checkUsername(username: string): Observable<boolean> {
-    console.log(`${this.apiUrl}/checkusername/${username}`);
-    return this.http.get<boolean>(`${this.apiUrl}/checkusername/${username}`);
+    const authToken = new AuthToken();
+    return this.http.get<boolean>(`${this.apiUrl}/checkusername/${username}`, { headers: authToken.getAuthHeaders() });
   }
 
   checkEmail(email: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/checkemail/${email}`);
+    const authToken = new AuthToken();
+    return this.http.get<boolean>(`${this.apiUrl}/checkemail/${email}`, { headers: authToken.getAuthHeaders() });
   }
 
   resetPassword(token: string, newPassword: string): Observable<any> {

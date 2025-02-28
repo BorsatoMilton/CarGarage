@@ -1,0 +1,129 @@
+/* Estilos base */
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    color: #333;
+}
+
+.footer-10 {
+    background: #00050a;
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tarjetas de contacto */
+.con {
+    background: #2e2e2e;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #3a506b;
+}
+
+.con:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.icon {
+    width: 55px;
+    height: 55px;
+    background: #3a506b;
+    border-radius: 50%;
+    margin: 0 auto 1.2rem;
+}
+
+.icon span {
+    color: #ecf0f1;
+    font-size: 1.6rem;
+}
+
+.text span {
+    color: #ecf0f1;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+}
+
+/* Formulario de suscripción */
+.footer-heading {
+    color: #ecf0f1;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.subscribe-form .form-control {
+    height: 46px;
+    border: 1px solid #3a506b;
+    background: #34495e;
+    color: #ecf0f1;
+    font-size: 0.9rem;
+}
+
+.subscribe-form .form-control::placeholder {
+    color: #95a5a6;
+}
+
+.submit {
+    background: #3498db !important;
+    color: #ecf0f1 !important;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.submit:hover {
+    background: #2980b9 !important;
+}
+
+.subheading {
+    color: #bdc3c7;
+    font-size: 0.85rem;
+    margin-top: 0.8rem;
+    display: block;
+}
+
+/* Efectos y detalles */
+.con-1 .icon { background: #3498db; }
+.con-2 .icon { background: #3498db; }
+.con-3 .icon { background: #3498db; }
+
+.ion-ios-call:before,
+.ion-ios-mail:before,
+.ion-ios-pin:before {
+    font-size: 2.5rem;
+    color: #c82333; /* Rojo mecánico */
+    vertical-align: middle;
+}
+
+.footer-10:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -25%;
+    width: 150%;
+    height: 80px;
+    background: #3498db;
+    transform: rotate(-2deg);
+    z-index: -1;
+    opacity: 0.1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-10 {
+        padding: 2.5rem 0;
+    }
+    
+    .con {
+        margin-bottom: 1.5rem;
+    }
+    
+    .col-md-5 {
+        margin-top: 2.5rem;
+    }
+    
+    .footer-heading {
+        font-size: 1.3rem;
+    }
+}

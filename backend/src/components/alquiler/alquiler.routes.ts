@@ -136,7 +136,7 @@ alquilerRouter.get("/",verificarToken, verificarRol('ADMIN') ,findAll);
 alquilerRouter.get("/:id",verificarToken ,findOne);
 /**
  * @swagger
- * /api/alquiler/vehiculo/{id}:
+ * /api/alquiler/vehiculo/:id:
  *   get:
  *     summary: Obtiene una lista de alquileres por ID de vehículo
  *     tags: [Alquiler]
@@ -173,7 +173,7 @@ alquilerRouter.get("/:id",verificarToken ,findOne);
 alquilerRouter.get("/vehiculo/:id",verificarToken ,findAllByVehicle);
 /**
  * @swagger
- * /api/alquiler/usuario/{id}:
+ * /api/alquiler/usuario/:id:
  *   get:
  *     summary: Obtiene una lista de alquileres por ID de usuario
  *     tags: [Alquiler]
@@ -245,10 +245,17 @@ alquilerRouter.get("/usuario/:id", verificarToken,findAllByUser);
 alquilerRouter.post("/", verificarToken, sanitizeAlquilerInput, add);
 /**
  * @swagger
- * /api/alquiler/confirmarAlquiler:
+ * /api/alquiler/confirmarAlquilerMail/{id}:
  *   post:
  *     summary: Confirma un alquiler enviando un correo electrónico
  *     tags: [Alquiler]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del alquiler
  *     requestBody:
  *       required: true
  *       content:
@@ -256,21 +263,52 @@ alquilerRouter.post("/", verificarToken, sanitizeAlquilerInput, add);
  *           schema:
  *             type: object
  *             properties:
- *               id:
- *                 type: string
- *                 description: ID del alquiler
- *               destinatario:
- *                 type: string
- *                 description: Correo electrónico del destinatario
+ *               usuario:
+ *                 type: object
+ *                 description: Información del usuario
  *     responses:
- *       200:
+ *       201:
  *         description: Alquiler confirmado
- */
-alquilerRouter.post("/confirmarAlquilerMail/:id",verificarToken ,confirmarAlquilerMail);
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Alquiler confirmado
+ *       404:
+ *         description: Alquiler no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Alquiler no encontrado
+ *       500:
+ *         description: Error al confirmar el alquiler
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error al confirmar el alquiler
+ *                 error:
+ *                   type: string
+ *                   example: Detalles del error
+ */ 
+alquilerRouter.post("/confirmarAlquilerMail/:id",verificarToken ,confirmarAlquilerMail); //falta
 
 /**
  * @swagger
- * /api/alquiler/{id}:
+ * /api/alquiler/:id:
  *   patch:
  *     summary: Actualiza un alquiler existente
  *     tags: [Alquiler]
@@ -294,19 +332,6 @@ alquilerRouter.post("/confirmarAlquilerMail/:id",verificarToken ,confirmarAlquil
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Alquiler'
- *       404:
- *         description: Alquiler no encontrado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Alquiler no encontrado
- *                 error:
- *                   type: string
- *                   example: Detalles del error
  *       500:
  *         description: Error al actualizar el alquiler
  *         content:
@@ -321,10 +346,10 @@ alquilerRouter.post("/confirmarAlquilerMail/:id",verificarToken ,confirmarAlquil
  *                   type: string
  *                   example: Detalles del error
  */
-alquilerRouter.patch("/confirmarAlquiler/:id", verificarToken,confirmRent); //Acomodar el swagger
+alquilerRouter.patch("/confirmarAlquiler/:id", verificarToken,confirmRent); 
 /**
  * @swagger
- * /api/alquiler/cancelar/{id}:
+ * /api/alquiler/cancelar/:id:
  *   put:
  *     summary: Cancela un alquiler existente
  *     tags: [Alquiler]
@@ -364,7 +389,6 @@ alquilerRouter.patch("/confirmarAlquiler/:id", verificarToken,confirmRent); //Ac
  */
 alquilerRouter.put("/cancelar/:id",verificarToken ,cancelRent);
 
-// alquilerRouter.patch('/:id', sanitizeAlquilerInput, update); Que hacemos con esto?
 
 /**
  * @swagger

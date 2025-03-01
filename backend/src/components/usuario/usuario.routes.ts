@@ -11,7 +11,6 @@ import {
   remove, 
   sanitizeUsuarioInput, 
   login, 
-  findOneByEmailDestinatario,
   resetPassword,
   validatePassword
 } from "./usuario.controler.js";
@@ -66,7 +65,7 @@ export const usuarioRouter = Router();
 
 /**
  * @swagger
- * /api/usuario:
+ * /api/usuarios:
  *   get:
  *     summary: Obtiene una lista de todos los usuarios
  *     tags: [Usuario]
@@ -98,7 +97,7 @@ usuarioRouter.get("/",verificarToken, verificarRol('ADMIN') ,findAll);
 // Endpoint GET /:id
 /**
  * @swagger
- * /api/usuario/{id}:
+ * /api/usuarios/{id}:
  *   get:
  *     summary: Obtiene un usuario por su ID
  *     tags: [Usuario]
@@ -142,10 +141,9 @@ usuarioRouter.get("/",verificarToken, verificarRol('ADMIN') ,findAll);
  */
 usuarioRouter.get("/:id",verificarToken ,findOneById);
 
-// Endpoint GET /checkusername/:username
 /**
  * @swagger
- * /api/usuario/checkusername/{username}:
+ * /api/usuarios/checkusername/:username:
  *   get:
  *     summary: Verifica disponibilidad de nombre de usuario
  *     tags: [Usuario]
@@ -183,10 +181,10 @@ usuarioRouter.get("/:id",verificarToken ,findOneById);
  */
 usuarioRouter.get("/checkusername/:username",verificarToken ,checkUsername);
 
-// Endpoint GET /checkemail/:email
+
 /**
  * @swagger
- * /api/usuario/checkemail/{email}:
+ * /api/usuarios/checkemail/{email}:
  *   get:
  *     summary: Verifica disponibilidad de correo electrónico
  *     tags: [Usuario]
@@ -228,7 +226,7 @@ usuarioRouter.get("/checkemail/:email",verificarToken ,checkEmail);
 // Endpoint GET /:user/:mail
 /**
  * @swagger
- * /api/usuario/{user}/{mail}:
+ * /api/usuarios/{user}/{mail}:
  *   get:
  *     summary: Obtiene usuario por nombre de usuario o correo
  *     tags: [Usuario]
@@ -280,7 +278,7 @@ usuarioRouter.get("/:user/:mail", findOneByEmailOrUsername);
 
 /**
  * @swagger
- * /api/usuario/reset:
+ * /api/usuarios/reset:
  *   post:
  *     summary: Restablecer la contraseña del usuario
  *     tags: [Usuario]
@@ -353,7 +351,7 @@ usuarioRouter.post("/reset", resetPassword)
 
 /**
  * @swagger
- * /api/usuario/login:
+ * /api/usuarios/login:
  *   post:
  *     summary: Inicio de sesión de usuario
  *     tags: [Usuario]
@@ -417,10 +415,9 @@ usuarioRouter.post("/reset", resetPassword)
  */
 usuarioRouter.post("/login", login);
 
-// Endpoint POST /
 /**
  * @swagger
- * /api/usuario:
+ * /api/usuarios:
  *   post:
  *     summary: Crea un nuevo usuario
  *     tags: [Usuario]
@@ -463,10 +460,10 @@ usuarioRouter.post("/login", login);
  */
 usuarioRouter.post("/", sanitizeUsuarioInput, add);
 
-// Endpoint POST /validate/:id
+
 /** 
  * @swagger
- * /api/usuario/validate-password/{id}:
+ * /api/usuarios/validate/:id:
  *   post:
  *     summary: Validar la contraseña del usuario
  *     tags: [Usuario]
@@ -521,7 +518,7 @@ usuarioRouter.post("/validate/:id", verificarToken ,validatePassword)
 
 /**
  * @swagger
- * /api/usuario/{id}:
+ * /api/usuarios/{id}:
  *   put:
  *     summary: Actualiza un usuario
  *     tags: [Usuario]
@@ -578,7 +575,7 @@ usuarioRouter.put("/:id", verificarToken,sanitizeUsuarioInput, update);
 
 /**
  * @swagger
- * /api/usuario/{id}:
+ * /api/usuarios/{id}:
  *   patch:
  *     summary: Restablece contraseña sin token
  *     tags: [Usuario]
@@ -627,7 +624,7 @@ usuarioRouter.patch("/:id", verificarToken,sanitizeUsuarioInput, resetPasswordWi
 
 /**
  * @swagger
- * /api/usuario/{id}:
+ * /api/usuarios/{id}:
  *   delete:
  *     summary: Elimina un usuario existente
  *     tags: [Usuario]

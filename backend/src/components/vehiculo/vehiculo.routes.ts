@@ -144,7 +144,7 @@ vehiculoRouter.get('/:id', verificarToken,findOne);
 
 /**
  * @swagger
- * /api/vehiculos/user/{id}:
+ * /api/vehiculos/user/:id:
  *   get:
  *     summary: Obtiene una lista de vehículos por ID de usuario
  *     tags: [Vehiculo]

@@ -11,7 +11,6 @@ function sanitizeAlquilerInput(req: Request, res: Response, next: NextFunction) 
       const fechaInicio = new Date(req.body.fechaHoraInicioAlquiler);
       const fechaDevolucion = new Date(req.body.fechaHoraDevolucion);
 
-      // Validación de fechas
       if (isNaN(fechaInicio.getTime())) throw new Error('Fecha de inicio inválida');
       if (isNaN(fechaDevolucion.getTime())) throw new Error('Fecha de devolución inválida');
 
@@ -103,21 +102,6 @@ async function add(req: Request, res: Response) {
   }
 }
 
-async function update(req: Request, res: Response) {
-  try {
-    const id = req.params.id;
-    const alquilerAactualizar = await em.findOne(Alquiler, { id }, { populate: ['locatario', 'vehiculo', 'vehiculo.propietario'] });
-    if (!alquilerAactualizar) {
-      return res.status(404).json({ message: 'Alquiler no encontrado' });
-    }
-    em.assign(alquilerAactualizar, req.body.sanitizedInput);
-    await em.flush();
-    return res.status(200).json({ message: 'Alquiler Actualizado', data: alquilerAactualizar });
-  } catch (error: any) {
-    return res.status(500).json({ message: 'Error al actualizar el alquiler', error: error.message });
-  }  
-}
-
 async function confirmarAlquilerMail(req: Request, res: Response) {
   try {
     const usuario = req.body; 
@@ -205,4 +189,4 @@ async function envioMailPropietarioAviso(id:string){
 
 
 }
-export { sanitizeAlquilerInput, findAll, findAllByVehicle, findAllByUser, findOne, getOneById, add, update, remove,confirmRent, confirmarAlquilerMail, cancelRent }
+export { sanitizeAlquilerInput, findAll, findAllByVehicle, findAllByUser, findOne, getOneById, add, remove,confirmRent, confirmarAlquilerMail, cancelRent }

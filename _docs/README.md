@@ -7,8 +7,8 @@ Año cursado: 2024
 
 ## Índice
 - [Descripción General](#descripción-general)
+- [Proposal](./proposal.md)
 - [Endpoints](./endpoints.md)
-- [Autenticación](./autenticacion.md)
 - [Ejemplos de Uso](./ejemplos.md)
 - [Diagramas y Esquemas](./diagramas.md)
 

@@ -18,6 +18,10 @@ console.log('Lista de usuarios:', users);
 });
 ```
 
+Respuestas HTTP:
+- 200: Lista de usuarios obtenida exitosamente.
+- 500: Error al obtener los usuarios.
+
 ## Endpoint: api/usuarios/:usuario/:mail
 
 Metodo: GET
@@ -38,25 +42,13 @@ usuariosService.getOneUserByEmailOrUsername('juanp', 'juan@example.com').subscri
 console.log('Usuario encontrado:', user);
 });
 ```
-## Endpoint: api/usuarios/bymail/:mail
 
-Metodo: GET
+Respuestas HTTP:
+- 200: Usuario encontrado.
+- 404: Usuario no encontrado.
+- 500: Error al obtener el usuario.
 
-Descripción:
-Obtiene la información de un usuario utilizando su correo electrónico.
 
-Parámetros:
-- mail (String): Correo electrónico del usuario.
-
-Respuesta:
-Retorna un Observable<User | null> con la información del usuario o null si no se encuentra.
-
-Ejemplo de Uso:
-```typescript
-usuariosService.getOneUserByEmail('juan@example.com').subscribe(user => {
-console.log('Usuario encontrado:', user);
-});
-```
 ## Endpoint: api/usuarios/:id
 
 Metodo: GET
@@ -80,6 +72,11 @@ console.log('Usuario encontrado:', user);
 });
 ```
 
+Respuestas HTTP:
+- 200: Usuario encontrado.
+- 404: Usuario no encontrado.
+- 500: Error al obtener el usuario.
+
 ## Endpoint: api/usuarios/checkusername/:username
 
 METODO: GET
@@ -99,7 +96,11 @@ console.log('¿Nombre de usuario disponible?', isAvailable);
 });
 ```
 
-# Endpoint: api/usuarios/checkmail/:mail
+Respuestas HTTP:
+- 200: Resultado de disponibilidad.
+- 500: Error en la verificación.
+
+## Endpoint: api/usuarios/checkemail/:mail
 
 METODO: GET
 Descripción:
@@ -109,7 +110,7 @@ Parámetros:
 - mail (string): Correo electrónico a verificar.
 
 Respuesta:
-Retorna un Observable<boolean> que indica si el correo electrónico está disponible (true) o no (false).ç
+Retorna un Observable<boolean> que indica si el correo electrónico está disponible (true) o no (false).
 
 Ejemplo de Uso:
 ```typescript
@@ -117,6 +118,10 @@ usuariosService.checkEmail('nuevo@example.com').subscribe(isAvailable => {
 console.log('¿Correo electrónico disponible?', isAvailable);
 });
 ```
+
+Respuestas HTTP:
+- 200: Resultado de disponibilidad.
+- 500: Error en la verificación.
 
 ## Endpoint: api/usuarios/validate/:id
 
@@ -139,6 +144,11 @@ console.log('¿Contraseña válida?', isValid);
 });
 ```
 
+Respuestas HTTP:
+- 200: Contraseña validada exitosamente.
+- 404: Usuario no encontrado.
+- 500: Error interno del servidor.
+
 ## Endpoint: api/usuarios/login
 
 Metodo: POST
@@ -158,6 +168,12 @@ authService.login('juanp', 'miContraseña123').subscribe((usuario: User) => {
 console.log('Usuario autenticado:', usuario);
 });
 ```
+
+Respuestas HTTP:
+- 200: Login exitoso.
+- 401: Credenciales inválidas.
+- 404: Usuario no encontrado.
+- 500: Error al iniciar sesión.
 
 ## Endpoint: api/usuarios
 
@@ -181,8 +197,12 @@ formData.append('nombre', 'Juan Pérez');
 usuariosService.addUser(formData).subscribe(user => {
 console.log('Usuario creado:', user);
 });
-
 ```
+
+Respuestas HTTP:
+- 201: Usuario creado.
+- 400: Error de validación o usuario ya existente.
+- 500: Error al crear el usuario.
 
 ## Endpoint: api/usuarios/reset
 
@@ -201,9 +221,15 @@ Retorna un Observable<any> con la confirmación del restablecimiento de la contr
 Ejemplo de Uso:
 ```typescript
 recuperacionService.resetPassword('token123', 'nuevaContraseña123').subscribe(response => {
-        console.log('Contraseña restablecida:', response);
+console.log('Contraseña restablecida:', response);
 });
 ```
+
+Respuestas HTTP:
+- 200: Contraseña actualizada exitosamente.
+- 400: Solicitud incorrecta (contraseña corta o token inválido/expirado).
+- 404: Usuario no encontrado.
+- 500: Error interno del servidor.
 
 ## Endpoint: api/usuarios/:id
 
@@ -225,6 +251,11 @@ usuariosService.editUser(updatedUser).subscribe(user => {
 console.log('Usuario actualizado:', user);
 });
 ```
+
+Respuestas HTTP:
+- 200: Usuario actualizado.
+- 404: Usuario no encontrado.
+- 500: Error en el servidor.
 
 ## Endpoint: api/usuarios/:id
 
@@ -248,6 +279,11 @@ console.log('Contraseña actualizada:', user);
 });
 ```
 
+Respuestas HTTP:
+- 200: Contraseña actualizada.
+- 404: Usuario no encontrado.
+- 500: Error al actualizar la contraseña.
+
 ## Enpoint: api/usuarios/:id
 
 Metodo: DELETE
@@ -269,7 +305,14 @@ console.log('Usuario eliminado:', user);
 });
 ```
 
+Respuestas HTTP:
+- 200: Usuario eliminado con éxito.
+- 404: Usuario no encontrado.
+- 500: Error al eliminar el usuario.
+
+
 ------------------------------------------------ BRANDS ------------------------------------------------------
+
 
 
 ## Endpoint: api/brands
@@ -292,6 +335,10 @@ brandService.getAllBrand().subscribe(brands => {
 });
 ```
 
+Respuestas HTTP:
+- 200: Lista de marcas obtenida exitosamente.
+- 500: Error al obtener las marcas.
+
 ## Endpoint: api/brands/:id
 
 Metodo: GET
@@ -311,6 +358,11 @@ brandService.getOneBrand('1').subscribe(brand => {
         console.log('Marca encontrada:', brand);
 });
 ```
+
+Respuestas HTTP:
+- 200: Marca encontrada.
+- 404: Marca no encontrada.
+- 500: Error al obtener la marca.
 
 ## Endpoint: api/brands/byname/:name
 
@@ -332,6 +384,10 @@ brandService.getOneBrandByName('Marca Ejemplo').subscribe(brand => {
 });
 ```
 
+Respuestas HTTP:
+- 200: Marca encontrada.
+- 404: Marca no encontrada.
+- 500: Error al obtener la marca.
 
 ## Endpoint: api/brands
 
@@ -354,6 +410,11 @@ brandService.addBrand(newBrand).subscribe(brand => {
 });
 ```
 
+Respuestas HTTP:
+- 201: Marca creada.
+- 400: La marca ya existe.
+- 500: Error al crear la marca.
+
 ## Endpoint: api/brands/:id
 
 Metodo: PUT
@@ -374,6 +435,11 @@ brandService.editBrand(updatedBrand).subscribe(brand => {
         console.log('Marca actualizada:', brand);
 });
 ```
+
+Respuestas HTTP:
+- 200: Marca actualizada.
+- 404: Marca no encontrada.
+- 500: Error al actualizar la marca.
 
 ## Endpoint: api/brands/:id
 
@@ -396,6 +462,10 @@ brandService.deleteBrand(brandToDelete).subscribe(brand => {
 });
 ```
 
+Respuestas HTTP:
+- 200: Marca eliminada.
+- 404: Marca no encontrada.
+- 500: Error al eliminar la marca.
 ------------------------------------------------------------- CATEGORIES ------------------------------------------------------------
 
 ## Endpoint: api/categories
@@ -419,6 +489,11 @@ categoryService.addCategory(newCategory).subscribe(category => {
 });
 ```
 
+Respuestas HTTP:
+- 201: Categoría creada.
+- 400: La categoría ya existe.
+- 500: Error al crear la categoría.
+
 ## Endpoint: api/categories
 
 Metodo: GET
@@ -438,6 +513,10 @@ categoryService.getAllCategories().subscribe(categories => {
         console.log('Lista de categorías:', categories);
 });
 ```
+
+Respuestas HTTP:
+- 200: Lista de categorías obtenida exitosamente.
+- 500: Error al obtener las categorías.
 
 ## Endpoint: api/categories/:id
 
@@ -459,6 +538,11 @@ categoryService.getOneCategory('1').subscribe(category => {
 });
 ```
 
+Respuestas HTTP:
+- 200: Categoría encontrada.
+- 404: Categoría no encontrada.
+- 500: Error al obtener la categoría.
+
 ## Endpoint: api/categories/byname/:name
 
 Metodo: GET
@@ -478,6 +562,12 @@ categoryService.getOneCategoryByName('Categoría Ejemplo').subscribe(category =>
         console.log('Categoría encontrada:', category);
 });
 ```
+
+Respuestas HTTP:
+- 200: Categoría encontrada.
+- 404: Categoría no encontrada.
+- 500: Error al obtener la categoría.
+
 ## Endpoint: api/categories/:id
 
 Metodo: PUT
@@ -499,6 +589,11 @@ categoryService.editCategory(updatedCategory).subscribe(category => {
 });
 ```
 
+Respuestas HTTP:
+- 200: Categoría actualizada.
+- 404: Categoría no encontrada.
+- 500: Error al actualizar la categoría.
+
 ## Endpoint: api/categories/:id
 
 Metodo: DELETE
@@ -519,154 +614,218 @@ categoryService.deleteCategory({ id: '1' }).subscribe(category => {
 });
 ```
 
+Respuestas HTTP:
+- 200: Categoría eliminada.
+- 404: Categoría no encontrada.
+- 500: Error al eliminar la categoría.
+
 -------------------------------------------------------- COMPRA -------------------------------------------------
 
-## Endpoint: api/compras
+## Endpoint: api/categories
+
+Metodo: POST
+
+Descripción:
+Agrega una nueva categoría al sistema.
+
+Parámetros:
+- category (Category): Objeto que contiene la información de la categoría a registrar.
+
+Respuesta:
+Retorna un Observable<Category> con la categoría creada.
+
+Ejemplo de Uso:
+```typescript
+const newCategory = { nombre: 'Nueva Categoría' };
+categoryService.addCategory(newCategory).subscribe(category => {
+        console.log('Categoría creada:', category);
+});
+```
+
+Respuestas HTTP:
+- 201: Categoría creada.
+- 400: La categoría ya existe.
+- 500: Error al crear la categoría.
+
+## Endpoint: api/categories
 
 Metodo: GET
 
 Descripción:
-Obtiene una lista de todas las compras registradas en el sistema.
+Obtiene una lista de todas las categorías registradas en el sistema.
 
 Parámetros:
 - No requiere parámetros.
 
 Respuesta:
-Retorna un Observable<Compra[]> con la lista de compras.
+Retorna un Observable<Category[]> con la lista de categorías.
 
 Ejemplo de Uso:
 ```typescript
-compraService.getAllCompra().subscribe(compras => {
-        console.log('Lista de compras:', compras);
+categoryService.getAllCategories().subscribe(categories => {
+        console.log('Lista de categorías:', categories);
 });
 ```
 
-## Endpoint: api/compras/byuser/:userId
+Respuestas HTTP:
+- 200: Lista de categorías obtenida exitosamente.
+- 500: Error al obtener las categorías.
+
+## Endpoint: api/categories/:id
 
 Metodo: GET
 
 Descripción:
-Obtiene una lista de todas las compras realizadas por un usuario específico.
+Obtiene la información de una categoría a partir de su identificador.
 
 Parámetros:
-- userId (string): Identificador único del usuario.
+- id (string): Identificador único de la categoría.
 
 Respuesta:
-Retorna un Observable<Compra[]> con la lista de compras del usuario.
+Retorna un Observable<Category> con la información de la categoría.
 
 Ejemplo de Uso:
 ```typescript
-compraService.getAllCompraByUser('userId123').subscribe(compras => {
-        console.log('Lista de compras del usuario:', compras);
+categoryService.getOneCategory('1').subscribe(category => {
+        console.log('Categoría encontrada:', category);
 });
 ```
 
-## Endpoint: api/compras
+Respuestas HTTP:
+- 200: Categoría encontrada.
+- 404: Categoría no encontrada.
+- 500: Error al obtener la categoría.
 
-Metodo: POST
+## Endpoint: api/categories/byname/:name
+
+Metodo: GET
 
 Descripción:
-Agrega una nueva compra al sistema.
+Obtiene la información de una categoría utilizando su nombre.
 
 Parámetros:
-- idComprador (string): Identificador único del comprador.
-- idVehiculo (string): Identificador único del vehículo.
-- fechaCancelacion (Date | null): Fecha de cancelación de la compra (opcional, puede ser null).
+- name (string): Nombre de la categoría.
 
 Respuesta:
-Retorna un Observable<Compra> con la compra creada.
+Retorna un Observable<Category> con la información de la categoría.
 
 Ejemplo de Uso:
 ```typescript
-compraService.addCompra('idComprador123', 'idVehiculo456').subscribe(compra => {
-        console.log('Compra creada:', compra);
+categoryService.getOneCategoryByName('Categoría Ejemplo').subscribe(category => {
+        console.log('Categoría encontrada:', category);
 });
 ```
 
-## Endpoint: api/compras/confirmarCompra
+Respuestas HTTP:
+- 200: Categoría encontrada.
+- 404: Categoría no encontrada.
+- 500: Error al obtener la categoría.
 
-Metodo: POST
+## Endpoint: api/categories/:id
+
+Metodo: PUT
 
 Descripción:
-Confirma una compra enviando un correo electrónico al destinatario.
+Actualiza la información de una categoría existente.
 
 Parámetros:
-- mail (string): Correo electrónico del destinatario.
-- id (string): Identificador único de la compra.
+- category (Category): Objeto que contiene los datos actualizados de la categoría, incluyendo su id.
 
 Respuesta:
-Retorna un Observable<Compra> con la confirmación de la compra.
+Retorna un Observable<Category> con la información actualizada de la categoría.
 
 Ejemplo de Uso:
 ```typescript
-compraService.confirmarCompra('correo@example.com', 'compraId123').subscribe(compra => {
-        console.log('Compra confirmada:', compra);
+const updatedCategory = { id: '1', nombre: 'Categoría Actualizada' };
+categoryService.editCategory(updatedCategory).subscribe(category => {
+        console.log('Categoría actualizada:', category);
 });
 ```
 
-## Endpoint: api/compras/avisoCompraExitosa
+Respuestas HTTP:
+- 200: Categoría actualizada.
+- 404: Categoría no encontrada.
+- 500: Error al actualizar la categoría.
 
-Metodo: POST
+## Endpoint: api/categories/:id
 
-Descripción:
-Envía un aviso de compra exitosa al correo electrónico del destinatario.
-
-Parámetros:
-- mail (string): Correo electrónico del destinatario.
-
-Respuesta:
-Retorna un Observable<Compra> con la confirmación del aviso.
-
-Ejemplo de Uso:
-```typescript
-compraService.avisoCompraExitosa('correo@example.com').subscribe(compra => {
-        console.log('Aviso de compra exitosa enviado:', compra);
-});
-```
-
-## Endpoint: api/compras/cancelarCompra
 
 Metodo: DELETE
 
 Descripción:
-Cancela una compra existente.
+Elimina una categoría del sistema.
 
 Parámetros:
-- compra (Compra): Objeto de compra que debe incluir el id de la compra a cancelar.
+- id (string): Identificador único de la categoría a eliminar.
 
 Respuesta:
-Retorna un Observable<Compra> con la confirmación de cancelación (usualmente la compra cancelada).
+Retorna un Observable<Category> con la confirmación de eliminación (usualmente la categoría eliminada).
 
 Ejemplo de Uso:
 ```typescript
-const compraACancelar = { id: 'compraId123', ... };
-compraService.cancelarCompra(compraACancelar).subscribe(compra => {
-        console.log('Compra cancelada:', compra);
+categoryService.deleteCategory({ id: '1' }).subscribe(category => {
+        console.log('Categoría eliminada:', category);
 });
 ```
 
+Respuestas HTTP:
+- 200: Categoría eliminada.
+- 404: Categoría no encontrada.
+- 500: Error al eliminar la categoría
+
 -------------------------------------------------------- RECUPERACIÓN DE CONTRASEÑA -------------------------------------------------
+
+
 
 ## Endpoint: api/recuperacion
 
 Metodo: POST
 
 Descripción:
-Envía un correo electrónico de recuperación de contraseña al destinatario.
+Crea un token de restablecimiento de contraseña y envía un correo electrónico.
 
 Parámetros:
-- destinatario (string): Correo electrónico del destinatario.
+- email (string): Correo electrónico del usuario.
 
 Respuesta:
-Retorna un Observable<any> con la confirmación del envío del correo.
+Retorna un Observable<any> con la confirmación del envío del correo y la creación del token.
 
 Ejemplo de Uso:
 ```typescript
-recuperacionService.sendRecoveryEmail('correo@example.com').subscribe(response => {
-        console.log('Correo de recuperación enviado:', response);
+recuperacionService.createPasswordResetToken('correo@example.com').subscribe(response => {
+        console.log('Token de restablecimiento creado y correo enviado:', response);
 });
 ```
 
+Respuestas HTTP:
+- 201: Token creado y correo enviado.
+- 404: Usuario no encontrado.
+- 500: Error al crear el token.
+
+## Endpoint: api/recuperacion/:token
+
+Metodo: GET
+
+Descripción:
+Valida un token de restablecimiento de contraseña.
+
+Parámetros:
+- token (string): Token de restablecimiento de contraseña.
+
+Respuesta:
+Retorna un Observable<any> con la validación del token.
+
+Ejemplo de Uso:
+```typescript
+recuperacionService.validatePasswordResetToken('token123').subscribe(response => {
+        console.log('Token válido:', response);
+});
+```
+
+Respuestas HTTP:
+- 200: Token válido.
+- 400: Token expirado.
+- 404: Token no encontrado.
 
 -------------------------------------------------------- CALIFICACIONES -------------------------------------------------
 
@@ -690,6 +849,9 @@ qualificationsService.getQualificationsByUserId('userId123').subscribe(calificac
 });
 ```
 
+Respuestas HTTP:
+- 200: Lista de calificaciones obtenida exitosamente.
+- 500: Error al obtener las calificaciones.
 
 ## Endpoint: api/calificaciones/:userId/:rentId
 
@@ -712,6 +874,10 @@ qualificationsService.checkQualificationExists('userId123', 'rentId456').subscri
 });
 ```
 
+Respuestas HTTP:
+- 200: Calificación encontrada.
+- 500: Error al obtener la calificación.
+
 ## Endpoint: api/calificaciones
 
 Metodo: POST
@@ -733,10 +899,15 @@ qualificationsService.createQualification(newQualification).subscribe(qualificat
 });
 ```
 
+Respuestas HTTP:
+- 201: Calificación creada.
+- 400: Error de validación o calificación ya existente.
+- 500: Error al crear la calificación.
 
 -------------------------------------------------------- ALQUILER -------------------------------------------------
 
-## Endpoint: api/rents
+
+## Endpoint: api/alquiler
 
 Metodo: GET
 
@@ -756,7 +927,11 @@ rentService.getAllRents().subscribe(rents => {
 });
 ```
 
-## Endpoint: api/rents/vehiculo/:id
+Respuestas HTTP:
+- 200: Lista de alquileres obtenida exitosamente.
+- 500: Error al obtener los alquileres.
+
+## Endpoint: api/alquiler/vehiculo/:id
 
 Metodo: GET
 
@@ -776,7 +951,11 @@ rentService.getRentsByVehicle('vehiculoId123').subscribe(rents => {
 });
 ```
 
-## Endpoint: api/rents/usuario/:id
+Respuestas HTTP:
+- 200: Lista de alquileres del vehículo obtenida exitosamente.
+- 500: Error al obtener los alquileres por vehículo.
+
+## Endpoint: api/alquiler/usuario/:id
 
 Metodo: GET
 
@@ -796,7 +975,11 @@ rentService.getRentsByUser('usuarioId123').subscribe(rents => {
 });
 ```
 
-## Endpoint: api/rents/:id
+Respuestas HTTP:
+- 200: Lista de alquileres del usuario obtenida exitosamente.
+- 500: Error al obtener los alquileres por usuario.
+
+## Endpoint: api/alquiler/:id
 
 Metodo: GET
 
@@ -816,7 +999,12 @@ rentService.getOneRent('alquilerId123').subscribe(rent => {
 });
 ```
 
-## Endpoint: api/rents
+Respuestas HTTP:
+- 200: Alquiler encontrado.
+- 404: Alquiler no encontrado.
+- 500: Error al obtener el alquiler.
+
+## Endpoint: api/alquiler
 
 Metodo: POST
 
@@ -837,7 +1025,11 @@ rentService.addRent(newRent).subscribe(rent => {
 });
 ```
 
-## Endpoint: api/rents/confirmarAlquiler
+Respuestas HTTP:
+- 201: Alquiler creado.
+- 500: Error al crear el alquiler.
+
+## Endpoint: api/alquiler/confirmarAlquiler
 
 Metodo: POST
 
@@ -857,28 +1049,38 @@ rentService.confirmRent('correo@example.com', 123).subscribe(rent => {
         console.log('Alquiler confirmado:', rent);
 });
 ```
-## Endpoint: api/rents/:id
 
-Metodo: PUT
+Respuestas HTTP:
+- 200: Alquiler confirmado.
+- 500: Error en el servidor.
+
+## Endpoint: api/alquiler/confirmarAlquilerMail/{id}
+
+Metodo: POST
 
 Descripción:
-Actualiza la información de un alquiler existente.
+Confirma un alquiler enviando un correo electrónico al destinatario.
 
 Parámetros:
-- rent (Rent): Objeto que contiene los datos actualizados del alquiler, incluyendo su id.
+- id (string): Identificador único del alquiler.
 
 Respuesta:
-Retorna un Observable<Rent> con la información actualizada del alquiler.
+Retorna un Observable<Rent> con la confirmación del alquiler.
 
 Ejemplo de Uso:
-```typescript
-const updatedRent = { id: 'alquilerId123', vehiculoId: 'vehiculoId123', usuarioId: 'usuarioId123', fechaInicio: '2023-01-01', fechaFin: '2023-01-15' };
-rentService.editRent(updatedRent).subscribe(rent => {
-        console.log('Alquiler actualizado:', rent);
+typescript
+rentService.confirmRent('correo@example.com', 123).subscribe(rent => {
+        console.log('Alquiler confirmado:', rent);
 });
-```
 
-## Endpoint: api/rents/cancelar/:id
+
+Respuestas HTTP:
+- 201: Alquiler confirmado.
+- 404: Alquiler no encontrado.
+- 500: Error al confirmar el alquiler.
+
+
+## Endpoint: api/alquiler/cancelar/:id
 
 Metodo: PUT
 
@@ -899,7 +1101,11 @@ rentService.cancelRent(rentToCancel).subscribe(rent => {
 });
 ```
 
-## Endpoint: api/rents/:id
+Respuestas HTTP:
+- 200: Alquiler cancelado.
+- 500: Error al cancelar el alquiler.
+
+## Endpoint: api/alquiler/:id
 
 Metodo: DELETE
 
@@ -920,140 +1126,15 @@ rentService.deleteRent(rentToDelete).subscribe(rent => {
 });
 ```
 
+Respuestas HTTP:
+- 200: Alquiler eliminado.
+- 404: Alquiler no encontrado.
+- 500: Error al eliminar el alquiler.
 
-
-
-
--------------------------------------------------------- ROLES -------------------------------------------------
-
-
-## Endpoint: api/roles
-
-Metodo: GET
-
-Descripción:
-Obtiene una lista de todos los roles registrados en el sistema.
-
-Parámetros:
-No requiere parámetros.
-
-Respuesta:
-Retorna un Observable<Rol[]> con la lista de roles.
-
-Ejemplo de Uso:
-```typescript
-rolService.getAllRol().subscribe(roles => {
-        console.log('Lista de roles:', roles);
-});
-```
-
-## Endpoint: api/roles/byname/:name
-
-Metodo: GET
-
-Descripción:
-Obtiene la información de un rol utilizando su nombre.
-
-Parámetros:
-- name (string): Nombre del rol.
-
-Respuesta:
-Retorna un Observable<Rol> con la información del rol.
-
-Ejemplo de Uso:
-```typescript
-rolService.getOneRolByName('Admin').subscribe(rol => {
-        console.log('Rol encontrado:', rol);
-});
-```
-
-## Endpoint: api/roles/:id
-
-Metodo: GET
-
-Descripción:
-Obtiene la información de un rol a partir de su identificador.
-
-Parámetros:
-- id (string): Identificador único del rol.
-
-Respuesta:
-Retorna un Observable<Rol> con la información del rol.
-
-Ejemplo de Uso:
-```typescript
-rolService.getOneRol('rolId123').subscribe(rol => {
-        console.log('Rol encontrado:', rol);
-});
-```
-
-## Endpoint: api/roles
-
-Metodo: POST
-
-Descripción:
-Agrega un nuevo rol al sistema.
-
-Parámetros:
-- rolData (Rol): Objeto que contiene la información del rol a registrar.
-
-Respuesta:
-Retorna un Observable<Rol> con el rol creado.
-
-Ejemplo de Uso:
-```typescript
-const newRol = { nombre: 'Nuevo Rol' };
-rolService.addRol(newRol).subscribe(rol => {
-        console.log('Rol creado:', rol);
-});
-```
-
-## Endpoint: api/roles/:id
-
-Metodo: PUT
-
-Descripción:
-Actualiza la información de un rol existente.
-
-Parámetros:
-- rol (Rol): Objeto que contiene los datos actualizados del rol, incluyendo su id.
-
-Respuesta:
-Retorna un Observable<Rol> con la información actualizada del rol.
-
-Ejemplo de Uso:
-```typescript
-const updatedRol = { id: 'rolId123', nombre: 'Rol Actualizado' };
-rolService.editRol(updatedRol).subscribe(rol => {
-        console.log('Rol actualizado:', rol);
-});
-```
-
-## Endpoint: api/roles/:id
-
-Metodo: DELETE
-
-Descripción:
-Elimina un rol del sistema.
-
-Parámetros:
-- rol (Rol): Objeto de rol que debe incluir el id del rol a eliminar.
-
-Respuesta:
-Retorna un Observable<Rol> con la confirmación de eliminación (usualmente el rol eliminado).
-
-Ejemplo de Uso:
-```typescript
-const rolToDelete = { id: 'rolId123', nombre: 'Rol a Eliminar' };
-rolService.deleteRol(rolToDelete).subscribe(rol => {
-        console.log('Rol eliminado:', rol);
-});
-```
 
 -------------------------------------------------------- VEHÍCULOS -------------------------------------------------
 
-
-## Endpoint: api/vehicles
+## Endpoint: api/vehiculos
 
 Metodo: GET
 
@@ -1073,7 +1154,11 @@ vehicleService.getAllVehicle().subscribe(vehicles => {
 });
 ```
 
-## Endpoint: api/vehicles/user/:id
+Respuestas HTTP:
+- 200: Lista de vehículos obtenida exitosamente.
+- 500: Error al obtener los vehículos.
+
+## Endpoint: api/vehiculos/user/:id
 
 Metodo: GET
 
@@ -1093,7 +1178,11 @@ vehicleService.getAllVehicleByUser('userId123').subscribe(vehicles => {
 });
 ```
 
-## Endpoint: api/vehicles/:id
+Respuestas HTTP:
+- 200: Lista de vehículos del usuario obtenida exitosamente.
+- 500: Error al obtener los vehículos del usuario.
+
+## Endpoint: api/vehiculos/:id
 
 Metodo: GET
 
@@ -1113,7 +1202,36 @@ vehicleService.getOneVehicle('vehicleId123').subscribe(vehicle => {
 });
 ```
 
-## Endpoint: api/vehicles
+Respuestas HTTP:
+- 200: Vehículo encontrado.
+- 404: Vehículo no encontrado.
+- 500: Error al obtener el vehículo.
+
+## Endpoint: api/vehiculos/categoria/{id}
+
+Metodo: GET
+
+Descripción:
+Obtiene una lista de vehículos por ID de categoría.
+
+Parámetros:
+- id (string): Identificador único de la categoría.
+
+Respuesta:
+Retorna un Observable<Vehicle[]> con la lista de vehículos por categoría.
+
+Ejemplo de Uso:
+```typescript
+vehicleService.getVehiclesByCategory('categoriaId123').subscribe(vehicles => {
+        console.log('Lista de vehículos por categoría:', vehicles);
+});
+```
+
+Respuestas HTTP:
+- 200: Lista de vehículos por categoría obtenida exitosamente.
+- 500: Error al obtener los vehículos por categoría.
+
+## Endpoint: api/vehiculos
 
 Metodo: POST
 
@@ -1137,7 +1255,12 @@ vehicleService.addVehicle(formData).subscribe(vehicle => {
 });
 ```
 
-## Endpoint: api/vehicles/:id
+Respuestas HTTP:
+- 201: Vehículo creado.
+- 400: Ids de marca, categoría o propietario no válidos.
+- 500: Error al crear el vehículo.
+
+## Endpoint: api/vehiculos/:id
 
 Metodo: PUT
 
@@ -1158,7 +1281,38 @@ vehicleService.editVehicle(updatedVehicle).subscribe(vehicle => {
 });
 ```
 
-## Endpoint: api/vehicles/:id
+Respuestas HTTP:
+- 200: Vehículo actualizado.
+- 404: Vehículo no encontrado.
+- 500: Error al actualizar el vehículo.
+
+## Endpoint: api/vehiculos/:id
+
+Metodo: PATCH
+
+Descripción:
+Baja lógica de un vehículo existente.
+
+Parámetros:
+- id (string): Identificador único del vehículo.
+
+Respuesta:
+Retorna un Observable<Vehicle> con la confirmación de la baja lógica del vehículo.
+
+Ejemplo de Uso:
+```typescript
+const vehicleToDeactivate = { id: 'vehicleId123', ... };
+vehicleService.deactivateVehicle(vehicleToDeactivate).subscribe(vehicle => {
+        console.log('Vehículo dado de baja:', vehicle);
+});
+```
+
+Respuestas HTTP:
+- 200: Vehículo dado de baja.
+- 404: Vehículo no encontrado.
+- 500: Error al dar de baja el vehículo.
+
+## Endpoint: api/vehiculos/:id
 
 Metodo: DELETE
 
@@ -1178,3 +1332,404 @@ vehicleService.deleteVehicle(vehicleToDelete).subscribe(vehicle => {
         console.log('Vehículo eliminado:', vehicle);
 });
 ```
+
+Respuestas HTTP:
+- 200: Vehículo eliminado.
+- 404: Vehículo no encontrado.
+- 500: Error al eliminar el vehículo.
+
+
+-------------------------------------------------------- COMPRAS -------------------------------------------------
+
+## Endpoint: api/compras
+
+Metodo: GET
+
+Descripción:
+Obtiene todas las compras registradas en el sistema.
+
+Parámetros:
+No requiere parámetros.
+
+Respuesta:
+Retorna un Observable<Compra[]> con la lista de compras.
+
+Ejemplo de Uso:
+```typescript
+compraService.getAllCompras().subscribe(compras => {
+        console.log('Lista de compras:', compras);
+});
+```
+
+Respuestas HTTP:
+- 200: Lista de compras obtenida exitosamente.
+- 500: Error al obtener las compras.
+
+## Endpoint: api/compras/byuser/:id
+
+Metodo: GET
+
+Descripción:
+Obtiene compras por ID de usuario.
+
+Parámetros:
+- id (string): Identificador único del usuario.
+
+Respuesta:
+Retorna un Observable<Compra[]> con la lista de compras del usuario.
+
+Ejemplo de Uso:
+```typescript
+compraService.getComprasByUser('userId123').subscribe(compras => {
+        console.log('Lista de compras del usuario:', compras);
+});
+```
+
+Respuestas HTTP:
+- 200: Lista de compras del usuario obtenida exitosamente.
+- 500: Error al obtener las compras por usuario.
+
+## Endpoint: api/compras/byvehiculo/:idVehiculo
+
+Metodo: GET
+
+Descripción:
+Obtiene compras por ID de vehículo.
+
+Parámetros:
+- idVehiculo (string): Identificador único del vehículo.
+
+Respuesta:
+Retorna un Observable<Compra[]> con la lista de compras del vehículo.
+
+Ejemplo de Uso:
+```typescript
+compraService.getComprasByVehiculo('vehiculoId123').subscribe(compras => {
+        console.log('Lista de compras del vehículo:', compras);
+});
+```
+
+Respuestas HTTP:
+- 200: Lista de compras del vehículo obtenida exitosamente.
+- 500: Error al obtener las compras por vehículo.
+
+## Endpoint: api/compras
+
+Metodo: POST
+
+Descripción:
+Crea una nueva compra.
+
+Parámetros:
+- compra (Compra): Objeto que contiene la información de la compra a registrar.
+
+Respuesta:
+Retorna un Observable<Compra> con la compra creada.
+
+Ejemplo de Uso:
+```typescript
+const newCompra = { vehiculoId: 'vehiculoId123', usuarioId: 'usuarioId123', fechaCompra: '2023-01-01' };
+compraService.addCompra(newCompra).subscribe(compra => {
+        console.log('Compra creada:', compra);
+});
+```
+
+Respuestas HTTP:
+- 201: Compra creada exitosamente.
+- 500: Error al crear la compra.
+
+## Endpoint: api/compras/avisoCompraExitosa
+
+Metodo: POST
+
+Descripción:
+Envía aviso de compra exitosa.
+
+Parámetros:
+- mail (string): Correo electrónico del destinatario.
+
+Respuesta:
+Retorna un Observable con la confirmación del aviso enviado.
+
+Ejemplo de Uso:
+```typescript
+compraService.avisoCompraExitosa('correo@example.com').subscribe(response => {
+        console.log('Aviso enviado:', response);
+});
+```
+
+Respuestas HTTP:
+- 200: Aviso enviado correctamente.
+- 500: Error al enviar el aviso.
+
+## Endpoint: api/compras/confirmarCompraAviso/:idCompra
+
+Metodo: POST
+
+Descripción:
+Confirma una compra enviando un correo electrónico.
+
+Parámetros:
+- idCompra (string): Identificador único de la compra.
+
+Respuesta:
+Retorna un Observable con la confirmación de la compra.
+
+Ejemplo de Uso:
+```typescript
+compraService.confirmarCompraMail('compraId123').subscribe(response => {
+        console.log('Compra confirmada:', response);
+});
+```
+
+Respuestas HTTP:
+- 200: Compra confirmada correctamente.
+- 500: Error al confirmar la compra.
+
+## Endpoint: api/compras/confirmarCompra
+
+Metodo: PATCH
+
+Descripción:
+Confirma una compra.
+
+Parámetros:
+- idCompra (string): Identificador único de la compra.
+
+Respuesta:
+Retorna un Observable<Compra> con la compra confirmada.
+
+Ejemplo de Uso:
+```typescript
+const compraToConfirm = { idCompra: 'compraId123' };
+compraService.confirmarCompra(compraToConfirm).subscribe(compra => {
+        console.log('Compra confirmada:', compra);
+});
+```
+
+Respuestas HTTP:
+- 200: Compra confirmada exitosamente.
+- 400: ID de compra requerido.
+- 404: Compra no encontrada.
+- 500: Error al confirmar la compra.
+
+## Endpoint: api/compras/cancelarCompra
+
+Metodo: PATCH
+
+Descripción:
+Cancela una compra.
+
+Parámetros:
+- id (string): Identificador único de la compra.
+
+Respuesta:
+Retorna un Observable<Compra> con la compra cancelada.
+
+Ejemplo de Uso:
+```typescript
+const compraToCancel = { id: 'compraId123' };
+compraService.cancelarCompra(compraToCancel).subscribe(compra => {
+        console.log('Compra cancelada:', compra);
+});
+```
+
+Respuestas HTTP:
+- 200: Compra cancelada exitosamente.
+- 400: ID de compra requerido.
+- 404: Compra no encontrada.
+- 500: Error al cancelar la compra.
+
+## Endpoint: api/compras/:id 
+
+Metodo: DELETE
+
+Descripción:
+Elimina una compra del sistema.
+
+Parámetros:
+- id (string): Identificador único de la compra.
+
+Respuesta:
+Retorna un Observable<Compra> con la confirmación de eliminación (usualmente la compra eliminada).
+
+Ejemplo de Uso:
+```typescript
+const compraToDelete = { id: 'compraId123' };
+compraService.deleteCompra(compraToDelete).subscribe(compra => {
+        console.log('Compra eliminada:', compra);
+});
+```
+
+Respuestas HTTP:
+- 200: Compra eliminada exitosamente.
+- 404: Compra no encontrada.
+- 500: Error al eliminar la compra.
+
+
+-------------------------------------------------------- FAQs -------------------------------------------------
+
+## Endpoint: api/faqs
+
+Metodo: GET
+
+Descripción:
+Obtiene todas las FAQs registradas en el sistema.
+
+Parámetros:
+No requiere parámetros.
+
+Respuesta:
+Retorna un Observable<FAQ[]> con la lista de FAQs.
+
+Ejemplo de Uso:
+```typescript
+faqService.getAllFaqs().subscribe(faqs => {
+        console.log('Lista de FAQs:', faqs);
+});
+```
+
+Respuestas HTTP:
+- 200: Lista de FAQs obtenida exitosamente.
+- 500: Error al obtener las FAQs.
+
+## Endpoint: api/faqs
+
+Metodo: POST
+
+Descripción:
+Agrega una nueva FAQ al sistema.
+
+Parámetros:
+- faq (FAQ): Objeto que contiene la información de la FAQ a registrar.
+
+Respuesta:
+Retorna un Observable<FAQ> con la FAQ creada.
+
+Ejemplo de Uso:
+```typescript
+const newFaq = { pregunta: '¿Cómo puedo registrarme?', respuesta: 'Puedes registrarte haciendo clic en el botón de registro.' };
+faqService.addFaq(newFaq).subscribe(faq => {
+        console.log('FAQ agregada:', faq);
+});
+```
+
+Respuestas HTTP:
+- 200: FAQ agregada exitosamente.
+- 500: Error al agregar la FAQ.
+
+## Endpoint: api/faqs/{id}
+
+Metodo: PUT
+
+Descripción:
+Actualiza una FAQ existente.
+
+Parámetros:
+- id (string): Identificador único de la FAQ.
+- faq (FAQ): Objeto que contiene los datos actualizados de la FAQ.
+
+Respuesta:
+Retorna un Observable<FAQ> con la FAQ actualizada.
+
+Ejemplo de Uso:
+```typescript
+const updatedFaq = { id: 'faqId123', pregunta: '¿Cómo puedo cambiar mi contraseña?', respuesta: 'Puedes cambiar tu contraseña desde la configuración de tu cuenta.' };
+faqService.updateFaq(updatedFaq).subscribe(faq => {
+        console.log('FAQ actualizada:', faq);
+});
+```
+
+Respuestas HTTP:
+- 200: FAQ actualizada exitosamente.
+- 500: Error al actualizar la FAQ.
+
+## Endpoint: api/faqs/{id}
+
+Metodo: DELETE
+
+Descripción:
+Elimina una FAQ del sistema.
+
+Parámetros:
+- id (string): Identificador único de la FAQ.
+
+Respuesta:
+Retorna un Observable<FAQ> con la confirmación de eliminación (usualmente la FAQ eliminada).
+
+Ejemplo de Uso:
+```typescript
+const faqToDelete = { id: 'faqId123' };
+faqService.deleteFaq(faqToDelete).subscribe(faq => {
+        console.log('FAQ eliminada:', faq);
+});
+```
+
+Respuestas HTTP:
+- 200: FAQ eliminada exitosamente.
+- 500: Error al eliminar la FAQ.
+
+
+-------------------------------------------------------- MERCADOPAGO -------------------------------------------------
+
+## Endpoint: api/mercadopago/create-preference
+
+Metodo: POST
+
+Descripción:
+Crea una preferencia de pago en Mercado Pago.
+
+Parámetros:
+- paymentPreference (PaymentPreference): Objeto que contiene la información de la preferencia de pago.
+
+Respuesta:
+Retorna un Observable con el ID de la preferencia de pago creada.
+
+Ejemplo de Uso:
+```typescript
+const paymentPreference = {
+    items: [
+        { title: 'Producto 1', unit_price: 100, quantity: 1 }
+    ],
+    external_reference: 'ref123',
+    rentalData: { ... }
+};
+mercadoPagoService.createPreference(paymentPreference).subscribe(response => {
+        console.log('Preferencia de pago creada:', response.id);
+});
+```
+
+Respuestas HTTP:
+- 201: Preferencia de pago creada.
+- 500: Error interno del servidor.
+
+## Endpoint: api/mercadopago/webhook
+
+Metodo: POST
+
+Descripción:
+Webhook para recibir notificaciones de Mercado Pago.
+
+Parámetros:
+- type (string): Tipo de notificación.
+- data (object): Objeto que contiene el ID del pago.
+
+Respuesta:
+Retorna un Observable con la confirmación de recepción de la notificación.
+
+Ejemplo de Uso:
+```typescript
+const notification = {
+    type: 'payment',
+    data: { id: 'paymentId123' }
+};
+mercadoPagoService.webhook(notification).subscribe(response => {
+        console.log('Notificación recibida:', response);
+});
+```
+
+Respuestas HTTP:
+- 200: Notificación recibida correctamente.
+- 404: Pago no encontrado.
+- 409: El pago ya fue procesado.
+- 500: Error interno del servidor.

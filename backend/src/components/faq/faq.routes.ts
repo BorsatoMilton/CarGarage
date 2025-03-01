@@ -7,6 +7,31 @@ export const faqRouter = Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     FAQ:
+ *       type: object
+ *       required:
+ *         - pregunta
+ *         - respuesta
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Identificador único de la FAQ
+ *         pregunta:
+ *           type: string
+ *           description: La pregunta de la FAQ
+ *         respuesta:
+ *           type: string
+ *           description: La respuesta de la FAQ
+ *       example:
+ *         id: faqId123
+ *         pregunta: ¿Cómo puedo registrarme?
+ *         respuesta: Puedes registrarte haciendo clic en el botón de registro.
+ */
+
+/**
+ * @swagger
  * /api/faqs:
  *   get:
  *     summary: Obtiene todas las FAQs

@@ -72,38 +72,6 @@ export const calificacionRouter = Router();
  */
 
 calificacionRouter.get('/:idUsuario',verificarToken, findAllByUser);
-/**
- * @swagger
- * /api/calificaciones/{id}:
- *   get:
- *     summary: Obtiene una calificación por ID
- *     tags: [Calificaciones]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID de la calificación
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Calificación encontrada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/Calificacion'
- *       500:
- *         description: Error interno del servidor
- *         message:
- *             type: string
- *             example: Error al obtener la calificación
-*/
-calificacionRouter.get('/:id',verificarToken ,findOne); //NO SE USA CREO
 
 /**
  * @swagger

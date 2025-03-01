@@ -110,7 +110,7 @@ compraRouter.get('/byuser/:userId', verificarToken, findAllByUser);
 
 /**
  * @swagger
- * /api/compras/byvehiculo/{idVehiculo}:
+ * /api/compras/byvehiculo/:idVehiculo:
  *   get:
  *     summary: Obtiene compras por ID de vehículo
  *     tags: [Compra]
@@ -244,7 +244,7 @@ compraRouter.post('/avisoCompraExitosa/:mail',verificarToken ,avisoCompraExitosa
 
 /**
  * @swagger
- * /api/compras/confirmarCompra:
+ * /api/compras/confirmarCompraAviso:
  *   post:
  *     summary: Confirma una compra
  *     tags: [Compra]

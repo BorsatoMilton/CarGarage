@@ -29,7 +29,7 @@ export const recuperacionRouter = Router();
 
 /**
  * @swagger
- * /api/password-reset-token:
+ * /api/recuperacion:
  *   post:
  *     summary: Crea un token de restablecimiento de contraseña y envía un correo electrónico
  *     tags: [PasswordResetToken]
@@ -90,7 +90,7 @@ recuperacionRouter.post('/', addToken);
 
 /**
  * @swagger
- * /api/password-reset-token/{token}:
+ * /api/recuperacion/:token:
  *   get:
  *     summary: Valida un token de restablecimiento de contraseña
  *     tags: [PasswordResetToken]

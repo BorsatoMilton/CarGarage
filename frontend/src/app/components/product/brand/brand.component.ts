@@ -60,6 +60,7 @@ closeModal(modalId: string){
     backdrop.parentNode?.removeChild(backdrop);
   }
   this.selectedBrand= null;
+  this.brandForm.reset();
 }
 
 loadBrand(): void {

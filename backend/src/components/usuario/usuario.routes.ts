@@ -15,6 +15,7 @@ import {
   resetPassword,
   validatePassword
 } from "./usuario.controler.js";
+import { verificarRol, verificarToken } from "../../middleware/authMiddleware.js";
 
 export const usuarioRouter = Router();
 
@@ -92,7 +93,7 @@ export const usuarioRouter = Router();
  *                   type: string
  *                   example: Detalles del error
  */
-usuarioRouter.get("/", findAll);
+usuarioRouter.get("/",verificarToken, verificarRol('ADMIN') ,findAll);
 
 // Endpoint GET /:id
 /**
@@ -139,7 +140,7 @@ usuarioRouter.get("/", findAll);
  *                   type: string
  *                   example: Detalles del error
  */
-usuarioRouter.get("/:id", findOneById);
+usuarioRouter.get("/:id",verificarToken ,findOneById);
 
 // Endpoint GET /checkusername/:username
 /**
@@ -180,7 +181,7 @@ usuarioRouter.get("/:id", findOneById);
  *                   type: string
  *                   example: Detalles del error
  */
-usuarioRouter.get("/checkusername/:username", checkUsername);
+usuarioRouter.get("/checkusername/:username",verificarToken ,checkUsername);
 
 // Endpoint GET /checkemail/:email
 /**
@@ -221,54 +222,8 @@ usuarioRouter.get("/checkusername/:username", checkUsername);
  *                   type: string
  *                   example: Detalles del error
  */
-usuarioRouter.get("/checkemail/:email", checkEmail);
+usuarioRouter.get("/checkemail/:email",verificarToken ,checkEmail);
 
-// Endpoint GET /bymail/:mail
-/**
- * @swagger
- * /api/usuario/bymail/{mail}:
- *   get:
- *     summary: Obtiene usuario por correo electrónico
- *     tags: [Usuario]
- *     parameters:
- *       - in: path
- *         name: mail
- *         schema:
- *           type: string
- *         required: true
- *         description: Correo electrónico
- *     responses:
- *       200:
- *         description: Usuario encontrado
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Usuario'
- *       404:
- *         description: Usuario no encontrado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Usuario no encontrado
- *       500:
- *         description: Error al obtener el usuario
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Error al obtener el usuario
- *                 error:
- *                   type: string
- *                   example: Detalles del error
- */
-usuarioRouter.get("/bymail/:mail", findOneByEmailDestinatario);
 
 // Endpoint GET /:user/:mail
 /**
@@ -562,7 +517,7 @@ usuarioRouter.post("/", sanitizeUsuarioInput, add);
  *                   type: string
  *                   description: Mensaje de error
 */
-usuarioRouter.post("/validate/:id", validatePassword)
+usuarioRouter.post("/validate/:id", verificarToken ,validatePassword)
 
 /**
  * @swagger
@@ -619,7 +574,7 @@ usuarioRouter.post("/validate/:id", validatePassword)
  *                   type: string
  *                   example: Detalles del error
  */
-usuarioRouter.put("/:id", sanitizeUsuarioInput, update);
+usuarioRouter.put("/:id", verificarToken,sanitizeUsuarioInput, update);
 
 /**
  * @swagger
@@ -668,7 +623,7 @@ usuarioRouter.put("/:id", sanitizeUsuarioInput, update);
  *                   type: string
  *                   example: Error al actualizar la contraseña
  */
-usuarioRouter.patch("/:id", sanitizeUsuarioInput, resetPasswordWithoutToken);
+usuarioRouter.patch("/:id", verificarToken,sanitizeUsuarioInput, resetPasswordWithoutToken);
 
 /**
  * @swagger
@@ -711,4 +666,4 @@ usuarioRouter.patch("/:id", sanitizeUsuarioInput, resetPasswordWithoutToken);
  *                   type: string
  *                   example: Error al eliminar el usuario
 */
-usuarioRouter.delete("/:id", remove);
+usuarioRouter.delete("/:id", verificarToken, verificarRol('ADMIN'),remove);

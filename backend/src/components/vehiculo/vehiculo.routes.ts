@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { sanitizeVehiculoInput, findAll, findOne, add, update, remove, logicRemove, findAllByUser, findAllByCategory } from './vehiculo.controler.js';
 import upload from '../../config/multer.upload.images.js';
+import { verificarToken } from '../../middleware/authMiddleware.js';
 
 export const vehiculoRouter = Router();
 
@@ -139,7 +140,7 @@ vehiculoRouter.get('/', findAll);
  *                   type: string
  *                   example: Error al obtener el vehículo
  */
-vehiculoRouter.get('/:id', findOne);
+vehiculoRouter.get('/:id', verificarToken,findOne);
 
 /**
  * @swagger
@@ -174,7 +175,7 @@ vehiculoRouter.get('/:id', findOne);
  *                   type: string
  *                   example: Error al obtener los vehículos por usuario
  */
-vehiculoRouter.get('/user/:id', findAllByUser);
+vehiculoRouter.get('/user/:id', verificarToken,findAllByUser);
 
 /**
  * @swagger
@@ -209,7 +210,7 @@ vehiculoRouter.get('/user/:id', findAllByUser);
  *                   type: string
  *                   example: Error al obtener los vehículos por categoría
  */
-vehiculoRouter.get('/categoria/:id', findAllByCategory);
+vehiculoRouter.get('/categoria/:id', verificarToken,findAllByCategory);
 
 /**
  * @swagger
@@ -286,7 +287,7 @@ vehiculoRouter.get('/categoria/:id', findAllByCategory);
  *                   type: string
  *                   example: Error al crear el vehículo
  */
-vehiculoRouter.post('/', upload.array('imagenes', 10), sanitizeVehiculoInput, add);
+vehiculoRouter.post('/', upload.array('imagenes', 10),verificarToken ,sanitizeVehiculoInput, add);
 
 /**
  * @swagger
@@ -335,7 +336,7 @@ vehiculoRouter.post('/', upload.array('imagenes', 10), sanitizeVehiculoInput, ad
  *                   type: string
  *                   example: Error al actualizar el vehículo
  */
-vehiculoRouter.put('/:id', sanitizeVehiculoInput, update);
+vehiculoRouter.put('/:id', verificarToken,sanitizeVehiculoInput, update);
 
 /**
  * @swagger
@@ -384,7 +385,7 @@ vehiculoRouter.put('/:id', sanitizeVehiculoInput, update);
  *                   type: string
  *                   example: Error al dar de baja el vehículo
  */
-vehiculoRouter.patch('/:id', logicRemove);
+vehiculoRouter.patch('/:id', verificarToken,logicRemove);
 
 /**
  * @swagger
@@ -431,4 +432,4 @@ vehiculoRouter.patch('/:id', logicRemove);
  *                   type: string
  *                   example: Error al eliminar el vehículo
  */
-vehiculoRouter.delete('/:id', remove);
+vehiculoRouter.delete('/:id', verificarToken,remove);

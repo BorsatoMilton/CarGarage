@@ -31,31 +31,31 @@ export class AuthService {
   }
   
   setUserSession(usuario: User, token: string): void {
-    sessionStorage.setItem('user', JSON.stringify(usuario));
-    sessionStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(usuario));
+    localStorage.setItem('token', token);
     this.isAuthenticatedSubject.next(true); 
     this.currentUserSubject.next(usuario); 
   }
   
   logout(): void {
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     this.isAuthenticatedSubject.next(false);
     this.currentUserSubject.next(null); 
     this.router.navigate(['/auth/login']); 
   }
   
   isAuthenticated(): boolean {
-    return sessionStorage.getItem('user') !== null;
+    return localStorage.getItem('user') !== null;
   }
   
   getCurrentUser(): User | null {
-    const userString = sessionStorage.getItem('user');
+    const userString = localStorage.getItem('user');
     return userString ? JSON.parse(userString) : null;
   }
   
   getCurrentToken(): string  {
-    const tokenString = sessionStorage.getItem('token');
+    const tokenString = localStorage.getItem('token');
     return tokenString!;
   }  
 }

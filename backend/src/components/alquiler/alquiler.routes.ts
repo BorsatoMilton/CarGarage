@@ -11,6 +11,7 @@ import {
   confirmarAlquilerMail,
   confirmRent,
 } from "./alquiler.controler.js";
+import { verificarRol, verificarToken } from "../../middleware/authMiddleware.js";
 
 export const alquilerRouter = Router();
 /**
@@ -85,7 +86,7 @@ export const alquilerRouter = Router();
  *                   type: string
  *                   example: Detalles del error
  */
-alquilerRouter.get("/", findAll);
+alquilerRouter.get("/",verificarToken, verificarRol('ADMIN') ,findAll);
 
 /**
  * @swagger
@@ -132,7 +133,7 @@ alquilerRouter.get("/", findAll);
  *                   example: Detalles del error
  */
  
-alquilerRouter.get("/:id", findOne);
+alquilerRouter.get("/:id",verificarToken ,findOne);
 /**
  * @swagger
  * /api/alquiler/vehiculo/{id}:
@@ -169,7 +170,7 @@ alquilerRouter.get("/:id", findOne);
  *                   type: string
  *                   example: Detalles del error
  */
-alquilerRouter.get("/vehiculo/:id", findAllByVehicle);
+alquilerRouter.get("/vehiculo/:id",verificarToken ,findAllByVehicle);
 /**
  * @swagger
  * /api/alquiler/usuario/{id}:
@@ -207,7 +208,7 @@ alquilerRouter.get("/vehiculo/:id", findAllByVehicle);
  *                   example: Detalles del error
  */
 
-alquilerRouter.get("/usuario/:id", findAllByUser);
+alquilerRouter.get("/usuario/:id", verificarToken,findAllByUser);
 /**
  * @swagger
  * /api/alquiler:
@@ -241,7 +242,7 @@ alquilerRouter.get("/usuario/:id", findAllByUser);
  *                   type: string
  *                   example: Detalles del error
  */
-alquilerRouter.post("/", sanitizeAlquilerInput, add);
+alquilerRouter.post("/", verificarToken, sanitizeAlquilerInput, add);
 /**
  * @swagger
  * /api/alquiler/confirmarAlquiler:
@@ -265,7 +266,7 @@ alquilerRouter.post("/", sanitizeAlquilerInput, add);
  *       200:
  *         description: Alquiler confirmado
  */
-alquilerRouter.post("/confirmarAlquilerMail/:id", confirmarAlquilerMail);
+alquilerRouter.post("/confirmarAlquilerMail/:id",verificarToken ,confirmarAlquilerMail);
 
 /**
  * @swagger
@@ -320,7 +321,7 @@ alquilerRouter.post("/confirmarAlquilerMail/:id", confirmarAlquilerMail);
  *                   type: string
  *                   example: Detalles del error
  */
-alquilerRouter.patch("/confirmarAlquiler/:id", confirmRent); //Acomodar el swagger
+alquilerRouter.patch("/confirmarAlquiler/:id", verificarToken,confirmRent); //Acomodar el swagger
 /**
  * @swagger
  * /api/alquiler/cancelar/{id}:
@@ -361,7 +362,7 @@ alquilerRouter.patch("/confirmarAlquiler/:id", confirmRent); //Acomodar el swagg
  *                   type: string
  *                   example: Detalles del error
  */
-alquilerRouter.put("/cancelar/:id", cancelRent);
+alquilerRouter.put("/cancelar/:id",verificarToken ,cancelRent);
 
 // alquilerRouter.patch('/:id', sanitizeAlquilerInput, update); Que hacemos con esto?
 
@@ -412,4 +413,4 @@ alquilerRouter.put("/cancelar/:id", cancelRent);
  *                   type: string
  *                   example: Detalles del error
  */
-alquilerRouter.delete("/:id", remove);
+alquilerRouter.delete("/:id",verificarToken ,remove);

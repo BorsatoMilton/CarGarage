@@ -20,10 +20,12 @@ export class QualificationsService {
   }
 
   createQualification(qualification: Qualification) {
-    return this.http.post<Qualification>(`${this.apiUrl}`, qualification);
+    const authToken = new AuthToken();
+    return this.http.post<Qualification>(this.apiUrl, qualification, { headers: authToken.getAuthHeaders() });
   }
 
-  checkQualificationExists(userId: string, rentId: string) {
-    return this.http.get<Qualification>(`${this.apiUrl}/${userId}/${rentId}`);
+  checkQualificationExists(userId: string, objectId: string) {
+    const authToken = new AuthToken();
+    return this.http.get<Qualification>(`${this.apiUrl}/${userId}/${objectId}`, { headers: authToken.getAuthHeaders() });
   }
 }

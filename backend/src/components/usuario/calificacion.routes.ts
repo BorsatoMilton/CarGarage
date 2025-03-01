@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {findAllByUser, findOne, add, findOneByObjectAndUser, sanitizeCalificacionInput} from './calificacion.controler.js';
+import { verificarToken } from '../../middleware/authMiddleware.js';
 
 export const calificacionRouter = Router();
 
@@ -70,7 +71,7 @@ export const calificacionRouter = Router();
  *              example: Error al obtener las calificaciones
  */
 
-calificacionRouter.get('/:idUsuario', findAllByUser);
+calificacionRouter.get('/:idUsuario',verificarToken, findAllByUser);
 /**
  * @swagger
  * /api/calificaciones/{id}:
@@ -102,7 +103,7 @@ calificacionRouter.get('/:idUsuario', findAllByUser);
  *             type: string
  *             example: Error al obtener la calificación
 */
-calificacionRouter.get('/:id', findOne);
+calificacionRouter.get('/:id',verificarToken ,findOne); //NO SE USA CREO
 
 /**
  * @swagger
@@ -133,7 +134,7 @@ calificacionRouter.get('/:id', findOne);
  *       500:
  *         description: Error interno del servidor
  */
-calificacionRouter.get('/:userId/:objectId', findOneByObjectAndUser);
+calificacionRouter.get('/:userId/:objectId',verificarToken ,findOneByObjectAndUser);
 
 /**
  * @swagger
@@ -172,4 +173,4 @@ calificacionRouter.get('/:userId/:objectId', findOneByObjectAndUser);
  *              example: Error al crear la calificación
  */
 
-calificacionRouter.post('/', sanitizeCalificacionInput, add);
+calificacionRouter.post('/', verificarToken ,sanitizeCalificacionInput, add);

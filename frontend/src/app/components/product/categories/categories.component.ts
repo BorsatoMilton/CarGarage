@@ -64,6 +64,7 @@ closeModal(modalId: string){
     backdrop.parentNode?.removeChild(backdrop);
   }
   this.selectedCategory= null;
+  this.categoryForm.reset();
 }
 
 loadCategories(): void {

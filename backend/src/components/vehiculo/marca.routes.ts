@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { sanitizeModeloInput, findAll, findOne, add, update, remove, findOneByName } from './marca.controler.js';
+import { verificarRol, verificarToken } from '../../middleware/authMiddleware.js';
 
 export const marcaRouter = Router();
 
@@ -95,7 +96,7 @@ marcaRouter.get('/', findAll);
  *                   type: string
  *                   example: Detalles del error
  */
-marcaRouter.get('/:id', findOne);
+marcaRouter.get('/:id', verificarToken, verificarRol('ADMIN'),findOne); //NO SE USA CREO
 
 /**
  * @swagger
@@ -141,7 +142,7 @@ marcaRouter.get('/:id', findOne);
  *                   type: string
  *                   example: Detalles del error
  */
-marcaRouter.get('/byname/:name', findOneByName);
+marcaRouter.get('/byname/:name', verificarToken, verificarRol('ADMIN'), findOneByName);
 
 /**
  * @swagger
@@ -186,7 +187,7 @@ marcaRouter.get('/byname/:name', findOneByName);
  *                   type: string
  *                   example: Detalles del error
  */
-marcaRouter.post('/', sanitizeModeloInput, add);
+marcaRouter.post('/', verificarToken, verificarRol('ADMIN'),sanitizeModeloInput, add);
 
 /**
  * @swagger
@@ -238,7 +239,7 @@ marcaRouter.post('/', sanitizeModeloInput, add);
  *                   type: string
  *                   example: Detalles del error
  */
-marcaRouter.put('/:id', sanitizeModeloInput, update);
+marcaRouter.put('/:id', verificarToken, verificarRol('ADMIN'), sanitizeModeloInput, update);
 
 /**
  * @swagger
@@ -288,4 +289,4 @@ marcaRouter.put('/:id', sanitizeModeloInput, update);
  *                   type: string
  *                   example: Detalles del error
  */
-marcaRouter.delete('/:id', remove);
+marcaRouter.delete('/:id', verificarToken, verificarRol('ADMIN'), remove);

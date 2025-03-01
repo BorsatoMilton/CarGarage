@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { findAll, findOne, add, remove, sanitizeCompraInput, findOneByVehiculo, confirmarCompraMail ,cancelarCompra, avisoCompraExitosa, findAllByUser, confirmarCompra } from "./compra.controler.js";
+import { verificarRol, verificarToken } from "../../middleware/authMiddleware.js";
 
 
 export const compraRouter = Router();
@@ -67,7 +68,7 @@ export const compraRouter = Router();
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.get('/', findAll);
+compraRouter.get('/', verificarToken, verificarRol('ADMIN'), findAll);
 
 /**
  * @swagger
@@ -105,7 +106,7 @@ compraRouter.get('/', findAll);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.get('/byuser/:userId', findAllByUser);
+compraRouter.get('/byuser/:userId', verificarToken, findAllByUser);
 
 /**
  * @swagger
@@ -143,7 +144,7 @@ compraRouter.get('/byuser/:userId', findAllByUser);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.get('/:id', findOne);
+compraRouter.get('/:id', verificarToken ,findOne);
 
 /**
  * @swagger
@@ -179,53 +180,7 @@ compraRouter.get('/:id', findOne);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.get('/byvehiculo/:idVehiculo', findOneByVehiculo);
-
-/**
- * @swagger
- * /api/compras/{id}:
- *   get:
- *     summary: Obtiene una compra por ID
- *     tags: [Compra]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: ID de la compra
- *     responses:
- *       200:
- *         description: Compra encontrada
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Compra'
- *       404:
- *         description: Compra no encontrada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Compra no encontrada
- *       500:
- *         description: Error al obtener la compra
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Error al obtener la compra
- *                 error:
- *                   type: string
- *                   example: Detalles del error
- */
-compraRouter.get('/:id', findOne);
+compraRouter.get('/byvehiculo/:idVehiculo',verificarToken ,findOneByVehiculo);
 
 /**
  * @swagger
@@ -260,7 +215,7 @@ compraRouter.get('/:id', findOne);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.post('/', sanitizeCompraInput, add);
+compraRouter.post('/', verificarToken ,sanitizeCompraInput, add);
 
 /**
  * @swagger
@@ -285,7 +240,7 @@ compraRouter.post('/', sanitizeCompraInput, add);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.post('/avisoCompraExitosa/:mail', avisoCompraExitosa);
+compraRouter.post('/avisoCompraExitosa/:mail',verificarToken ,avisoCompraExitosa);
 
 /**
  * @swagger
@@ -310,7 +265,7 @@ compraRouter.post('/avisoCompraExitosa/:mail', avisoCompraExitosa);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.post('/confirmarCompraAviso/:idCompra', confirmarCompraMail);
+compraRouter.post('/confirmarCompraAviso/:idCompra',verificarToken ,confirmarCompraMail);
 
 
 /**
@@ -369,7 +324,7 @@ compraRouter.post('/confirmarCompraAviso/:idCompra', confirmarCompraMail);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.patch('/confirmarCompra/:idCompra', confirmarCompra);
+compraRouter.patch('/confirmarCompra/:idCompra',verificarToken ,confirmarCompra);
 
 /**
  * @swagger
@@ -427,7 +382,7 @@ compraRouter.patch('/confirmarCompra/:idCompra', confirmarCompra);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.patch('/cancelarCompra/:id', cancelarCompra);
+compraRouter.patch('/cancelarCompra/:id', verificarToken ,cancelarCompra);
 
 /**
  * @swagger
@@ -469,4 +424,4 @@ compraRouter.patch('/cancelarCompra/:id', cancelarCompra);
  *                   type: string
  *                   example: Detalles del error
  */
-compraRouter.delete('/:id', remove);
+compraRouter.delete('/:id', verificarToken,remove);

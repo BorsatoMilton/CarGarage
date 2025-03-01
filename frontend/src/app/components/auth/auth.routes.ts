@@ -17,7 +17,7 @@ export const authRoutes: Routes = [
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'users', component: UserComponent, canActivate: [onlyAdmin] },
     { path: 'profile', component: ProfileComponent, canActivate: [isLoggedInGuard] },
-    { path: 'rate/:usuarioAcalificar/:id', component: QualificationComponent },
+    { path: 'rate/:usuarioAcalificar/:id', component: QualificationComponent, canActivate: [isLoggedInGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [onlyAdmin] }
 
 ];

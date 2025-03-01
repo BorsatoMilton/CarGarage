@@ -146,7 +146,7 @@ async function login(req: Request, res: Response) {
       }
       const token = jwt.sign(
         { id: usuarioEncontrado.id, rol: usuarioEncontrado.rol }, 
-        process.env.SECRECT_KEY_WEBTOKEN || 'your-secret-key', 
+        process.env.SECRET_KEY_WEBTOKEN!, 
         { expiresIn: '1h' } 
       );
 
@@ -260,13 +260,15 @@ async function update(req: Request, res: Response) {
     if (!usuarioAactualizar) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     } else {
-      if(req.body.sanitizedInput.clave){
+      /*if(req.body.sanitizedInput.clave){
         return res.status(400).json({ message: "No se puede modificar la contraseña desde update" });
-      }
+      }*/
       const usuario = { ...req.body.sanitizedInput, 
         telefono: req.body.sanitizedInput.telefono.toString(),
       };
-      em.assign(usuarioAactualizar, usuario);
+      console.log('ACA LLEGO')
+      em.assign(usuarioAactualizar, usuario); //ACA ESTA EL ERROR
+      console.log('ACA LLEGO')
       await em.flush();
       res
         .status(200)

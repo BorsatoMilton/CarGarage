@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { findAllFaq, addFAQ, updateFAQ, deleteFAQ, sanitizeFaqInput } from "./faq.controller.js";
+import { verificarRol, verificarToken } from "../../middleware/authMiddleware.js";
 
 export const faqRouter = Router();
 
@@ -68,7 +69,7 @@ faqRouter.get("/", findAllFaq);
  *                   type: string
  *                   example: Detalles del error
  */
-faqRouter.post("/", sanitizeFaqInput, addFAQ);
+faqRouter.post("/",verificarToken,verificarRol('ADMIN') ,sanitizeFaqInput, addFAQ);
 
 /**
  * @swagger
@@ -110,7 +111,7 @@ faqRouter.post("/", sanitizeFaqInput, addFAQ);
  *                   type: string
  *                   example: Detalles del error
  */
-faqRouter.put("/:id", sanitizeFaqInput, updateFAQ);
+faqRouter.put("/:id",verificarToken,verificarRol('ADMIN') , sanitizeFaqInput, updateFAQ);
 
 /**
  * @swagger
@@ -142,4 +143,4 @@ faqRouter.put("/:id", sanitizeFaqInput, updateFAQ);
  *                   type: string
  *                   example: Detalles del error
  */
-faqRouter.delete("/:id", deleteFAQ);
+faqRouter.delete("/:id", verificarToken, verificarRol('ADMIN'), deleteFAQ);

@@ -20,8 +20,9 @@ export class UsuariosService {
     return this.http.delete<User>(`${this.apiUrl}/${user.id}`, { headers: authToken.getAuthHeaders() });
   }
   editUser(user: User): Observable<User> {
+    const { clave, ...userWithoutPassword } = user;
     const authToken = new AuthToken();
-    return this.http.put<User>(`${this.apiUrl}/${user.id}`, user, { headers: authToken.getAuthHeaders() });
+    return this.http.put<User>(`${this.apiUrl}/${user.id}`, userWithoutPassword, { headers: authToken.getAuthHeaders() });
   }
 
   getAllUser(): Observable<User[]> {

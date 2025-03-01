@@ -60,15 +60,15 @@ app.use((req, res, next) => {
   RequestContext.create(orm.em, next)
 })
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
-app.use('/api/categorias', verificarToken, verificarRol('ADMIN'), categoriaRouter)
-app.use('/api/marcas', verificarToken, verificarRol('ADMIN'), marcaRouter);
+app.use('/api/categorias', categoriaRouter)
+app.use('/api/marcas', marcaRouter);
 app.use('/api/vehiculos', vehiculoRouter);
 app.use('/api/usuarios', usuarioRouter);
-app.use('/api/tarjetas', verificarToken, tarjetaRouter);
-app.use('/api/calificaciones', verificarToken, calificacionRouter);
-app.use('/api/compras', verificarToken, compraRouter); 
-app.use('/api/alquiler', verificarToken, alquilerRouter); 
-app.use('/api/mercadopago', verificarToken, mercadoPagoRouter);
+app.use('/api/tarjetas', tarjetaRouter);
+app.use('/api/calificaciones', calificacionRouter);
+app.use('/api/compras', compraRouter); 
+app.use('/api/alquiler', alquilerRouter); 
+app.use('/api/mercadopago', mercadoPagoRouter);
 app.use('/api/recuperacion', recuperacionRouter);
 app.use('/uploads', express.static(path.resolve('src/uploads')));
 app.use('/api/faq', faqRouter);

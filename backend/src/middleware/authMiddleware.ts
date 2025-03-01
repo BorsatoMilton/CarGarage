@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-const SECRET_KEY = process.env.SECRECT_KEY_WEBTOKEN as string;
+const SECRET_KEY = process.env.SECRET_KEY_WEBTOKEN as string;
 
 interface Usuario {
     id: string,

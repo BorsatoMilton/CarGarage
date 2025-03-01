@@ -2,7 +2,7 @@ import { HttpHeaders } from '@angular/common/http';
 
 export class AuthToken {
   getToken(): string | null {
-    return sessionStorage.getItem('token');
+    return localStorage.getItem('token');
   }
 
   getAuthHeaders() {

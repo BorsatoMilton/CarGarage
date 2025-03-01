@@ -60,15 +60,16 @@ export class RentsService {
 
   createPaymentPreference(items: any): Observable<any> {
     const authToken = new AuthToken();
+    const authHeaders = authToken.getAuthHeaders();
+    
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set(authHeaders.keys()[0], authHeaders.get(authHeaders.keys()[0]) || '');
+  
     return this.http.post<any>(
       'http://localhost:3000/api/mercadopago/create-preference', 
       items, 
-      {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          ...authToken.getAuthHeaders()
-        })
-      }
+      { headers }
     );
   }
 }

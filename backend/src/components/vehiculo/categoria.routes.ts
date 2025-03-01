@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { sanitizeModeloInput, findAll, findOne, add, update, remove, findOneByName } from './categoria.controler.js';
+import { verificarRol, verificarToken } from '../../middleware/authMiddleware.js';
 
 export const categoriaRouter = Router();
 
@@ -99,7 +100,7 @@ categoriaRouter.get('/', findAll);
  *                   type: string
  *                   example: Detalles del error
  */
-categoriaRouter.get('/:id', findOne);
+categoriaRouter.get('/:id', verificarToken, verificarRol('ADMIN'), findOne); //NO SE USA CREO
 
 /**
  * @swagger
@@ -145,7 +146,7 @@ categoriaRouter.get('/:id', findOne);
  *                   type: string
  *                   example: Detalles del error
  */
-categoriaRouter.get('/byname/:name', findOneByName);
+categoriaRouter.get('/byname/:name', verificarToken, verificarRol('ADMIN'),findOneByName);
 
 /**
  * @swagger
@@ -197,7 +198,7 @@ categoriaRouter.get('/byname/:name', findOneByName);
  *                   type: string
  *                   example: Detalles del error
  */
-categoriaRouter.post('/', sanitizeModeloInput, add);
+categoriaRouter.post('/', verificarToken, verificarRol('ADMIN'), sanitizeModeloInput, add);
 
 /**
  * @swagger
@@ -249,7 +250,7 @@ categoriaRouter.post('/', sanitizeModeloInput, add);
  *                   type: string
  *                   example: Detalles del error
  */
-categoriaRouter.put('/:id', sanitizeModeloInput, update);
+categoriaRouter.put('/:id', verificarToken, verificarRol('ADMIN'), sanitizeModeloInput, update);
 
 /**
  * @swagger
@@ -299,4 +300,4 @@ categoriaRouter.put('/:id', sanitizeModeloInput, update);
  *                   type: string
  *                   example: Detalles del error
  */
-categoriaRouter.delete('/:id', remove);
+categoriaRouter.delete('/:id', verificarToken, verificarRol('ADMIN'), remove);

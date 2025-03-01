@@ -14,8 +14,7 @@ export class PaymentStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      const status = params['status'] || 'unknown';
-
+      const status = params['payment_status'] || 'unknown';
       switch (status) {
         case 'approved':
           this.router.navigate(['/']);

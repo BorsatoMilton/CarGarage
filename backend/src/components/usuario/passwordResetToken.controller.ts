@@ -25,11 +25,11 @@ async function addToken(req: Request, res: Response) {
     const correoResultado = await recuperarContraseña(token, user);
     
     if (!correoResultado.ok) {
-      return res.status(500).json({ ok: false, message: correoResultado.message, error: correoResultado.info });
+      throw new Error(correoResultado.message);
     }
     res.status(201).json({ ok: true, message: 'Token creado y correo enviado', info: correoResultado.info });
   } catch (error: any) {
-    res.status(500).json({ ok: false, message: 'Error al crear el token', error: error.message });
+    res.status(500).json({ ok: false, message: error.message || 'Error al crear el token', error: error.info});
   }
 }
 

@@ -260,22 +260,23 @@ async function update(req: Request, res: Response) {
     if (!usuarioAactualizar) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     } else {
-      /*if(req.body.sanitizedInput.clave){
+      if(req.body.sanitizedInput.clave){
         return res.status(400).json({ message: "No se puede modificar la contraseña desde update" });
-      }*/
+      }
       const usuario = { ...req.body.sanitizedInput, 
         telefono: req.body.sanitizedInput.telefono.toString(),
       };
-      console.log('ACA LLEGO')
-      em.assign(usuarioAactualizar, usuario); //ACA ESTA EL ERROR
-      console.log('ACA LLEGO')
+
+      em.assign(usuarioAactualizar, usuario);
+
       await em.flush();
       res
         .status(200)
         .json({ message: "Usuario Actualizado", data: usuarioAactualizar });
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error('Error detallado:', error);
+    res.status(500).json({ message: error.message || 'Error desconocido' });
   }
 }
 

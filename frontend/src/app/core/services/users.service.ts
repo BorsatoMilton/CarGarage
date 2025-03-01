@@ -36,7 +36,8 @@ export class UsuariosService {
   }
 
   getOneUserById(id: string): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${id}`);
+    const authToken = new AuthToken();
+    return this.http.get<User>(`${this.apiUrl}/${id}`, { headers: authToken.getAuthHeaders() });
   }
 
   changePassword(id: string, data: any): Observable<User> {

@@ -1,12 +1,3 @@
-<section class="ftco-section">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6 text-center">
-        <h2></h2>
-      </div>
-    </div>
-  </div>
-</section>
 <footer class="footer-10">
   <div class="container">
     <div class="row mb-5 pb-3 no-gutters">
@@ -14,63 +5,52 @@
         <div class="con con-1 w-100 py-5">
           <div class="con-info w-100 text-center">
             <div class="icon d-flex align-items-center justify-content-center">
-              <span class="ion-ios-call"></span>
+              <i class="fas fa-phone-alt">
+                <img src="faq.png" alt="Preguntas frecuentes">
+              </i>
             </div>
+            <h3 class="heading mb-3">FAQs</h3>
             <div class="text">
-              <span>0341 272-4611</span>
+              <a [routerLink]="['/faq']" class="contact-link">Preguntas frecuentes</a>
             </div>
           </div>
         </div>
       </div>
+
       <div class="col-md-4 mb-md-0 mb-4 d-flex">
         <div class="con con-2 w-100 py-5">
           <div class="con-info w-100 text-center">
             <div class="icon d-flex align-items-center justify-content-center">
-              <span class="ion-ios-mail"></span>
+              <i class="fas fa-envelope">
+                <img src="mail.png" alt="Email">
+              </i>
             </div>
+            <h3 class="heading mb-3">Email</h3>
             <div class="text">
-              <span> cargarage153&#64;gmail.com</span>
+              <a href="mailto:cargarage153@gmail.com" class="contact-link">cargarage153&#64;gmail.com</a>
             </div>
           </div>
         </div>
       </div>
+
+
       <div class="col-md-4 mb-md-0 mb-4 d-flex">
         <div class="con con-3 w-100 py-5">
           <div class="con-info w-100 text-center">
             <div class="icon d-flex align-items-center justify-content-center">
-              <span class="ion-ios-pin"></span>
+              <i class="fas fa-map-marker-alt">
+                <img src="location.png" alt="ubicación">
+              </i>
             </div>
+            <h3 class="heading mb-3">Dirección</h3>
             <div class="text">
-              <span>Zeballos 1341, S2000 Rosario, Santa Fe </span>
+              <a href="https://maps.app.goo.gl/nYW5MTWbKRiF6G7X8" target="_blank" rel="noopener" class="contact-link">
+                Zeballos 1341, S2000 Rosario, Santa Fe
+              </a>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-7">
-        <div class="row"></div>
-      </div>
-      <div class="col-md-5 mb-md-0 mb-4">
-        <h2 class="footer-heading">SUSCRIBIRSE</h2>
-        <form action="#" class="subscribe-form">
-          <div class="form-group d-flex">
-            <input
-              type="text"
-              class="form-control rounded-left"
-              placeholder="Ingresa tu email"
-            />
-            <button type="submit" class="form-control submit rounded-right">
-              Suscribirse
-            </button>
-          </div>
-          <span class="subheading"
-            >Suscribite para obtener avisos sobre los ultimos autos
-            publicados</span
-          >
-        </form>
-      </div>
-    </div>
-    <div class="row mt-5 pt-4 border-top"></div>
   </div>
 </footer>

@@ -11,8 +11,8 @@ import {
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
 import { Alquiler } from '../alquiler/alquiler.entity.js'
-import { Marca } from './marca.entity.js'
-import { Categoria } from './categoria.entity.js'
+import { Marca } from '../marca/marca.entity.js'
+import { Categoria } from '../categoria/categoria.entity.js'
 import { Compra } from '../compra/compra.entity.js'
 
 @Entity()

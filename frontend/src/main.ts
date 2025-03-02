@@ -10,4 +10,3 @@ bootstrapApplication(AppComponent, {
     provideAnimations()
   ]
 }).catch(err => console.error(err));
-// Aca carga el componenete con la aplicacion, es el primer archivo que se inicia

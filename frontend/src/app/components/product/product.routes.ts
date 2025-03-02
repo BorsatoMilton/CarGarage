@@ -23,6 +23,6 @@ export const productRoutes: Routes = [
     {path: 'rent/:id', component:RentComponent, canActivate: [isLoggedInGuard]},
     {path: 'confirm-rent', component:ConfirmRentComponent, canActivate: [isLoggedInGuard]},
     {path: 'purchases', component: PurchasesComponent, canActivate: [isLoggedInGuard]},
-    { path: 'payment-status', component: PaymentStatusComponent }, //¿¿????
+    { path: 'payment-status', component: PaymentStatusComponent }, 
     {path: '', component: VehiclesCardComponent},
 ];

@@ -6,7 +6,7 @@ import {
     OneToOne
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
-import { Usuario } from './usuario.entity.js'
+import { Usuario } from '../usuario/usuario.entity.js'
 import { Alquiler } from '../alquiler/alquiler.entity.js'
 import { Compra } from '../compra/compra.entity.js'
 

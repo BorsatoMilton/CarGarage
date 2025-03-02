@@ -7,8 +7,7 @@ import {
     OneToMany
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
-import { Marca } from './marca.entity.js'
-import { Vehiculo } from './vehiculo.entity.js'
+import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
 
 
 @Entity()

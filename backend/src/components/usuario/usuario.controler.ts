@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Usuario } from "./usuario.entity.js";
 import { orm } from "../../shared/db/orm.js";
-import { PasswordResetToken } from "./passwordResetToken.entity.js";
+import { PasswordResetToken } from "../reset-password/passwordResetToken.entity.js";
 import bcrypt from "bcrypt";
 import { Vehiculo } from "../vehiculo/vehiculo.entity.js";
 import jwt from "jsonwebtoken";
@@ -20,7 +20,6 @@ function sanitizeUsuarioInput(req: Request, res: Response, next: NextFunction) {
     mail: req.body.mail,
     direccion: req.body.direccion,
     telefono: req.body.telefono,
-    tarjeta: req.body.tarjeta,
     calificacion: req.body.calificacion,
     alquiler: req.body.alquiler,
     rol: req.body.rol,
@@ -347,7 +346,7 @@ async function resetPassword(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const usuario = await em.findOne(Usuario, { id: id }, { populate: ['tarjetas', 'calificacionesUsuario', 'compras', 'alquilerLocatario'] });
+    const usuario = await em.findOne(Usuario, { id: id }, { populate: ['calificacionesUsuario', 'compras', 'alquilerLocatario'] });
     if (!usuario) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     } else {

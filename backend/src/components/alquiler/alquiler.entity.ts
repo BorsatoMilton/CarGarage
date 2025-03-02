@@ -9,7 +9,7 @@ import {
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
 import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
-import { Calificacion } from '../usuario/calificacion.entity.js'
+import { Calificacion } from '../calificacion/calificacion.entity.js'
 
 @Entity()
 export class Alquiler extends BaseEntity {

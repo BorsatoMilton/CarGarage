@@ -8,8 +8,7 @@ import {
     Cascade
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
-import { Tarjeta } from './tarjeta.entity.js'
-import { Calificacion } from './calificacion.entity.js'
+import { Calificacion } from '../calificacion/calificacion.entity.js'
 import { Compra } from '../compra/compra.entity.js'
 import {Vehiculo} from '../vehiculo/vehiculo.entity.js'
 import { Alquiler } from '../alquiler/alquiler.entity.js'
@@ -19,7 +18,7 @@ import { Alquiler } from '../alquiler/alquiler.entity.js'
 export class Usuario extends BaseEntity {
     @Property({ nullable: false })
     usuario!: string
-    //DNI?
+    
     @Property({ nullable: false })
     clave!: string
 
@@ -40,9 +39,6 @@ export class Usuario extends BaseEntity {
 
     @Property({ nullable: false})
     rol!: string
-
-    @OneToMany(() => Tarjeta, tarjeta => tarjeta.usuario, { nullable: false, cascade: [ Cascade.REMOVE ] })
-    tarjetas = new Collection<Tarjeta>(this)
 
     @OneToMany(() => Calificacion, calificacion => calificacion.usuario, { nullable: false, cascade: [ Cascade.REMOVE ] })
     calificacionesUsuario = new Collection<Calificacion>(this)

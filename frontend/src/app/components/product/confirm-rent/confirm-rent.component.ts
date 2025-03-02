@@ -180,20 +180,4 @@ export class ConfirmRentComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
-  /* confirmRent() {
-    if (this.rent !== null) {
-      this.rentService.confirmRent(this.rent.id).subscribe({
-        next: () => {
-          alertMethod('Confirmar Alquiler','Alquiler confirmado con éxito!', 'success');
-          this.closeModal('confirmarAlquiler');
-          this.router.navigate(['/']);
-        },
-        error: (error) => {
-          this.alertComponent.showAlert('Algo salio mal!', 'error');
-        },
-      });
-    }
-  }*/
 }

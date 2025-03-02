@@ -3,18 +3,17 @@ import express from 'express';
 import { orm } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
 import { vehiculoRouter } from './components/vehiculo/vehiculo.routes.js';
-import { marcaRouter } from './components/vehiculo/marca.routes.js';
-import { categoriaRouter } from './components/vehiculo/categoria.routes.js';
+import { marcaRouter } from './components/marca/marca.routes.js';
+import { categoriaRouter } from './components/categoria/categoria.routes.js';
 import { usuarioRouter } from './components/usuario/usuario.routes.js';
-import { tarjetaRouter } from './components/usuario/tarjeta.routes.js';
-import { calificacionRouter } from './components/usuario/calificacion.routes.js';
+import { calificacionRouter } from './components/calificacion/calificacion.routes.js';
 import { compraRouter } from './components/compra/compra.routes.js';
 import { faqRouter } from './components/faq/faq.routes.js';
 import { verificarToken } from './middleware/authMiddleware.js';
 import { verificarRol } from './middleware/authMiddleware.js';
 import cors from 'cors';
 import { alquilerRouter } from './components/alquiler/alquiler.routes.js';
-import { recuperacionRouter } from './components/usuario/passwordResetToken.routes.js';
+import { recuperacionRouter } from './components/reset-password/passwordResetToken.routes.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
@@ -64,7 +63,6 @@ app.use('/api/categorias', categoriaRouter)
 app.use('/api/marcas', marcaRouter);
 app.use('/api/vehiculos', vehiculoRouter);
 app.use('/api/usuarios', usuarioRouter);
-app.use('/api/tarjetas', tarjetaRouter);
 app.use('/api/calificaciones', calificacionRouter);
 app.use('/api/compras', compraRouter); 
 app.use('/api/alquiler', alquilerRouter); 

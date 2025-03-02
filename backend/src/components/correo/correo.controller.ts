@@ -134,7 +134,7 @@ async function avisoCompraExitosaMail(user: Usuario, vehiculo: Vehiculo): Promis
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
             }
             h2 { 
-                color: #28a745; /* Verde para indicar éxito */
+                color: #28a745;
                 text-align: center; 
             }
             p { 

@@ -4,8 +4,6 @@ import { orm } from '../../shared/db/orm.js'
 import fs from 'fs';
 import path from 'path';
 import { ObjectId } from 'mongodb';
-import { Marca } from './marca.entity.js';
-import { Categoria } from './categoria.entity.js';
 
 const em = orm.em.fork()
 

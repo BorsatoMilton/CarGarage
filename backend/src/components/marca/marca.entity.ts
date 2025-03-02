@@ -3,13 +3,10 @@ import {
     Property,
     Collection,
     OneToMany,
-    ManyToOne,
-    Rel,
     Cascade
 } from '@mikro-orm/core'
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js'
-import { Categoria } from './categoria.entity.js'
-import { Vehiculo } from './vehiculo.entity.js'
+import { Vehiculo } from '../vehiculo/vehiculo.entity.js'
 
 @Entity()
 

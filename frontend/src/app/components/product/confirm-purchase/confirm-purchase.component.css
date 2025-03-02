@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  min-height: 100vh;
   background-color: #f4f4f4;
 
 }
@@ -141,7 +141,7 @@ button.btn-success:hover {
 
 .confirmar-compra-btn {
   width: 100%; /* Hace que el botón ocupe todo el ancho */
-  max-width: 400px; /* Opcional: Limita el tamaño en pantallas grandes */
+  max-width: 700px; /* Opcional: Limita el tamaño en pantallas grandes */
   padding: 12px;
   font-size: 1.2rem; /* Tamaño de letra más visible */
   text-align: center;

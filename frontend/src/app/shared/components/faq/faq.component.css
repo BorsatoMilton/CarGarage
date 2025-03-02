@@ -1,12 +1,13 @@
-h1 {
+.text-primary{
+  display: block;
    text-align: center;
    text-transform: uppercase;
     margin-bottom: 2rem;
     text-decoration: underline;
-    text-decoration-color: rgba(55, 55, 194, 0.464);
+    text-decoration-color: rgba(5, 5, 5, 0.318);
     font-size: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+    font-family: Arial, sans-serif;
+  }
 
 
 .faq-container {
@@ -14,6 +15,9 @@ h1 {
     margin: 2rem auto;
     padding: 1rem;
   }
+  .faq-container .text-primary {
+    color: #0f0275 !important;
+}
   
   .faq-search {
     width: 100%;

@@ -1,4 +1,4 @@
-<div class="page-container">
+<div class="page-container mt-3 mb-3">
   <div class="vehicle-container">
     <div *ngIf="vehiculo">
       <img id="imagen-vehiculo" *ngIf="vehiculo.imagenes && vehiculo.imagenes.length > 0"
@@ -6,10 +6,9 @@
       <p *ngIf="!vehiculo.imagenes?.length">No hay imágenes disponibles para este vehículo.</p>
     </div>
 
-    <div class="vehicle-details">
-      <div class="anuncio">
-        <strong>Descripción del vehiculo</strong>
-      </div>
+    <div class="row vehicle-details">
+      <div class="col-md-6 anuncio">
+        <strong class="titulo">Descripción del vehículo</strong>
       <hr>
       <p><strong>Modelo:</strong> {{vehiculo?.modelo}}</p>
       <p><strong>Color:</strong> Blanco</p>
@@ -19,17 +18,18 @@
       <p><strong>Transmisión:</strong> {{vehiculo?.transmision}}</p>
       <p><strong>Precio Venta:</strong> {{ vehiculo?.precioVenta | currency:'ARS' }}</p>
       <p><strong>Precio Alquiler:</strong> {{ vehiculo?.precioAlquilerDiario| currency:'ARS' }}</p>
-      <div class="anuncio">
-        <strong>Descripción del propietario</strong>
-      </div>
+    </div>
+      <div class="col-md-6 anuncio">
+        <strong class="titulo">Descripción del propietario</strong>
       <hr>
       <p><strong>Nombre:</strong>{{vehiculo?.propietario?.nombre}} </p>
       <p><strong>Apellido:</strong> {{vehiculo?.propietario?.apellido}} </p>
       <p><strong>Mail:</strong> {{vehiculo?.propietario?.mail}} </p>
       <p><strong>Direccion:</strong> {{vehiculo?.propietario?.direccion}} </p>
-
-      <button type="button" class="btn btn-primary" (click)="openModal('confirmarCompra')">Confirmar Compra</button>
     </div>
+    </div>
+    <div class="confirmar-compra-container">
+    <button type="button" class="btn btn-primary confirmar-compra-btn" (click)="openModal('confirmarCompra')">Confirmar Compra</button></div>
   </div>
 </div>
 

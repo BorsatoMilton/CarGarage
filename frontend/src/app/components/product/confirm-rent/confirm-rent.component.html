@@ -1,4 +1,4 @@
-<div class="page-container">
+<div class="page-container mt-3 mb-3">
     <div class="vehicle-container">
       <app-universal-alert></app-universal-alert>
       <div *ngIf="vehiculo">
@@ -7,10 +7,9 @@
         <p *ngIf="!vehiculo.imagenes?.length">No hay imágenes disponibles para este vehículo.</p>
       </div>
   
-      <div class="vehicle-details">
-        <div class="anuncio">
-          <strong>Descripción del vehiculo</strong>
-        </div>
+      <div class="row vehicle-details">
+        <div class="col-md-6 anuncio">
+          <strong class="titulo">Descripción del vehiculo</strong>
         <hr>
         <p><strong>Modelo:</strong> {{rent?.vehiculo?.modelo}}</p>
         <p><strong>Categoria:</strong> {{vehiculo?.categoria?.nombreCategoria}} </p>
@@ -19,19 +18,17 @@
         <p><strong>Transmisión:</strong> {{rent?.vehiculo?.transmision}}</p>
         <p><strong>Precio Alquiler Diario:</strong> {{ rent?.vehiculo?.precioAlquilerDiario| currency:'ARS' }}</p>
         <p> <strong>Desde: </strong>{{rent?.fechaHoraInicioAlquiler | date:'yyyy-MM-dd'}} <br> <strong>Hasta: </strong>{{rent?.fechaHoraDevolucion | date:'yyyy-MM-dd'}}</p>
-        <p>
-            <strong>Total: </strong>{{totalAlquiler | currency:'ARS'}}
-        </p>
-        <div class="anuncio">
-          <strong>Descripción del propietario</strong>
-        </div>
+        <p><strong>Total: </strong>{{totalAlquiler | currency:'ARS'}} </p>
+      </div>
+        <div class="col-md-6 anuncio">
+          <strong class="titulo">Descripción del propietario</strong>
         <hr>
         <p><strong>Nombre:</strong>{{vehiculo?.propietario?.nombre}} </p>
         <p><strong>Apellido:</strong> {{vehiculo?.propietario?.apellido}} </p>
         <p><strong>Email:</strong> {{vehiculo?.propietario?.mail}} </p>
         <p><strong>Direccion:</strong> {{vehiculo?.propietario?.direccion}} </p>
         <p><strong>Telefono:</strong> {{vehiculo?.propietario?.telefono || 'Sin celular'}} </p>
-  
+        </div> 
         <button
         type="button"
         (click)="confirmRent()"

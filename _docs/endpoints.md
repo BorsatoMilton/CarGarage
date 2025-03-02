@@ -1,3 +1,10 @@
+> [!NOTE]
+> Para ver la documentación de la API en Swagger. 
+1. Entrar en la carpeta de BACKEND (cd backend) 
+2. Ejecutar con el comando "npm run start:dev" 
+3. Abrir el navegador y entrar a la dirección "localhost:3000/api-docs"
+
+
 ## Endpoint : api/usuarios
 
 Metodo: GET

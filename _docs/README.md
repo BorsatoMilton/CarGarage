@@ -9,7 +9,7 @@ Año cursado: 2024
 - [Descripción General](#descripción-general)
 - [Proposal](./proposal.md)
 - [Endpoints](./endpoints.md)
-- [Ejemplos de Uso](./ejemplos.md)
+- [Configuración](./setup.md)
 - [Diagramas y Esquemas](./diagramas.md)
 
 ## Descripción General

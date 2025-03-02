@@ -11,22 +11,25 @@
 .vehicle-container {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 10px;
+  margin-bottom: 10px;
   gap: 20px;
   padding: 20px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-max-width: 1200px;
-width: 100%;
+  min-width: 320px;
+  max-width: 700px;
+width: 75vw;
 align-items: flex-start;
 }
 
 #imagen-vehiculo {
-  width: 500px;
-  height: 500px;
+  width: 100%;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 15px;
   align-items: center;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 #imagen-propietario {
@@ -36,18 +39,11 @@ align-items: flex-start;
   border-radius: 10px;
 }
 
-.vehicle-details {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 300px;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  color: #333;
-}
+
 
 .vehicle-details p {
   margin: 5px 0;
+  
 }
 
 .img {
@@ -65,9 +61,16 @@ align-items: flex-start;
 
 .anuncio {
   font-family: Arial, sans-serif;
-  color: #a52a2a;
   padding: 20px;
-  max-width: 300px;
+}
+
+
+.titulo {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #0f0275;
+  white-space: nowrap; 
+  overflow: hidden; 
 }
 
 .modalChanged {
@@ -114,6 +117,10 @@ align-items: flex-start;
   cursor: pointer;
 
 }
+button.btn-success:hover {
+  background-color: #007bff;
+  border-color: #007bff;
+}
 
 .btn-secondary {
   color: white;
@@ -125,10 +132,30 @@ align-items: flex-start;
   margin-right: 10px;
 }
 
+.confirmar-compra-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Espaciado superior */
+}
+
+.confirmar-compra-btn {
+  width: 100%; /* Hace que el botón ocupe todo el ancho */
+  max-width: 400px; /* Opcional: Limita el tamaño en pantallas grandes */
+  padding: 12px;
+  font-size: 1.2rem; /* Tamaño de letra más visible */
+  text-align: center;
+  border-radius: 5px;
+}
+
+
 @media (max-width: 768px) {
   .vehicle-container {
     flex-direction: column;
     align-items: center;
+  }
+  .confirmar-compra-btn {
+    max-width: 100%; /* Tamaño más pequeño para móviles */
   }
 
   #imagen-vehiculo {

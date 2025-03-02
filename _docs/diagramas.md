@@ -90,7 +90,7 @@ classDiagram
 
   Alquiler "1" -- "0..1" Calificacion : "tiene"
   Compra "1" -- "0..1" Calificacion : "tiene"
-  Usuario "1" -- "*" Calificacion : "realiza"
+  Usuario "1" -- "*" Calificacion : "tiene"
   Usuario "1" -- "*" Compra : "realiza"
   Usuario "1" -- "*" Vehiculo : "posee"
   Usuario "1" -- "*" Alquiler : "como locatario"
@@ -101,5 +101,5 @@ classDiagram
   Vehiculo "1" -- "1" Marca : "de la"
   Categoria "1" -- "*" Vehiculo : "contiene"
   Marca "1" -- "*" Vehiculo : "tiene modelos"
-  Calificacion "1" -- "1" Usuario : "emitida por"
+  Calificacion "*" -- "1" Usuario : "emitida por"
 ```

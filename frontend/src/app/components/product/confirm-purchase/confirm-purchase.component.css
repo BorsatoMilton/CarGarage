@@ -1,9 +1,8 @@
-/* Contenedor principal para centrar todo en la página */
 .page-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 65vh;
   background-color: #f4f4f4;
 
 }
@@ -11,17 +10,13 @@
 .vehicle-container {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   gap: 20px;
   padding: 20px;
-  background: white;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  min-width: 320px;
-  max-width: 700px;
-width: 75vw;
-align-items: flex-start;
+  max-width: 900px;
 }
 
 #imagen-vehiculo {
@@ -32,31 +27,15 @@ align-items: flex-start;
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
-#imagen-propietario {
-  width: 400px;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 10px;
+.vehicle-details {
+  display: flex;  
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
 }
-
-
 
 .vehicle-details p {
   margin: 5px 0;
-  
-}
-
-.img {
-  max-width: 100%;
-  align-items: center;
-}
-
-.propietario-container {
-  display: flex;
-  justify-content: right;
-  align-items: right;
-  gap: 20px;
-  height: 40%;
 }
 
 .anuncio {
@@ -64,14 +43,15 @@ align-items: flex-start;
   padding: 20px;
 }
 
-
-.titulo {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #0f0275;
-  white-space: nowrap; 
-  overflow: hidden; 
+.titulo { 
+font-size: 1.5rem;
+margin-bottom: 10px;
+color: #0f0275;
+white-space: nowrap; 
+overflow: hidden; 
 }
+
+
 
 .modalChanged {
   display: none;
@@ -136,72 +116,18 @@ button.btn-success:hover {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 20px; /* Espaciado superior */
+  margin-top: 20px; 
 }
 
 .confirmar-compra-btn {
-  width: 100%; /* Hace que el botón ocupe todo el ancho */
-  max-width: 700px; /* Opcional: Limita el tamaño en pantallas grandes */
+  width: 100%;
   padding: 12px;
-  font-size: 1.2rem; /* Tamaño de letra más visible */
+  font-size: 1.2rem;
   text-align: center;
   border-radius: 5px;
 }
 
 
-@media (max-width: 768px) {
-  .vehicle-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  .confirmar-compra-btn {
-    max-width: 100%; /* Tamaño más pequeño para móviles */
-  }
-
-  #imagen-vehiculo {
-    max-width: 400px;
-    aspect-ratio: 16/9;
-  }
-  @media (max-width: 480px) {
-    .page-container {
-      padding: 10px;
-    }
-    #imagen-vehiculo {
-      max-width: 300px; /* Tamaño más pequeño para móviles */
-      aspect-ratio: 16/9; /* Cambia relación de aspecto si es necesario */
-    }
-    
-    .vehicle-container {
-      padding: 15px;
-    }
-    
-    .vehicle-details {
-      font-size: 0.9rem;
-    }
-    
-    .btn {
-      width: 100%; /* Botones full width en móvil */
-      margin-bottom: 10px;
-    }
-  }
-  .modal-contentChanged {
-    max-width: 95%; /* Más espacio en móviles */
-    padding: 20px;
-  }
-  
-  @media (max-width: 480px) {
-    .modal-contentChanged button {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-    
-    .modal-contentChanged {
-      text-align: center;
-    }
-  }
-
-
     
   
   
-}

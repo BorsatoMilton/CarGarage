@@ -1,7 +1,7 @@
 > [!NOTE]
 > Diagrama realizado con mermaID
 
-::: mermaid
+```mermaid
 
 classDiagram
   direction LR
@@ -102,5 +102,4 @@ classDiagram
   Categoria "1" -- "*" Vehiculo : "contiene"
   Marca "1" -- "*" Vehiculo : "tiene modelos"
   Calificacion "1" -- "1" Usuario : "emitida por"
-
-:::
+```

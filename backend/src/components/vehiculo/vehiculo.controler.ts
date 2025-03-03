@@ -150,7 +150,8 @@ async function logicRemove(req: Request, res:Response) {
 }
 
 async function remove(vehiculoId: string): Promise<void> {
-  const vehiculo = await em.findOne(Vehiculo, { id: vehiculoId }, {populate: ['compra', 'alquileres']});
+  try {
+      const vehiculo = await em.findOne(Vehiculo, { id: vehiculoId }, {populate: ['compra', 'alquileres']});
   if (!vehiculo) {
     throw new Error('Vehículo no encontrado');
   }
@@ -174,6 +175,10 @@ async function remove(vehiculoId: string): Promise<void> {
   
   await Promise.all(unlinkPromises);
   await em.removeAndFlush(vehiculo);
+    
+  } catch (error) {
+    console.error('Error al eliminar el vehículo:', error); 
+  }
 }
 
 

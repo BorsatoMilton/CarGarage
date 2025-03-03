@@ -21,7 +21,7 @@ import './config/cron.timelapse.js';
 
 import { mercadoPagoRouter } from './components/mercadoPago/mercadopago.routes.js';
 
-const app = express();
+export const app = express();
 
 const allowedOrigins = ['http://localhost:4200' ];
 app.use(cors({

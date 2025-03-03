@@ -9,7 +9,7 @@ const em = orm.em;
 
 async function createPreference(req: Request, res: Response) {
     try {
-        console.log('🚀 Creando preferencia de pago:', req.body);
+        console.log('Creando preferencia de pago:', req.body);
 
         const { items, external_reference, rentalData } = req.body;
         const body = {

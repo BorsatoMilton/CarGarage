@@ -14,6 +14,9 @@ function sanitizeAlquilerInput(req: Request, res: Response, next: NextFunction) 
       if (isNaN(fechaInicio.getTime())) throw new Error('Fecha de inicio inválida');
       if (isNaN(fechaDevolucion.getTime())) throw new Error('Fecha de devolución inválida');
 
+      if (fechaInicio.getTime() < fechaAlquiler.getTime()) throw new Error('La fecha de inicio no puede ser menor a la fecha actual');
+      if (fechaDevolucion.getTime() < fechaInicio.getTime()) throw new Error('La fecha de devolución no puede ser menor a la fecha de inicio');
+
       req.body.sanitizedInput = {
           fechaAlquiler: fechaAlquiler,
           fechaHoraInicioAlquiler: fechaInicio,

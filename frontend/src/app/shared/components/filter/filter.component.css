@@ -76,9 +76,16 @@
 }
 
 .checkbox-group {
+  display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
+.checkbox-group input{
+  width: 16px;
+  height: 16px;
+} 
 
 .checkbox-group label {
   margin-left: 0.5rem;

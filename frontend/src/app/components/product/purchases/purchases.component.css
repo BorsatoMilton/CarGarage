@@ -52,7 +52,10 @@ button.btn-danger:hover {
   background-color: #c9302c;
 }
 
-
+img {
+  width: 20px;
+  height: 20px;
+}
 
 
 .close {

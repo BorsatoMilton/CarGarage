@@ -35,11 +35,11 @@
               *ngIf="!Vehicle.compra || Vehicle.compra?.estadoCompra === 'NO CONFIRMADA' || Vehicle.compra?.estadoCompra === 'CANCELADA'; else reservadoOVendido">
               <button (click)="openModal('editVehicle', Vehicle)" class="btn btn-lg btn-outline-primary"
                 data-bs-toggle="modal">
-                <i class="bi bi-pencil"></i>
+                <img src="edit.logo.png" alt="">
               </button>
               <button (click)="openModal('removeVehicle', Vehicle)" class="btn btn-lg btn-outline-danger"
                 data-bs-toggle="modal">
-                <i class="bi bi-key"></i>
+                <img src="cancel.logo.png" alt="">
               </button>
             </ng-container>
 

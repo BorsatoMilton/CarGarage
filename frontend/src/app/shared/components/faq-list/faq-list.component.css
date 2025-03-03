@@ -72,6 +72,15 @@
   button.btn-danger:hover {
     background-color: #c9302c;
   }
+
+  img {
+    width: 20px;
+    height: 20px
+  }
+  .btn-outline-primary {
+    margin-right: 10px; /* Espacio entre el botón de Editar y Eliminar */
+  }
+  
   
   form {
     margin-top: 20px;

@@ -3,7 +3,7 @@
 <div class="container my-4">
   <app-universal-alert></app-universal-alert>
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
-    <h2 class="mb-3 mb-md-0"><strong class="text-primary">Gestión de Usuarios</strong></h2>
+    <h2 class="mb-3 mb-md-0"><strong class="text-primary">GESTION DE USUARIOS </strong></h2>
     <app-searcher [data]="users" [filterAttributes]="['usuario', 'nombre', 'apellido', 'mail']" (filteredData)="onSearch($event)"  style="display: block; width: 70%;"></app-searcher>
     <button
       type="button"
@@ -45,21 +45,21 @@
                 class="btn btn-lg btn-outline-primary"
                 data-bs-toggle="modal"
               >
-                <i class="bi bi-pencil"></i>
+              <img src="edit.logo.png" alt="">
               </button>
               <button
                 (click)="openModal('updatePassword', User)"
                 class="btn btn-lg btn-outline-warning"
                 data-bs-toggle="modal"
               >
-                <i class="bi bi-key"></i>
+              <img src="password.logo.png" alt="">
               </button>
               <button
                 (click)="openModal('removeUser', User)"
                 class="btn btn-lg btn-outline-danger"
                 data-bs-toggle="modal"
               >
-                <i class="bi bi-trash"></i>
+              <img src="cancel.logo.png" alt="">
               </button>
               <button class="btn btn-light btn-details ms-auto d-table-cell d-md-none" (click)="openUserDetails(User)">
                 <span class="material-icons">

@@ -31,7 +31,7 @@ export class PurchasesComponent {
     if (currentUser !== null) {
       this.compraService.getAllCompraByUser(currentUser.id).subscribe((data) => {
         this.compras = data;
-      });
+            });
     }
   }
 

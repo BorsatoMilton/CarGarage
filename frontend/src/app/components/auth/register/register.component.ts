@@ -7,11 +7,11 @@ import {
 } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UsuariosService } from '../../../core/services/users.service.js';
+import { UsuariosService } from '../../../core/services/users.service';
 import { Router } from '@angular/router';
-import { User } from '../../../core/models/user.interface.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { User } from '../../../core/models/user.interface';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
 @Component({
   selector: 'app-register',
   standalone: true,

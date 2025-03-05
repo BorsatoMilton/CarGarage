@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Compra } from '../models/compra.interfaces.js';
-import { AuthToken } from '../../functions/authToken.function.js';
+import { Compra } from '../models/compra.interfaces';
+import { AuthToken } from '../../functions/authToken.function';
 
 @Injectable({
   providedIn: 'root'

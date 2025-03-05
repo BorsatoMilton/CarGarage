@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Vehicle } from '../models/vehicles.interface.js';
+import { Vehicle } from '../models/vehicles.interface';
 import { map } from 'rxjs/operators';
-import { AuthToken } from '../../functions/authToken.function.js';
+import { AuthToken } from '../../functions/authToken.function';
 
 @Injectable({
   providedIn: 'root'

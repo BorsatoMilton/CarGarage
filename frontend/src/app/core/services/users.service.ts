@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../models/user.interface.js';
-import { AuthToken } from '../../functions/authToken.function.js';
+import { User } from '../models/user.interface';
+import { AuthToken } from '../../functions/authToken.function';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +30,7 @@ export class UsuariosService {
     return this.http.get<User[]>(this.apiUrl, { headers: authToken.getAuthHeaders() });
   }
 
-  getOneUserByEmailOrUsername(usuario: string, mail: string, excludeUserId?: string): Observable<User> {
+  getOneUserByEmailOrUsername(usuario: string, mail: string, excludeUserId?: string): Observable<User | null> {
     const params = new HttpParams().set('excludeUserId', excludeUserId || '');
     return this.http.get<User>(`${this.apiUrl}/${usuario}/${mail}`, { params });
   }

@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { VehiclesService } from '../../../core/services/vehicles.service.js';
+import { Vehicle } from '../../../core/models/vehicles.interface';
+import { VehiclesService } from '../../../core/services/vehicles.service';
 import { RouterLink } from '@angular/router';
-import { User } from '../../../core/models/user.interface.js';
-import { AuthService } from '../../../core/services/auth.service.js';
-import { FilterComponent } from '../../../shared/components/filter/filter.component.js';
+import { User } from '../../../core/models/user.interface';
+import { AuthService } from '../../../core/services/auth.service';
+import { FilterComponent } from '../../../shared/components/filter/filter.component';
 import { HostListener } from '@angular/core';
 import { MatBottomSheet} from '@angular/material/bottom-sheet'; 
 import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component'; 
-import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface';
 
 
 @Component({

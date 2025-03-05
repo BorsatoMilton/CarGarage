@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Compra } from '../../../core/models/compra.interfaces.js';
+import { Compra } from '../../../core/models/compra.interfaces';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { User } from '../../../core/models/user.interface.js';
-import { Category } from '../../../core/models/categories.interface.js';
-import { CompraService } from '../../../core/services/compra.service.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { Vehicle } from '../../../core/models/vehicles.interface';
+import { User } from '../../../core/models/user.interface';
+import { Category } from '../../../core/models/categories.interface';
+import { CompraService } from '../../../core/services/compra.service';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
 
 @Component({
   selector: 'app-confirm-purchase',

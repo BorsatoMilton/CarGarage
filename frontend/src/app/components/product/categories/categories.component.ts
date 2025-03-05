@@ -3,11 +3,11 @@ import { Component,  OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { Category } from '../../../core/models/categories.interface';
-import { SearcherComponent } from '../../../shared/components/searcher/searcher.component.js';
+import { SearcherComponent } from '../../../shared/components/searcher/searcher.component';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
 
 @Component({
   selector: 'app-categories',

@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { UsuariosService } from '../../../core/services/users.service.js';
-import { AuthService } from '../../../core/services/auth.service.js';
-import { User } from '../../../core/models/user.interface.js';
+import { UsuariosService } from '../../../core/services/users.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { User } from '../../../core/models/user.interface';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 
 @Component({
   selector: 'app-profile',

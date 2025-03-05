@@ -5,7 +5,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { UserComponent } from './usuario/usuario.component';
 import { onlyAdmin } from '../../guards/onlyAdmin.guard';
-import { isLoggedInGuard } from '../../guards/is-logged-in.guard.js';
+import { isLoggedInGuard } from '../../guards/is-logged-in.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { QualificationComponent } from './qualification/qualification.component';
 import { DashboardComponent } from './dashboard/dashboard.component';

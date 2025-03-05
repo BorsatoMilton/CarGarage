@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnInit } from '@angular/core';
-import { QualificationsService } from '../../../core/services/qualifications.service.js';
-import { UsuariosService } from '../../../core/services/users.service.js';
+import { QualificationsService } from '../../../core/services/qualifications.service';
+import { UsuariosService } from '../../../core/services/users.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../../core/models/user.interface.js';
-import { RentsService } from '../../../core/services/rents.service.js';
-import { CompraService } from '../../../core/services/compra.service.js';
-import { Rent } from '../../../core/models/rent.interface.js';
-import { Compra } from '../../../core/models/compra.interfaces.js';
-import { Qualification } from '../../../core/models/qualification.inteface.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { User } from '../../../core/models/user.interface';
+import { RentsService } from '../../../core/services/rents.service';
+import { CompraService } from '../../../core/services/compra.service';
+import { Rent } from '../../../core/models/rent.interface';
+import { Compra } from '../../../core/models/compra.interfaces';
+import { Qualification } from '../../../core/models/qualification.inteface';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 import {
   ReactiveFormsModule,
   Validators,
@@ -19,7 +19,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ViewChild } from '@angular/core';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
 
 @Component({
   selector: 'app-qualification',

@@ -7,15 +7,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { User } from '../../../core/models/user.interface.js';
-import { UsuariosService } from '../../../core/services/users.service.js';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { User } from '../../../core/models/user.interface';
+import { UsuariosService } from '../../../core/services/users.service';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 import {  map, Observable, switchMap, throwError } from 'rxjs';
-import {SearcherComponent} from '../../../shared/components/searcher/searcher.component.js';
+import {SearcherComponent} from '../../../shared/components/searcher/searcher.component';
 import { MatBottomSheet} from '@angular/material/bottom-sheet'; 
 import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component'; 
-import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface';
 
 @Component({
   selector: 'app-usuario',
@@ -115,7 +115,7 @@ export class UserComponent implements OnInit {
 
   checkUsernameAndMail(username: string, mail: string, excludeUserId?: string): Observable<boolean> {
     return this.userService.getOneUserByEmailOrUsername(username, mail, excludeUserId).pipe(
-      map((user: User) => !!user)
+      map((user: User | null) => !!user)
     );
   }
 

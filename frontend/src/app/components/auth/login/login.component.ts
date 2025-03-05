@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../core/services/auth.service.js';
+import { AuthService } from '../../../core/services/auth.service';
 import { RouterModule, Router } from '@angular/router';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
 import { ViewChild } from '@angular/core';
 
 @Component({
@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});
   user: string = '';
   password: string = '';
+  isLoggedIn: boolean = false;  
 
   @ViewChild(UniversalAlertComponent) alertComponent!: UniversalAlertComponent;
 
@@ -45,6 +46,7 @@ export class LoginComponent implements OnInit {
   
     this.authService.login(this.user, this.password).subscribe({
       next: (usuario) => {
+        this.isLoggedIn= true
         this.router.navigate(['/']);
         
       },

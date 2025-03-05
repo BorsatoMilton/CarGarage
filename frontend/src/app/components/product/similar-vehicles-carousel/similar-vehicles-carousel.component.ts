@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { VehiclesService } from '../../../core/services/vehicles.service.js';
+import { Vehicle } from '../../../core/models/vehicles.interface';
+import { VehiclesService } from '../../../core/services/vehicles.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

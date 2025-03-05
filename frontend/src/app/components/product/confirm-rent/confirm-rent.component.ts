@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Vehicle } from '../../../core/models/vehicles.interface.js';
+import { Vehicle } from '../../../core/models/vehicles.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Rent } from '../../../core/models/rent.interface.js';
-import { RentsService } from '../../../core/services/rents.service.js';
+import { Rent } from '../../../core/models/rent.interface';
+import { RentsService } from '../../../core/services/rents.service';
 import { CommonModule } from '@angular/common';
-import { VehiclesService } from '../../../core/services/vehicles.service.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
-import { environment } from '../../../environments/environments.js';
+import { VehiclesService } from '../../../core/services/vehicles.service';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
+import { environment } from '../../../environments/environments';
 
 
 declare const MercadoPago: any;

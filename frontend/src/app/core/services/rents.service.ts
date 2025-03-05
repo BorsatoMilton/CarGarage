@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Rent } from '../models/rent.interface.js';
-import { User } from '../models/user.interface.js';
-import { AuthToken } from '../../functions/authToken.function.js';
+import { Rent } from '../models/rent.interface';
+import { User } from '../models/user.interface';
+import { AuthToken } from '../../functions/authToken.function';
 
 @Injectable({
   providedIn: 'root'

@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RentsService } from '../../../core/services/rents.service.js';
-import { VehiclesService } from '../../../core/services/vehicles.service.js';
-import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { Rent } from '../../../core/models/rent.interface.js';
-import { User } from '../../../core/models/user.interface.js';
-import { CompraService } from '../../../core/services/compra.service.js';
-import { UsuariosService } from '../../../core/services/users.service.js';
+import { RentsService } from '../../../core/services/rents.service';
+import { VehiclesService } from '../../../core/services/vehicles.service';
+import { Vehicle } from '../../../core/models/vehicles.interface';
+import { Rent } from '../../../core/models/rent.interface';
+import { User } from '../../../core/models/user.interface';
+import { CompraService } from '../../../core/services/compra.service';
+import { UsuariosService } from '../../../core/services/users.service';
 
 
 @Component({

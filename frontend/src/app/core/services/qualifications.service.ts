@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Qualification } from '../models/qualification.inteface.js';
+import { Qualification } from '../models/qualification.inteface';
 import { Observable } from 'rxjs';
-import { AuthToken } from '../../functions/authToken.function.js';
+import { AuthToken } from '../../functions/authToken.function';
 
 
 @Injectable({

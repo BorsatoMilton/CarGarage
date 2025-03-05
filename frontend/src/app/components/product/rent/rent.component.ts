@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RentsService } from '../../../core/services/rents.service.js';
+import { RentsService } from '../../../core/services/rents.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
@@ -9,21 +9,21 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { VehiclesService } from '../../../core/services/vehicles.service.js';
-import { User } from '../../../core/models/user.interface.js';
-import { AuthService } from '../../../core/services/auth.service.js';
+import { Vehicle } from '../../../core/models/vehicles.interface';
+import { VehiclesService } from '../../../core/services/vehicles.service';
+import { User } from '../../../core/models/user.interface';
+import { AuthService } from '../../../core/services/auth.service';
 import { FormGroup } from '@angular/forms';
-import { Rent } from '../../../core/models/rent.interface.js';
+import { Rent } from '../../../core/models/rent.interface';
 import { CommonModule } from '@angular/common';
-import { SimilarVehiclesCarouselComponent } from '../similar-vehicles-carousel/similar-vehicles-carousel.component.js';
+import { SimilarVehiclesCarouselComponent } from '../similar-vehicles-carousel/similar-vehicles-carousel.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
-import { QualificationCalculator } from '../../../shared/components/qualification-calculator/qualification-calculator.js';
-import { environment } from '../../../environments/environments.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
+import { QualificationCalculator } from '../../../shared/components/qualification-calculator/qualification-calculator';
+import { environment } from '../../../environments/environments';
 
 declare const MercadoPago: any;
 

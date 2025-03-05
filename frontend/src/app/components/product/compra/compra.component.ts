@@ -7,19 +7,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { VehiclesService } from '../../../core/services/vehicles.service.js';
-import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { AuthService } from '../../../core/services/auth.service.js';
-import { User } from '../../../core/models/user.interface.js';
-import { Compra } from '../../../core/models/compra.interfaces.js';
-import { CompraService } from '../../../core/services/compra.service.js';
-import { SimilarVehiclesCarouselComponent } from '../similar-vehicles-carousel/similar-vehicles-carousel.component.js';
+import { VehiclesService } from '../../../core/services/vehicles.service';
+import { Vehicle } from '../../../core/models/vehicles.interface';
+import { AuthService } from '../../../core/services/auth.service';
+import { User } from '../../../core/models/user.interface';
+import { Compra } from '../../../core/models/compra.interfaces';
+import { CompraService } from '../../../core/services/compra.service';
+import { SimilarVehiclesCarouselComponent } from '../similar-vehicles-carousel/similar-vehicles-carousel.component';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Category } from '../../../core/models/categories.interface.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
-import { QualificationCalculator } from '../../../shared/components/qualification-calculator/qualification-calculator.js';
+import { Category } from '../../../core/models/categories.interface';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
+import { QualificationCalculator } from '../../../shared/components/qualification-calculator/qualification-calculator';
 
 @Component({
   selector: 'app-compra',

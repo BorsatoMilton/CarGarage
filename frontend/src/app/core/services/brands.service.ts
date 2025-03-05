@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Brand } from '../models/brands.interfaces.js';
-import { AuthToken } from '../../functions/authToken.function.js';
+import { Brand } from '../models/brands.interfaces';
+import { AuthToken } from '../../functions/authToken.function';
 
 @Injectable({
   providedIn: 'root'

@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
-import { UsuariosService } from '../../../core/services/users.service.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { UsuariosService } from '../../../core/services/users.service';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 
 @Component({
   selector: 'app-reset-password',

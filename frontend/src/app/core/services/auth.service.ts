@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { User } from '../models/user.interface.js';
+import { User } from '../models/user.interface';
 import { Router } from '@angular/router';
 
 
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/usuarios';
+  public apiUrl = 'http://localhost:3000/api/usuarios';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.isAuthenticated());
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 

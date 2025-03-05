@@ -1,5 +1,5 @@
 import { CanActivateFn } from '@angular/router';
-import { AuthService } from '../core/services/auth.service.js';
+import { AuthService } from '../core/services/auth.service';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -16,9 +16,9 @@ export const onlyAdmin: CanActivateFn = (route, state) => {
   const currentUser = authService.getCurrentUser();
   
   if(currentUser && currentUser.rol === 'ADMIN') {
-        return true; 
+        return of(true); 
   } else {    
     router.navigate(['/']);
-    return false;
+    return of(false);
   }
 };

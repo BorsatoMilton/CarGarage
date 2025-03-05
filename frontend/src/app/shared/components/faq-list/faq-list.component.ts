@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FaqService } from '../../../core/services/faq.service.js';
-import { Faq } from '../../../core/models/faq.interface.js';
+import { FaqService } from '../../../core/services/faq.service';
+import { Faq } from '../../../core/models/faq.interface';
 import {  FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { alertMethod } from '../alerts/alert-function/alerts.functions.js';
+import { alertMethod } from '../alerts/alert-function/alerts.functions';
 import { CommonModule } from '@angular/common';
 
 @Component({

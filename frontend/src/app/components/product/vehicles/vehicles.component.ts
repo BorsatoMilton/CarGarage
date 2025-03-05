@@ -7,19 +7,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { VehiclesService } from '../../../core/services/vehicles.service.js';
-import { Vehicle } from '../../../core/models/vehicles.interface.js';
-import { BrandsService } from '../../../core/services/brands.service.js';
-import { Brand } from '../../../core/models/brands.interfaces.js';
-import { CategoriesService } from '../../../core/services/categories.service.js';
-import { Category } from '../../../core/models/categories.interface.js';
-import { AuthService } from '../../../core/services/auth.service.js';
-import { User } from '../../../core/models/user.interface.js';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { VehiclesService } from '../../../core/services/vehicles.service';
+import { Vehicle } from '../../../core/models/vehicles.interface';
+import { BrandsService } from '../../../core/services/brands.service';
+import { Brand } from '../../../core/models/brands.interfaces';
+import { CategoriesService } from '../../../core/services/categories.service';
+import { Category } from '../../../core/models/categories.interface';
+import { AuthService } from '../../../core/services/auth.service';
+import { User } from '../../../core/models/user.interface';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 import {MatIconModule} from '@angular/material/icon';
-import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
-import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component.js';
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface';
+import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({

@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BrandsService } from '../../../core/services/brands.service.js';
-import { Brand } from '../../../core/models/brands.interfaces.js';
+import { BrandsService } from '../../../core/services/brands.service';
+import { Brand } from '../../../core/models/brands.interfaces';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { SearcherComponent } from '../../../shared/components/searcher/searcher.component.js';
-import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { SearcherComponent } from '../../../shared/components/searcher/searcher.component';
+import { UniversalAlertComponent } from '../../../shared/components/alerts/universal-alert/universal-alert.component';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 @Component({
   selector: 'app-brand',
   standalone: true,

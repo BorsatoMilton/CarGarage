@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { Compra } from '../../../core/models/compra.interfaces.js';
-import { CompraService } from '../../../core/services/compra.service.js';
+import { Compra } from '../../../core/models/compra.interfaces';
+import { CompraService } from '../../../core/services/compra.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../core/services/auth.service.js';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { AuthService } from '../../../core/services/auth.service';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 import { MatIconModule } from '@angular/material/icon';
-import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component.js';
+import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component';
 
 @Component({
   selector: 'app-purchases',

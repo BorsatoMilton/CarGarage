@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Faq } from '../../../core/models/faq.interface.js';
+import { Faq } from '../../../core/models/faq.interface';
 import { CommonModule } from '@angular/common';
-import { FaqService } from '../../../core/services/faq.service.js';
+import { FaqService } from '../../../core/services/faq.service';
 
 @Component({
   selector: 'app-faq',

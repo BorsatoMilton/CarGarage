@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { Rent } from '../../../core/models/rent.interface.js';
-import { RentsService } from '../../../core/services/rents.service.js';
-import { AuthService } from '../../../core/services/auth.service.js';
+import { Rent } from '../../../core/models/rent.interface';
+import { RentsService } from '../../../core/services/rents.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 import { MatIconModule } from '@angular/material/icon';
-import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface.js';
+import { BottomSheetConfig } from '../../../core/models/bottom-sheet.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component.js';
+import { BottomSheetComponent } from '../../../shared/components/bottom-sheet/bottom-sheet.component';
 
 @Component({
   selector: 'app-rent-list',

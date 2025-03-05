@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions.js';
+import { alertMethod } from '../../../shared/components/alerts/alert-function/alerts.functions';
 
 @Component({
   selector: 'app-payment-status',

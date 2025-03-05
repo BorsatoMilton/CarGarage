@@ -86,8 +86,6 @@ export class QualificationComponent implements OnInit {
     if (idUsuario) {
       this.usuarioService.getOneUserById(idUsuario).subscribe((user) => {
         this.usuarioAcalificar = user;
-        console.log('Usuario a calificar:', this.usuarioAcalificar);
-
         this.verificarObjeto(idObjeto);
       });
     }
@@ -200,8 +198,6 @@ export class QualificationComponent implements OnInit {
           'Usuario calificado correctamente',
           'success'
         );
-        console.log('Calificación enviada con éxito:', respuesta);
-
         this.router.navigate(['/']);
       },
       error: (error) => {

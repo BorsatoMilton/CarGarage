@@ -70,7 +70,7 @@
                   </div>
                   <div class="col-md-12">
                     <label for="respuesta">Respuesta</label>
-                    <input type="text" formControlName="respuesta" id="respuesta" name="respuesta" class="form-control" required>
+                    <textarea formControlName="respuesta" id="respuesta" name="respuesta" class="form-control" rows="4" cols="50" required></textarea>
                   </div>
     
                   <div class="modal-footer">
@@ -101,13 +101,13 @@
           <span class="close" (click)="closeModal('editFaq')">&times;</span>
           <h2>Editar FAQ</h2>
           <form [formGroup]="faqForm" (ngSubmit)="editFaq()">
-            <div class="form-group">
+            <div class="col-md-12">
               <label for="pregunta">Pregunta</label>
               <input type="text" id="pregunta" formControlName="pregunta" class="form-control" required>
             </div>
-            <div class="form-group">
+            <div class="col-md-12">
                 <label for="respuesta">Respuesta</label>
-                <input type="text" id="respuesta" formControlName="respuesta" class="form-control" required>
+                <textarea type="text" id="respuesta" formControlName="respuesta" class="form-control" required></textarea>
               </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" (click)="closeModal('editFaq')">Cancelar</button>

@@ -72,6 +72,11 @@ export class CompraComponent implements OnInit {
           if (data === null) {
             alertMethod('Realizar Compra', 'Oops, algo fue mal!', 'error');
             this.router.navigate(['/']);
+          
+          } else if(data.propietario.id === this.authService.getCurrentUser()?.id){
+            this.router.navigate(['/']);
+            alertMethod('Comprar vehiculo', 'No puedes comprar tu propio vehículo', 'error');
+            return;
           } else {
             this.vehiculo = data;
             this.obtenerCompra(this.vehiculo.id);
@@ -146,7 +151,6 @@ goToSlide(index: number): void {
 }
 
   openModal(modalId: string): void {
-    console.log(this.compraForm.value);
     const modalDiv = document.getElementById(modalId);
     if (modalDiv != null) {
       modalDiv.style.display = 'block';
@@ -209,7 +213,6 @@ closeLightboxOnBackdrop(event: MouseEvent): void {
               'success'
             );
             this.router.navigate(['/']);
-            console.log(dataCompra)
             this.compraService.confirmarCompraAviso(dataCompra.id).subscribe((data) => {
               if (data === null) {
                 alertMethod(

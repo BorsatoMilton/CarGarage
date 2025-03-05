@@ -116,7 +116,6 @@ export class ConfirmPurchaseComponent {
         });
     }else {
       alertMethod('Confirmar Compra', 'Oops! Algo salió mal. falta mail, vehiculo, compra', 'error');
-      console.log(this.selectedCompra, this.vehiculo, this.usuario);
     }
   }
 

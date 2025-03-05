@@ -107,12 +107,6 @@ export class ProfileComponent implements OnInit {
     }
     return this.userService.checkUsername(control.value).pipe(
       map((exists) => {
-        console.log(
-          'Resultado de checkUsername para',
-          control.value,
-          ':',
-          exists
-        );
         return exists ? { usernameTaken: true } : null;
       }),
       catchError((err) => {

@@ -30,7 +30,6 @@ export class FaqListComponent implements OnInit {
   ngOnInit(): void {
     this.faqService.findAllFaqs().subscribe((faq: Faq[]) => {
       this.faqs = faq
-      console.log(this.faqs);
     });
   
   }

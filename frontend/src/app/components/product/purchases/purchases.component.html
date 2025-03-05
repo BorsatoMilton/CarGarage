@@ -39,7 +39,7 @@
         <img src="cancel.logo.png" alt="">
         </button>
         <button 
-          *ngIf="compra.estadoCompra === 'FINALIZADA' || compra.estadoCompra ===  'NO CONFIRMADA' || compra.estadoCompra === 'CANCELADA'" 
+          *ngIf="compra.estadoCompra === 'FINALIZADA' || compra.estadoCompra ===  'NO CONFIRMADA' || compra.estadoCompra === 'CANCELADA' || compra.estadoCompra === 'CONFIRMADA'" 
           (click)="openModal('borrarCompra', compra)" 
           class="btn btn-sm btn-outline-danger ms-4"
           data-bs-toggle="modal">

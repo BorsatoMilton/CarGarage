@@ -111,7 +111,6 @@ export class VehicleComponent implements OnInit {
         transmision: vehicle.transmision,
       });
     }
-    console.log(this.vehicleForm.value);
     const modalDiv = document.getElementById(modalId);
     if (modalDiv != null) {
       modalDiv.style.display = 'block';

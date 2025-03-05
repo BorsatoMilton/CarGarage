@@ -36,7 +36,7 @@ export class ForgotPasswordComponent {
         },
         error: (error) => {
           console.error('Error al enviar el correo:', error);
-          alertMethod('Hubo un error', 'Hubo un error al enviar el correo. Por favor inténtalo nuevamente.', 'error');
+          alertMethod('Hubo un error', 'Hubo un error al enviar el correo. Probablemente el usuario no exista', 'error');
         }
       });
     }

@@ -86,7 +86,11 @@ export class RentComponent implements OnInit, OnDestroy {
       if (this.idVehiculo) {
         this.vehiculoService.getOneVehicle(this.idVehiculo).subscribe({
           next: (data: Vehicle) => {
-            console.log("Vehículo obtenido:", data);
+            if(data.propietario.id === this.authService.getCurrentUser()?.id){
+              this.router.navigate(['/']);
+              alertMethod('Alquilar vehiculo', 'No puedes alquilar tu propio vehículo', 'error');
+              return;
+            }
             this.vehiculo = data;
             this.cargarCalificacionesPropietario();
           },

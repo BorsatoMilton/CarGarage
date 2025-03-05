@@ -6,6 +6,8 @@ import { avisoCompraExitosaMail} from "../correo/correo.controller.js";
 import { Vehiculo } from "../vehiculo/vehiculo.entity.js";
 import { confirmarCompraMailCorreo } from "../correo/correo.controller.js";
 import { Usuario } from "../usuario/usuario.entity.js";
+import path from "path";
+import fs from 'fs';
 
 
 const em = orm.em
@@ -191,7 +193,30 @@ async function remove(req: Request, res: Response) {
         if(!compra){
             return res.status(404).json({ message: 'Compra no encontrada' })
         }
-        await em.removeAndFlush(compra)
+        const vehiculo = await em.findOne(Vehiculo, { id: compra.vehiculo.id })
+        if(!vehiculo){
+            return res.status(404).json({ message: 'Vehiculo no encontrado' })
+        }
+         const imagePaths = vehiculo.imagenes.map((imageName: string) => 
+            path.resolve('src/uploads', imageName)
+          );
+        
+          const unlinkPromises = imagePaths.map((imagePath) => {
+            return new Promise((resolve, reject) => {
+              fs.unlink(imagePath, (err) => {
+                if (err) {
+                  console.error('Error al eliminar la imagen:', err);
+                  return reject(err);
+                }
+                console.log('Imagen eliminada correctamente:', imagePath);
+                resolve(true);
+              });
+            });
+          });
+          
+        await Promise.all(unlinkPromises);
+        await em.removeAndFlush(compra);
+        await em.removeAndFlush(vehiculo);
         res.status(200).json({ message: 'Compra eliminada' })
     } catch (error: any) {
         res.status(500).json({ message: error.message })

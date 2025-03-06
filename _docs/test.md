@@ -1,24 +1,34 @@
-VIDEO TEST E2E FRONTEND CON CYPRESS:
-https://youtu.be/70ifzO4H8o8
+# Reporte de Pruebas Automatizadas
 
-PRUEBAS UNITARIAS ANGULAR CON JASMINE Y KARMA
-[LoginComponent test](./capturas/Screenshot%202025-03-05%20231336.png)
-[NavBarComponent test](./capturas/Screenshot%202025-03-05%20231347.png)
-[AuthService test](./capturas/Screenshot%202025-03-05%20231357.png)
-[DashboardComponent test](./capturas/Screenshot%202025-03-05%20231406.png)
+## Pruebas E2E Frontend (Cypress)
+>[!NOTE] (https://youtu.be/70ifzO4H8o8)
 
+## Pruebas Unitarias Frontend (Angular/Jasmine/Karma)
+**LoginComponent**  
+[![Test Login](./capturas/Screenshot%202025-03-05%20231336.png)](./capturas/Screenshot%202025-03-05%20231336.png)
+
+**NavBarComponent**  
+[![Test NavBar](./capturas/Screenshot%202025-03-05%20231347.png)](./capturas/Screenshot%202025-03-05%20231347.png)
+
+**AuthService**  
+[![Test Auth](./capturas/Screenshot%202025-03-05%20231357.png)](./capturas/Screenshot%202025-03-05%20231357.png)
+
+**DashboardComponent**  
+[![Test Dashboard](./capturas/Screenshot%202025-03-05%20231406.png)](./capturas/Screenshot%202025-03-05%20231406.png)
+
+## Pruebas Backend (Jest)
+
+### 1. Check Username and Email
+```javascript
 
 TEST BACKEND:
 1- check-usernameandmail
-/*
+
 console.log
 [query] db.getCollection('usuario').find({ '$or': [ { usuario: 'testuser' }, { mail: 'test@gmail.com' } ] }, {}).limit(1).toArray(); [took 10 ms, 0 results]
 
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
 PASS  test/check-username.test.ts
 √ Check username and mail (52 ms)
-                                                                                                                                                                                                        
 Test Suites: 1 passed, 1 total                                                                                                                                                                          
 Tests:       1 passed, 1 total                                                                                                                                                                          
 Snapshots:   0 total
@@ -27,11 +37,10 @@ Time:        3.841 s, estimated 4 s
 
 TEST CUANDO EXISTE SI ESPERA NULL:
 
-/*
 
- ● Check username and mail                                                                                                                                                                             
-                                                                                                                                                                                                        
-    expect(received).toBe(expected) // Object.is equality
+ ● Check username and mail
+
+    expect(received).toBe(expected)
 
     Expected: null
     Received: {"apellido": "Borsato", "clave": "$2b$10$bmIfU2BFin8MQ3urSkR0MexByaF9SbbMnlPsNyrnH8ZLxzpWgYaXK", "direccion": "Calle falsa 123", "id": "67c0e4a78be6c5fe666ff706", "mail": "borsatomilton@gmail.com", "nombre": "Admin", "rol": "ADMIN", "telefono": "341326421", "usuario": "admin"}
@@ -49,52 +58,37 @@ Tests:       1 failed, 1 passed, 2 total
 Snapshots:   0 total
 Time:        3.833 s, estimated 4 s
 
-*/
-
 TEST CUANDO EXISTE: 
 
-/*
-  console.log
+
     [query] db.getCollection('usuario').insertMany([ { usuario: 'testuser', clave: '$2b$10$y6DXwsovzlihmjQxkJ1nZ.WiEmoTvStAvrcew8J99/mC3QlPibd1a', nombre: 'Test', apellido: 'User', mail: 'test@example.com', direccion: '123 Test St', telefono: '1234567890', rol: 'ADMIN' } ], {}); [took 13 ms]
 
-      at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
-  console.log
     [query] db.getCollection('usuario').find({ '$or': [ { usuario: 'testuser1' }, { mail: 'testingg@gmail.com' } ] }, {}).limit(1).toArray(); [took 8 ms, 0 results]
 
-      at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
-  console.log
     [query] db.getCollection('usuario').find({ '$or': [ { usuario: 'testuser' }, { mail: 'lalalala@gmail.com' } ] }, {}).limit(1).toArray(); [took 4 ms, 1 result]
 
-      at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
-  console.log
     [query] db.getCollection('usuario').deleteMany({ usuario: 'testuser' }, {}); [took 5 ms]
-
-      at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
  PASS  test/check-username.test.ts
   √ Check username and mail (45 ms)
-  √ Check username and mail (22 ms)                                                                                                                                                                     
-                                                                                                                                                                                                        
-Test Suites: 1 passed, 1 total                                                                                                                                                                          
-Tests:       2 passed, 2 total                                                                                                                                                                          
+  √ Check username and mail (22 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
 Snapshots:   0 total
 Time:        4.154 s, estimated 5 s
 
-*/
+
 
 2- create-preference
 
 TEST CON TOKEN:
 
-/*
+
 [query] db.getCollection('usuario').insertMany([ { usuario: 'testuser', clave: '$2b$10$ShuYdyrZ7BUHqz.nDllEL.5pyQ179xrL9W2X2K/jte0ZoMnWUKFKW', nombre: 'Test', apellido: 'User', mail: 'test@example.com', direccion: '123 Test St', telefono: '1234567890', rol: 'ADMIN' } ], {}); [took 5 ms]
 
-  at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
-console.log
 Creando preferencia de pago: {
   items: [
     {
@@ -112,61 +106,37 @@ Creando preferencia de pago: {
   }
 }
 
-  at createPreference (src/components/mercadoPago/mercadopago.controller.ts:12:17)
-
-console.log
 [query] db.getCollection('usuario').deleteMany({ _id: ObjectId('67c62727a1cdbc23ebe97793') }, {}); [took 1 ms]
 
-  at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
 PASS  test/create-preference.test.ts
 GET /api/usuarios/:id
-√ Crear preferencia para mercado pago (1001 ms)                                                                                                                                                                                           
-                                                                                                                                                                                                                                          
-Test Suites: 1 passed, 1 total                                                                                                                                                                                                                
-Tests:       1 passed, 1 total                                                                                                                                                                                                                
+√ Crear preferencia para mercado pago (1001 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
 Snapshots:   0 total
 Time:        4.985 s, estimated 7 s
 Ran all test suites matching /test\\create-preference.test/i.
-Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
-
-
-*/
-
 
 3- logicremove-vehicle
 
-/*
+
 [query] db.getCollection('usuario').insertMany([ { usuario: 'testuser', clave: '$2b$10$gKykEKUa7dvpI0NpiKITbeRP7a5zqs0vj6VXhf4s0rCjw3ium/ynm', nombre: 'Test', apellido: 'User', mail: 'test@example.com', direccion: '123 Test St', telefono: '1234567890', rol: 'ADMIN' } ], {}); [took 5 ms]
 
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
-console.log
 { mensaje: 'Acceso denegado. Token no proporcionado.' }
 
-    at Object.<anonymous> (test/logicremove-vehicle.test.ts:57:17)
-
-console.log
 [query] db.getCollection('vehiculo').find({ _id: '1' }, {}).limit(1).toArray(); [took 2 ms, 0 results]
 
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
-console.log                                                                                                                                                                                                                                 
-{ message: 'Vehiculo no encontrado' }                                                                                                                                                                                                     
+{ message: 'Vehiculo no encontrado' }
 
-    at Object.<anonymous> (test/logicremove-vehicle.test.ts:65:17)
 
-console.log
 [query] db.getCollection('vehiculo').find({ _id: ObjectId('67c34dc68dbb2ff768d39ad2') }, {}).limit(1).toArray(); [took 1 ms, 1 result]
 
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
-console.log                                                                                                                                                                                                                                 
 [query] db.getCollection('vehiculo').updateMany({ _id: ObjectId('67c34dc68dbb2ff768d39ad2') }, { '$set': { fechaBaja: ISODate('2025-03-03T22:43:59.812Z') } }, {}); [took 2 ms]                                                           
 
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
-console.log
 {
     message: 'Vehiculo dado de baja',
     data: {
@@ -187,55 +157,32 @@ console.log
     }
 }
 
-    at Object.<anonymous> (test/logicremove-vehicle.test.ts:73:17)
-
-console.log                                                                                                                                                                                                                                 
-[query] db.getCollection('usuario').deleteMany({ usuario: 'testuser' }, {}); [took 2 ms]                                                                                                                                                  
-
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
+[query] db.getCollection('usuario').deleteMany({ usuario: 'testuser' }, {}); [took 2 ms]
 
 PASS  test/logicremove-vehicle.test.ts
 GET /api/usuarios/:id                                                                                                                                                                                                                       
 √ Baja lógica publicación | vehículo (No autorizado) (16 ms)                                                                                                                                                                              
 √ Baja lógica publicación | vehículo (No existe) (14 ms)                                                                                                                                                                                  
 √ Baja lógica publicación | vehículo (Lo elimina) (22 ms)                                                                                                                                                                                 
-                                                                                                                                                                                                                                            
-Test Suites: 1 passed, 1 total                                                                                                                                                                                                                
-Tests:       3 passed, 3 total                                                                                                                                                                                                                
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
 Snapshots:   0 total
 Time:        4.234 s
-*/
+
 
 4- login
 
-/*
-
-console.log
 [query] db.getCollection('usuario').find({ usuario: 'pepito' }, {}).limit(1).toArray(); [took 3 ms, 0 results]
 
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
-console.log
 { message: 'Usuario no encontrado' }
 
-    at Object.<anonymous> (test/login.test.ts:21:13)
+[query] db.getCollection('usuario').find({ usuario: 'admin' }, {}).limit(1).toArray(); [took 1 ms, 1 result]
 
-console.log                                                                                                                                                                                                                                 
-[query] db.getCollection('usuario').find({ usuario: 'admin' }, {}).limit(1).toArray(); [took 1 ms, 1 result]                                                                                                                              
-
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
-console.log
 { message: 'Contraseña incorrecta' }
 
-    at Object.<anonymous> (test/login.test.ts:33:13)
+[query] db.getCollection('usuario').find({ usuario: 'admin' }, {}).limit(1).toArray(); [took 1 ms, 1 result]                                                                       
 
-console.log                                                                                                                                                                                                                                 
-[query] db.getCollection('usuario').find({ usuario: 'admin' }, {}).limit(1).toArray(); [took 1 ms, 1 result]                                                                                                                              
-
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
-console.log
 {
     user: {
     id: '67c0e4a78be6c5fe666ff706',
@@ -251,52 +198,32 @@ console.log
     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ.eyJpZCI6IjY3YzBlNGE3OGJlNmM1ZmU2NjZmZjcwNiIsInJvbCI6IkFETUlOIiwiaWF0IjoxNzQxMDM5OTY0LCJleHAiOjE3NDEwNDM1NjR9.MfQdSCn1qk-WM-bcRpYKPjJXhmDo3LWO_bhKmxYZlVw'
 }
 
-    at Object.<anonymous> (test/login.test.ts:45:13)
+[query] db.getCollection('usuario').find({ usuario: 'admin' }, {}).limit(1).toArray(); [took 1 ms, 1 result]                                                                       
 
-console.log                                                                                                                                                                                                                                 
-[query] db.getCollection('usuario').find({ usuario: 'admin' }, {}).limit(1).toArray(); [took 1 ms, 1 result]                                                                                                                              
-
-    at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
-console.log                                                                                                                                                                                                                                 
-{ message: 'data and hash arguments required' }                                                                                                                                                                                           
-
-    at Object.<anonymous> (test/login.test.ts:56:13)
+{ message: 'data and hash arguments required' }
 
 PASS  test/login.test.ts
 √ Usuario inexistente (48 ms)
-√ Contraseña incorrecta (64 ms)                                                                                                                                                                                                             
-√ Todo OK (66 ms)                                                                                                                                                                                                                           
-√ Error del server por falta de atributos (7 ms)                                                                                                                                                                                            
-                                                                                                                                                                                                                                            
-Test Suites: 1 passed, 1 total                                                                                                                                                                                                                
-Tests:       4 passed, 4 total                                                                                                                                                                                                                
+√ Contraseña incorrecta (64 ms)
+√ Todo OK (66 ms)
+√ Error del server por falta de atributos (7 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
 Snapshots:   0 total
 Time:        3.792 s, estimated 4 s
 Ran all test suites matching /test\\login.test/i.
 
-*/
 
-5- post-obtain-delete-user
 
-/*
-
-RESULTADO (realizado con Jest y Supertest)
-
+5 - post-obtain-delete-user
 
 [query] db.getCollection('usuario').insertMany([ { usuario: 'testuser', clave: '$2b$10$XsSRGJkLR4TvMzXMYz1gUOIIB.WDUSyLvubG0k7TKdXgriiGWjhOO', nombre: 'Test', apellido: 'User', mail: 'test@example.com', direccion: '123 Test St', telefono: '1234567890', rol: 'ADMIN' } ], {}); [took 14 ms]
 
-  at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
-console.log
 [query] db.getCollection('usuario').find({ _id: ObjectId('67c5fc015671a74260d8ccf8') }, {}).limit(1).toArray(); [took 12 ms, 1 result]
 
-  at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
-
-console.log
 [query] db.getCollection('usuario').deleteMany({ _id: ObjectId('67c5fc015671a74260d8ccf8') }, {}); [took 4 ms]
-
-  at DefaultLogger.log (node_modules/@mikro-orm/core/logging/DefaultLogger.js:38:14)
 
 PASS  test/post-obtain-user.test.ts
 GET /api/usuarios/:id
@@ -308,4 +235,3 @@ Snapshots:   0 total
 Time:        4.293 s
 Ran all test suites.
 
-*/

@@ -11,6 +11,7 @@ Año cursado: 2024
 - [Endpoints](./endpoints.md)
 - [Configuración](./setup.md)
 - [Diagramas y Esquemas](./diagramas.md)
+-[TESTS](./test.md) 
 
 ## Descripción General
 La API REST para el Cargarage ha sido diseñada para gestionar todas las operaciones y la información relacionada con la compra-venta y alquiler de vehículos. Su objetivo principal es facilitar a los usuarios (clientes, administradores y vendedores) el acceso a funcionalidades clave, tales como:
